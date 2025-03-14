@@ -1,0 +1,28 @@
+# Archivos compilados .NET
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+*.log
+
+# Configuración de usuario y secretos
+appsettings*.json
+secrets.json
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Archivos generados por herramientas
+*.vs
+
+
+# Dependencias react 
+node_modules/
+npm-debug.log
+yarn.lock
+.env
+.env.local
+build/
+dist/
