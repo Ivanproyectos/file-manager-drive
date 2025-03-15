@@ -116,27 +116,6 @@ function App() {
         order: []
       })
 
-      const datatableCollapasble = HSCore.components.HSDatatables.getItem('datatableChildRows')
-
-      // ADD EVENT LISTENER FOR OPENING AND CLOSING DETAILS
-      // =======================================================
-      document.querySelector('#datatableChildRows tbody')?.addEventListener('click', function (e) {
-        const target = e.target as Element;
-        if (!target.closest('td.details-control')) return
-        const tr = target.closest('tr') as Element,
-          row = datatableCollapasble.row(tr);
-
-        if (row.child.isShown()) {
-          // This row is already open - close it
-          row.child.hide()
-          tr.classList.remove('shown')
-        }
-        else {
-          // Open this row
-          row.child(format(row.data())).show()
-          tr.classList.add('shown')
-        }
-      })
 
     //HSCore.components.HSDatatables.init('.js-datatable')
   });
