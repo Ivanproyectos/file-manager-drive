@@ -40,6 +40,8 @@ namespace FileManagement.Persistence.Configurations
             builder.Property(x => x.UpdatedBy)
                .IsRequired(false);
 
+            builder.HasQueryFilter(x => x.DeletedAt == null);
+
 
         }
     }

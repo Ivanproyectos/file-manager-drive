@@ -12,7 +12,7 @@ namespace FileManagement.Persistence.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.IdStorageProvider)
+            builder.Property(x => x.StorageProviderId)
                 .IsRequired();
 
             builder.Property(x => x.StorageIdentifier)
@@ -28,7 +28,7 @@ namespace FileManagement.Persistence.Configurations
 
             builder.HasOne(x => x.StorageProvider)
                 .WithMany(x => x.FileStorages)
-                .HasForeignKey(x => x.IdStorageProvider)
+                .HasForeignKey(x => x.StorageProviderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(x => x.CreatedBy)
@@ -42,6 +42,8 @@ namespace FileManagement.Persistence.Configurations
 
             builder.Property(x => x.UpdatedBy)
                .IsRequired(false);
+
+            builder.HasQueryFilter(x => x.DeletedAt == null);
         }
     }
 }

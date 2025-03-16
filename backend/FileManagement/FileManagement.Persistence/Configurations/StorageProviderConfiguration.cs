@@ -39,6 +39,8 @@ namespace FileManagement.Persistence.Configurations
             //    .WithOne(x => x.StorageProvider)
             //    .HasForeignKey(x => x.IdStorageProvider)
             //    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasQueryFilter(x => x.DeletedAt == null);
         }
     }
 }

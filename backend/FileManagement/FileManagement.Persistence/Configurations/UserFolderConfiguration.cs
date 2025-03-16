@@ -9,16 +9,18 @@ namespace FileManagement.Persistence.Configurations
         public void Configure(EntityTypeBuilder<UserFolder> builder)
         {
             builder.ToTable("UserFolders");
-            builder.HasKey(x => new { x.IdUser, x.IdFolder });
+            builder.HasKey(x => x.Id); 
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.HasIndex(x => new { x.UserId, x.FolderId }).IsUnique();
 
             builder.HasOne(x => x.Folder)
                 .WithMany(x => x.UserFolders)
-                .HasForeignKey(x => x.IdFolder)
+                .HasForeignKey(x => x.FolderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.User)
               .WithMany(x => x.UserFolders)
-              .HasForeignKey(x => x.IdUser)
+              .HasForeignKey(x => x.UserId)
               .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(x => x.CreatedBy)
@@ -32,6 +34,8 @@ namespace FileManagement.Persistence.Configurations
 
             builder.Property(x => x.UpdatedBy)
                .IsRequired(false);
+            builder.HasQueryFilter(x => x.DeletedAt == null);
+
         }
     }
 }

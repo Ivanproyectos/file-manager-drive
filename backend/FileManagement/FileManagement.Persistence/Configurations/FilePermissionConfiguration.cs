@@ -13,7 +13,7 @@ namespace FileManagement.Persistence.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.HasIndex(x => new { x.IdUser, x.IdFile })
+            builder.HasIndex(x => new { x.UserId, x.FileId })
              .IsUnique();
 
             builder.Property(x => x.CanView)
@@ -26,13 +26,15 @@ namespace FileManagement.Persistence.Configurations
 
             builder.HasOne(x => x.File)
                  .WithMany(x => x.FilePermissions)
-                 .HasForeignKey(x => x.IdFile)
+                 .HasForeignKey(x => x.FileId)
                  .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.User)
                 .WithMany(x => x.FilePermissions)
-                .HasForeignKey(x => x.IdUser)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasQueryFilter(x => x.DeletedAt == null);
         }
     }
 }

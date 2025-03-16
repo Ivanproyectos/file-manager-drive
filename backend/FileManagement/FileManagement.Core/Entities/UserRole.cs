@@ -9,8 +9,8 @@ namespace FileManagement.Core.Entities
 {
     public class UserRole: AuditableBaseEntity
     {
-        public int IdUser { get; set; }
-        public int IdRole { get; set; }
+        public int UserId { get; set; }
+        public int RoleId { get; set; }
 
         // 🔗 Relaciones con User y Role
         public User User { get; set; }

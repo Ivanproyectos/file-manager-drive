@@ -33,6 +33,7 @@ namespace FileManagement.WebApi.Middleware
                     case Core.Exceptions.ValidationException ex:
                         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         result.title = "Error de validacion";
+                        result.Message = ex.Message;
                         result.Details = ex.Failures;
                         break;
                     case KeyNotFoundException ex:
@@ -42,6 +43,7 @@ namespace FileManagement.WebApi.Middleware
                     default:    
                       
                         result.title = "Error interno del servidor";
+                        result.Message = error.Message;
                         result.Details = _env.IsDevelopment() ? error.Message : "Consulte al administrador del sistema";
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;

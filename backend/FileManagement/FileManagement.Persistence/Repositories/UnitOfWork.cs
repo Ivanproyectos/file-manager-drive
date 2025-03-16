@@ -1,6 +1,8 @@
 ﻿using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace FileManagement.Persistence.Repositories
 {
@@ -15,7 +17,7 @@ namespace FileManagement.Persistence.Repositories
         }
         public async Task BeginTransactionAsync()
         {
-            _transaction = await _context.Database.BeginTransactionAsync();
+            _transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
         }
 
         public async Task CommitAsync()
@@ -23,7 +25,10 @@ namespace FileManagement.Persistence.Repositories
             try
             {
                 await _context.SaveChangesAsync();
-                await _transaction?.CommitAsync();
+                if (_transaction != null)
+                {
+                    await _transaction.CommitAsync();
+                }
             }
             catch
             {

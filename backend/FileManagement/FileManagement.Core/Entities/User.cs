@@ -4,8 +4,8 @@ namespace FileManagement.Core.Entities
 {
     public class User : AuditableBaseEntity
     {
-        public int IdPerson { get; set; }
-        public string Username { get; set; }
+        public int PeopleId { get; set; }
+        public string UserName { get; set; }
         public string PasswordHash { get; set; }
         public bool? Status { get; set; } = true;
         public People People { get; set; }

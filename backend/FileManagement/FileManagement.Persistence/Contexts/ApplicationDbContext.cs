@@ -13,6 +13,9 @@ namespace FileManagement.Persistence.Contexts
         }
 
         public DbSet<Folder> Folders { get; set; }
+        public DbSet<UserFolder> UserFolders { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<People> Peoples { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -22,9 +25,11 @@ namespace FileManagement.Persistence.Contexts
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedAt = DateTime.Now;
+                        entry.Entity.CreatedBy = 1; 
                         break;
                     case EntityState.Modified:
                         entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.UpdatedBy = 1;
                         break;
                 }
             }

@@ -20,17 +20,17 @@ namespace FileManagement.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(x => x.PasswordHash)
-              .HasMaxLength(500)
-              .IsRequired();
+                  .HasMaxLength(500)
+                  .IsRequired();
 
-            builder.HasIndex(x => x.Username).IsUnique();
+            builder.HasIndex(x => x.UserName).IsUnique();
 
-            builder.Property(x => x.Username)
+            builder.Property(x => x.UserName)
               .HasMaxLength(100)
               .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                     .IsRequired();
+                     .IsRequired(false);
 
             builder.Property(x => x.CreatedAt)
                .IsRequired();
@@ -46,7 +46,7 @@ namespace FileManagement.Persistence.Configurations
 
             builder.HasOne(u => u.People)
                  .WithOne()
-                 .HasForeignKey<User>(u => u.IdPerson)
+                 .HasForeignKey<User>(u => u.PeopleId)
                  .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.CreatedByUser)
@@ -58,6 +58,22 @@ namespace FileManagement.Persistence.Configurations
                 .WithMany()
                 .HasForeignKey(u => u.UpdatedBy)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasQueryFilter(x => x.DeletedAt == null);
+
+            builder.HasData(
+                new User
+                {
+                    Id = 1,
+                    PeopleId = 1,
+                    UserName = "admin",
+                    PasswordHash ="admin",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    Status = true
+                });
+
+
         }
     }
 }

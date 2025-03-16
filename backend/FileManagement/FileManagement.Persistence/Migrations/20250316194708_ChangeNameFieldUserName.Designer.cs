@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250316011929_initialMigration")]
-    partial class initialMigration
+    [Migration("20250316194708_ChangeNameFieldUserName")]
+    partial class ChangeNameFieldUserName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,10 +95,7 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdFile")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUser")
+                    b.Property<int>("FileId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -107,11 +104,14 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdFile");
+                    b.HasIndex("FileId");
 
-                    b.HasIndex("IdUser", "IdFile")
+                    b.HasIndex("UserId", "FileId")
                         .IsUnique();
 
                     b.ToTable("FilePermissions", (string)null);
@@ -136,10 +136,7 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdFile")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdStorageProvider")
+                    b.Property<int>("FileId")
                         .HasColumnType("int");
 
                     b.Property<string>("StorageIdentifier")
@@ -152,6 +149,9 @@ namespace FileManagement.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int>("StorageProviderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -163,7 +163,7 @@ namespace FileManagement.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdStorageProvider");
+                    b.HasIndex("StorageProviderId");
 
                     b.ToTable("FileStorages", (string)null);
                 });
@@ -234,10 +234,7 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdFolder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUser")
+                    b.Property<int>("FolderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -246,11 +243,14 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdFolder");
+                    b.HasIndex("FolderId");
 
-                    b.HasIndex("IdUser", "IdFolder")
+                    b.HasIndex("UserId", "FolderId")
                         .IsUnique();
 
                     b.ToTable("FolderPermissions", (string)null);
@@ -328,12 +328,15 @@ namespace FileManagement.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("BussinessName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -344,15 +347,18 @@ namespace FileManagement.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Identification")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PersonType")
                         .IsRequired()
@@ -382,7 +388,24 @@ namespace FileManagement.Persistence.Migrations
 
                     b.HasIndex("UpdatedBy");
 
-                    b.ToTable("Peoples", (string)null);
+                    b.ToTable("Peoples", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_People_PersonType", "PersonType IN ('N', 'J')");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Main St",
+                            CreatedAt = new DateTime(2025, 3, 16, 14, 47, 8, 434, DateTimeKind.Local).AddTicks(1237),
+                            Email = "ivanperezt@gmail.com",
+                            FirstName = "John",
+                            Identification = "123456789",
+                            LastName = "Doe",
+                            PersonType = "N",
+                            Phone = "1234567890"
+                        });
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.Role", b =>
@@ -430,10 +453,10 @@ namespace FileManagement.Persistence.Migrations
 
             modelBuilder.Entity("FileManagement.Core.Entities.RoleModule", b =>
                 {
-                    b.Property<int>("IdRole")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdModule")
+                    b.Property<int>("ModuleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -456,9 +479,9 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.HasKey("IdRole", "IdModule");
+                    b.HasKey("RoleId", "ModuleId");
 
-                    b.HasIndex("IdModule");
+                    b.HasIndex("ModuleId");
 
                     b.ToTable("RoleModules", (string)null);
                 });
@@ -519,19 +542,18 @@ namespace FileManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdPerson")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("PeopleId")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("Status")
                         .IsRequired()
@@ -546,7 +568,7 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -555,24 +577,36 @@ namespace FileManagement.Persistence.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("IdPerson")
+                    b.HasIndex("PeopleId")
                         .IsUnique();
 
                     b.HasIndex("UpdatedBy");
 
-                    b.HasIndex("Username")
+                    b.HasIndex("UserName")
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 3, 16, 14, 47, 8, 437, DateTimeKind.Local).AddTicks(2777),
+                            PasswordHash = "admin",
+                            PeopleId = 1,
+                            Status = true,
+                            UpdatedAt = new DateTime(2025, 3, 16, 14, 47, 8, 437, DateTimeKind.Local).AddTicks(2787),
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.UserFolder", b =>
                 {
-                    b.Property<int>("IdUser")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("IdFolder")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .IsRequired()
@@ -585,7 +619,7 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("FolderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -594,19 +628,25 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.HasKey("IdUser", "IdFolder");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("IdFolder");
+                    b.HasKey("Id");
+
+                    b.HasIndex("FolderId");
+
+                    b.HasIndex("UserId", "FolderId")
+                        .IsUnique();
 
                     b.ToTable("UserFolders", (string)null);
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.UserRole", b =>
                 {
-                    b.Property<int>("IdUser")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdRole")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -629,9 +669,9 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.HasKey("IdUser", "IdRole");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("IdRole");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
                 });
@@ -651,13 +691,13 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.File", "File")
                         .WithMany("FilePermissions")
-                        .HasForeignKey("IdFile")
+                        .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
                         .WithMany("FilePermissions")
-                        .HasForeignKey("IdUser")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -670,7 +710,7 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.StorageProvider", "StorageProvider")
                         .WithMany("FileStorages")
-                        .HasForeignKey("IdStorageProvider")
+                        .HasForeignKey("StorageProviderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -692,13 +732,13 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
                         .WithMany("FolderPermissions")
-                        .HasForeignKey("IdFolder")
+                        .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
                         .WithMany("FolderPermissions")
-                        .HasForeignKey("IdUser")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -723,8 +763,7 @@ namespace FileManagement.Persistence.Migrations
                     b.HasOne("FileManagement.Core.Entities.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FileManagement.Core.Entities.User", "UpdatedByUser")
                         .WithMany()
@@ -740,13 +779,13 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.Module", "Module")
                         .WithMany("RoleModules")
-                        .HasForeignKey("IdModule")
+                        .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.Role", "Role")
                         .WithMany("RoleModules")
-                        .HasForeignKey("IdRole")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -760,12 +799,11 @@ namespace FileManagement.Persistence.Migrations
                     b.HasOne("FileManagement.Core.Entities.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FileManagement.Core.Entities.People", "People")
                         .WithOne()
-                        .HasForeignKey("FileManagement.Core.Entities.User", "IdPerson")
+                        .HasForeignKey("FileManagement.Core.Entities.User", "PeopleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -785,13 +823,13 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
                         .WithMany("UserFolders")
-                        .HasForeignKey("IdFolder")
+                        .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
                         .WithMany("UserFolders")
-                        .HasForeignKey("IdUser")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -804,13 +842,13 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.Role", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("IdRole")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("IdUser")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

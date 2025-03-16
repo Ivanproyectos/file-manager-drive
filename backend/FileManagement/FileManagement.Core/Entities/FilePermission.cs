@@ -4,8 +4,8 @@ namespace FileManagement.Core.Entities
 {
     public class FilePermission : AuditableBaseEntity
     {
-        public int IdUser { get; set; }
-        public int IdFile { get; set; }
+        public int UserId { get; set; }
+        public int FileId { get; set; }
         public bool CanView { get; set; } = true;
         public bool CanDownload { get; set; }
 

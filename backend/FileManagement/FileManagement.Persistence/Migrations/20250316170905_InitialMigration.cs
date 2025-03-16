@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FileManagement.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -134,8 +134,8 @@ namespace FileManagement.Persistence.Migrations
                 name: "RoleModules",
                 columns: table => new
                 {
-                    IdRole = table.Column<int>(type: "int", nullable: false),
-                    IdModule = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ModuleId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
@@ -145,16 +145,16 @@ namespace FileManagement.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleModules", x => new { x.IdRole, x.IdModule });
+                    table.PrimaryKey("PK_RoleModules", x => new { x.RoleId, x.ModuleId });
                     table.ForeignKey(
-                        name: "FK_RoleModules_Modules_IdModule",
-                        column: x => x.IdModule,
+                        name: "FK_RoleModules_Modules_ModuleId",
+                        column: x => x.ModuleId,
                         principalTable: "Modules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoleModules_Roles_IdRole",
-                        column: x => x.IdRole,
+                        name: "FK_RoleModules_Roles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -166,8 +166,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdFile = table.Column<int>(type: "int", nullable: false),
-                    IdStorageProvider = table.Column<int>(type: "int", nullable: false),
+                    FileId = table.Column<int>(type: "int", nullable: false),
+                    StorageProviderId = table.Column<int>(type: "int", nullable: false),
                     StorageIdentifier = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     StoragePath = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     UploadedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -181,8 +181,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_FileStorages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FileStorages_SourceProviders_IdStorageProvider",
-                        column: x => x.IdStorageProvider,
+                        name: "FK_FileStorages_SourceProviders_StorageProviderId",
+                        column: x => x.StorageProviderId,
                         principalTable: "SourceProviders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -194,8 +194,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdUser = table.Column<int>(type: "int", nullable: false),
-                    IdFile = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FileId = table.Column<int>(type: "int", nullable: false),
                     CanView = table.Column<bool>(type: "bit", nullable: false),
                     CanDownload = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -208,8 +208,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_FilePermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FilePermissions_Files_IdFile",
-                        column: x => x.IdFile,
+                        name: "FK_FilePermissions_Files_FileId",
+                        column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -221,8 +221,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdUser = table.Column<int>(type: "int", nullable: false),
-                    IdFolder = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FolderId = table.Column<int>(type: "int", nullable: false),
                     CanView = table.Column<bool>(type: "bit", nullable: false),
                     CanDownload = table.Column<bool>(type: "bit", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -236,8 +236,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_FolderPermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FolderPermissions_Folders_IdFolder",
-                        column: x => x.IdFolder,
+                        name: "FK_FolderPermissions_Folders_FolderId",
+                        column: x => x.FolderId,
                         principalTable: "Folders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -250,13 +250,15 @@ namespace FileManagement.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PersonType = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    BussinessName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Identification = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<int>(type: "int", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -264,6 +266,7 @@ namespace FileManagement.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Peoples", x => x.Id);
+                    table.CheckConstraint("CK_People_PersonType", "PersonType IN ('N', 'J')");
                 });
 
             migrationBuilder.CreateTable(
@@ -272,12 +275,12 @@ namespace FileManagement.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdPerson = table.Column<int>(type: "int", nullable: false),
+                    PeopleId = table.Column<int>(type: "int", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Status = table.Column<bool>(type: "BIT", maxLength: 500, nullable: false, defaultValue: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<int>(type: "int", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -286,8 +289,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Peoples_IdPerson",
-                        column: x => x.IdPerson,
+                        name: "FK_Users_Peoples_PeopleId",
+                        column: x => x.PeopleId,
                         principalTable: "Peoples",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -309,9 +312,10 @@ namespace FileManagement.Persistence.Migrations
                 name: "UserFolders",
                 columns: table => new
                 {
-                    IdFolder = table.Column<int>(type: "int", nullable: false),
-                    IdUser = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FolderId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -320,16 +324,16 @@ namespace FileManagement.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserFolders", x => new { x.IdUser, x.IdFolder });
+                    table.PrimaryKey("PK_UserFolders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserFolders_Folders_IdFolder",
-                        column: x => x.IdFolder,
+                        name: "FK_UserFolders_Folders_FolderId",
+                        column: x => x.FolderId,
                         principalTable: "Folders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserFolders_Users_IdUser",
-                        column: x => x.IdUser,
+                        name: "FK_UserFolders_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -339,8 +343,8 @@ namespace FileManagement.Persistence.Migrations
                 name: "UserRole",
                 columns: table => new
                 {
-                    IdUser = table.Column<int>(type: "int", nullable: false),
-                    IdRole = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
@@ -350,30 +354,40 @@ namespace FileManagement.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRole", x => new { x.IdUser, x.IdRole });
+                    table.PrimaryKey("PK_UserRole", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UserRole_Roles_IdRole",
-                        column: x => x.IdRole,
+                        name: "FK_UserRole_Roles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRole_Users_IdUser",
-                        column: x => x.IdUser,
+                        name: "FK_UserRole_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_FilePermissions_IdFile",
-                table: "FilePermissions",
-                column: "IdFile");
+            migrationBuilder.InsertData(
+                table: "Peoples",
+                columns: new[] { "Id", "Address", "BussinessName", "CreatedAt", "CreatedBy", "DeletedAt", "Email", "FirstName", "Identification", "LastName", "PersonType", "Phone", "UpdatedAt", "UpdatedBy" },
+                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 3, 16, 12, 9, 5, 717, DateTimeKind.Local).AddTicks(3221), null, null, "ivanperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy", "Username" },
+                values: new object[] { 1, new DateTime(2025, 3, 16, 12, 9, 5, 720, DateTimeKind.Local).AddTicks(1688), null, null, "admin", 1, true, new DateTime(2025, 3, 16, 12, 9, 5, 720, DateTimeKind.Local).AddTicks(1693), null, "admin" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FilePermissions_IdUser_IdFile",
+                name: "IX_FilePermissions_FileId",
                 table: "FilePermissions",
-                columns: new[] { "IdUser", "IdFile" },
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FilePermissions_UserId_FileId",
+                table: "FilePermissions",
+                columns: new[] { "UserId", "FileId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -382,19 +396,19 @@ namespace FileManagement.Persistence.Migrations
                 column: "IdFolder");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileStorages_IdStorageProvider",
+                name: "IX_FileStorages_StorageProviderId",
                 table: "FileStorages",
-                column: "IdStorageProvider");
+                column: "StorageProviderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FolderPermissions_IdFolder",
+                name: "IX_FolderPermissions_FolderId",
                 table: "FolderPermissions",
-                column: "IdFolder");
+                column: "FolderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FolderPermissions_IdUser_IdFolder",
+                name: "IX_FolderPermissions_UserId_FolderId",
                 table: "FolderPermissions",
-                columns: new[] { "IdUser", "IdFolder" },
+                columns: new[] { "UserId", "FolderId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -436,9 +450,9 @@ namespace FileManagement.Persistence.Migrations
                 column: "UpdatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleModules_IdModule",
+                name: "IX_RoleModules_ModuleId",
                 table: "RoleModules",
-                column: "IdModule");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Roles_RoleName",
@@ -453,14 +467,20 @@ namespace FileManagement.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserFolders_IdFolder",
+                name: "IX_UserFolders_FolderId",
                 table: "UserFolders",
-                column: "IdFolder");
+                column: "FolderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRole_IdRole",
+                name: "IX_UserFolders_UserId_FolderId",
+                table: "UserFolders",
+                columns: new[] { "UserId", "FolderId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_RoleId",
                 table: "UserRole",
-                column: "IdRole");
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CreatedBy",
@@ -468,9 +488,9 @@ namespace FileManagement.Persistence.Migrations
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_IdPerson",
+                name: "IX_Users_PeopleId",
                 table: "Users",
-                column: "IdPerson",
+                column: "PeopleId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -485,17 +505,17 @@ namespace FileManagement.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_FilePermissions_Users_IdUser",
+                name: "FK_FilePermissions_Users_UserId",
                 table: "FilePermissions",
-                column: "IdUser",
+                column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_FolderPermissions_Users_IdUser",
+                name: "FK_FolderPermissions_Users_UserId",
                 table: "FolderPermissions",
-                column: "IdUser",
+                column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);

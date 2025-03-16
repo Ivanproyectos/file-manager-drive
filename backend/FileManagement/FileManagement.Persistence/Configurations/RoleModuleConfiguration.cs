@@ -9,16 +9,16 @@ namespace FileManagement.Persistence.Configurations
         public void Configure(EntityTypeBuilder<RoleModule> builder)
         {
                builder.ToTable("RoleModules");
-               builder.HasKey(x => new { x.IdRole, x.IdModule });
+               builder.HasKey(x => new { x.RoleId, x.ModuleId });
 
                builder.HasOne(x => x.Role)
                    .WithMany(x => x.RoleModules)
-                   .HasForeignKey(x => x.IdRole)
+                   .HasForeignKey(x => x.RoleId)
                    .OnDelete(DeleteBehavior.Cascade);
 
                builder.HasOne(x => x.Module)
                    .WithMany(x => x.RoleModules)
-                   .HasForeignKey(x => x.IdModule)
+                   .HasForeignKey(x => x.ModuleId)
                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.Property(x => x.CreatedBy)
@@ -32,6 +32,8 @@ namespace FileManagement.Persistence.Configurations
 
                 builder.Property(x => x.UpdatedBy)
                    .IsRequired(false);
+
+            builder.HasQueryFilter(x => x.DeletedAt == null);
         }
     }
 }
