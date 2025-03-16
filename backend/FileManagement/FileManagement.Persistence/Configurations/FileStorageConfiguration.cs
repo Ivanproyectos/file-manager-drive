@@ -1,41 +1,38 @@
 ﻿using FileManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileManagement.Persistence.Configurations
 {
-    public class FileConfiguration : IEntityTypeConfiguration<Core.Entities.File>
+    public class FileStorageConfiguration : IEntityTypeConfiguration<FileStorage>
     {
-        public void Configure(EntityTypeBuilder<Core.Entities.File> builder)
+        public void Configure(EntityTypeBuilder<FileStorage> builder)
         {
-
-            builder.ToTable("Files");
+            builder.ToTable("FileStorages");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.FileName)
-                .HasMaxLength(500)
+            builder.Property(x => x.IdStorageProvider)
                 .IsRequired();
 
-            builder.Property(x => x.Extension)
-                .HasMaxLength(100)
+            builder.Property(x => x.StorageIdentifier)
+                .HasMaxLength(200)
                 .IsRequired();
 
-            builder.Property(x => x.SizeBytes)
-               .IsRequired();
+            builder.Property(x => x.StoragePath)
+                 .HasMaxLength(500)
+                 .IsRequired();
 
-            builder.HasOne(x => x.Folder)
-                .WithMany(x => x.Files)
-                .HasForeignKey(x => x.IdFolder)
+            builder.Property(x => x.UploadedAt)
+                 .IsRequired();
+
+            builder.HasOne(x => x.StorageProvider)
+                .WithMany(x => x.FileStorages)
+                .HasForeignKey(x => x.IdStorageProvider)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(x => x.CreatedBy)
-                .IsRequired();
+             .IsRequired();
 
             builder.Property(x => x.CreatedAt)
                .IsRequired();
@@ -45,7 +42,6 @@ namespace FileManagement.Persistence.Configurations
 
             builder.Property(x => x.UpdatedBy)
                .IsRequired(false);
-
         }
     }
 }

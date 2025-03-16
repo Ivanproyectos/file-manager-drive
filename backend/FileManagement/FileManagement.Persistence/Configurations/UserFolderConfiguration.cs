@@ -20,6 +20,18 @@ namespace FileManagement.Persistence.Configurations
               .WithMany(x => x.UserFolders)
               .HasForeignKey(x => x.IdUser)
               .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(x => x.CreatedBy)
+             .IsRequired();
+
+            builder.Property(x => x.CreatedAt)
+               .IsRequired();
+
+            builder.Property(x => x.UpdatedAt)
+                .IsRequired(false);
+
+            builder.Property(x => x.UpdatedBy)
+               .IsRequired(false);
         }
     }
 }

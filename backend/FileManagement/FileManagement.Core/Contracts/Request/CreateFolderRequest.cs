@@ -2,7 +2,7 @@
 
 namespace FileManagement.Core.Contracts.Request
 {
-    public record struct CreateFolderRequest(string Name, Guid ParentId) : IRequest<int>
+    public record struct CreateFolderRequest(string Name, int ParentId) : IRequest<int>
     {
     }
 }

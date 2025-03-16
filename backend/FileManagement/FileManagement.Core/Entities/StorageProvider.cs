@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Entities
 {
-    public class Role: AuditableBaseEntity
+    public class StorageProvider : AuditableBaseEntity
     {
-        public string RoleName { get; set; }
+        public string ProviderName { get; set; }
         public string Description { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
-
-        public ICollection<RoleModule> RoleModules { get; set; }
+        public IEnumerable<FileStorage> FileStorages { get; set; }
     }
 }

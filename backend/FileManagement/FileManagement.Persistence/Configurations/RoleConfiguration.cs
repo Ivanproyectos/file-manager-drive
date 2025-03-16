@@ -29,14 +29,12 @@ namespace FileManagement.Persistence.Configurations
               .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                .HasMaxLength(30)
-                .IsRequired(false);
+                         .IsRequired();
 
             builder.Property(x => x.CreatedAt)
-               .IsRequired(false);
+               .IsRequired();
 
             builder.Property(x => x.UpdatedAt)
-                  .HasMaxLength(30)
                 .IsRequired(false);
 
             builder.Property(x => x.UpdatedBy)

@@ -21,17 +21,22 @@ namespace FileManagement.WebApi.Middleware
             }
             catch (Exception error)
             {
+                if (error is AggregateException aggregateException)
+                {
+                    error = aggregateException.Flatten().InnerExceptions.FirstOrDefault() ?? aggregateException;
+                }
+
                 var result = new ProblemDetailsDto();
                 context.Response.ContentType = "application/json";
                 switch (error)
                 {
-                    case Core.Exceptions.ValidationException e:
+                    case Core.Exceptions.ValidationException ex:
                         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         result.title = "Error de validacion";
-                        result.Details = e.Failures;
+                        result.Details = ex.Failures;
                         break;
-                    case KeyNotFoundException e:
-                        result.title = e.Message;
+                    case KeyNotFoundException ex:
+                        result.title = ex.Message;
                         context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     default:    

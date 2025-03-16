@@ -7,9 +7,10 @@ namespace FileManagement.WebApi.Controllers
     public class FoldersController : BaseApiController
     {
         [HttpPost]
-        public IActionResult Create([FromBody] CreateFolderRequest folderRequest)
+        public async Task<IActionResult> Create([FromBody] CreateFolderRequest folderRequest)
         {
-            return Ok(Mediator.Send(folderRequest));
+
+            return Ok(await Mediator.Send(folderRequest));
         }
     }
 }
