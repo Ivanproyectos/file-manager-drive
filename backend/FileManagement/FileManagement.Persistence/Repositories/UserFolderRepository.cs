@@ -1,6 +1,7 @@
 ﻿using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileManagement.Persistence.Repositories
 {
@@ -21,6 +22,18 @@ namespace FileManagement.Persistence.Repositories
         public async Task AddUserFolder(UserFolder userFolder)
         {
             await _context.AddAsync(userFolder);
+        }
+
+        public async Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int FolderId)
+        {
+           return await _context.UserFolders.Include(uf => uf.Folder)
+                .Where(uf => uf.FolderId == FolderId).ToListAsync();
+        }
+
+        public async Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId)
+        {
+            return await _context.UserFolders.Include(uf => uf.Folder)
+                .Where(uf => uf.UserId == UserId).ToListAsync();
         }
     }
 }

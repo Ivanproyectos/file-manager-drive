@@ -36,33 +36,25 @@ namespace FileManagement.Service.UseCases
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                //var people = _mapper.Map<People>(request.People);
-                var people = new People { Address = request.People.Address,
-                    FirstName = request.People.FirstName, 
-                    LastName = request.People.LastName, 
-                    Phone = request.People.Phone, 
-                    Identification = request.People.Identification,
-                    PersonType = request.People.PersonType, 
-                    Email = request.People.Email
-                };
+                var people = _mapper.Map<People>(request.People);
 
                 await _peopleRepository.AddPeopleAsync(people);
 
-                //await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
 
-                //var user = _mapper.Map<User>(request);
+                var user = _mapper.Map<User>(request);
 
-                //user.PasswordHash = _passwordService.HashPassword(request.Password);
+                user.PasswordHash = _passwordService.HashPassword(request.Password);
 
-                //user.PeopleId = people.Id;
+                user.PeopleId = people.Id;
+                user.People = null;
 
-                //await _userRepository.AddUserAsync(user);
+                await _userRepository.AddUserAsync(user);
 
                 await _unitOfWork.CommitAsync();
 
-                //return new CreateUserResponse { Id = user.Id, UserName = user.UserName };
+                return new CreateUserResponse { Id = user.Id, UserName = user.UserName };
 
-                return new CreateUserResponse();
             } catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();

@@ -16,7 +16,8 @@ namespace FileManagement.Service.Mappers
 
             #region dto to entity
             CreateMap<CreateFolderRequest, Folder>();
-            CreateMap<CreateUserRequest, User>();
+            CreateMap<CreateUserRequest, User>()
+                .ForMember(dest => dest.People, opt => opt.Ignore());
             CreateMap<CreatePeopleRequest, People>();
             #endregion
         }

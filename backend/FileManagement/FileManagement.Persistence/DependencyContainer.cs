@@ -20,6 +20,7 @@ namespace FileManagement.Persistence
             services.AddScoped<IUserFolderRepository, UserFolderRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPeopleRepository, PeopleRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 

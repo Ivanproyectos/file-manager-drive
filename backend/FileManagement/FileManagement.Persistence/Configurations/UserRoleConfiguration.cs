@@ -8,31 +8,37 @@ namespace FileManagement.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
-               builder.HasKey(ur => new { ur.UserId, ur.RoleId }); // Clave compuesta
+            builder.ToTable("UserRoles");
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-                builder.HasOne(ur => ur.User)
-                    .WithMany(u => u.UserRoles)
-                    .HasForeignKey(ur => ur.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasIndex(ur => new { ur.UserId, ur.RoleId }).IsUnique();
 
-                builder.HasOne(ur => ur.Role)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.RoleId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(ur => ur.User)
+                .WithMany()
+                .HasForeignKey(ur => ur.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                builder.Property(x => x.CreatedBy)
-                 .IsRequired();
+            builder.HasOne(ur => ur.Role)
+                .WithMany()
+                .HasForeignKey(ur => ur.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                builder.Property(x => x.CreatedAt)
-                   .IsRequired();
+            builder.Property(x => x.CreatedBy)
+                .IsRequired();
 
-                builder.Property(x => x.UpdatedAt)
-                    .IsRequired(false);
+            builder.Property(x => x.CreatedAt)
+                .IsRequired();
 
-                builder.Property(x => x.UpdatedBy)
-                   .IsRequired(false);
+            builder.Property(x => x.UpdatedAt)
+                .IsRequired(false);
+
+            builder.Property(x => x.UpdatedBy)
+                .IsRequired(false);
 
             builder.HasQueryFilter(x => x.DeletedAt == null);
+
+            builder.HasData(new UserRole {Id = 1, UserId = 1, RoleId = 1, CreatedAt = DateTime.Now, CreatedBy = 1 });
         }
     }
 }

@@ -16,7 +16,7 @@ namespace FileManagement.Persistence.Contexts
         public DbSet<UserFolder> UserFolders { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<People> Peoples { get; set; }
-
+        public DbSet<UserRole> UserRoles { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
@@ -38,7 +38,19 @@ namespace FileManagement.Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            //modelBuilder.Entity<User>().HasData(new User
+            //{
+            //    Id = 1,
+            //    PeopleId = 1,
+            //    UserName = "admin",
+            //    PasswordHash = "admin",
+            //    CreatedAt = DateTime.Now,
+            //    UpdatedAt = DateTime.Now,
+            //    Status = true
+            //});
         }
     }
 }

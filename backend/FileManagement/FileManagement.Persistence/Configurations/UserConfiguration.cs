@@ -1,6 +1,8 @@
 ﻿using FileManagement.Core.Entities;
+using FileManagement.Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FileManagement.Persistence.Configurations
 {
@@ -52,12 +54,14 @@ namespace FileManagement.Persistence.Configurations
             builder.HasOne(u => u.CreatedByUser)
                 .WithMany()
                 .HasForeignKey(u => u.CreatedBy)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasPrincipalKey(u => u.Id);
 
             builder.HasOne(u => u.UpdatedByUser)
                 .WithMany()
                 .HasForeignKey(u => u.UpdatedBy)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasPrincipalKey(u => u.Id);
 
             builder.HasQueryFilter(x => x.DeletedAt == null);
 
@@ -67,7 +71,7 @@ namespace FileManagement.Persistence.Configurations
                     Id = 1,
                     PeopleId = 1,
                     UserName = "admin",
-                    PasswordHash ="admin",
+                    PasswordHash = "change password for password hash",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     Status = true

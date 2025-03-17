@@ -8,11 +8,12 @@ namespace FileManagement.IoC
 {
     public static class DependencyContainer
     {
-        public static void AddApplication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddPersistenceInfrastructure(configuration);
             services.AddCore();
-            services.AddServices();
+            services.AddServices(configuration);
+            return services;
         
         }
     }

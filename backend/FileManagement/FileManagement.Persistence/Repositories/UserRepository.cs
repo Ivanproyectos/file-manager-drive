@@ -13,10 +13,10 @@ namespace FileManagement.Persistence.Repositories
             _context = dbContext;
         }
 
-        public async Task<User?> AddUserAsync(User user)
+        public async Task AddUserAsync(User user)
         {
-           var result = await _context.Users.AddAsync(user);
-            return result.Entity;
+            await _context.Users.AddAsync(user);
+            
         }
 
         public Task DeleteUserAsync(User user)
@@ -28,12 +28,38 @@ namespace FileManagement.Persistence.Repositories
 
         public Task<List<User>> GetAllUsersAsync()
         {
-            return _context.Users.ToListAsync();
+            return _context.Users.Include(u => u.People)
+                .Select(u => new User { 
+                    Id = u.Id, 
+                    UserName = u.UserName, 
+                    Status = u.Status,
+                    People = new People {
+                        Id = u.People.Id, 
+                        FirstName = u.People.FirstName, 
+                        LastName = u.People.LastName,
+                        Email = u.People.Email,
+                        Phone = u.People.Phone, 
+                        Identification = u.People.Identification,
+                        CreatedAt = u.People.CreatedAt,
+                        PersonType = u.People.PersonType
+                    } 
+                })
+                .ToListAsync();
+        }
+
+        public Task<User?> GetUserByEmailAsync(string email)
+        {
+          return _context.Users.FirstOrDefaultAsync(u => u.People.Email == email);
         }
 
         public async Task<User?> GetUserByIdAsync(int userId)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return await _context.Users.Include(u => u.People).FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public Task<User?> GetUserByUsernameAsync(string UserName)
+        {
+            return _context.Users.FirstOrDefaultAsync(u => u.UserName == UserName);
         }
 
         public Task  UpdateUserAsync(User user)

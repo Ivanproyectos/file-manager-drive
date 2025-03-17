@@ -11,7 +11,7 @@ namespace FileManagement.Core.Entities
     {
         public string RoleName { get; set; }
         public string Description { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
+        //public ICollection<UserRole> UserRoles { get; set; }
 
         public ICollection<RoleModule> RoleModules { get; set; }
     }

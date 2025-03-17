@@ -14,12 +14,12 @@ namespace FileManagement.Persistence.Configurations
             builder.HasIndex(x => new { x.UserId, x.FolderId }).IsUnique();
 
             builder.HasOne(x => x.Folder)
-                .WithMany(x => x.UserFolders)
+                .WithMany()
                 .HasForeignKey(x => x.FolderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.User)
-              .WithMany(x => x.UserFolders)
+              .WithMany()
               .HasForeignKey(x => x.UserId)
               .OnDelete(DeleteBehavior.Cascade);
 

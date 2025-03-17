@@ -14,6 +14,7 @@ namespace FileManagement.Core.Entities
         public int SizeBytes { get; set; }
         public int IdFolder { get; set; }
         public Folder Folder { get; set; }
-        public IEnumerable<FilePermission> FilePermissions { get; set; }
+
+        //public IEnumerable<FilePermission> FilePermissions { get; set; }
     }
 }

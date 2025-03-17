@@ -6,7 +6,7 @@ namespace FileManagement.Core.Interfaces.Repositories
     {
         Task<People> GetPeopleByIdAsync(int id);
         Task<List<People>> GetAllPeopleAsync();
-        Task<People> AddPeopleAsync(People people);
+        Task AddPeopleAsync(People people);
         Task UpdatePeopleAsync(People people);
         Task DeletePeopleAsync(int id);
     }

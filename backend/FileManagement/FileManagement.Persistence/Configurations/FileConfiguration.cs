@@ -30,7 +30,7 @@ namespace FileManagement.Persistence.Configurations
                .IsRequired();
 
             builder.HasOne(x => x.Folder)
-                .WithMany(x => x.Files)
+                .WithMany()
                 .HasForeignKey(x => x.IdFolder)
                 .OnDelete(DeleteBehavior.Cascade);
 

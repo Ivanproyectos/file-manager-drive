@@ -1,11 +1,6 @@
 ﻿using FileManagement.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileManagement.Persistence.Configurations
 {
@@ -41,6 +36,11 @@ namespace FileManagement.Persistence.Configurations
                .IsRequired(false);
 
             builder.HasQueryFilter(x => x.DeletedAt == null);
+
+            builder.HasData(
+                new Role { Id = 1, RoleName = "Admin", Description = "Administrador" ,CreatedAt = DateTime.Now, CreatedBy = 1},
+                new Role { Id = 2, RoleName = "User", Description = "Usuario", CreatedAt = DateTime.Now, CreatedBy = 1 }
+            );
 
 
         }

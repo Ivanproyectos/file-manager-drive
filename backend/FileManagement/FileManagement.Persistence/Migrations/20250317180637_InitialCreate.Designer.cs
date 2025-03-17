@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250316194708_ChangeNameFieldUserName")]
-    partial class ChangeNameFieldUserName
+    [Migration("20250317180637_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -381,7 +381,8 @@ namespace FileManagement.Persistence.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("DeletedAt IS NULL");
 
                     b.HasIndex("Identification")
                         .IsUnique();
@@ -398,7 +399,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 16, 14, 47, 8, 434, DateTimeKind.Local).AddTicks(1237),
+                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 361, DateTimeKind.Local).AddTicks(5609),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -449,6 +450,24 @@ namespace FileManagement.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 362, DateTimeKind.Local).AddTicks(1333),
+                            CreatedBy = 1,
+                            Description = "Administrador",
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 362, DateTimeKind.Local).AddTicks(1344),
+                            CreatedBy = 1,
+                            Description = "Usuario",
+                            RoleName = "User"
+                        });
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.RoleModule", b =>
@@ -591,11 +610,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 16, 14, 47, 8, 437, DateTimeKind.Local).AddTicks(2777),
-                            PasswordHash = "admin",
+                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 364, DateTimeKind.Local).AddTicks(7046),
+                            PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 16, 14, 47, 8, 437, DateTimeKind.Local).AddTicks(2787),
+                            UpdatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 364, DateTimeKind.Local).AddTicks(7055),
                             UserName = "admin"
                         });
                 });
@@ -643,11 +662,11 @@ namespace FileManagement.Persistence.Migrations
 
             modelBuilder.Entity("FileManagement.Core.Entities.UserRole", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .IsRequired()
@@ -660,7 +679,7 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -669,11 +688,27 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRole");
+                    b.HasIndex("UserId", "RoleId")
+                        .IsUnique();
+
+                    b.ToTable("UserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 365, DateTimeKind.Local).AddTicks(7268),
+                            CreatedBy = 1,
+                            RoleId = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.File", b =>
@@ -828,7 +863,7 @@ namespace FileManagement.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
-                        .WithMany("UserFolders")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -841,13 +876,13 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.UserRole", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Role", "Role")
-                        .WithMany("UserRoles")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
-                        .WithMany("UserRoles")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -883,8 +918,6 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.Role", b =>
                 {
                     b.Navigation("RoleModules");
-
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.StorageProvider", b =>
@@ -897,10 +930,6 @@ namespace FileManagement.Persistence.Migrations
                     b.Navigation("FilePermissions");
 
                     b.Navigation("FolderPermissions");
-
-                    b.Navigation("UserFolders");
-
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

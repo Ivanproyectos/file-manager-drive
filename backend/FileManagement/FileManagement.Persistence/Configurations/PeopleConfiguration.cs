@@ -70,9 +70,9 @@ namespace FileManagement.Persistence.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(u => u.UpdatedByUser)
-                .WithMany()
-                .HasForeignKey(u => u.UpdatedBy)
-                .OnDelete(DeleteBehavior.Restrict);
+                    .WithMany()
+                    .HasForeignKey(u => u.UpdatedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasData(
                     new People

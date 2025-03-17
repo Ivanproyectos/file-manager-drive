@@ -12,10 +12,9 @@ namespace FileManagement.Persistence.Repositories
         {
             _context = dbContext;
         }
-        public async Task<People> AddPeopleAsync(People people)
+        public async Task AddPeopleAsync(People people)
         {
-            var newPeople = await _context.Peoples.AddAsync(people);
-            return newPeople.Entity;
+            await _context.Peoples.AddAsync(people);
         }
 
         public Task DeletePeopleAsync(int id)

@@ -25,12 +25,12 @@ namespace FileManagement.Persistence.Configurations
                .HasConversion<bool>().IsRequired();
 
             builder.HasOne(x => x.File)
-                 .WithMany(x => x.FilePermissions)
+                 .WithMany()
                  .HasForeignKey(x => x.FileId)
                  .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.User)
-                .WithMany(x => x.FilePermissions)
+                .WithMany()
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

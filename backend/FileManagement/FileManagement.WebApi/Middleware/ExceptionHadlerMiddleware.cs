@@ -40,11 +40,16 @@ namespace FileManagement.WebApi.Middleware
                         result.title = ex.Message;
                         context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
+                    case Core.Exceptions.UnauthorizedException ex:
+                        result.title = "Unauthorized";
+                        result.Message = ex.Message;
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        break;
                     default:    
                       
                         result.title = "Error interno del servidor";
-                        result.Message = error.Message;
-                        result.Details = _env.IsDevelopment() ? error.Message : "Consulte al administrador del sistema";
+                        result.Message = _env.IsDevelopment() ? error.Message : "Consulte al administrador del sistema";
+                        result.Details = Array.Empty<string>();
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }
