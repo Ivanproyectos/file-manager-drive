@@ -1,5 +1,6 @@
 ﻿
 using FileManagement.Core.Contracts.Dtos;
+using FileManagement.Core.Exceptions;
 using FileManagement.Core.Interfaces.Services;
 using FileManagement.Core.Settings;
 using FileManagement.Service.Behaviors;
@@ -72,15 +73,25 @@ namespace FileManagement.Service
                         OnChallenge = context =>
                         {
                             var result = new ProblemDetailsDto();
+                            try
+                            {
+                                if (context.AuthenticateFailure is null)
+                                {
+                                    context.HandleResponse();
+                                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                                    context.Response.ContentType = "application/json";
 
-                            context.HandleResponse();
-                            context.Response.StatusCode = 401;
-                            context.Response.ContentType = "application/json";
-
-                            result.title = "Unauthorized";
-                            result.Message = "Token es invalido.";
-                            result.StatusCode = context.Response.StatusCode;
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
+                                    result.title = "Unauthorized";
+                                    result.Message = "Token es invalido.";
+                                    result.StatusCode = context.Response.StatusCode;
+                                    return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
+                                }
+                                return Task.CompletedTask;
+                            }
+                            catch (Exception ex)
+                            {
+                                return Task.CompletedTask;
+                            }
                         },
                         OnForbidden = context =>
                         {

@@ -17,6 +17,7 @@ namespace FileManagement.Persistence.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<People> Peoples { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<FilePermission> FilePermissions { get; set; }
         public DbSet<FileManagement.Core.Entities.File> Files { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -41,17 +42,6 @@ namespace FileManagement.Persistence.Contexts
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            //modelBuilder.Entity<User>().HasData(new User
-            //{
-            //    Id = 1,
-            //    PeopleId = 1,
-            //    UserName = "admin",
-            //    PasswordHash = "admin",
-            //    CreatedAt = DateTime.Now,
-            //    UpdatedAt = DateTime.Now,
-            //    Status = true
-            //});
         }
     }
 }

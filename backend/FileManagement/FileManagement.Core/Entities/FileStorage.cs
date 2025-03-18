@@ -10,5 +10,6 @@ namespace FileManagement.Core.Entities
         public string StoragePath { get; set; }
         public DateTime UploadedAt { get; set; } = DateTime.Now;
         public StorageProvider StorageProvider { get; set; }
+        public File File { get; set; }
     }
 }

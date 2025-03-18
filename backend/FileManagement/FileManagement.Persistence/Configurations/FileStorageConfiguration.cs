@@ -31,6 +31,11 @@ namespace FileManagement.Persistence.Configurations
                 .HasForeignKey(x => x.StorageProviderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasOne(x => x.File)
+              .WithOne(x => x.FileStorage)
+              .HasForeignKey<FileStorage>(x => x.FileId)
+              .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(x => x.CreatedBy)
              .IsRequired();
 

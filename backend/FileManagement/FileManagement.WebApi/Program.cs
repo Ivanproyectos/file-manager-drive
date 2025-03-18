@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var allowSpecificOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+var jwtSetting = builder.Configuration.GetSection("JwtSetting").Get<JwtSetting>();
 //builder.Services.Configure<JwtSetting>(builder.Configuration.GetSection("JwtConfig"));
 
 builder.Services.AddControllers();
@@ -86,8 +87,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
+//app.UseMiddleware<JwtMiddleware>(jwtSetting.SecretKey);
 app.UseAuthentication();
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 app.UseMiddleware<ExceptionHadlerMiddleware>();

@@ -16,5 +16,18 @@ namespace FileManagement.Persistence.Repositories
         {
             return await _context.Files.Where(x => x.FolderId == FolderId).ToListAsync();
         }
+
+        public Task<List<Core.Entities.File>> GetFilesWithPermissionsAsync(int FolderId, int UserId)
+        {
+            return _context.Files.Where(x => x.FolderId == FolderId).Select(f => new Core.Entities.File {
+                Id = f.Id,
+                FileName = f.FileName,
+                FolderId = f.FolderId,
+                SizeBytes = f.SizeBytes,
+                CreatedAt = f.CreatedAt,
+                Extension = f.Extension,
+                Permission = _context.FilePermissions.FirstOrDefault(fp => fp.FileId == f.Id && fp.UserId == UserId)
+            }).ToListAsync();
+        }
     }
 }

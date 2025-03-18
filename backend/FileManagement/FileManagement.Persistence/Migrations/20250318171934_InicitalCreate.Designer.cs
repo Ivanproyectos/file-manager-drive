@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250318023327_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250318171934_InicitalCreate")]
+    partial class InicitalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,11 +49,12 @@ namespace FileManagement.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("FileName")
+                    b.Property<string>("FileName")
+                        .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("IdFolder")
+                    b.Property<int>("FolderId")
                         .HasColumnType("int");
 
                     b.Property<int>("SizeBytes")
@@ -67,7 +68,7 @@ namespace FileManagement.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdFolder");
+                    b.HasIndex("FolderId");
 
                     b.ToTable("Files", (string)null);
                 });
@@ -95,7 +96,13 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("FileId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FileId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -110,6 +117,10 @@ namespace FileManagement.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FileId");
+
+                    b.HasIndex("FileId1")
+                        .IsUnique()
+                        .HasFilter("[FileId1] IS NOT NULL");
 
                     b.HasIndex("UserId", "FileId")
                         .IsUnique();
@@ -162,6 +173,9 @@ namespace FileManagement.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileId")
+                        .IsUnique();
 
                     b.HasIndex("StorageProviderId");
 
@@ -399,7 +413,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(5865),
+                            CreatedAt = new DateTime(2025, 3, 18, 12, 19, 34, 370, DateTimeKind.Local).AddTicks(8724),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -455,7 +469,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(8667),
+                            CreatedAt = new DateTime(2025, 3, 18, 12, 19, 34, 371, DateTimeKind.Local).AddTicks(4149),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -463,7 +477,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(8674),
+                            CreatedAt = new DateTime(2025, 3, 18, 12, 19, 34, 371, DateTimeKind.Local).AddTicks(4159),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -610,11 +624,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(175),
+                            CreatedAt = new DateTime(2025, 3, 18, 12, 19, 34, 373, DateTimeKind.Local).AddTicks(8089),
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(180),
+                            UpdatedAt = new DateTime(2025, 3, 18, 12, 19, 34, 373, DateTimeKind.Local).AddTicks(8097),
                             UserName = "admin"
                         });
                 });
@@ -704,7 +718,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(8528),
+                            CreatedAt = new DateTime(2025, 3, 18, 12, 19, 34, 374, DateTimeKind.Local).AddTicks(7902),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1
@@ -715,7 +729,7 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
                         .WithMany()
-                        .HasForeignKey("IdFolder")
+                        .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -730,6 +744,10 @@ namespace FileManagement.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FileManagement.Core.Entities.File", null)
+                        .WithOne("Permission")
+                        .HasForeignKey("FileManagement.Core.Entities.FilePermission", "FileId1");
+
                     b.HasOne("FileManagement.Core.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -743,11 +761,19 @@ namespace FileManagement.Persistence.Migrations
 
             modelBuilder.Entity("FileManagement.Core.Entities.FileStorage", b =>
                 {
+                    b.HasOne("FileManagement.Core.Entities.File", "File")
+                        .WithOne("FileStorage")
+                        .HasForeignKey("FileManagement.Core.Entities.FileStorage", "FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FileManagement.Core.Entities.StorageProvider", "StorageProvider")
                         .WithMany("FileStorages")
                         .HasForeignKey("StorageProviderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("File");
 
                     b.Navigation("StorageProvider");
                 });
@@ -890,6 +916,15 @@ namespace FileManagement.Persistence.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FileManagement.Core.Entities.File", b =>
+                {
+                    b.Navigation("FileStorage")
+                        .IsRequired();
+
+                    b.Navigation("Permission")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.Module", b =>

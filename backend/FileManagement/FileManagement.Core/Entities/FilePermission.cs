@@ -8,6 +8,7 @@ namespace FileManagement.Core.Entities
         public int FileId { get; set; }
         public bool CanView { get; set; } = true;
         public bool CanDownload { get; set; }
+        public DateTime ExpirationDate { get; set; }
         public User User { get; set; }
         public File File { get; set; }
     }

@@ -30,7 +30,7 @@ namespace FileManagement.WebApi.Controllers
         {
             return Ok(await _userFolderService.GerUserFolderByFolderIdAsync(FolderId));
         }
-        [HttpGet("/{FolderId:int}/files")]
+        [HttpGet("{FolderId:int}/files")]
         public async Task<IActionResult> GetFiles(int FolderId)
         {
             return Ok(await _fileService.GetFilesByFolderIdAsync(FolderId));

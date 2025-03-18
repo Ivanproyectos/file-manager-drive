@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FileManagement.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InicitalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -111,10 +111,10 @@ namespace FileManagement.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FileName = table.Column<int>(type: "int", maxLength: 500, nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Extension = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     SizeBytes = table.Column<int>(type: "int", nullable: false),
-                    IdFolder = table.Column<int>(type: "int", nullable: false),
+                    FolderId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -125,8 +125,8 @@ namespace FileManagement.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Files_Folders_IdFolder",
-                        column: x => x.IdFolder,
+                        name: "FK_Files_Folders_FolderId",
+                        column: x => x.FolderId,
                         principalTable: "Folders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -183,6 +183,12 @@ namespace FileManagement.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_FileStorages", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_FileStorages_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_FileStorages_SourceProviders_StorageProviderId",
                         column: x => x.StorageProviderId,
                         principalTable: "SourceProviders",
@@ -200,6 +206,8 @@ namespace FileManagement.Persistence.Migrations
                     FileId = table.Column<int>(type: "int", nullable: false),
                     CanView = table.Column<bool>(type: "bit", nullable: false),
                     CanDownload = table.Column<bool>(type: "bit", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FileId1 = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -215,6 +223,11 @@ namespace FileManagement.Persistence.Migrations
                         principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FilePermissions_Files_FileId1",
+                        column: x => x.FileId1,
+                        principalTable: "Files",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -375,31 +388,38 @@ namespace FileManagement.Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "Peoples",
                 columns: new[] { "Id", "Address", "BussinessName", "CreatedAt", "CreatedBy", "DeletedAt", "Email", "FirstName", "Identification", "LastName", "PersonType", "Phone", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(5865), null, null, "ivanperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
+                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 3, 18, 12, 19, 34, 370, DateTimeKind.Local).AddTicks(8724), null, null, "ivanperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "RoleName", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(8667), 1, null, "Administrador", "Admin", null, null },
-                    { 2, new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(8674), 1, null, "Usuario", "User", null, null }
+                    { 1, new DateTime(2025, 3, 18, 12, 19, 34, 371, DateTimeKind.Local).AddTicks(4149), 1, null, "Administrador", "Admin", null, null },
+                    { 2, new DateTime(2025, 3, 18, 12, 19, 34, 371, DateTimeKind.Local).AddTicks(4159), 1, null, "Usuario", "User", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy", "UserName" },
-                values: new object[] { 1, new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(175), null, null, "change password for password hash", 1, true, new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(180), null, "admin" });
+                values: new object[] { 1, new DateTime(2025, 3, 18, 12, 19, 34, 373, DateTimeKind.Local).AddTicks(8089), null, null, "change password for password hash", 1, true, new DateTime(2025, 3, 18, 12, 19, 34, 373, DateTimeKind.Local).AddTicks(8097), null, "admin" });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "RoleId", "UpdatedAt", "UpdatedBy", "UserId" },
-                values: new object[] { 1, new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(8528), 1, null, 1, null, null, 1 });
+                values: new object[] { 1, new DateTime(2025, 3, 18, 12, 19, 34, 374, DateTimeKind.Local).AddTicks(7902), 1, null, 1, null, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilePermissions_FileId",
                 table: "FilePermissions",
                 column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FilePermissions_FileId1",
+                table: "FilePermissions",
+                column: "FileId1",
+                unique: true,
+                filter: "[FileId1] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilePermissions_UserId_FileId",
@@ -408,9 +428,15 @@ namespace FileManagement.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Files_IdFolder",
+                name: "IX_Files_FolderId",
                 table: "Files",
-                column: "IdFolder");
+                column: "FolderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileStorages_FileId",
+                table: "FileStorages",
+                column: "FileId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_FileStorages_StorageProviderId",

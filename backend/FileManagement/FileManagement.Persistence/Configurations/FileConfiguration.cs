@@ -46,6 +46,14 @@ namespace FileManagement.Persistence.Configurations
             builder.Property(x => x.UpdatedBy)
                .IsRequired(false);
 
+            builder.Ignore(x => x.Permission);
+
+
+            //builder.HasOne(x => x.FileStorage)
+            //    .WithOne()
+            //    .HasForeignKey<File>(x => x.FileStorageId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasQueryFilter(x => x.DeletedAt == null);
 
         }

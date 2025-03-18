@@ -13,8 +13,12 @@ namespace FileManagement.Service.Mappers
             #region entity to dto
             CreateMap<Folder, CreateFolderResponse>();
             CreateMap<Folder, FolderDto>();
-            CreateMap<FileManagement.Core.Entities.File, FileDto>();
+            CreateMap<Core.Entities.File, FileDto>()
+                .ForMember(dest => dest.CanView, opt => opt.MapFrom(src => src.Permission.CanView))
+                .ForMember(dest => dest.CanDownload, opt => opt.MapFrom(src => src.Permission.CanDownload))
+                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.Permission.ExpirationDate.ToString("o")));
 
+            //CreateMap<List<Core.Entities.File>, List<FileDto>>();
 
             #endregion
 
