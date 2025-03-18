@@ -17,6 +17,7 @@ namespace FileManagement.Persistence.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<People> Peoples { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<FileManagement.Core.Entities.File> Files { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
@@ -24,11 +25,11 @@ namespace FileManagement.Persistence.Contexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedAt = DateTime.Now;
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
                         entry.Entity.CreatedBy = 1; 
                         break;
                     case EntityState.Modified:
-                        entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.UpdatedAt = DateTime.UtcNow;
                         entry.Entity.UpdatedBy = 1;
                         break;
                 }

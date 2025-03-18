@@ -1,17 +1,12 @@
-﻿using FileManagement.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FileManagement.Core.Contracts.Dtos;
 
 namespace FileManagement.Core.Interfaces.Services
 {
     public interface IUserFolderService
     {
-        Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int FolderId);
+        Task<List<FolderDto>> GerUserFolderByFolderIdAsync(int FolderId);
 
-        Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId);
+        Task<List<FolderDto>> GerUserFolderAsync();
      
     }
 }

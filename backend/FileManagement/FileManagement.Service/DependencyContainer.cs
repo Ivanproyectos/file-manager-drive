@@ -24,12 +24,13 @@ namespace FileManagement.Service
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-            services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
+            services.Configure<JwtSetting>(configuration.GetSection("JWTSetting"));
 
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<IPasswordService, PasswordService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IUserFolderService, UserFolderService>();
+            services.AddTransient<IFileService, FileService>();
 
             services.AddTransient<SeedUseCase>();
 
@@ -45,9 +46,9 @@ namespace FileManagement.Service
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["JwtSetting:Issuer"],
-                        ValidAudience = configuration["JwtSetting:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["JwtSetting:SecretKey"])),
+                        ValidIssuer = configuration["JWTSetting:Issuer"],
+                        ValidAudience = configuration["JWTSetting:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["JWTSetting:SecretKey"])),
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,

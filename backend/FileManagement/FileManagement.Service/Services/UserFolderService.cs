@@ -1,11 +1,7 @@
-﻿using FileManagement.Core.Entities;
+﻿using AutoMapper;
+using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileManagement.Service.Services
 {
@@ -13,21 +9,30 @@ namespace FileManagement.Service.Services
     {
         private readonly IUserFolderRepository _userFolderRepository;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public UserFolderService(IUserFolderRepository userFolderRepository, ITokenService tokenService)
+        public UserFolderService(IUserFolderRepository userFolderRepository, 
+            ITokenService tokenService, IMapper mapper)
         {
             _userFolderRepository = userFolderRepository;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
-        public async Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int FolderId)
+        public async Task<List<FolderDto>> GerUserFolderByFolderIdAsync(int FolderId)
         {
-            return await _userFolderRepository.GerUserFolderByFolderIdAsync(FolderId);
+            var decodedToken = _tokenService.DecodeToken();
+
+            var userFolders = await _userFolderRepository.GerUserFolderByFolderIdAsync(decodedToken.UserId, FolderId);
+            var folders = userFolders.Select(x => x.Folder).ToList();
+            return _mapper.Map<List<FolderDto>>(folders);
         }
 
-        public async Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId)
+        public async Task<List<FolderDto>> GerUserFolderAsync()
         {
-            var userToken =  _tokenService.DecodeToken();
-            return await _userFolderRepository.GerUserFolderByUserIdAsync(userToken.Id);
+            var decodedToken =  _tokenService.DecodeToken();
+            var userFolders = await _userFolderRepository.GerUserFolderByUserIdAsync(decodedToken.UserId);
+            var folders = userFolders.Select(x => x.Folder).ToList();
+            return _mapper.Map<List<FolderDto>>(folders);
         }
     }
 }

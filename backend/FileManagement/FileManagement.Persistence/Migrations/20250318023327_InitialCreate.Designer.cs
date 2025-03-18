@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250317180637_InitialCreate")]
+    [Migration("20250318023327_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -399,7 +399,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 361, DateTimeKind.Local).AddTicks(5609),
+                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(5865),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -455,7 +455,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 362, DateTimeKind.Local).AddTicks(1333),
+                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(8667),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -463,7 +463,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 362, DateTimeKind.Local).AddTicks(1344),
+                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 963, DateTimeKind.Local).AddTicks(8674),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -610,11 +610,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 364, DateTimeKind.Local).AddTicks(7046),
+                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(175),
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 364, DateTimeKind.Local).AddTicks(7055),
+                            UpdatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(180),
                             UserName = "admin"
                         });
                 });
@@ -704,7 +704,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 17, 13, 6, 37, 365, DateTimeKind.Local).AddTicks(7268),
+                            CreatedAt = new DateTime(2025, 3, 17, 21, 33, 26, 966, DateTimeKind.Local).AddTicks(8528),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1
@@ -714,7 +714,7 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.File", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
-                        .WithMany("Files")
+                        .WithMany()
                         .HasForeignKey("IdFolder")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -725,13 +725,13 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.FilePermission", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.File", "File")
-                        .WithMany("FilePermissions")
+                        .WithMany()
                         .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
-                        .WithMany("FilePermissions")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -755,7 +755,7 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.Folder", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "ParentFolder")
-                        .WithMany("SubFolders")
+                        .WithMany()
                         .HasForeignKey("ParentFolderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -766,13 +766,13 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.FolderPermission", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
-                        .WithMany("FolderPermissions")
+                        .WithMany()
                         .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileManagement.Core.Entities.User", "User")
-                        .WithMany("FolderPermissions")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -857,7 +857,7 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.UserFolder", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
-                        .WithMany("UserFolders")
+                        .WithMany()
                         .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -892,22 +892,6 @@ namespace FileManagement.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FileManagement.Core.Entities.File", b =>
-                {
-                    b.Navigation("FilePermissions");
-                });
-
-            modelBuilder.Entity("FileManagement.Core.Entities.Folder", b =>
-                {
-                    b.Navigation("Files");
-
-                    b.Navigation("FolderPermissions");
-
-                    b.Navigation("SubFolders");
-
-                    b.Navigation("UserFolders");
-                });
-
             modelBuilder.Entity("FileManagement.Core.Entities.Module", b =>
                 {
                     b.Navigation("RoleModules");
@@ -923,13 +907,6 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.StorageProvider", b =>
                 {
                     b.Navigation("FileStorages");
-                });
-
-            modelBuilder.Entity("FileManagement.Core.Entities.User", b =>
-                {
-                    b.Navigation("FilePermissions");
-
-                    b.Navigation("FolderPermissions");
                 });
 #pragma warning restore 612, 618
         }

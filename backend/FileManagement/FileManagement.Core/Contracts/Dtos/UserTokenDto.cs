@@ -9,7 +9,7 @@ namespace FileManagement.Core.Contracts.Dtos
     public class UserTokenDto
     {
         public string Email { get; set; }
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
     }
 }

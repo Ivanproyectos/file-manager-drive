@@ -96,7 +96,7 @@ namespace FileManagement.Service.Services
             var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             if(string.IsNullOrEmpty(token))
             {
-                throw new UnauthorizedException("Token no encontrado");
+                throw new UnauthorizedException("Usuario no autorizado");
             }
 
             var handler = new JwtSecurityTokenHandler();
@@ -108,7 +108,7 @@ namespace FileManagement.Service.Services
                 var userId = jsonToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
                 var email = jsonToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
 
-                return new UserTokenDto { Email = email, Id = int.Parse(userId) };
+                return new UserTokenDto { Email = email, UserId = int.Parse(userId) };
             }
             return new UserTokenDto();
         }

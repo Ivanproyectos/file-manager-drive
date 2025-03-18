@@ -1,4 +1,6 @@
-﻿using FileManagement.Core.Interfaces.Services;
+﻿using AutoMapper;
+using FileManagement.Core.Interfaces.Services;
+using FileManagement.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,24 +8,32 @@ namespace FileManagement.WebApi.Controllers
 {
     [Authorize(Roles = "Admin")]
     [ApiController]
-    [Route("api/users/{userId}/folders")]
+    [Route("/users/folders")]
     public class UserFoldersController : BaseApiController
     {
         private readonly IUserFolderService _userFolderService;
-        public UserFoldersController(IUserFolderService userFolderService) {
+        private readonly IFileService _fileService;
+        public UserFoldersController(IUserFolderService userFolderService, IFileService fileService)
+        {
             _userFolderService = userFolderService;
+            _fileService = fileService;
         }
 
         [HttpGet()]
-        public IActionResult GetFolders(int userId)
+        public async Task<IActionResult> GetFolders()
         {
-            return Ok($"Listando carpetas del usuario {userId} toke");
+            return Ok(await _userFolderService.GerUserFolderAsync());
         }
 
-        [HttpGet("folderId")]
-        public async Task<IActionResult> GetFolderById(int userId)
+        [HttpGet("{FolderId:int}")]
+        public async Task<IActionResult> GetFolderById(int FolderId)
         {
-            return Ok(await _userFolderService.GerUserFolderByUserIdAsync(userId));
+            return Ok(await _userFolderService.GerUserFolderByFolderIdAsync(FolderId));
+        }
+        [HttpGet("/{FolderId:int}/files")]
+        public async Task<IActionResult> GetFiles(int FolderId)
+        {
+            return Ok(await _fileService.GetFilesByFolderIdAsync(FolderId));
         }
     }
 }
