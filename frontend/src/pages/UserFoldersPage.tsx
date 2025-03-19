@@ -14,6 +14,14 @@ export const UserFoldersPage = () => {
           </nav>
 
           <h1 className="page-header-title">Files</h1>
+          <div className="d-flex align-items-center gap-2">
+            <div><i className="bi-folder me-1"></i>
+              <strong>2</strong> Folders
+              </div> 
+            <div><i className="bi-files me-1"></i>
+            <strong>3</strong> Archivos
+            </div> 
+          </div>
         </div>
       
 
@@ -50,17 +58,43 @@ export const UserFoldersPage = () => {
       </div>
       {/*End Row */}
     </div>
-    {/*End Page Header */}
-    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-8 mb-5">
-    <div className="d-none d-lg-block">
-                <div className="input-group input-group-merge ">
-                  <div className="input-group-prepend input-group-text">
-                    <i className="bi-search"></i>
-                  </div>
-                  <input type="text" className="form-control" name="firstName" id="firstNameLabel" placeholder="buscar archivos..." aria-label="buscar archivos" />
-                </div>
-              </div>
 
+
+    <div className="row mb-5">
+    <div className="col-lg-8 pe-0">
+
+      <div className="d-none d-lg-block">
+          <div className="input-group input-group-merge ">
+            <div className="input-group-prepend input-group-text">
+              <i className="bi-search"></i>
+            </div>
+            <input type="text" className="form-control" name="firstName" id="firstNameLabel" placeholder="buscar archivos..." aria-label="buscar archivos" />
+          </div>
+      </div>
+    </div>
+    <div className="col-lg-4 d-flex">
+      <div className="d-flex align-items-center me-2 flex-grow-1">
+        <button type="button" className="js-file-attach-reset-img btn btn-white w-100" >
+          <i className="bi-funnel-fill me-2"></i>
+          Filters
+        </button>
+      </div>
+
+      <div className="d-flex align-items-center">
+        <ul className="nav nav-segment" id="connectionsTab" role="tablist">
+            <li className="nav-item">
+              <a className="nav-link active" id="grid-tab" data-bs-toggle="tab" href="#grid" role="tab" aria-controls="grid" aria-selected="true" title="Column view">
+                <i className="bi-grid"></i>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" id="list-tab" data-bs-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false" title="List view">
+                <i className="bi-view-list"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <h2 className="h4 mb-3">Folders</h2>
