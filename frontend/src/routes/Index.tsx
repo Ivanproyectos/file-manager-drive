@@ -1,17 +1,20 @@
 // src/routes/index.tsx
 
-import { Routes, Route } from 'react-router-dom';
-import { Dashboard, Login, ErrorPage, User, UserFoldersPage, FoldersPage } from '@/pages';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Dashboard, LoginPage, ErrorPage, User, UserFoldersPage, FoldersPage } from '@/pages';
 import { PrivateRoute } from './PrivateRoute';
+import { useAuth } from '@/context/AuthContext';
 //import Login from '../pages/Login';
 //import ErrorPage from '../pages/ErrorPage';
 //import PrivateRoute from './PrivateRoute'; // Componente para proteger rutas
 
 export const AppRoutes = () => {
+  const { isAuthenticated } = useAuth();
   return (
     <Routes>
 
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+      <Route path="/login" element={<LoginPage />} />
       
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<Dashboard />}>
@@ -19,6 +22,7 @@ export const AppRoutes = () => {
           <Route path="/dashboard/user" element={<User />} />
           <Route path="/dashboard/user-folders" element={<UserFoldersPage />} />
           <Route path="/dashboard/folders" element={<FoldersPage />} />
+          <Route path="*" element={<ErrorPage />} />
         </Route>
 
       </Route>

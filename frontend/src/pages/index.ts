@@ -1,5 +1,5 @@
 export { Dashboard } from '@/pages/Dashboard';
-export { Login } from '@/pages/Login';  
+export { LoginPage } from '@/pages/LoginPage';  
 export { ErrorPage } from '@/pages/ErrorPage';
 export { User } from '@/pages/User';
 export { UserFoldersPage } from '@/pages/UserFoldersPage';
