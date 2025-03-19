@@ -1,3 +1,4 @@
+using FileManagement.Core.Interfaces.Services;
 using FileManagement.Core.Settings;
 using FileManagement.IoC;
 using FileManagement.WebApi.Middleware;
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices(builder.Configuration);
+//builder.Services.AddTransient<JwtMiddleware>();
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",policy =>
 {
@@ -87,7 +89,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
-//app.UseMiddleware<JwtMiddleware>(jwtSetting.SecretKey);
+app.UseMiddleware<JwtMiddleware>(jwtSetting.SecretKey);
 app.UseAuthentication();
 
 app.UseAuthorization();

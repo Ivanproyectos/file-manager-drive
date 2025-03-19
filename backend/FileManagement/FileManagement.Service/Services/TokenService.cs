@@ -1,6 +1,5 @@
 ﻿using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Exceptions;
-using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
 using FileManagement.Core.Settings;
 using Microsoft.AspNetCore.Http;
@@ -15,29 +14,22 @@ namespace FileManagement.Service.Services
     internal class TokenService : ITokenService
     {
         private readonly JwtSetting _jwtConfig;
-        private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public TokenService(IOptions<JwtSetting> jwtConfig, 
-            IUserRepository userRepository, 
             IHttpContextAccessor httpContextAccessor)
         {
             _jwtConfig = jwtConfig.Value;
-            _userRepository = userRepository;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<TokenDto> GenerateToken(int userId, List<string> roles)
+        public async Task<TokenDto> GenerateToken(int userId, UserDto user)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"usuario con el id {userId} no existe");
-            }
+     
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.SecretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var userRoles = new List<Claim>();
-            foreach (var role in roles)
+            foreach (var role in user.Roles)
             {
                 userRoles.Add(new Claim("roles", role));
             }
@@ -46,7 +38,7 @@ namespace FileManagement.Service.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user?.People?.Email ?? string.Empty),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
              }.Concat(userRoles);
 

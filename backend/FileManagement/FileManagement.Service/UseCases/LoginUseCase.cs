@@ -1,4 +1,5 @@
-﻿using FileManagement.Core.Contracts.Request;
+﻿using FileManagement.Core.Contracts.Dtos;
+using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Exceptions;
 using FileManagement.Core.Interfaces.Repositories;
@@ -12,7 +13,7 @@ namespace FileManagement.Service.UseCases
         private readonly IUserRepository _userRepository;
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
-        private readonly IUserRoleRepository _userRoleRepository; 
+        private readonly IUserRoleRepository _userRoleRepository;
         public LoginUseCase(IUserRepository userRepository,
             IPasswordService passwordService,
             ITokenService tokenService,
@@ -30,16 +31,26 @@ namespace FileManagement.Service.UseCases
             if (user == null) {
                 throw new UnauthorizedException($"El usuario con el email {request.Email} no existe");
             }
+
             if (!_passwordService.VerifyPassword(user.PasswordHash, request.Password))
             {
                 throw new UnauthorizedException("Contraseña incorrecta");
             }
 
+            var userInfo = await _userRepository.GetUserByIdAsync(user.Id);
+
             var roles = await _userRoleRepository.GetUserRolesAsync(user.Id);
 
             var roleNames = roles.Select(x => x.Role.RoleName).ToList();
 
-            var tokenDto = await _tokenService.GenerateToken(user.Id, roleNames);
+            var userDto = new UserDto
+            {
+                Id = userInfo.Id,
+                Email = userInfo.People.Email,
+                Roles = roleNames
+            };
+
+            var tokenDto = await _tokenService.GenerateToken(user.Id, userDto);
             
             return new LoginResponse { Token = tokenDto.Token, ExpiresIn = tokenDto.ExpiresIn };
 

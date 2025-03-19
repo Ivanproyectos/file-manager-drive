@@ -403,7 +403,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 18, 14, 13, 12, 959, DateTimeKind.Local).AddTicks(6197),
+                            CreatedAt = new DateTime(2025, 3, 18, 18, 49, 4, 997, DateTimeKind.Local).AddTicks(9904),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -459,7 +459,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 18, 14, 13, 12, 960, DateTimeKind.Local).AddTicks(991),
+                            CreatedAt = new DateTime(2025, 3, 18, 18, 49, 4, 998, DateTimeKind.Local).AddTicks(2697),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -467,7 +467,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 18, 14, 13, 12, 960, DateTimeKind.Local).AddTicks(999),
+                            CreatedAt = new DateTime(2025, 3, 18, 18, 49, 4, 998, DateTimeKind.Local).AddTicks(2703),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -614,11 +614,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 18, 14, 13, 12, 962, DateTimeKind.Local).AddTicks(8304),
+                            CreatedAt = new DateTime(2025, 3, 18, 18, 49, 5, 0, DateTimeKind.Local).AddTicks(2957),
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 18, 14, 13, 12, 962, DateTimeKind.Local).AddTicks(8320),
+                            UpdatedAt = new DateTime(2025, 3, 18, 18, 49, 5, 0, DateTimeKind.Local).AddTicks(2962),
                             UserName = "admin"
                         });
                 });
@@ -708,7 +708,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 18, 14, 13, 12, 964, DateTimeKind.Local).AddTicks(2354),
+                            CreatedAt = new DateTime(2025, 3, 18, 18, 49, 5, 1, DateTimeKind.Local).AddTicks(986),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1
