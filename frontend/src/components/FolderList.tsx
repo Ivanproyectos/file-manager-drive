@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
 declare const HSCore: any;
@@ -451,10 +452,10 @@ export const FolderList = () => {
           <tbody>
             <tr>
               <td>
-                <a className="d-flex align-items-center" href="javascript:;">
+                <Link className="d-flex align-items-center" to="/dashboard/folders/1">
                   <i className="bi-folder me-2"></i>
                   <span>Dashboard</span>
-                </a>
+                </Link>
               </td>
               <td>
                 <div className="avatar-group avatar-group-xs avatar-circle">

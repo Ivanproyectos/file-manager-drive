@@ -1,4 +1,4 @@
-import { FolderList, NewFolderForm } from '@/components';
+import { FolderList, CreateFolderForm } from '@/components';
 
 export const FoldersPage = () => {
   return (
@@ -20,33 +20,11 @@ export const FoldersPage = () => {
         </div>
       
 
-        <div className="col-sm-auto" aria-label="Button group">
+        <div className="col-sm-auto">
           {/*Button Group */}
-          <div className="btn-group" role="group">
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal">
-              <i className="bi-cloud-arrow-up-fill me-1"></i> Upload
+          <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal">
+              <i className="bi-plus me-1"></i> Nuevo folder
             </button>
-
-            <div className="btn-group">
-              <button type="button" className="btn btn-primary dropdown-toggle" id="uploadGroupDropdown" data-bs-toggle="dropdown" aria-expanded="false"></button>
-
-              <div className="dropdown-menu dropdown-menu-end" aria-labelledby="uploadGroupDropdown">
-                <a className="dropdown-item" href="#">
-                  <i className="bi-folder-plus dropdown-item-icon"></i> New folder
-                </a>
-                <a className="dropdown-item" href="#">
-                  <i className="bi-folder-symlink dropdown-item-icon"></i> New shared folder
-                </a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
-                  <i className="bi-file-earmark-arrow-up dropdown-item-icon"></i> Upload files
-                </a>
-                <a className="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
-                  <i className="bi-upload dropdown-item-icon"></i> Upload folder
-                </a>
-              </div>
-            </div>
-          </div>
           {/*End Button Group */}
         </div>
         {/*End Col */}
@@ -115,7 +93,7 @@ export const FoldersPage = () => {
           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
           <div className="modal-body">
-          <NewFolderForm />
+           <CreateFolderForm />
           </div>
 
       </div>

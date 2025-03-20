@@ -4,3 +4,4 @@ export { ErrorPage } from '@/pages/ErrorPage';
 export { UsersPage } from '@/pages/UsersPage';
 export { UserFoldersPage } from '@/pages/UserFoldersPage';
 export { FoldersPage } from '@/pages/FoldersPage';
+export { FolderEditPage } from '@/pages/FolderEditPage';
