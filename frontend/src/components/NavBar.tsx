@@ -107,9 +107,9 @@ export const NavBar = () => {
                     className="nav-collapse collapse "
                     data-bs-parent="#navbarVerticalMenuPagesMenu"
                   >
-                    <a className="nav-link " href="../users.html">
+                    <Link className="nav-link " to="/dashboard/users">
                       Overview
-                    </a>
+                    </Link>
                     <a className="nav-link " href="../users-leaderboard.html">
                       Leaderboard
                     </a>

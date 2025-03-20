@@ -1,7 +1,7 @@
 // src/routes/index.tsx
 
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Dashboard, LoginPage, ErrorPage, User, UserFoldersPage, FoldersPage } from '@/pages';
+import { Dashboard, LoginPage, ErrorPage, UsersPage, UserFoldersPage, FoldersPage } from '@/pages';
 import { PrivateRoute } from './PrivateRoute';
 import { useAuth } from '@/context/AuthContext';
 //import Login from '../pages/Login';
@@ -19,7 +19,7 @@ export const AppRoutes = () => {
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<Dashboard />}>
           {/* <Route path="/dashboard" element={<Dashboard />} /> */} 
-          <Route path="/dashboard/user" element={<User />} />
+          <Route path="/dashboard/users" element={<UsersPage />} />
           <Route path="/dashboard/user-folders" element={<UserFoldersPage />} />
           <Route path="/dashboard/folders" element={<FoldersPage />} />
           <Route path="*" element={<ErrorPage />} />

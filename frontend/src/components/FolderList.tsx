@@ -1,89 +1,85 @@
-import {  useEffect } from "react";
+import { useEffect } from "react";
 
 declare const HSCore: any;
 declare const HSBsDropdown: any;
 
 export const FolderList = () => {
- 
- useEffect(() => {
+  useEffect(() => {
+    HSBsDropdown.init();
 
-    HSBsDropdown.init()
-    
-    HSCore.components.HSTomSelect.init('.js-select')
+    HSCore.components.HSTomSelect.init(".js-select");
 
-    HSCore.components.HSDatatables.init($('#datatable'), {
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'copy',
-            className: 'd-none'
-          },
-          {
-            extend: 'excel',
-            className: 'd-none'
-          },
-          {
-            extend: 'csv',
-            className: 'd-none'
-          },
-          {
-            extend: 'pdf',
-            className: 'd-none'
-          },
-          {
-            extend: 'print',
-            className: 'd-none'
-          },
-        ],
-        select: {
-          style: 'multi',
-          selector: 'td:first-child input[type="checkbox"]',
-          classMap: {
-            checkAll: '#datatableCheckAll',
-            counter: '#datatableCounter',
-            counterInfo: '#datatableCounterInfo'
-          }
+    HSCore.components.HSDatatables.init($("#datatable"), {
+      dom: "Bfrtip",
+      buttons: [
+        {
+          extend: "copy",
+          className: "d-none",
         },
-        language: {
-          zeroRecords: `<div class="text-center p-4">
-              <img class="mb-3" src="./assets/svg/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
-              <img class="mb-3" src="./assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
-            <p class="mb-0">No data to show</p>
-            </div>`
-        }
-      });
+        {
+          extend: "excel",
+          className: "d-none",
+        },
+        {
+          extend: "csv",
+          className: "d-none",
+        },
+        {
+          extend: "pdf",
+          className: "d-none",
+        },
+        {
+          extend: "print",
+          className: "d-none",
+        },
+      ],
+      select: {
+        style: "multi",
+        selector: 'td:first-child input[type="checkbox"]',
+        classMap: {
+          checkAll: "#datatableCheckAll",
+          counter: "#datatableCounter",
+          counterInfo: "#datatableCounterInfo",
+        },
+      },
+      language: {
+        zeroRecords: `<div className="text-center p-4">
+              <img className="mb-3" src="./assets/svg/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+              <img className="mb-3" src="./assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
+            <p className="mb-0">No data to show</p>
+            </div>`,
+      },
+    });
 
-      const datatable = HSCore.components.HSDatatables.getItem(0); 
+    const datatable = HSCore.components.HSDatatables.getItem(0);
 
-      $('#export-copy').click(function() {
-        datatable.button('.buttons-copy').trigger()
-      });
+    $("#export-copy").click(function () {
+      datatable.button(".buttons-copy").trigger();
+    });
 
-      $('#export-excel').click(function() {
-        datatable.button('.buttons-excel').trigger()
-      });
+    $("#export-excel").click(function () {
+      datatable.button(".buttons-excel").trigger();
+    });
 
-      $('#export-csv').click(function() {
-        datatable.button('.buttons-csv').trigger()
-      });
+    $("#export-csv").click(function () {
+      datatable.button(".buttons-csv").trigger();
+    });
 
-      $('#export-pdf').click(function() {
-        datatable.button('.buttons-pdf').trigger()
-      });
+    $("#export-pdf").click(function () {
+      datatable.button(".buttons-pdf").trigger();
+    });
 
-      $('#export-print').click(function() {
-        datatable.button('.buttons-print').trigger()
-      });
+    $("#export-print").click(function () {
+      datatable.button(".buttons-print").trigger();
+    });
 
+    $(".js-datatable-filter").on("change", function () {
+      var $this = $(this),
+        elVal = $this.val(),
+        targetColumnIndex = $this.data("target-column-index");
 
-      $('.js-datatable-filter').on('change', function() {
-        var $this = $(this),
-          elVal = $this.val(),
-          targetColumnIndex = $this.data('target-column-index');
-
-        datatable.column(targetColumnIndex).search(elVal).draw();
-      });
-
+      datatable.column(targetColumnIndex).search(elVal).draw();
+    });
   }, []);
 
   return (
@@ -423,7 +419,8 @@ export const FolderList = () => {
 
       {/* Table */}
       <div className="table-responsive datatable-custom">
-        <table id="datatable"
+        <table
+          id="datatable"
           className="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
           data-hs-datatables-options='{
                "columnDefs": [{
@@ -445,783 +442,609 @@ export const FolderList = () => {
           <thead className="thead-light">
             <tr>
               <th>Name</th>
-              <th>Position</th>
-              <th>Country</th>
-              <th>Status</th>
+              <th>Usuarios</th>
+              <th>Tamaño</th>
+              <th>Fecha Creado</th>
             </tr>
           </thead>
 
           <tbody>
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img10.jpg"
-                      alt="Image Description"
-                    />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Amanda Harvey{" "}
-                      <i
-                        className="bi-patch-check-fill text-primary"
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Top endorsed"
-                      ></i>
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      amanda@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Director</span>
-                <span className="d-block fs-5">Human resources</span>
-              </td>
-              <td>United Kingdom</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">A</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Anne Richard
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      anne@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Seller</span>
-                <span className="d-block fs-5">Branding products</span>
-              </td>
-              <td>United States</td>
-              <td>
-                <span className="legend-indicator bg-warning"></span>Pending
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      David Harrison
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      david@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Unknown</span>
-                <span className="d-block fs-5">Unknown</span>
-              </td>
-              <td>United States</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Finch Hoot
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      finch@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Designer</span>
-                <span className="d-block fs-5">IT department</span>
-              </td>
-              <td>Argentina</td>
-              <td>
-                <span className="legend-indicator bg-danger"></span>Suspended
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">B</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Bob Dean
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      bob@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Executive director</span>
-                <span className="d-block fs-5">Marketing</span>
-              </td>
-              <td>Austria</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
                     <img
                       className="avatar-img"
                       src="../assets/img/160x160/img9.jpg"
                       alt="Image Description"
                     />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Ella Lauda{" "}
-                      <i
-                        className="bi-patch-check-fill text-primary"
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Top endorsed"
-                      ></i>
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      ella@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Co-founder</span>
-                <span className="d-block fs-5">All departments</span>
-              </td>
-              <td>United Kingdom</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">L</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Lori Hunter
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      hunter@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Developer</span>
-                <span className="d-block fs-5">Mobile app</span>
-              </td>
-              <td>Estonia</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">M</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Mark Colbert
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      mark@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Executive director</span>
-                <span className="d-block fs-5">Human resources</span>
-              </td>
-              <td>Canada</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
                     <img
                       className="avatar-img"
-                      src="../assets/img/160x160/img6.jpg"
+                      src="../assets/img/160x160/img3.jpg"
                       alt="Image Description"
                     />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Costa Quinn
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      costa@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Co-founder</span>
-                <span className="d-block fs-5">All departments</span>
-              </td>
-              <td>France</td>
-              <td>
-                <span className="legend-indicator bg-warning"></span>Pending
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">R</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Rachel Doe{" "}
-                      <i
-                        className="bi-patch-check-fill text-primary"
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Top endorsed"
-                      ></i>
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      rachel@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Accountant</span>
-                <span className="d-block fs-5">Finance</span>
-              </td>
-              <td>United States</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
                     <img
                       className="avatar-img"
-                      src="../assets/img/160x160/img8.jpg"
+                      src="../assets/img/160x160/img5.jpg"
                       alt="Image Description"
                     />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Linda Bates
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      linda@example.com
-                    </span>
-                  </div>
+                  </a>
+                </div>
+              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
+            </tr>
+            <tr>
+              <td>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Folder 2</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Unknown</span>
-                <span className="d-block fs-5">Unknown</span>
+              <div className="avatar-group avatar-group-xs avatar-circle">
+                    <a className="avatar" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Amanda Harvey">
+                      <img className="avatar-img" src="./assets/img/160x160/img10.jpg" alt="Image Description"/>
+                    </a>
+                    <a className="avatar" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="David Harrison">
+                      <img className="avatar-img" src="./assets/img/160x160/img3.jpg" alt="Image Description" />
+                    </a>
+                    <a className="avatar avatar-soft-info" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Lisa Iston">
+                      <span className="avatar-initials">L</span>
+                    </a>
+                    <a className="avatar avatar-light avatar-circle" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Lewis Clarke, Chris Mathew and 3 more">
+                      <span className="avatar-initials">+5</span>
+                    </a>
+                  </div>
               </td>
-              <td>United Kingdom</td>
-              <td>
-                <span className="legend-indicator bg-danger"></span>Suspended
-              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
-
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">B</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Brian Halligan
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      brian@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Director</span>
-                <span className="d-block fs-5">Accounting</span>
-              </td>
-              <td>France</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">C</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Chris Mathew
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      chris@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Developer</span>
-                <span className="d-block fs-5">Mobile app</span>
-              </td>
-              <td>Switzerland</td>
-              <td>
-                <span className="legend-indicator bg-warning"></span>Pending
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
                     <img
                       className="avatar-img"
-                      src="../assets/img/160x160/img7.jpg"
+                      src="../assets/img/160x160/img9.jpg"
                       alt="Image Description"
                     />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Clarice Boone{" "}
-                      <i
-                        className="bi-patch-check-fill text-primary"
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Top endorsed"
-                      ></i>
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      clarice@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Seller</span>
-                <span className="d-block fs-5">Branding products</span>
-              </td>
-              <td>United Kingdom</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">L</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Lewis Clarke
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      lewis@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Co-founder</span>
-                <span className="d-block fs-5">IT department</span>
-              </td>
-              <td>Switzerland</td>
-              <td>
-                <span className="legend-indicator bg-warning"></span>Pending
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
                     <img
                       className="avatar-img"
-                      src="../assets/img/160x160/img4.jpg"
+                      src="../assets/img/160x160/img3.jpg"
                       alt="Image Description"
                     />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Sam Kart
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      sam@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Designer</span>
-                <span className="d-block fs-5">Branding</span>
-              </td>
-              <td>Canada</td>
-              <td>
-                <span className="legend-indicator bg-warning"></span>Pending
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">J</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Johnny Appleseed
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      johnny@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Accountant</span>
-                <span className="d-block fs-5">Human resources</span>
-              </td>
-              <td>United States</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">P</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Phileas Fogg
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      phileas@example.com
-                    </span>
-                  </div>
-                </a>
-              </td>
-              <td>
-                <span className="d-block h5 mb-0">Designer</span>
-                <span className="d-block fs-5">Branding</span>
-              </td>
-              <td>Spain</td>
-              <td>
-                <span className="legend-indicator bg-danger"></span>Suspended
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-circle">
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
                     <img
                       className="avatar-img"
-                      src="../assets/img/160x160/img6.jpg"
+                      src="../assets/img/160x160/img5.jpg"
                       alt="Image Description"
                     />
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Mark Williams{" "}
-                      <i
-                        className="bi-patch-check-fill text-primary"
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Top endorsed"
-                      ></i>
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      mark@example.com
-                    </span>
-                  </div>
-                </a>
+                  </a>
+                </div>
               </td>
-              <td>
-                <span className="d-block h5 mb-0">Co-founder</span>
-                <span className="d-block fs-5">Branding</span>
-              </td>
-              <td>United Kingdom</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
-
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">T</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Timothy Silva
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      timothy@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Developer</span>
-                <span className="d-block fs-5">Mobile app</span>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img9.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img5.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                </div>
               </td>
-              <td>Italy</td>
-              <td>
-                <span className="legend-indicator bg-warning"></span>Pending
-              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
-
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">G</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Gary Bishop{" "}
-                      <i
-                        className="bi-patch-check-fill text-primary"
-                        data-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Top endorsed"
-                      ></i>
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      gary@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Developer</span>
-                <span className="d-block fs-5">Mobile app</span>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img9.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img5.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                </div>
               </td>
-              <td>Latvia</td>
-              <td>
-                <span className="legend-indicator bg-success"></span>Active
-              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
-
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">Y</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Yorker Scogings
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      yorker@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Seller</span>
-                <span className="d-block fs-5">Branding products</span>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img9.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img5.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                </div>
               </td>
-              <td>Norway</td>
-              <td>
-                <span className="legend-indicator bg-danger"></span>Suspended
-              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
-
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">F</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Frank Phillips
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      frank@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Unknown</span>
-                <span className="d-block fs-5">Unknown</span>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img9.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img5.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                </div>
               </td>
-              <td>Norway</td>
-              <td>
-                <span className="legend-indicator bg-danger"></span>Suspended
-              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
-
             <tr>
               <td>
-                <a
-                  className="d-flex align-items-center"
-                  href="../user-profile.html"
-                >
-                  <div className="avatar avatar-soft-primary avatar-circle">
-                    <span className="avatar-initials">E</span>
-                  </div>
-                  <div className="ms-3">
-                    <span className="d-block h5 text-inherit mb-0">
-                      Elizabeth Carter
-                    </span>
-                    <span className="d-block fs-5 text-body">
-                      eliz@example.com
-                    </span>
-                  </div>
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
                 </a>
               </td>
               <td>
-                <span className="d-block h5 mb-0">Unknown</span>
-                <span className="d-block fs-5">Unknown</span>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img9.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img5.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                </div>
               </td>
-              <td>United States</td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
+            </tr>
+            <tr>
               <td>
-                <span className="legend-indicator bg-warning"></span>Pending
+                <a className="d-flex align-items-center" href="javascript:;">
+                  <i className="bi-folder me-2"></i>
+                  <span>Dashboard</span>
+                </a>
               </td>
+              <td>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Ella Lauda"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img9.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-dark"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Antony Taylor"
+                  >
+                    <span className="avatar-initials">A</span>
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Sara Iwens"
+                  >
+                    <span className="avatar-initials">S</span>
+                  </a>
+                  <a
+                    className="avatar"
+                    href="../user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Finch Hoot"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="../assets/img/160x160/img5.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                </div>
+              </td>
+              <td> 45 MB </td>
+              <td> 01 Jun 2021 </td>
             </tr>
           </tbody>
         </table>
-
       </div>
       {/* End Table */}
 
@@ -1240,7 +1063,8 @@ export const FolderList = () => {
                   autoComplete="off"
                   data-hs-tom-select-options='{
                             "searchInDropdown": false,
-                            "hideSearch": true
+                            "hideSearch": true,
+                            "dropdownWidth": "5rem"
                           }'
                 >
                   <option value="10">10</option>

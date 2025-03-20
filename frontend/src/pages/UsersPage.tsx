@@ -1,8 +1,7 @@
-import { FolderList, NewFolderForm } from '@/components';
+import { UserList } from "@/components";
 
-export const FoldersPage = () => {
+export const UsersPage = () => {
   return (
-    <>
     <div className="content container-fluid">
 
     <div className="page-header">
@@ -23,7 +22,7 @@ export const FoldersPage = () => {
         <div className="col-sm-auto" aria-label="Button group">
           {/*Button Group */}
           <div className="btn-group" role="group">
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal">
+            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
               <i className="bi-cloud-arrow-up-fill me-1"></i> Upload
             </button>
 
@@ -100,27 +99,13 @@ export const FoldersPage = () => {
       </div>
 
 
-      <FolderList />
+      <UserList />
 
     {/*End Tab Content */}
 
 
   </div>
 
-  <div className="modal fade" id="newFolderModal" tabIndex={-1} aria-labelledby="newFolderModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-dialog-centered modal-lg">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title" id="newProjectModalLabel">Nuevo folder</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-          <div className="modal-body">
-          <NewFolderForm />
-          </div>
-
-      </div>
-    </div>
-  </div>
-  </>
   )
 }
+
