@@ -91,7 +91,6 @@ return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
 window.onload = (function () {
     // STYLE SWITCHER
     // =======================================================
-    debugger;
     const $dropdownBtn = document.getElementById('selectThemeDropdown') // Dropdowon trigger
     const $variants = document.querySelectorAll(`[aria-labelledby="selectThemeDropdown"] [data-icon]`) // All items of the dropdown
 

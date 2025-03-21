@@ -13,4 +13,7 @@
 .text-transparent{
     color: transparent !important;
 }
+.dz-dropzone .dz-title {
+    color: #000;
+}
  

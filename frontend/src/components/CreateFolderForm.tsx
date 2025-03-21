@@ -1,18 +1,35 @@
-import { useEffect } from "react" 
+import { useEffect, useState } from "react" 
 import { FolderDetailsForm , FileDropZone, FilePersmision} from "@/components"
+import { IUserFilePermission } from "@/types"
 declare const HSStepForm: any;
-
+declare const HSBsValidation: any;
 export const CreateFolderForm = () => {
-    useEffect(() => {
-        new HSStepForm('.js-step-form')
-    })
+   const [users, setUsers] = useState<IUserFilePermission[]>([])
 
+    useEffect(() => {
+      new HSStepForm('.js-step-form-validate', {
+        validator: HSBsValidation.init('.js-validate'),
+        preventNextStep () {
+          return false
+        },
+        finish ($el: any) {
+          const $successMessageTempalte = $el.querySelector('#createFolderSuccessMessage').cloneNode(true)
+          $successMessageTempalte.style.display = 'block'
+ 
+          $el.style.display = 'none'
+          $el.parentElement.appendChild($successMessageTempalte)
+        }
+     })
+    },[])
+  const handleSelectedUser = (users: IUserFilePermission[]) => {
+    setUsers(users)
+  }
   return (
-    <form className="js-step-form" data-hs-step-form-options='{
+    <form className="js-step-form-validate js-validate" data-hs-step-form-options='{
         "progressSelector": "#createProjectStepFormProgress",
         "stepsSelector": "#createProjectStepFormContent", 
-        "endSelector": "#createProjectFinishBtn",
-        "isValidate": false
+        "endSelector": "#createFolderFinishBtn",
+        "isValidate": true
       }'>
  {/*Step */}
   <ul id="createProjectStepFormProgress" className="js-step-progress step step-sm step-icon-sm step-inline step-item-between mb-3 mb-sm-7">
@@ -47,11 +64,53 @@ export const CreateFolderForm = () => {
 
     <div id="createProjectStepDetails" className="active">
  
-     <FolderDetailsForm />
+    <div className="mb-4">
+        <label htmlFor="projectNameNewProjectLabel" className="form-label">
+          Folder{" "}
+          <i
+            className="bi-question-circle text-body ms-1"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Displayed on public forums, such as Front."
+          ></i>
+        </label>
+
+  
+          <div className="js-form-message">
+          <input
+            type="text"
+            className="form-control"
+            name="projectName"
+            id="projectNameNewProjectLabel"
+            placeholder="Ingrese el nombre del folder"
+            aria-label="Ingrese el nombre del folder"
+            required data-msg="Nombre de folder es requerido."
+          />
+          <span className="invalid-feedback">Please enter a valid username.</span>
+        </div>
+        </div>
+ 
+      {/*End Form */}
+
+      <div className="mb-4">
+        <label className="form-label">
+          Descripción <span className="form-label-secondary">(Optional)</span>
+        </label>
+        <div className="js-form-message">
+        <textarea
+          className="form-control"
+          name="projectName"
+          placeholder="Ingrese una descripción"
+          aria-label="Ingrese una descripción"
+        ></textarea>
+        </div>
+      </div>
+
       <div className="mb-4">
         <label className="form-label">Adjuntar archivos</label>
-        <FileDropZone />
+        <FileDropZone url="https://localhost:7095/api/upload/upload-chunk" />
       </div>
+       
 
      {/*Footer */}
       <div className="d-flex align-items-center mt-5">
@@ -68,36 +127,12 @@ export const CreateFolderForm = () => {
 
     <div id="createProjectStepMembers" style={{display: "none"}}>
      {/*Form */}
-     <p><i className="bi-info-circle me-2"></i>Agregue los usuarios que tendran acceso a estas carpetas y configure sus permisos</p>
-{/*       <div className="mb-4">
-        <div className="input-group mb-2 mb-sm-0">
-            <div className="input-group-prepend input-group-text">
-                <i className="bi-search"></i>
-            </div>
-          <input type="text" className="form-control" name="fullName" placeholder="Buscar por nombre o correo..." aria-label="Buscar por nombre o correo..." />
+     <p><i className="bi-info-circle me-2"></i>Agregue los usuarios que tendran acceso a estas carpetas y configure sus permisos para los archivos</p>
 
-        </div>
-      </div> */}
-
-      <FilePersmision />
+      <FilePersmision onUpdateUsers={handleSelectedUser} />
 
       <hr className="mt-2" />
-   {/*    <div className="d-grid gap-3">
-    
 
-
-        <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-          <span className="col-8 col-sm-9 ms-0">
-            <i className="bi-chat-left-dots text-primary me-3"></i>
-            <span className="text-dark">Show team activity</span>
-          </span>
-          <span className="col-4 col-sm-3 text-end">
-            <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-          </span>
-        </label>
-
-      </div>
- */}
      {/*Footer */}
       <div className="d-sm-flex align-items-center mt-5">
         <button type="button" className="btn btn-ghost-secondary mb-3 mb-sm-0 me-2" data-hs-step-form-prev-options='{
@@ -108,7 +143,7 @@ export const CreateFolderForm = () => {
 
         <div className="d-flex justify-content-end gap-3 ms-auto">
           <button type="button" className="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-          <button id="createProjectFinishBtn" type="button" className="btn btn-primary">Create Folder</button>
+          <button id="createFolderFinishBtn" type="button" className="btn btn-primary">Create Folder</button>
         </div>
       </div>
      {/*End Footer */}
@@ -117,10 +152,10 @@ export const CreateFolderForm = () => {
  {/*End Content Step Form */}
 
  {/*Message Body */}
-  <div id="createProjectStepSuccessMessage" style={{display: 'none'}}>
+  <div id="createFolderSuccessMessage" style={{display: 'none'}}>
     <div className="text-center">
-      <img className="img-fluid mb-3" src="./assets/svg/illustrations/oc-hi-five.svg" alt="Image Description" data-hs-theme-appearance="default" style={{maxWidth: '15rem'}} />
-      <img className="img-fluid mb-3" src="./assets/svg/illustrations-light/oc-hi-five.svg" alt="Image Description" data-hs-theme-appearance="dark" style={{maxWidth: '15rem'}} />
+      <img className="img-fluid mb-3" src="../assets/svg/illustrations/oc-hi-five.svg" alt="Image Description" data-hs-theme-appearance="default" style={{maxWidth: '15rem'}} />
+      <img className="img-fluid mb-3" src="../assets/svg/illustrations-light/oc-hi-five.svg" alt="Image Description" data-hs-theme-appearance="dark" style={{maxWidth: '15rem'}} />
 
       <div className="mb-4">
         <h2>Creado!</h2>
@@ -128,13 +163,13 @@ export const CreateFolderForm = () => {
       </div>
 
       <div className="d-flex justify-content-center gap-3">
-        <a className="btn btn-white" href="./projects.html">
+      {/*   <a className="btn btn-white" href="./projects.html">
           <i className="bi-chevron-left"></i> Regresar a folders
         </a>
-
-        <a className="btn btn-primary" href="javascript:;" data-toggle="modal" data-target="#newProjectModal">
+ */}
+        <button className="btn btn-primary" data-bs-dismiss="modal" data-toggle="modal" data-target="#newFolderModal">
           <i className="bi-building"></i> Crear Folder
-        </a>
+        </button>
       </div>
     </div>
   </div>

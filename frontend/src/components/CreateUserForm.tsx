@@ -32,7 +32,7 @@ const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
   useEffect(() => {
     onIsSubmitting(isSubmitting);
-  }, [isSubmitting, errors]);
+  }, [isSubmitting]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id="createUserForm">

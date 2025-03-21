@@ -7,4 +7,4 @@ export { FileDropZone } from './FileDropZone';
 export { FolderDetailsForm } from './FolderDetailsForm';
 export { CreateUserForm } from './CreateUserForm';
 export { SearchUser } from './SearchUser';
-export { FilePersmision } from './FilePersmision';
+export { UserFilePersmision as FilePersmision } from './UserFilePersmision';

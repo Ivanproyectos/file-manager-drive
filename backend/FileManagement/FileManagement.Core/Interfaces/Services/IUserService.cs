@@ -1,4 +1,5 @@
-﻿using FileManagement.Core.Entities;
+﻿using FileManagement.Core.Contracts.Request;
+using FileManagement.Core.Entities;
 
 namespace FileManagement.Core.Interfaces.Services
 {
@@ -7,5 +8,6 @@ namespace FileManagement.Core.Interfaces.Services
         Task DeleteUser(int Id);
         Task<List<User>> GetAllUsers(); 
          Task<User> GetUserById(int Id);
+        Task<List<UserSummaryResponse>> GetAllUserSummary();
     }
 }

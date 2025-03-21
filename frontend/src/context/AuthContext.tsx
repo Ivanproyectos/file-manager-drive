@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {  User, AuthContextType  } from "@/types";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext<AuthContextType | null>(null); 
 
@@ -19,6 +20,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode}) => {
       }, []); 
 
       const login = (userData: User, authToken: string) => {
+       // Cookies.set('token', token, { expires: 7, path: '' });
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", authToken);
         setUser(userData);

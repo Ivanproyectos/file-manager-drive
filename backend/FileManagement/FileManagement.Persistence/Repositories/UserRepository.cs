@@ -26,6 +26,11 @@ namespace FileManagement.Persistence.Repositories
             return Task.FromResult(user);
         }
 
+        public Task<List<User>> GetAllUsersActiveAsync()
+        {
+            return _context.Users.Include(u => u.People).Where(u => u.Status == true).ToListAsync();
+        }
+
         public Task<List<User>> GetAllUsersAsync()
         {
             return _context.Users.Include(u => u.People)

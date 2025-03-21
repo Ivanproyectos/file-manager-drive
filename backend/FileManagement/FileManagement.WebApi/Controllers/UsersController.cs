@@ -13,6 +13,11 @@ namespace FileManagement.WebApi.Controllers
         {
             _userService = userService;
         }
+        [HttpGet("summary")]
+        public async Task<IActionResult> GetUserSummary()
+        {
+            return Ok(await _userService.GetAllUserSummary());
+        }
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
