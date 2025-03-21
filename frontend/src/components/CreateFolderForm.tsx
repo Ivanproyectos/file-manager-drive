@@ -1,5 +1,5 @@
 import { useEffect } from "react" 
-import { FolderDetailsForm , FileDropZone} from "@/components"
+import { FolderDetailsForm , FileDropZone, FilePersmision} from "@/components"
 declare const HSStepForm: any;
 
 export const CreateFolderForm = () => {
@@ -10,7 +10,7 @@ export const CreateFolderForm = () => {
   return (
     <form className="js-step-form" data-hs-step-form-options='{
         "progressSelector": "#createProjectStepFormProgress",
-        "stepsSelector": "#createProjectStepFormContent",
+        "stepsSelector": "#createProjectStepFormContent", 
         "endSelector": "#createProjectFinishBtn",
         "isValidate": false
       }'>
@@ -69,7 +69,7 @@ export const CreateFolderForm = () => {
     <div id="createProjectStepMembers" style={{display: "none"}}>
      {/*Form */}
      <p><i className="bi-info-circle me-2"></i>Agregue los usuarios que tendran acceso a estas carpetas y configure sus permisos</p>
-      <div className="mb-4">
+{/*       <div className="mb-4">
         <div className="input-group mb-2 mb-sm-0">
             <div className="input-group-prepend input-group-text">
                 <i className="bi-search"></i>
@@ -77,128 +77,9 @@ export const CreateFolderForm = () => {
           <input type="text" className="form-control" name="fullName" placeholder="Buscar por nombre o correo..." aria-label="Buscar por nombre o correo..." />
 
         </div>
-      </div>
-     {/*End Form */}
+      </div> */}
 
-
-     <table className="table">
-        <thead>
-            <tr>
-                <th scope="col">Usuario</th>
-                <th scope="col">Ver</th>
-                <th scope="col">Descargar</th>
-                <th scope="col">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td>
-              <div className="d-flex align-items-center">
-                <div className="flex-shrink-0">
-                  <div className="avatar avatar-sm avatar-circle">
-                    <img className="avatar-img" src="../assets/img/160x160/img3.jpg" alt="Image Description" />
-                  </div>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <h5 className="text-body mb-0">John Doe</h5>
-                  <span className="d-block small">amanda@site.com</span>
-                </div>
-              </div>
-            </td>
-            <td className="align-middle">
-                <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-                    <span className="col-4 col-sm-3 text-end">
-                        <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-                    </span>
-                </label>
-            </td>
-            <td className="align-middle">
-             <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-                    <span className="col-4 col-sm-3 text-end">
-                        <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-                    </span>
-              </label>
-    
-            </td>
-            <td>
-                <div role="button" className="w-100" style={{fontSize: "2rem"}}>
-                    <i className="bi-x text-danger"></i>
-                </div>
-            </td>
-            </tr>
-            <tr>
-            <td>
-              <div className="d-flex align-items-center">
-                <div className="flex-shrink-0">
-                  <div className="avatar avatar-sm avatar-circle">
-                    <img className="avatar-img" src="../assets/img/160x160/img3.jpg" alt="Image Description" />
-                  </div>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <h5 className="text-body mb-0">John Doe</h5>
-                  <span className="d-block small">amanda@site.com</span>
-                </div>
-              </div>
-            </td>
-            <td className="align-middle">
-                <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-                    <span className="col-4 col-sm-3 text-end">
-                        <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-                    </span>
-                </label>
-            </td>
-            <td className="align-middle">
-             <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-                    <span className="col-4 col-sm-3 text-end">
-                        <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-                    </span>
-              </label>
-    
-            </td>
-            <td>
-                <div role="button" className="w-100" style={{fontSize: "2rem"}}>
-                    <i className="bi-x text-danger"></i>
-                </div>
-            </td>
-            </tr>
-            <tr>
-            <td>
-              <div className="d-flex align-items-center">
-                <div className="flex-shrink-0">
-                  <div className="avatar avatar-sm avatar-circle">
-                    <img className="avatar-img" src="../assets/img/160x160/img3.jpg" alt="Image Description" />
-                  </div>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <h5 className="text-body mb-0">John Doe</h5>
-                  <span className="d-block small">amanda@site.com</span>
-                </div>
-              </div>
-            </td>
-            <td className="align-middle">
-                <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-                    <span className="col-4 col-sm-3 text-end">
-                        <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-                    </span>
-                </label>
-            </td>
-            <td className="align-middle">
-             <label className="row form-check form-switch" htmlFor="addTeamPreferencesNewProjectSwitch2">
-                    <span className="col-4 col-sm-3 text-end">
-                        <input type="checkbox" className="form-check-input" id="addTeamPreferencesNewProjectSwitch2" />
-                    </span>
-              </label>
-    
-            </td>
-            <td>
-                <div role="button" className="w-100" style={{fontSize: "2rem"}}>
-                    <i className="bi-x text-danger"></i>
-                </div>
-            </td>
-            </tr>
-                    
-        </tbody>
-        </table>
+      <FilePersmision />
 
       <hr className="mt-2" />
    {/*    <div className="d-grid gap-3">
@@ -222,7 +103,7 @@ export const CreateFolderForm = () => {
         <button type="button" className="btn btn-ghost-secondary mb-3 mb-sm-0 me-2" data-hs-step-form-prev-options='{
              "targetSelector": "#createProjectStepDetails"
            }'>
-          <i className="bi-chevron-left"></i> Previous step
+          <i className="bi-chevron-left me-1"></i>Paso anterior
         </button>
 
         <div className="d-flex justify-content-end gap-3 ms-auto">
@@ -242,17 +123,17 @@ export const CreateFolderForm = () => {
       <img className="img-fluid mb-3" src="./assets/svg/illustrations-light/oc-hi-five.svg" alt="Image Description" data-hs-theme-appearance="dark" style={{maxWidth: '15rem'}} />
 
       <div className="mb-4">
-        <h2>Successful!</h2>
-        <p>New project has been successfully created.</p>
+        <h2>Creado!</h2>
+        <p>Nuevo folder creado con exito.</p>
       </div>
 
       <div className="d-flex justify-content-center gap-3">
         <a className="btn btn-white" href="./projects.html">
-          <i className="bi-chevron-left"></i> Back to projects
+          <i className="bi-chevron-left"></i> Regresar a folders
         </a>
 
         <a className="btn btn-primary" href="javascript:;" data-toggle="modal" data-target="#newProjectModal">
-          <i className="bi-building"></i> Add new project
+          <i className="bi-building"></i> Crear Folder
         </a>
       </div>
     </div>

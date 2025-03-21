@@ -1,0 +1,16 @@
+.input-group.is-invalid:has(input:focus) {
+    border-color: #ed4c78;
+    box-shadow: 0 0 1rem 0 #ed4c78; /* Sombras alrededor del contenedor */
+}
+.input-group.is-invalid{
+    border-color: #ed4c78;
+}
+.status-spinner{
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+}
+.text-transparent{
+    color: transparent !important;
+}
+ 

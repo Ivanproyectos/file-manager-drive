@@ -18,8 +18,18 @@ export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
         identification: yup.number()
         .typeError('La identificación debe ser un número')
         .integer('Debe ser un número entero').required('La identificación es obligatoria'),
-        lastName: yup.string().required('El apellido es obligatorio'),
-        firstName: yup.string().required('El nombre es obligatorio'),
+        lastName: yup.string()
+        .when('personType', {
+          is: PersonType.Natural,
+          then: (schema) => schema.required('El apellido es obligatorio'),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        firstName: yup.string()
+        .when('personType', {
+          is: PersonType.Natural,
+          then: (schema) => schema.required('El nombre es obligatorio'),
+          otherwise: (schema) => schema.notRequired(),
+        }),
         email: yup.string().email('Correo electrónico inválido').required('El email es obligatorio'),
         bussinessName: yup.string()
         .when('personType', {

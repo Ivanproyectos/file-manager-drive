@@ -169,10 +169,20 @@ export const UsersPage = () => {
               >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary" form="createUserForm">
-              <div className="spinner-border text-light" role="status" style={{ display: isSubmitting ? "inline-block" : "none", width: "1rem", height: "1rem" }}>
-                <span className="visually-hidden">Loading...</span>
-              </div>
+              <button
+                type="submit"
+                className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
+                form="createUserForm"
+                disabled={isSubmitting}
+
+              >
+                <div
+                  className="spinner-border text-light status-spinner"
+                  role="status"
+                  hidden={!isSubmitting}
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
                 Guardar cambios
               </button>
             </div>

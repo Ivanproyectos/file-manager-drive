@@ -27,7 +27,7 @@ export const HeaderTop = () => {
                     <i className="bi-search"></i>
                   </div>
     
-                  <input type="search" className="js-form-search form-control" placeholder="Search in front" aria-label="Search in front" data-hs-for-search-options='{
+                  <input type="search" className="form-control" placeholder="Search in front" aria-label="Search in front" data-hs-for-search-options='{
                          "clearIcon": "#clearSearchResultsIcon",
                          "dropMenuElement": "#searchDropdownMenu",
                          "dropMenuOffset": 20,
