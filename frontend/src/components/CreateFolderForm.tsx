@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react" 
-import { FolderDetailsForm , FileDropZone, FilePersmision} from "@/components"
+import { FileDropZone, FilePersmision} from "@/components"
 import { IUserFilePermission } from "@/types"
+
 declare const HSStepForm: any;
 declare const HSBsValidation: any;
-export const CreateFolderForm = () => {
+
+interface CreateFolderFormProps {
+  onCloseModal: (isOpen: boolean) => void;
+}
+
+export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
+
    const [users, setUsers] = useState<IUserFilePermission[]>([])
+
 
     useEffect(() => {
       new HSStepForm('.js-step-form-validate', {
         validator: HSBsValidation.init('.js-validate'),
-        preventNextStep () {
+    /*     preventNextStep () {
           return false
-        },
+        },  */
         finish ($el: any) {
           const $successMessageTempalte = $el.querySelector('#createFolderSuccessMessage').cloneNode(true)
           $successMessageTempalte.style.display = 'block'
@@ -21,6 +29,7 @@ export const CreateFolderForm = () => {
         }
      })
     },[])
+
   const handleSelectedUser = (users: IUserFilePermission[]) => {
     setUsers(users)
   }
@@ -108,7 +117,7 @@ export const CreateFolderForm = () => {
 
       <div className="mb-4">
         <label className="form-label">Adjuntar archivos</label>
-        <FileDropZone url="https://localhost:7095/api/upload/upload-chunk" />
+        <FileDropZone/>
       </div>
        
 
@@ -142,7 +151,7 @@ export const CreateFolderForm = () => {
         </button>
 
         <div className="d-flex justify-content-end gap-3 ms-auto">
-          <button type="button" className="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+          <button type="button" className="btn btn-white" data-bs-dismiss="modal" onClick={() => onCloseModal(false)} aria-label="Close">Cancelar</button>
           <button id="createFolderFinishBtn" type="button" className="btn btn-primary">Create Folder</button>
         </div>
       </div>

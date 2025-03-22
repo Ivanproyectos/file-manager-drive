@@ -1,41 +1,78 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { getUploadId } from '../api/uploadFile'
+
 declare const HSCore : any
-export const FileDropZone = ({url}: {url: string} ) => {
+export const FileDropZone = () => {
+  const [uploadId, setUploagId] = useState<String | null>(null);
+  const urlUpload = `${import.meta.env.REACT_APP_API_URL}/upload/upload-chunk`;
 
   useEffect(() => {
-   HSCore.components.HSDropzone.init('#attachFiles', {
-    paramName: 'file',
-    chunking: true, 
-    retryChunks: true,
-    chunkSize: 5 * 1024 * 1024, // 5mb
-    url : url,
-    params : function (files: File[], xhr: XMLHttpRequest, chunk: any) {
-      const parameters = { uploadId: '1f5864ef-99d7-45d6-a7f7-a4bf131b560d' };
-    if (chunk) {
+    const loadUploadId = async () => {
+      try {
+        setUploagId(await getUploadId());
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+       // setLoading(false);
+      }
+    }
+    loadUploadId();
+  }, [])
+
+  useEffect(() => {
+ /*    const dropzoneId = 'attachFiles';
+
+    const removeDropzone = (id: string) => {
+      const currentDropzones = HSCore.components.HSDropzone.collection;
+      HSCore.components.HSDropzone.collection = currentDropzones.filter(
+        (dropzone: { id: string }) => dropzone.id !== id
+      );
+    }; */
+
+    debugger;
+    const currentDropzones = HSCore.components.HSDropzone.collection;
+    if (currentDropzones.some((dropzone: { id: string }) => dropzone.id === 'attachFiles')) {
+      const currentDropzon = currentDropzones.find((dropzone: { id: string }) => dropzone.id === 'attachFiles'); //currentDropzon 
+      currentDropzon.$initializedEl.destroy();
+      //removeDropzone(dropzoneId);
+    }
+
+    HSCore.components.HSDropzone.init('#attachFiles', {
+      paramName: 'file',
+      chunking: true,
+      retryChunks: true,
+      chunkSize: 5 * 1024 * 1024, // 5MB
+      url: urlUpload,
+      params: function (files: File[], xhr: XMLHttpRequest, chunk: any) {
+        const params = {
+          uploadId: uploadId,
+          isLastChunk: chunk !== null,
+        };
+
+        if (chunk) {
           return {
-            ...parameters,
+            ...params,
             uuid: chunk.file.upload.uuid,
-            chunkindex: chunk.index,
-            totalfilesize: chunk.file.size,
-            chunksize: this.options.chunkSize,
-            totalchunkcount: chunk.file.upload.totalChunkCount,
-            chunkbyteoffset: chunk.index * this.options.chunkSize,
+            chunkIndex: chunk.index,
+            totalFileSize: chunk.file.size,
+            chunkSize: this.options.chunkSize,
+            totalChunkCount: chunk.file.upload.totalChunkCount,
+            chunkByteOffset: chunk.index * this.options.chunkSize,
           };
         }
-        return parameters;
-    },
- /*    sending: function(file: File, xhr: XMLHttpRequest, formData: FormData) {
-       formData.append("userId", "12"); // Agregar parámetro personalizado
-    }, */
-/*     complete: function (file: any) {
-     // console.log(file);
-    } */
-   });
 
-   return () => {
-    HSCore.components.HSDropzone.destroy('#attachFiles');
-   }
-  }, [])
+        return params;
+      },
+    });
+
+    return () => {
+    /*   const currentDropzones = HSCore.components.HSDropzone.collection;
+      HSCore.components.HSDropzone.collection = currentDropzones.filter(
+        (dropzone: { id: string }) => dropzone.id !== 'attachFiles'
+      ); */
+    };
+  }, [uploadId]);
 
   return (
     <div

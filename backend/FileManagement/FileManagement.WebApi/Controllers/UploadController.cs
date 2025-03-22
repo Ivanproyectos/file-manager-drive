@@ -1,43 +1,23 @@
 ﻿using FileManagement.Core.Contracts.Request;
+using FileManagement.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
     public class UploadController : BaseApiController
     {
-        [HttpPost("upload-chunk")]
-        public async Task<IActionResult> UploadChunk(IFormFile file, [FromForm] ChunckRequest chunkRequest)
+        private readonly IUploadFileService _uploadFileService;
+        public UploadController(IUploadFileService uploadFileService)
         {
-            if(chunkRequest.UploadId is null)
-            {
-                return BadRequest("UploadId is required");
-            }
-            string tempFolder = Path.Combine(Path.GetTempPath(), "Uploads", chunkRequest.UploadId);
-            if (!Directory.Exists(tempFolder))
-            {
-                Directory.CreateDirectory(tempFolder);
-
-            }
-
-            string filePath = string.Empty;
-            if(chunkRequest.Uuid != null)
-            {
-                filePath = Path.Combine(tempFolder, $"{chunkRequest.Uuid}.part-{chunkRequest.ChunkIndex}");
-}
-            else
-            {
-                filePath = Path.Combine(tempFolder, file.FileName);
-            }
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return Ok();
+            _uploadFileService = uploadFileService;
         }
-        [HttpPost("start-upload")]
-        public IActionResult StartUpload()
+        [HttpPost("upload-chunk")]
+        public async Task<IActionResult> UploadChunk([FromForm] ChunckRequest chunckRequest)
+        {
+            return Ok(await Mediator.Send(chunckRequest));
+        }
+        [HttpGet("upload-start")]
+        public IActionResult UploadStart()
         {
             return Ok(new { uploadId =  Guid.NewGuid() });
         }

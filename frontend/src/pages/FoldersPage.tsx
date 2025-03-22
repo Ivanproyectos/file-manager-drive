@@ -1,6 +1,8 @@
 import { FolderList, CreateFolderForm } from '@/components';
+import { useState } from 'react';
 
 export const FoldersPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
     <div className="content container-fluid">
@@ -22,7 +24,7 @@ export const FoldersPage = () => {
 
         <div className="col-sm-auto">
           {/*Button Group */}
-          <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal">
+          <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFolderModal" onClick={() => setIsModalOpen(true)}>
               <i className="bi-plus me-1"></i> Nuevo folder
             </button>
           {/*End Button Group */}
@@ -93,7 +95,7 @@ export const FoldersPage = () => {
           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
           <div className="modal-body">
-           <CreateFolderForm />
+           {isModalOpen && <CreateFolderForm onCloseModal={setIsModalOpen} />}
           </div>
 
       </div>
