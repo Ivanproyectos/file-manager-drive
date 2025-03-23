@@ -13,9 +13,9 @@ namespace FileManagement.Service.Services
 {
     internal class TokenService : ITokenService
     {
-        private readonly JwtSetting _jwtConfig;
+        private readonly JWTSettings _jwtConfig;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public TokenService(IOptions<JwtSetting> jwtConfig, 
+        public TokenService(IOptions<JWTSettings> jwtConfig, 
             IHttpContextAccessor httpContextAccessor)
         {
             _jwtConfig = jwtConfig.Value;

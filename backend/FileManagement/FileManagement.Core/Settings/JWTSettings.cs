@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Settings
 {
-    public class JwtSetting
+    public class JWTSettings
     {
         public string SecretKey { get; set; }
         public string Issuer { get; set; } 

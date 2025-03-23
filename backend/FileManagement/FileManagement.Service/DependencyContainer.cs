@@ -1,9 +1,12 @@
 ﻿
 using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Exceptions;
+using FileManagement.Core.Interfaces.Messaging;
 using FileManagement.Core.Interfaces.Services;
 using FileManagement.Core.Settings;
 using FileManagement.Service.Behaviors;
+using FileManagement.Service.External;
+using FileManagement.Service.Messaging;
 using FileManagement.Service.Services;
 using FileManagement.Service.UseCases;
 using MediatR;
@@ -25,15 +28,20 @@ namespace FileManagement.Service
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-            services.Configure<JwtSetting>(configuration.GetSection("JWTSetting"));
+            services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
+            services.Configure<GoogleDriveSettings>(configuration.GetSection(nameof(GoogleDriveSettings)));
 
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<IPasswordService, PasswordService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IUserFolderService, UserFolderService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IGoogleDriveService, GoogleDriveService>();
+            services.AddSingleton<GoogleDriveClient>();
+            services.AddSingleton<IFileUploadChannel, FileUploadChannel>();
+            services.AddHostedService<FileUploadBackgroundService>();
 
- 
+
 
             services.AddTransient<SeedUseCase>();
 

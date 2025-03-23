@@ -12,6 +12,17 @@ namespace FileManagement.Persistence.Repositories
             _context = dbContext;
         }
 
+        public Task AddFileAsync(Core.Entities.File File)
+        {
+            _context.AddAsync(File);
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteFileAsync(Core.Entities.File File)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Core.Entities.File>> GetFilesByFolderIdAsync(int FolderId)
         {
             return await _context.Files.Where(x => x.FolderId == FolderId).ToListAsync();
@@ -28,6 +39,11 @@ namespace FileManagement.Persistence.Repositories
                 Extension = f.Extension,
                 Permission = _context.FilePermissions.FirstOrDefault(fp => fp.FileId == f.Id && fp.UserId == UserId)
             }).ToListAsync();
+        }
+
+        public Task UpdateFileAsync(Core.Entities.File File)
+        {
+            throw new NotImplementedException();
         }
     }
 }

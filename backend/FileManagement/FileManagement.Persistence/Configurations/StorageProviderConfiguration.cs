@@ -41,6 +41,15 @@ namespace FileManagement.Persistence.Configurations
             //    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasQueryFilter(x => x.DeletedAt == null);
+
+            builder.HasData(new StorageProvider
+            {
+                Id = 1,
+                ProviderName = "Google Drive",
+                Description = "Google Drive Provider",
+                CreatedBy = 1,
+                CreatedAt = DateTime.UtcNow
+            });
         }
     }
 }

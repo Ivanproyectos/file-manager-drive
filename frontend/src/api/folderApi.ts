@@ -1,6 +1,8 @@
 import { axiosInstance } from "./axiosInstance";
-export const createFolder = async () => {
+import { CreateFolder } from "@/types";
+export const createFolder = async (folder: CreateFolder):Promise<number> => {
 
-    axiosInstance.post('/folders');
+   const response = await axiosInstance.post('/folders', folder);
+   return response.data?.id;
 
 }

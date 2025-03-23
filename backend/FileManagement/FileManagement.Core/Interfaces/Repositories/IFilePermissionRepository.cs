@@ -1,14 +1,12 @@
 ﻿using FileManagement.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileManagement.Core.Interfaces.Repositories
 {
     public interface IFilePermissionRepository
     {
         Task<FilePermission> GetFilePermissionByUserIdAsync(int FileId, int UserId);
+
+        Task AddFilePermissionAsync(FilePermission filePermission);
+        Task AddFilePermissionsAsync(List<FilePermission> filePermissions);
     }
 }

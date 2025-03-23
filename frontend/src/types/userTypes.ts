@@ -18,12 +18,4 @@ export type CreateUser = Omit<IUser, "id" | "userName" | "people"> & {
   people: CreatePerson
 }
 
-export interface IUserFilePermission {
-  id: number, 
-  name: string
-  email: string
-  expirationDate: string
-  canView: boolean
-  canDownload: boolean
-}
 

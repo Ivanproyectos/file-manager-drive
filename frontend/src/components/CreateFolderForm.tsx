@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react" 
+import { useEffect, useState, useRef } from "react" 
 import { FileDropZone, FilePersmision} from "@/components"
 import { IUserFilePermission } from "@/types"
 
@@ -12,13 +12,14 @@ interface CreateFolderFormProps {
 
 export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
 
-   const [users, setUsers] = useState<IUserFilePermission[]>([])
+   const [users, setUsers] = useState<IUserFilePermission[]>([]); 
+   const formFolerRef = useRef<HTMLFormElement>(null);
 
 
     useEffect(() => {
 
 
-      new HSStepForm('.js-step-form-validate', {
+      new HSStepForm(formFolerRef, {
         validator: HSBsValidation.init('.js-validate'),
     /*     preventNextStep () {
           return false
@@ -37,13 +38,13 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
     setUsers(users)
   }
   return (
-    <form className="js-step-form-validate js-validate" data-hs-step-form-options='{
+    <form className="js-step-form-validate js-validate" ref={formFolerRef} data-hs-step-form-options='{
         "progressSelector": "#createProjectStepFormProgress",
         "stepsSelector": "#createProjectStepFormContent", 
         "endSelector": "#createFolderFinishBtn",
         "isValidate": true
       }'>
- {/*Step */}
+   {/*Step */}
   <ul id="createProjectStepFormProgress" className="js-step-progress step step-sm step-icon-sm step-inline step-item-between mb-3 mb-sm-7">
 
     <li className="step-item">
