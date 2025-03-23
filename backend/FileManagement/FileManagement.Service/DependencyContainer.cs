@@ -33,7 +33,6 @@ namespace FileManagement.Service
             services.AddTransient<IUserFolderService, UserFolderService>();
             services.AddTransient<IFileService, FileService>();
 
-            services.AddTransient<IUploadFileService, UploadFileService>();
  
 
             services.AddTransient<SeedUseCase>();

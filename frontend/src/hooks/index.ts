@@ -1,0 +1,1 @@
+export { useInitTooltip } from "./useInitTooltip";

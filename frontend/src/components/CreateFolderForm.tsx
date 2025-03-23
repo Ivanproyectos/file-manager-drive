@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { FileDropZone, FilePersmision} from "@/components"
 import { IUserFilePermission } from "@/types"
 
+
 declare const HSStepForm: any;
 declare const HSBsValidation: any;
 
@@ -15,6 +16,8 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
 
 
     useEffect(() => {
+
+
       new HSStepForm('.js-step-form-validate', {
         validator: HSBsValidation.init('.js-validate'),
     /*     preventNextStep () {
@@ -95,7 +98,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
             aria-label="Ingrese el nombre del folder"
             required data-msg="Nombre de folder es requerido."
           />
-          <span className="invalid-feedback">Please enter a valid username.</span>
+          <span className="invalid-feedback">Ingrese el nombre del folder</span>
         </div>
         </div>
  
@@ -127,7 +130,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
           <button type="button" className="btn btn-primary" data-hs-step-form-next-options='{
                     "targetSelector": "#createProjectStepMembers"
                   }'>
-            Next <i className="bi-chevron-right"></i>
+            Siguiente <i className="bi-chevron-right"></i>
           </button>
         </div>
       </div>
@@ -136,7 +139,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
 
     <div id="createProjectStepMembers" style={{display: "none"}}>
      {/*Form */}
-     <p><i className="bi-info-circle me-2"></i>Agregue los usuarios que tendran acceso a estas carpetas y configure sus permisos para los archivos</p>
+     <p><i className="bi-info-circle me-2"></i>Agregue los usuarios que tendran acceso a este folder y configure sus permisos para los archivos</p>
 
       <FilePersmision onUpdateUsers={handleSelectedUser} />
 

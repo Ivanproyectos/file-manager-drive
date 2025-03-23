@@ -22,6 +22,7 @@ export interface IUserFilePermission {
   id: number, 
   name: string
   email: string
+  expirationDate: string
   canView: boolean
   canDownload: boolean
 }
