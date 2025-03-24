@@ -13,10 +13,10 @@ export interface ICreateFile  {
 }
 
 export interface IUserFilePermission {
-    id: number, 
+    userId: number, 
     name: string
     email: string
-    expirationDate: string | Date
+    expirationDate: string
     canView: boolean
     canDownload: boolean
   }

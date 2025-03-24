@@ -16,4 +16,12 @@
 .dz-dropzone .dz-title {
     color: #000;
 }
+.popup-dark {
+    background-color: #25282a;
+    color: #fff;
+}
+.popup-light{
+    background-color: #fff;
+    color: #000;
+}
  

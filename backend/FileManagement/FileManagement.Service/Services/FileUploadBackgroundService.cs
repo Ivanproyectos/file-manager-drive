@@ -1,5 +1,6 @@
 ﻿using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Entities;
+using FileManagement.Core.Enums;
 using FileManagement.Core.Interfaces.Messaging;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace FileManagement.Service.Services
 {
-    public class FileUploadBackgroundService : BackgroundService
+    public class FileUploadBackgroundService : BackgroundService    
     {
         private readonly IFileUploadChannel _channel;
         private readonly IGoogleDriveService _googleDriveService;
@@ -50,7 +51,7 @@ namespace FileManagement.Service.Services
                         var fileName = Path.GetFileName(file);
                         var driveFileId = await _googleDriveService.UploadFileAsync(file, fileName, _googleDriveSettings.FolderId);
 
-                        await SaveFileRepository(file, request);
+                        await SaveFileRepository(driveFileId, file, request);
 
                         // await _fileRepository.UpdateFileStatusAsync(file, driveFileId); // Actualizar tabla
                     }
@@ -63,13 +64,14 @@ namespace FileManagement.Service.Services
             }
         }
 
-        private async Task SaveFileRepository(string file, CreateFileRequest request)
+        private async Task SaveFileRepository(string driveFileId, string file, CreateFileRequest request)
         {
 
             // Creamos un scope para usar servicios Scoped
             using var scope = _serviceProvider.CreateScope();
             var fileRepository = scope.ServiceProvider.GetRequiredService<IFileRepository>();
             var filePermissionRepository = scope.ServiceProvider.GetRequiredService<IFilePermissionRepository>();
+            var fileStorageRepository = scope.ServiceProvider.GetRequiredService<IFileStorageRepository>();
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
             try
@@ -85,6 +87,17 @@ namespace FileManagement.Service.Services
                 };
 
                 await fileRepository.AddFileAsync(fileEntity);
+                await unitOfWork.SaveChangesAsync();
+
+                var fileStorage = new Core.Entities.FileStorage
+                {
+                    StorageIdentifier = driveFileId,
+                    FileId = fileEntity.Id,
+                    StorageProviderId = (int)StorageProviderEnum.Drive,
+                    StoragePath = request.UploadId
+                };
+
+                await fileStorageRepository.AddFileStorageAsync(fileStorage);
                 await unitOfWork.SaveChangesAsync();
 
                 var filesPermisions = request.FilePermissions.Select(fm => new FilePermission

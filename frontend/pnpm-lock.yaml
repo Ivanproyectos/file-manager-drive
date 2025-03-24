@@ -32,6 +32,9 @@ importers:
       react-router-dom:
         specifier: ^7.3.0
         version: 7.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      sweetalert2:
+        specifier: ^11.17.2
+        version: 11.17.2
       yup:
         specifier: ^1.6.1
         version: 1.6.1
@@ -1064,6 +1067,9 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
+  sweetalert2@11.17.2:
+    resolution: {integrity: sha512-HKxDr1IyV3Lxr3W6sb61qm/p2epFIEdr5EKwteRFHnIg6f8nHFl2kX++DBVz16Mac+fFiU3hMpjq1L6yE2Ge5w==}
+
   tiny-case@1.0.3:
     resolution: {integrity: sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==}
 
@@ -2048,6 +2054,8 @@ snapshots:
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
+
+  sweetalert2@11.17.2: {}
 
   tiny-case@1.0.3: {}
 

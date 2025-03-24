@@ -11,12 +11,12 @@ export const userFilePermissionReducer = (state = initialState, action: UserActi
         case UserAction.UPDATE_USER:
             return { 
                 ...state,
-                users: state.users.map<IUserFilePermission>(user => user.id === action.payload.id ? action.payload : user)
+                users: state.users.map<IUserFilePermission>(user => user.userId === action.payload.userId ? action.payload : user)
             }
         case UserAction.DELETE_USER:
             return {
                 ...state,
-                users: state.users.filter(user => user.id !== action.payload)
+                users: state.users.filter(user => user.userId !== action.payload)
             }
         default:
             return state

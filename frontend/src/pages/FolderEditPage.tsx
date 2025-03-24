@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FolderDetailsForm, FileDropZone } from "@/components";
 
@@ -6,9 +6,9 @@ declare const HSBsDropdown: any;
 declare const HSCore: any;
 export const FolderEditPage = () => {
   const { id } = useParams();
+  const [uploadId, setUploagId] = useState<string | null>(null);
 
-  console.log(id);
-
+  
   useEffect(() => {
     HSBsDropdown.init();
     HSCore.components.HSTomSelect.init(".js-select");
@@ -2262,7 +2262,7 @@ export const FolderEditPage = () => {
                 <FolderDetailsForm />
                 <div className="mb-4">
                   <label className="form-label">Adjuntar archivos</label>
-                  <FileDropZone />
+                  <FileDropZone onGetUploadId={setUploagId} />
                 </div>
               </form>
             </div>
@@ -2292,7 +2292,7 @@ export const FolderEditPage = () => {
             </div>
             <div className="modal-body">
               <form>
-                  <FileDropZone />
+                  <FileDropZone onGetUploadId={setUploagId} />
               </form>
             </div>
           </div>

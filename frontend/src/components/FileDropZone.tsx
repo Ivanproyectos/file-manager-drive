@@ -1,14 +1,23 @@
 
 import { useDropZoneServer } from '@/hooks/useDropZoneServer'
+import { useEffect, useRef} from 'react'
 
 declare const HSCore : any
-export const FileDropZone = () => {
-  
-  useDropZoneServer();
- 
+interface Props {
+  onGetUploadId: (uploadId: string) => void
+}
+export const FileDropZone = ({ onGetUploadId }: Props) => {
+  const elementRef = useRef<HTMLDivElement | null>(null);
+  const { uploadId } =  useDropZoneServer({ elementRef });
+
+  useEffect(() => {
+    onGetUploadId(uploadId as string);
+  }, [uploadId])
+
   return (
     <div
-      id="attachFiles"
+      id="dropzoneFileUpload"
+      ref={elementRef}
       className="js-dropzone dz-dropzone dz-dropzone-card"
     >
       <div className="dz-message">

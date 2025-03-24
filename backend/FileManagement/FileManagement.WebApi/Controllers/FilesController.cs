@@ -5,7 +5,7 @@ namespace FileManagement.WebApi.Controllers
 {
     public class FilesController : BaseApiController
     {
-        [HttpPost("file-permissions")]
+        [HttpPost()]
         public async Task<IActionResult> Create(CreateFileRequest createFileRequest)
         {
             return Accepted(await Mediator.Send(createFileRequest));

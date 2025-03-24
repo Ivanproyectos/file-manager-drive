@@ -1,6 +1,6 @@
 import { SearchUser } from "@/components";
 import { userFilePermissionReducer, initialState } from "@/reducers";
-import { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import { IUserFilePermission, IUserSummary } from "@/types";
 import { addUser, updateUser, deleteUser } from "@/actions";
 import { useInitTooltip } from "@/hooks";
@@ -11,35 +11,38 @@ interface userFilePermissionProps {
   onUpdateUsers: (users: IUserFilePermission[]) => void;
 }
 
-export const UserFilePersmision = ({
+export const UserFilePersmision = React.memo(({
   onUpdateUsers,
 }: userFilePermissionProps) => {
   const [state, dispatch] = useReducer(userFilePermissionReducer, initialState);
   const inputDateRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+
     HSCore.components.HSFlatpickr.init(inputDateRef.current, {
       onChange: function (selectedDates: Array<Date>, dateStr:string, instance: any) {
         const userId = Number(instance.input.dataset.userId);
         handleExpirationDate(userId, dateStr);
       }
- 
     });
+    onUpdateUsers(state?.users);
+
   }, [state.users]);
 
   useInitTooltip();
 
+ 
   const handleSelectedUser = (userSummary: IUserSummary) => {
     if (
       state?.users?.find(
-        (user: IUserFilePermission) => user.id === userSummary.id
+        (user: IUserFilePermission) => user.userId === userSummary.id
       )
     )
       return;
     const user: IUserFilePermission = {
-      id: userSummary.id,
+      userId: userSummary.id,
       name: userSummary.name,
-      expirationDate: new Date().toISOString(),
+      expirationDate: new Date().toLocaleDateString(),
       canView: true,
       canDownload: true,
       email: userSummary.email,
@@ -50,34 +53,30 @@ export const UserFilePersmision = ({
 
   const handleCanview = (id: number) => {
     const user = state?.users?.find(
-      (user: IUserFilePermission) => user.id === id
+      (user: IUserFilePermission) => user.userId === id
     );
     if (!user) return;
     dispatch(updateUser({ ...user, canView: !user?.canView }));
-    onUpdateUsers(state?.users);
   };
 
   const handleCandownload = (id: number) => {
     const user = state?.users?.find(
-      (user: IUserFilePermission) => user.id === id
+      (user: IUserFilePermission) => user.userId === id
     );
     if (!user) return;
     dispatch(updateUser({ ...user, canDownload: !user?.canDownload }));
-    onUpdateUsers(state?.users);
   };
 
   const handleExpirationDate = (id: number, expirationDate: string) => {
     const user = state?.users?.find(
-      (user: IUserFilePermission) => user.id === id
+      (user: IUserFilePermission) => user.userId === id
     );
     if (!user) return;
     dispatch(updateUser({ ...user, expirationDate }));
-    onUpdateUsers(state?.users);
   };
 
   const handleDeleteUser = (id: number) => {
     dispatch(deleteUser(id));
-    onUpdateUsers(state?.users);
   };
 
   return (
@@ -104,7 +103,7 @@ export const UserFilePersmision = ({
           </thead>
           <tbody>
             {state?.users?.map((user: IUserFilePermission) => (
-              <tr key={user.id}>
+              <tr key={user.userId}>
                 <td>
                   <div className="d-flex align-items-center">
                     <div className="flex-shrink-0">
@@ -125,14 +124,14 @@ export const UserFilePersmision = ({
                 <td className="align-middle">
                   <label
                     className="row form-check form-switch"
-                    htmlFor={`addfileCanViewSwitch${user.id}`}
+                    htmlFor={`addfileCanViewSwitch${user.userId}`}
                   >
                     <span className="col-4 col-sm-3 text-end">
                       <input
                         type="checkbox"
-                        onChange={() => handleCanview(user.id)}
+                        onChange={() => handleCanview(user.userId)}
                         className="form-check-input"
-                        id={`addfileCanViewSwitch${user.id}`}
+                        id={`addfileCanViewSwitch${user.userId}`}
                         defaultChecked={user.canView}
                       />
                     </span>
@@ -141,14 +140,14 @@ export const UserFilePersmision = ({
                 <td className="align-middle">
                   <label
                     className="row form-check form-switch"
-                    htmlFor={`addfileCanLoadSwitch${user.id}`}
+                    htmlFor={`addfileCanLoadSwitch${user.userId}`}
                   >
                     <span className="col-4 col-sm-3 text-end">
                       <input
                         type="checkbox"
                         className="form-check-input"
-                        onChange={() => handleCandownload(user.id)}
-                        id={`addfileCanLoadSwitch${user.id}`}
+                        onChange={() => handleCandownload(user.userId)}
+                        id={`addfileCanLoadSwitch${user.userId}`}
                         defaultChecked={user.canDownload}
                       />
                     </span>
@@ -163,8 +162,8 @@ export const UserFilePersmision = ({
                     data-hs-flatpickr-options='{
                     "dateFormat": "d/m/Y"
                    }'
-                    defaultValue={user.expirationDate}
-                    data-user-id={user.id}
+                    defaultValue={user.expirationDate.toString()}
+                    data-user-id={user.userId}
                   />
                 </td>
                 <td>
@@ -172,7 +171,7 @@ export const UserFilePersmision = ({
                     role="button"
                     className="w-100"
                     style={{ fontSize: "2rem" }}
-                    onClick={() => handleDeleteUser(user.id)}
+                    onClick={() => handleDeleteUser(user.userId)}
                   >
                     <i className="bi-x text-danger"></i>
                   </div>
@@ -210,4 +209,4 @@ export const UserFilePersmision = ({
       )}
     </>
   );
-};
+} );
