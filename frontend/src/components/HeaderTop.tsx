@@ -237,7 +237,7 @@ export const HeaderTop = () => {
                                   <div className="col-auto">
                                     <div className="d-flex align-items-center">
                                       <div className="htmlForm-check">
-                                        <input className="htmlForm-check-input" type="checkbox" value="" id="notificationCheck1" checked />
+                                        <input className="htmlForm-check-input" type="checkbox" value="" id="notificationCheck1" defaultChecked />
                                         <label className="htmlForm-check-label" htmlFor="notificationCheck1"></label>
                                         <span className="htmlForm-check-stretched-bg"></span>
                                       </div>
@@ -267,7 +267,7 @@ export const HeaderTop = () => {
                                   <div className="col-auto">
                                     <div className="d-flex align-items-center">
                                       <div className="htmlForm-check">
-                                        <input className="htmlForm-check-input" type="checkbox" value="" id="notificationCheck2" checked />
+                                        <input className="htmlForm-check-input" type="checkbox" value="" id="notificationCheck2" defaultChecked />
                                         <label className="htmlForm-check-label" htmlFor="notificationCheck2"></label>
                                         <span className="htmlForm-check-stretched-bg"></span>
                                       </div>
@@ -302,7 +302,7 @@ export const HeaderTop = () => {
                                   <div className="col-auto">
                                     <div className="d-flex align-items-center">
                                       <div className="htmlForm-check">
-                                        <input className="htmlForm-check-input" type="checkbox" value="" id="notificationCheck3" checked />
+                                        <input className="htmlForm-check-input" type="checkbox" value="" id="notificationCheck3" defaultChecked />
                                         <label className="htmlForm-check-label" htmlFor="notificationCheck3"></label>
                                         <span className="htmlForm-check-stretched-bg"></span>
                                       </div>

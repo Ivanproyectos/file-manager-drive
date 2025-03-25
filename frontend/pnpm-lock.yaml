@@ -14,6 +14,9 @@ importers:
       axios:
         specifier: ^1.8.4
         version: 1.8.4
+      datatables.net:
+        specifier: ^2.2.2
+        version: 2.2.2
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -661,6 +664,9 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
+  datatables.net@2.2.2:
+    resolution: {integrity: sha512-gfODIKE3gpgbVeZy2QGj2Dq9roO6hy00S+k1knklrqlMyAMrh1wt0Q6ryBUM7gU96U77ysbq8dYhxFdmcC/oPQ==}
+
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
@@ -895,6 +901,9 @@ packages:
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+
+  jquery@3.7.1:
+    resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
 
   js-cookie@3.0.5:
     resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
@@ -1699,6 +1708,10 @@ snapshots:
 
   csstype@3.1.3: {}
 
+  datatables.net@2.2.2:
+    dependencies:
+      jquery: 3.7.1
+
   date-fns@4.1.0: {}
 
   debug@4.4.0:
@@ -1953,6 +1966,8 @@ snapshots:
   is-number@7.0.0: {}
 
   isexe@2.0.0: {}
+
+  jquery@3.7.1: {}
 
   js-cookie@3.0.5: {}
 

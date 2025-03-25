@@ -1,164 +1,94 @@
 import { useEffect, useState, useRef } from "react";
 import { getUsers } from "@/api/users";
-import { IUser, PersonType } from "@/types";
+import { IUser, PersonType, IPeopleList } from "@/types";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
-
 
 declare const HSCore: any;
 declare const HSBsDropdown: any;
 
 export const UserList = () => {
-  const [users, setUsers] = useState<IUser[]>([])
-  const tableRef = useRef<HTMLTableElement>(null);
-
-
-/*   const columns = [
-    { data: "people.name" },
-    { data: "people.personType" },
-    { data: "people.identification" },
-    { data: "status" },
-    { data: null, label: 'Actions', render: (user) => `<button class="btn btn-primary" onclick="handleClick(${user.id})">Edit</button>` },
-  ];  */
   useInitTomSelect();
 
- // const { datatable } = useClientDataTable({ tableRef, columns: [] });
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const tableRef = useRef<HTMLTableElement>(null);
+
+  const columns = [
+    {
+      data: "people",
+      render: (people: IPeopleList) => `
+        <div
+        class="d-flex align-items-center"
+        >
+        <div class="avatar avatar-soft-primary avatar-circle">
+          <span class="avatar-initials">A</span>
+        </div>
+        <div class="ms-3">
+          <span class="d-block h5 text-inherit mb-0">
+            ${people.name}
+          </span>
+          <span class="d-block fs-5 text-body">
+          ${people.email}
+          </span>
+        </div>
+      </div>
+    `,
+    },
+    {
+      data: "people.personType",
+      render: (personType: PersonType) => (personType ? "Natural" : "Juridica"),
+    },
+    { data: "people.identification" },
+    {
+      data: "status",
+      render: (status: boolean) =>
+        status
+          ? `<span class="legend-indicator bg-success"></span> Activo`
+          : '<span class="legend-indicator bg-warning"></span> Inactivo',
+    },
+    {
+      data: null,
+      label: "Acciones",
+      orderable: false,
+      //with: 200,
+      render: (user: any) => `
+      <div class="d-flex align-items-center gap-2">
+        <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
+        data-id="${user.id}" data-bs-target="#editUserModal">
+              <i class="bi-pencil-fill me-1"></i> Editar
+        </button>
+          <button type="button" class="btn btn-white btn-sm" data-action="delete" data-bs-toggle="modal" data-id="${user.id}" >
+          <i class="bi-trash me-1"></i> Eliminar
+        </button>
+      </div>
+    `,
+    },
+  ];
+
+  const { datatable } = useClientDataTable({ tableRef, columns, data: users });
 
   useEffect(() => {
- /*    const onUpdateUsers = (users: IUser[]) => {
-      debugger ;
-      datatable.clear();
-     // datatable.rows.add(users);
-      datatable.draw();
-    }; */
-
-    const loadUsers = async () => {
-    
-      try {
-       
-          const users = await getUsers();
-           setUsers(users);
-          //onUpdateUsers(users);
-        
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    loadUsers();
+    debugger;
+    $("#datatable").on("click", 'button[data-action="edit"]', function () {
+      const id = $(this).data("id");
+      alert(id);
+      setLoading(true);
+    });
   }, []);
 
-
-
-  /* useEffect(() => {
-
-   if(tableRef.current === null) return;
-
-   debugger;
-
-    HSBsDropdown.init()
-    
-  
-
-    if(!datatable) {
-       HSCore.components.HSDatatables.init(tableRef.current, {
-        dom: 'Bfrtip',
-        columns : [
-          { 'data': 'people.name' },
-          { 'data': 'people.personType' },
-          { 'data': 'people.identification' },
-          { 'data': 'status' }],
-        buttons: [
-          {
-            extend: 'copy',
-            className: 'd-none'
-          },
-          {
-            extend: 'excel',
-            className: 'd-none'
-          },
-          {
-            extend: 'csv',
-            className: 'd-none'
-          },
-          {
-            extend: 'pdf',
-            className: 'd-none'
-          },
-          {
-            extend: 'print',
-            className: 'd-none'
-          },
-        ],
-        select: {
-          style: 'multi',
-          selector: 'td:first-child input[type="checkbox"]',
-          classMap: {
-            checkAll: '#datatableCheckAll',
-            counter: '#datatableCounter',
-            counterInfo: '#datatableCounterInfo'
-          }
-        },
-        language: {
-          zeroRecords: `<div class="text-center p-4">
-              <img class="mb-3" src="../assets/svg/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
-              <img class="mb-3" src="../assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
-            <p class="mb-0">No data to show</p>
-            </div>`
-        }
-      });
-
-    }
-   
-       datatable = HSCore.components.HSDatatables.getItem(0);
-    
-      $('#export-copy').click(function() {
-        datatable.button('.buttons-copy').trigger()
-      });
-
-      $('#export-excel').click(function() {
-        datatable.button('.buttons-excel').trigger()
-      });
-
-      $('#export-csv').click(function() {
-        datatable.button('.buttons-csv').trigger()
-      });
-
-      $('#export-pdf').click(function() {
-        datatable.button('.buttons-pdf').trigger()
-      });
-
-      $('#export-print').click(function() {
-        datatable.button('.buttons-print').trigger()
-      });
-
-
-      $('.js-datatable-filter').on('change', function() {
-        var $this = $(this),
-          elVal = $this.val(),
-          targetColumnIndex = $this.data('target-column-index');
-
-        datatable.column(targetColumnIndex).search(elVal).draw();
-      });
-
-      if (datatable && users.length > 0) {
-        datatable.clear();
-        datatable.rows.add(users);
-        datatable.draw();
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const users = await getUsers();
+        setUsers(users);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        // setLoading(false);
       }
-  
-
-      return () => {
-       
-
-       debugger
-       if (datatable) {
-        datatable.destroy();
-        datatable = null;
-      }
-
-      }
-
-  }, [users]); */
+    };
+    loadUsers();
+  }, [loading]);
 
   return (
     <div className="card">
@@ -199,7 +129,7 @@ export const UserList = () => {
           {/* End Datatable Info */}
 
           {/* Dropdown */}
-       {/*    <div className="dropdown">
+          {/*    <div className="dropdown">
             <button
               type="button"
               className="btn btn-white btn-sm dropdown-toggle w-100"
@@ -292,7 +222,7 @@ export const UserList = () => {
               {/* Card */}
               <div className="card">
                 <div className="card-header card-header-content-between">
-                  <h5 className="card-header-title">Filter users</h5>
+                  <h5 className="card-header-title">Filtrar usuarios</h5>
 
                   {/* Toggle Button */}
                   <button
@@ -306,84 +236,9 @@ export const UserList = () => {
 
                 <div className="card-body">
                   <form>
-                    <div className="mb-4">
-                      <small className="text-cap text-body">Role</small>
-
-                      <div className="row">
-                        <div className="col">
-                          {/* Check */}
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="usersFilterCheckAll"
-                              checked
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="usersFilterCheckAll"
-                            >
-                              All
-                            </label>
-                          </div>
-                          {/* End Check */}
-                        </div>
-                        {/* End Col */}
-
-                        <div className="col">
-                          {/* Check */}
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="usersFilterCheckEmployee"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="usersFilterCheckEmployee"
-                            >
-                              Employee
-                            </label>
-                          </div>
-                          {/* End Check */}
-                        </div>
-                        {/* End Col */}
-                      </div>
-                      {/* End Row */}
-                    </div>
-
                     <div className="row">
-                      <div className="col-sm mb-4">
-                        <small className="text-cap text-body">Position</small>
-
-                        {/* Select */}
-                        <div className="tom-select-custom">
-                          <select
-                            className="js-select js-datatable-filter form-select form-select-sm"
-                            data-target-column-index="2"
-                            data-hs-tom-select-options='{
-                                      "placeholder": "Any",
-                                      "searchInDropdown": false,
-                                      "hideSearch": true,
-                                      "dropdownWidth": "10rem"
-                                    }'
-                          >
-                            <option value="">Any</option>
-                            <option value="Accountant">Accountant</option>
-                            <option value="Co-founder">Co-founder</option>
-                            <option value="Designer">Designer</option>
-                            <option value="Developer">Developer</option>
-                            <option value="Director">Director</option>
-                          </select>
-                          {/* End Select */}
-                        </div>
-                      </div>
-                      {/* End Col */}
-
-                      <div className="col-sm mb-4">
-                        <small className="text-cap text-body">Status</small>
+                      <div className="col-12 mb-4">
+                        <small className="text-cap text-body">Estado</small>
 
                         {/* Select */}
                         <div className="tom-select-custom">
@@ -391,30 +246,28 @@ export const UserList = () => {
                             className="js-select js-datatable-filter form-select form-select-sm"
                             data-target-column-index="4"
                             data-hs-tom-select-options='{
-                                      "placeholder": "Any status",
-                                      "searchInDropdown": false,
-                                      "hideSearch": true,
-                                      "dropdownWidth": "10rem"
+                                      "placeholder": "Todos los estados",
+                                      "hideSearch": true
                                     }'
                           >
-                            <option value="">Any status</option>
+                            <option value="">Todos los estados...</option>
                             <option
-                              value="Completed"
-                              data-option-template='<span className="d-flex align-items-center"><span className="legend-indicator bg-success"></span>Completed</span>'
+                              value="true"
+                              data-option-template='<span class="d-flex align-items-center"><span class="legend-indicator bg-success"></span>Activos</span>'
                             >
-                              Completed
+                              Activos
                             </option>
                             <option
-                              value="In progress"
-                              data-option-template='<span className="d-flex align-items-center"><span className="legend-indicator bg-warning"></span>In progress</span>'
+                              value="false"
+                              data-option-template='<span class="d-flex align-items-center"><span class="legend-indicator bg-warning"></span>Inactivos</span>'
                             >
-                              In progress
+                              Inactivos
                             </option>
                             <option
-                              value="To do"
-                              data-option-template='<span className="d-flex align-items-center"><span className="legend-indicator bg-danger"></span>To do</span>'
+                              value="delete"
+                              data-option-template='<span class="d-flex align-items-center"><span class="legend-indicator bg-danger"></span>Eliminados</span>'
                             >
-                              To do
+                              Eliminados
                             </option>
                           </select>
                         </div>
@@ -423,54 +276,23 @@ export const UserList = () => {
                       {/* End Col */}
 
                       <div className="col-12 mb-4">
-                        <small className="text-cap text-body">Members</small>
+                        <small className="text-cap text-body">
+                          Tipo Usuario
+                        </small>
 
                         {/* Select */}
                         <div className="tom-select-custom">
                           <select
                             className="js-select form-select"
                             autoComplete="off"
-                            multiple
                             data-hs-tom-select-options='{
-                                      "singleMultiple": true,
-                                      "hideSelected": false,
-                                      "placeholder": "Select member"
-                                    }'
+                              "placeholder": "Seleccione tipo",
+                              "hideSearch": true
+                            }'
                           >
-                            <option label="empty"></option>
-                            <option
-                              value="AH"
-                              selected
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img10.jpg" alt="Image Description" /><span className="text-truncate">Amanda Harvey</span></span>'
-                            >
-                              Amanda Harvey
-                            </option>
-                            <option
-                              value="DH"
-                              selected
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img3.jpg" alt="Image Description" /><span className="text-truncate">David Harrison</span></span>'
-                            >
-                              David Harrison
-                            </option>
-                            <option
-                              value="SK"
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img4.jpg" alt="Image Description" /><span className="text-truncate">Sam Kart</span></span>'
-                            >
-                              Sam Kart
-                            </option>
-                            <option
-                              value="FH"
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img5.jpg" alt="Image Description" /><span className="text-truncate">Finch Hoot</span></span>'
-                            >
-                              Finch Hoot
-                            </option>
-                            <option
-                              value="CQ"
-                              selected
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img6.jpg" alt="Image Description" /><span className="text-truncate">Costa Quinn</span></span>'
-                            >
-                              Costa Quinn
-                            </option>
+                            <option value="">Seleccione tipo...</option>
+                            <option value="N">Natural</option>
+                            <option value="J">Juridico</option>
                           </select>
                         </div>
                         {/* End Select */}
@@ -481,7 +303,7 @@ export const UserList = () => {
 
                     <div className="d-grid">
                       <a className="btn btn-primary" href="javascript:;">
-                        Apply
+                        Aplicar
                       </a>
                     </div>
                   </form>
@@ -496,7 +318,7 @@ export const UserList = () => {
       {/* End Header */}
 
       {/* Table */}
-      <div className="table-responsive datatable-custom">
+      <div className=" datatable-custom">
         <table
           id="datatable"
           ref={tableRef}
@@ -524,12 +346,12 @@ export const UserList = () => {
               <th>Tipo</th>
               <th>Identificación</th>
               <th>Estado</th>
-     {/*          <th>Acciones</th> */}
+              <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-                { users.map((user) => (
+            {/*         { users.map((user) => (
                <tr key={user.id}>
                <td>
                  <a
@@ -567,7 +389,7 @@ export const UserList = () => {
                 }
                </td>
              </tr>
-            ))}
+            ))} */}
           </tbody>
         </table>
       </div>

@@ -1,77 +1,84 @@
-import { useState } from 'react';
-import DataTable from 'react-data-table-component';
+import { useState, useEffect,useRef } from 'react';
+
+import 'datatables.net';
+
 
 export const Datatable = () => {
+  const tableRef = useRef(null);
 
-    const users = [
-        { id: 1, name: 'John Doe', personType: 'Admin', identification: '12345', status: 'Active' },
-        { id: 2, name: 'Jane Smith', personType: 'User', identification: '67890', status: 'Inactive' }
-      ];
+  const data = [
+    { id: 1, name: 'Juan', age: 28 },
+    { id: 2, name: 'María', age: 32 },
+    { id: 3, name: 'Carlos', age: 40 },
+  ];
 
-   
-      // Columnas de la tabla
-      const columns =[
+
+  const handleRemove = (id) => {
+    alert(id)
+  };
+
+
+  useEffect(() => {
+    const table = $(tableRef.current).DataTable({
+      destroy: true,  // Asegura que no se inicialice varias veces
+      data: data,
+      responsive: false,
+      //isShowPaging: false,   // Datos que pasamos como prop
+      columns: [
+        { title: 'ID', data: 'id' },
+        { title: 'Nombre', data: 'name' },
+        { title: 'Edad', data: 'age' },
         {
-          name: 'Name',
-          selector: row => row.name,
-          sortable: true,
-        },
-        {
-          name: 'Person Type',
-          selector: row => row.personType,
-          sortable: true,
-        },
-        {
-          name: 'Identification',
-          selector: row => row.identification,
-        },
-        {
-          name: 'Status',
-          selector: row => row.status,
-        },
-        {
-            name: 'Actions',
-            cell: (row) => (
-              <button onClick={() => handleView(row.id)} className="btn btn-custom">
-                View
-              </button>
-            ),
+          title: 'Acciones',
+          data: null,
+          render: (data, type, row) => {
+            return `<button class="btn btn-primary btn-action" data-id="${row.id}">Acción</button>`;
           },
-  
-      ];
+          orderable: false,
+          searchable: false
+        },
+      ],
+    });
 
-      const handleView = (id: number) => {
-        alert(`Viewing user with ID: ${id}`);
-      };
-      
-      const [searchText, setSearchText] = useState(''); // Estado para manejar la búsqueda
+    // Delegación de eventos para manejar los clics en los botones
+    $(tableRef.current).on('click', '.btn-action', function () {
+      const id = $(this).data('id');
+      handleRemove(id);
+    });
 
-      const handleSearch = (e) => {
-        setSearchText(e.target.value); // Actualiza el texto de búsqueda
-      };
-      return (
-        <div>
-          <h1>User List</h1>
-                <input
-                type="text"
-                placeholder="Search"
-                value={searchText}
-                onChange={handleSearch}
-                className="search-input"
-            />
-          <DataTable
-            columns={columns}
-            data={users.filter((user) => 
-                user.name.toLowerCase().includes(searchText.toLowerCase()) || 
-                user.personType.toLowerCase().includes(searchText.toLowerCase()) || 
-                user.identification.includes(searchText) ||
-                user.status.toLowerCase().includes(searchText.toLowerCase())
-              )}
-            pagination
-            highlightOnHover
-            pointerOnHover
-           // customStyles={customStyles} // Aplicar estilos personalizados
-          />
-        </div>
-      );
-}
+ /*    // Actualizar la tabla si el flag shouldUpdate cambia
+    if (shouldUpdate) {
+      // Esto es donde forzamos una recarga de los datos
+      table.clear();  // Limpiamos los datos actuales
+      table.rows.add(data);  // Añadimos los nuevos datos
+      table.draw();  // Redibujamos la tabla
+    } */
+
+    // Cleanup al desmontar el componente
+    return () => {
+      if (tableRef.current) {
+        $(tableRef.current).DataTable().destroy(true);
+      }
+    };
+  }, []); // Dependemos de data y shouldUpdate
+
+  return (
+    <div className="card">
+    <div className="datatable-custom">
+    <table ref={tableRef} className="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+      <thead className="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {/* Los datos se inyectarán automáticamente por DataTables */}
+      </tbody>
+    </table>
+  </div>
+  </div>
+  );
+};
