@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
@@ -24,9 +25,10 @@ namespace FileManagement.Service.Services
             await _userRepository.DeleteUserAsync(user);
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<List<UserDto>> GetAllUsers()
         {
-            return await _userRepository.GetAllUsersAsync();
+            var users = await _userRepository.GetAllUsersAsync();
+            return _mapper.Map<List<UserDto>>(users);
         }
 
         public async Task<List<UserSummaryResponse>> GetAllUserSummary()

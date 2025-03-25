@@ -24,7 +24,11 @@ namespace FileManagement.Service.Mappers
              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.People.PersonType == PersonTypes.Natural ? src.People.FirstName + " " + src.People.LastName : src.People.BussinessName))
              .ForMember(dest => dest.PersonType, opt => opt.MapFrom(src => src.People.PersonType));
 
-            //CreateMap<List<Core.Entities.File>, List<FileDto>>();
+            CreateMap<User, UserDto>();
+ 
+            CreateMap<People, PeopleDto>()
+                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));
+
 
             #endregion
 

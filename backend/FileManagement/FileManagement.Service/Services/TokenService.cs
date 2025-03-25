@@ -21,7 +21,7 @@ namespace FileManagement.Service.Services
             _jwtConfig = jwtConfig.Value;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<TokenDto> GenerateToken(int userId, UserDto user)
+        public async Task<TokenDto> GenerateToken(int userId, GeneratTokenDto user)
         {
      
 

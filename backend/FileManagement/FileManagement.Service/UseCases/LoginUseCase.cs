@@ -43,7 +43,7 @@ namespace FileManagement.Service.UseCases
 
             var roleNames = roles.Select(x => x.Role.RoleName).ToList();
 
-            var userDto = new UserDto
+            var userDto = new GeneratTokenDto
             {
                 Id = userInfo.Id,
                 Email = userInfo.People.Email,

@@ -10,7 +10,7 @@ namespace FileManagement.Core.Contracts.Dtos
         int Id,
         string PersonType,
         string Name,
-        int Indentification,
+        string Identification,
         string Address,
         string Email,
         string Phone

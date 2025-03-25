@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Contracts.Dtos
 {
-    public record  struct UserDto(
-     int Id,
-     string UserName,
-     bool Status,
-     PeopleDto People
-     );
+    public record struct GeneratTokenDto(int Id, string UserName, string Email, List<string> Roles);
 
 }

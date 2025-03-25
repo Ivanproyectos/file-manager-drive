@@ -1,7 +1,12 @@
 import { axiosInstance } from './axiosInstance';
-import { IUserSummary } from '@/types';
+import { IUserSummary, IUser } from '@/types';
 
-export const getUsers = async (): Promise<IUserSummary[]> => {
+export const getUsersSummary = async (): Promise<IUserSummary[]> => {
     const response = await axiosInstance.get('/users/summary');
+    return response.data;
+}
+
+export const getUsers = async (): Promise<IUser[]> => {
+    const response = await axiosInstance.get('/users');
     return response.data;
 }

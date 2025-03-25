@@ -1,6 +1,14 @@
 import Swal from 'sweetalert2';
 
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+const defualtSettigs = {
+  customClass: {
+    confirmButton: 'btn btn-primary',
+    cancelButton: 'btn btn-white',
+    popup: 'popup-dark' ,
+  }
+}
 export const showSuccess = (msg: string) =>
   Swal.fire({
     icon: 'success',
@@ -8,18 +16,19 @@ export const showSuccess = (msg: string) =>
     text: msg,
     //timer: 5000,
     showConfirmButton: true,
-    customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-white',
-        popup: 'popup-dark' ,
-      },
+    ...defualtSettigs
   });
 
-export const showError = (msg: string) =>
+export const showError = (msg: string, title: string = 'Algo no funcionó como esperábamos') =>
   Swal.fire({
     icon: 'error',
-    title: 'Oops...',
+    title: title,
     text: msg,
+    showConfirmButton: true,
+    ...defualtSettigs,
+    customClass: {
+      confirmButton: 'btn btn-danger',
+    }
   });
 
 export const showInfo = (msg: string) =>

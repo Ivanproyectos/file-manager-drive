@@ -8,7 +8,7 @@ import { createFileAsync } from "@/services/fileService";
 import { showError } from "@/utils/alerts";
 
 interface CreateFolderFormProps {
-  onCloseModal: (isOpen: boolean) => void;
+  onCloseModal: () => void;
 }
 
 export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
@@ -35,9 +35,6 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
     });
   };
 
-  const handleCloseModal = () => {
-    onCloseModal(false);
-  };
   const finishCreate = () => {
     if (!formFolerRef.current) return;
     if (!messagaElementRef.current) return;
@@ -58,22 +55,31 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
   }, [uploadId]);
 
   const onSubmit = async (folderData: CreateFolder) => {
+
+    let folderId = 0;
     try {
       const newFolder = {
         ...folderData,
         usersId: users.map((user) => user.userId),
       };
-      const folderId = await createFolderAsync(newFolder);
+      folderId = await createFolderAsync(newFolder);
 
-      const file: ICreateFile = { folderId, uploadId, filePermissions: users };
-      await createFileAsync(file);
-
-      finishCreate();
       // showSuccess("Folder creado con exito");
     } catch (error) {
       console.error(error);
       showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
     }
+
+    try {
+      const file: ICreateFile = { folderId, uploadId, filePermissions: users };
+      await createFileAsync(file);
+
+      finishCreate();
+    }catch (error) {
+      console.error(error);
+      showError("Error al cargar los archivos, vuelva a intentalor mas tarde");
+    }
+
   };
   return (
     <>
@@ -202,8 +208,9 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
 
           <div id="createProjectStepMembers" style={{ display: "none" }}>
             {/*Form */}
-            <p>
-              <i className="bi-info-circle me-2"></i>Agregue los usuarios que
+            <h4>Agregue los miembros para el folder</h4>
+            <p className="text-muted">
+              Agregue los usuarios que
               tendran acceso a este folder y configure sus permisos para los
               archivos
             </p>
@@ -264,7 +271,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
           </div>
 
           <div className="d-flex justify-content-center gap-3">
-            <button data-bs-dismiss="modal" className="btn btn-white" onClick={handleCloseModal}>
+            <button data-bs-dismiss="modal" className="btn btn-white" onClick={() => onCloseModal()}>
               Cerrar
             </button>
 

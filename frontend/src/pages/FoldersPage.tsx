@@ -1,5 +1,5 @@
 import { FolderList, CreateFolderForm } from '@/components';
-import { useState, useRef , useEffect} from 'react';
+import { useState, useRef } from 'react';
 
 declare const bootstrap: any;
 
@@ -8,9 +8,11 @@ export const FoldersPage = () => {
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-
-  }, [isModalOpen]);
+  const handleModalOpen = () => {  
+    setTimeout(() => {
+      setIsModalOpen(false);
+    },500)
+  };
 
   return (
     <>
@@ -96,15 +98,15 @@ export const FoldersPage = () => {
 
   </div>
 
-  <div className="modal fade" ref={modalRef} id="newFolderModal" tabIndex={-1} aria-labelledby="newFolderModalLabel" aria-hidden="true">
+  <div className="modal fade" ref={modalRef} id="newFolderModal" data-bs-backdrop="static" tabIndex={-1} aria-labelledby="newFolderModalLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered modal-lg">
       <div className="modal-content">
         <div className="modal-header">
           <h5 className="modal-title" id="newProjectModalLabel">Nuevo folder</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => setIsModalOpen(false)} aria-label="Close"></button>
+          <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => handleModalOpen()} aria-label="Close"></button>
         </div>
           <div className="modal-body">
-           <CreateFolderForm onCloseModal={setIsModalOpen} />
+            {isModalOpen && <CreateFolderForm onCloseModal={() => handleModalOpen()} />}
           </div>
 
       </div>

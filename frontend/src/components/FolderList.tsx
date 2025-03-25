@@ -46,8 +46,8 @@ export const FolderList = () => {
       },
       language: {
         zeroRecords: `<div className="text-center p-4">
-              <img className="mb-3" src="./assets/svg/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
-              <img className="mb-3" src="./assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
+              <img className="mb-3" src="../assets/svg/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+              <img className="mb-3" src="../assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
             <p className="mb-0">No data to show</p>
             </div>`,
       },
@@ -99,8 +99,8 @@ export const FolderList = () => {
                 id="datatableSearch"
                 type="search"
                 className="form-control"
-                placeholder="Search users"
-                aria-label="Search users"
+                placeholder="Buscar folder"
+                aria-label="Buscar folder"
               />
             </div>
             {/* End Search */}

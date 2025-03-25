@@ -2,8 +2,7 @@ export enum PersonType {
    Natural = "N",
    Juridico = "J",
 }
-
-export interface IPerson {
+export interface IPeople {
    id: number;
    phone: number;
    address: string;
@@ -14,5 +13,9 @@ export interface IPerson {
    email: string;
    bussinessName?: string;
 }
+export type IPeopleList = Omit<IPeople, "bussinessName" | "firstName" | "lastName" > & {
+   name?: string;
+}
 
-export type CreatePerson = Omit<IPerson, "id">;
+
+export type CreatePerson = Omit<IPeople, "id">;

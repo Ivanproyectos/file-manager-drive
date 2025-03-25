@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getUsers } from "@/api/users"
+import { getUsersSummary } from "@/api/users"
 import { IUserSummary } from "@/types"
 
 declare const HSFormSearch: any
@@ -23,7 +23,7 @@ export const SearchUser = ({ onSelectedUser }: SearchUserProps) => {
 
       const loadUsers = async () => {
         try {
-          const users = await getUsers();
+          const users = await getUsersSummary();
           setUsers(users);
         } catch (error) {
           console.error('Error fetching data:', error);

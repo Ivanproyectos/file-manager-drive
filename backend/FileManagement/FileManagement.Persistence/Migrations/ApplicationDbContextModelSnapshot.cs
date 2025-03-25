@@ -403,7 +403,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 23, 13, 56, 56, 391, DateTimeKind.Local).AddTicks(8796),
+                            CreatedAt = new DateTime(2025, 3, 24, 9, 29, 50, 324, DateTimeKind.Local).AddTicks(5312),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -459,7 +459,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 23, 13, 56, 56, 392, DateTimeKind.Local).AddTicks(1657),
+                            CreatedAt = new DateTime(2025, 3, 24, 9, 29, 50, 325, DateTimeKind.Local).AddTicks(5868),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -467,7 +467,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 23, 13, 56, 56, 392, DateTimeKind.Local).AddTicks(1662),
+                            CreatedAt = new DateTime(2025, 3, 24, 9, 29, 50, 325, DateTimeKind.Local).AddTicks(5898),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -555,7 +555,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 23, 18, 56, 56, 392, DateTimeKind.Utc).AddTicks(8973),
+                            CreatedAt = new DateTime(2025, 3, 24, 14, 29, 50, 327, DateTimeKind.Utc).AddTicks(7128),
                             CreatedBy = 1,
                             Description = "Google Drive Provider",
                             ProviderName = "Google Drive"
@@ -624,11 +624,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 23, 13, 56, 56, 394, DateTimeKind.Local).AddTicks(2229),
+                            CreatedAt = new DateTime(2025, 3, 24, 9, 29, 50, 330, DateTimeKind.Local).AddTicks(2317),
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 23, 13, 56, 56, 394, DateTimeKind.Local).AddTicks(2233),
+                            UpdatedAt = new DateTime(2025, 3, 24, 9, 29, 50, 330, DateTimeKind.Local).AddTicks(2340),
                             UserName = "admin"
                         });
                 });
@@ -718,7 +718,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 23, 13, 56, 56, 395, DateTimeKind.Local).AddTicks(379),
+                            CreatedAt = new DateTime(2025, 3, 24, 9, 29, 50, 334, DateTimeKind.Local).AddTicks(6412),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getUploadId } from '../api/uploadFile';
+import { getUploadId } from '@/api/uploadFile';
 
 declare const HSCore: any;
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 export const useDropZoneServer = ({ elementRef }: Props) => {
 
   const [uploadId, setUploagId] = useState<string | null>(null);
-  const urlUpload = `${import.meta.env.VITE_API_BASE_URL}/api/upload/upload-chunk`;
+  const urlUpload = `${import.meta.env.VITE_API_BASE_URL}/upload/upload-chunk`;
 
   useEffect(() => {
     const loadUploadId = async () => {
@@ -57,17 +57,17 @@ export const useDropZoneServer = ({ elementRef }: Props) => {
     });
 
     return () => {
- 
-     /*  const currentDropzone = HSCore.components.HSDropzone.collection
-      .find((dropzone: { id: string }) => dropzone.id === elementRef.current?.id);
+      debugger;
+      const currentDropzone = HSCore.components.HSDropzone.collection
+      .find((dropzone: { id: string }) => dropzone.id === 'dropzoneFileUpload');
 
-      currentDropzone?.$initializedEl.destroy(); */
-    debugger
-    const dropzoneItems = HSCore.components.HSDropzone?.getItems();
+      currentDropzone?.$initializedEl.destroy(); 
+    
+   /*  const dropzoneItems = HSCore.components.HSDropzone?.getItems();
     dropzoneItems.forEach((element: any) => {
       element.destroy();
     });
-
+ */
     
     };
   }, [uploadId]);

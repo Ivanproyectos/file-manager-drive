@@ -1,11 +1,10 @@
-import { CreatePerson, Person } from "@/types";
+import { CreatePerson, IPeopleList } from "@/types";
 
 export interface IUser {
   id: number;
   userName: string;
-  password: string;
-  confirmPassword: string;
-  people: Person;
+  status?: boolean
+  people: IPeopleList;
 }
 
 export interface IUserSummary {
@@ -15,6 +14,8 @@ export interface IUserSummary {
   personType: string;
 }
 export type CreateUser = Omit<IUser, "id" | "userName" | "people"> & {
+  password: string;
+  confirmPassword: string;
   people: CreatePerson
 }
 

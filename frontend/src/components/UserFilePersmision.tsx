@@ -204,7 +204,7 @@ export const UserFilePersmision = React.memo(({
             alt="list empty"
             data-hs-theme-appearance="dark"
           />
-          <p className="text-center text-muted">Ningun usuario seleccionado</p>
+          <p className="text-center text-muted">Ningun usuario agregado</p>
         </div>
       )}
     </>

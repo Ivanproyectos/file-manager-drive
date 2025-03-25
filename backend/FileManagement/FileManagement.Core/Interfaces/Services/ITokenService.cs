@@ -7,7 +7,7 @@ namespace FileManagement.Core.Interfaces.Services
     public interface ITokenService
     {
         UserTokenDto DecodeToken();
-        Task<TokenDto> GenerateToken(int userId, UserDto user);
+        Task<TokenDto> GenerateToken(int userId, GeneratTokenDto user);
         ClaimsPrincipal? ValidateToken(string token);
     }
 }

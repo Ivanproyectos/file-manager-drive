@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://localhost:7095/api', 
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
   timeout: 10000,
 });
 

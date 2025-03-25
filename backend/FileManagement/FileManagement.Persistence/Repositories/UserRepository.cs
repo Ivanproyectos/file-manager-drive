@@ -34,21 +34,21 @@ namespace FileManagement.Persistence.Repositories
         public Task<List<User>> GetAllUsersAsync()
         {
             return _context.Users.Include(u => u.People)
-                .Select(u => new User { 
-                    Id = u.Id, 
-                    UserName = u.UserName, 
-                    Status = u.Status,
-                    People = new People {
-                        Id = u.People.Id, 
-                        FirstName = u.People.FirstName, 
-                        LastName = u.People.LastName,
-                        Email = u.People.Email,
-                        Phone = u.People.Phone, 
-                        Identification = u.People.Identification,
-                        CreatedAt = u.People.CreatedAt,
-                        PersonType = u.People.PersonType
-                    } 
-                })
+                //.Select(u => new User { 
+                //    Id = u.Id, 
+                //    UserName = u.UserName, 
+                //    Status = u.Status,
+                //    People = new People {
+                //        Id = u.People.Id, 
+                //        FirstName = u.People.FirstName, 
+                //        LastName = u.People.LastName,
+                //        Email = u.People.Email,
+                //        Phone = u.People.Phone, 
+                //        Identification = u.People.Identification,
+                //        CreatedAt = u.People.CreatedAt,
+                //        PersonType = u.People.PersonType
+                //    } 
+                //})
                 .ToListAsync();
         }
 

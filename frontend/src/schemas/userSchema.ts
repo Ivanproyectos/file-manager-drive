@@ -6,6 +6,7 @@ import { CreateUser, PersonType } from '@/types';
 export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
     password: yup.string().required('La contraseña es obligatoria').min(6, 'La contraseña debe tener al menos 6 caracteres'),
     confirmPassword: yup.string().required('La confirmación de la contraseña es obligatoria').oneOf([yup.ref('password')], 'Las contraseñas no coinciden'),
+    status: yup.boolean(),
     people: yup.object({
         phone: yup.number()
         .typeError('El teléfono debe ser un número')
