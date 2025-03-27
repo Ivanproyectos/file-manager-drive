@@ -4,10 +4,10 @@ export enum PersonType {
 }
 export interface IPeople {
    id: number;
-   phone: number;
+   phone: number | string;
    address: string;
    personType: PersonType;
-   identification: number;
+   identification: string | number;
    lastName?: string;
    firstName?: string;
    email: string;
@@ -16,6 +16,5 @@ export interface IPeople {
 export type IPeopleList = Omit<IPeople, "bussinessName" | "firstName" | "lastName" > & {
    name?: string;
 }
-
 
 export type CreatePerson = Omit<IPeople, "id">;

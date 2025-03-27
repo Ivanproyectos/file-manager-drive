@@ -1,7 +1,7 @@
 export { HeaderTop } from './HeaderTop';
 export { NavBar } from './NavBar';
 export { FolderList } from './FolderList';
-export { UserList } from './UserList';
+export { UserTable } from './UserTable';
 export { CreateFolderForm } from './CreateFolderForm';
 export { FileDropZone } from './FileDropZone';
 export { FolderDetailsForm } from './FolderDetailsForm';
@@ -9,3 +9,4 @@ export { CreateUserForm } from './CreateUserForm';
 export { SearchUser } from './SearchUser';
 export { UserFilePersmision as FilePersmision } from './UserFilePersmision';
 export { ButtonSubmit } from './ButtonSubmit';
+export { UpdateUserForm } from './UpdateUserForm';

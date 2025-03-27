@@ -53,7 +53,7 @@ namespace FileManagement.Service.UseCases
 
                 await _unitOfWork.CommitAsync();
 
-                return new CreateUserResponse { Id = user.Id, UserName = user.UserName };
+                return new CreateUserResponse { Id = user.Id, Email = user.People.Email };
 
             } catch (Exception ex)
             {

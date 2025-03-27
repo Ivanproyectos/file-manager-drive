@@ -10,8 +10,6 @@ export const Dashboard = () => {
         document.title = 'Dashboard - Mi Aplicación';
         new HSSideNav('.js-navbar-vertical-aside').init()
 
-        
-
       }, []);
     return (
     <main className="has-navbar-vertical-aside navbar-vertical-aside-show-xl">

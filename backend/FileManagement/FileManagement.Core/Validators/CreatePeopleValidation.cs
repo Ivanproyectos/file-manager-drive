@@ -19,7 +19,7 @@ namespace FileManagement.Core.Validators
                     .MaximumLength(200).WithMessage("El apellido no puede superar los {MaxLength} caracteres")
                     .When(x => x.PersonType == PersonTypes.Natural);
 
-            RuleFor(x => x.BusinessName)
+            RuleFor(x => x.BussinessName)
                 .NotEmpty().WithMessage("La razón social es obligatorio")
                 .MaximumLength(200).WithMessage("El apellido no puede superar los {MaxLength}caracteres")
                 .When(x => x.PersonType == PersonTypes.Legal);

@@ -8,7 +8,6 @@ namespace FileManagement.Core.Contracts.Dtos
 {
     public record  struct UserDto(
      int Id,
-     string UserName,
      bool Status,
      PeopleDto People
      );

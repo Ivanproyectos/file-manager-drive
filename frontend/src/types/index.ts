@@ -3,7 +3,7 @@ export { PersonType } from "./PersonTypes";
 export { UserAction} from "./userStateTypes";
 export type { UserActionTypes } from "./userStateTypes";
 export type { IPeople as Person, IPeopleList } from "./PersonTypes";
-export type { CreateUser, IUser, IUserSummary} from "./userTypes";
+export type { CreateUser, IUser, IUserSummary, UpdateUser} from "./userTypes";
 export type { CreatePerson } from "./PersonTypes";
 export type { CreateFolder } from "./folderTypes";
 export type { IFolder } from "./folderTypes";

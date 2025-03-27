@@ -9,7 +9,7 @@ namespace FileManagement.Core.Contracts.Request
     public record struct CreatePeopleRequest( 
         string FirstName,
         string LastName,
-        string BusinessName,
+        string BussinessName,
         char PersonType,
         string Email,
         string Address,

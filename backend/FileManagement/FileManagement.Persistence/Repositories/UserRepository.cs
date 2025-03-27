@@ -34,21 +34,6 @@ namespace FileManagement.Persistence.Repositories
         public Task<List<User>> GetAllUsersAsync()
         {
             return _context.Users.Include(u => u.People)
-                //.Select(u => new User { 
-                //    Id = u.Id, 
-                //    UserName = u.UserName, 
-                //    Status = u.Status,
-                //    People = new People {
-                //        Id = u.People.Id, 
-                //        FirstName = u.People.FirstName, 
-                //        LastName = u.People.LastName,
-                //        Email = u.People.Email,
-                //        Phone = u.People.Phone, 
-                //        Identification = u.People.Identification,
-                //        CreatedAt = u.People.CreatedAt,
-                //        PersonType = u.People.PersonType
-                //    } 
-                //})
                 .ToListAsync();
         }
 
@@ -62,10 +47,18 @@ namespace FileManagement.Persistence.Repositories
             return await _context.Users.Include(u => u.People).FirstOrDefaultAsync(u => u.Id == userId);
         }
 
-        public Task<User?> GetUserByUsernameAsync(string UserName)
+        public async Task UpdateStatusAsync(int userId)
         {
-            return _context.Users.FirstOrDefaultAsync(u => u.UserName == UserName);
+            var user = await _context.Users.Include(u => u.People).FirstOrDefaultAsync(u => u.Id == userId);
+            user.Status = !user.Status;
+            _context.Users.Update(user);
+
         }
+
+        //public Task<User?> GetUserByUsernameAsync(string UserName)
+        //{
+        //    return _context.Users.FirstOrDefaultAsync(u => u.UserName == UserName);
+        //}
 
         public Task  UpdateUserAsync(User user)
         {
@@ -73,9 +66,9 @@ namespace FileManagement.Persistence.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<bool> UserExists(string userName)
-        {
-            return _context.Users.AnyAsync(u => u.UserName == userName);
-        }
+        //public Task<bool> UserExists(string userName)
+        //{
+        //    return _context.Users.AnyAsync(u => u.UserName == userName);
+        //}
     }
 }

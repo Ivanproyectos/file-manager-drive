@@ -38,6 +38,10 @@ namespace FileManagement.Persistence.Repositories
 
         public Task UpdatePeopleAsync(People people)
         {
+            var peopleUpdate = _context.Peoples.Find(people.Id);
+
+            people.CreatedAt = peopleUpdate.CreatedAt;
+            people.CreatedBy = peopleUpdate.CreatedBy;
             _context.Peoples.Update(people);
             return Task.CompletedTask;
         }

@@ -22,7 +22,7 @@ namespace FileManagement.Service.UseCases
         }
         public async Task Execute()
         {
-            var user = await _userRepository.GetUserByUsernameAsync("admin");
+            var user = await _userRepository.GetUserByIdAsync(1);
             string passwordHash = _passwordService.HashPassword("admin");
 
             user.PasswordHash = passwordHash;

@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace FileManagement.Core.Contracts.Response
 {
    
-     public record struct CreateUserResponse(int Id, string UserName);
+     public record struct CreateUserResponse(int Id, string Email);
 }

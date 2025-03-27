@@ -1,8 +1,34 @@
-import { UserList, CreateUserForm } from "@/components";
-import { useState } from "react";
+import { UserTable, CreateUserForm, UpdateUserForm } from "@/components";
+import { useState,useEffect, useRef } from "react";
+
+declare const bootstrap: any;
 
 export const UsersPage = () => {
+  const modalUpdateRef = useRef<HTMLDivElement>(null);
+  const modalCreateRef = useRef<HTMLDivElement>(null);
+  const [isCompleteUpdate, setIsCompleteUpdate] = useState(false);
+  const [isCompleteCreate, setIsCompleteCreate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userId, setUserId] = useState(0);
+  const [isReload, setIsReload] = useState(false);
+
+  useEffect(() => { 
+    if (isCompleteUpdate) {
+       const modal = bootstrap.Modal.getInstance(modalUpdateRef.current);
+       modal.hide();
+       setIsCompleteUpdate(false)
+       setIsReload((prev) => !prev);
+    }
+  }, [isCompleteUpdate]);
+
+  useEffect(() => { 
+    if (isCompleteCreate) {
+       const modal = bootstrap.Modal.getInstance(modalCreateRef.current);
+       modal.hide();
+       setIsCompleteCreate(false)
+       setIsReload((prev) => !prev);
+    }
+  }, [isCompleteCreate]);
 
   return (
     <>
@@ -132,12 +158,13 @@ export const UsersPage = () => {
           </div>
         </div>
 
-        <UserList />
+        <UserTable onUpdateUserId={setUserId} isReload={isReload} />
 
         {/*End Tab Content */}
       </div>
 
       <div
+        ref={modalCreateRef}
         className="modal fade"
         id="createUserModal"
         tabIndex={-1}
@@ -158,7 +185,7 @@ export const UsersPage = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <CreateUserForm onIsSubmitting={setIsSubmitting} />
+              <CreateUserForm onIsSubmitting={setIsSubmitting} onCreateComplete={setIsCompleteCreate} />
             </div>
             <div className="modal-footer">
               <button
@@ -189,6 +216,61 @@ export const UsersPage = () => {
           </div>
         </div>
       </div>
+
+      <div
+        ref={modalUpdateRef}
+        className="modal fade"
+        id="editUserModal"
+        tabIndex={-1}
+        aria-labelledby="editUserModal"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                Actualizar usuario
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <UpdateUserForm onIsSubmitting={setIsSubmitting} onUpdateComplete={setIsCompleteUpdate} userId={userId} />
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
+                form="updateUserForm"
+                disabled={isSubmitting}
+
+              >
+                <div
+                  className="spinner-border text-light status-spinner"
+                  role="status"
+                  hidden={!isSubmitting}
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                Guardar cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 };

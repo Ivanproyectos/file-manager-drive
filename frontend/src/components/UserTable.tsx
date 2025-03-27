@@ -1,22 +1,24 @@
 import { useEffect, useState, useRef } from "react";
-import { getUsers } from "@/api/users";
-import { IUser, PersonType, IPeopleList } from "@/types";
+import { getUsers, removeUser, updateStatus } from "@/api/users";
+import { IUser, PersonType, Person } from "@/types";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
+import { formatPersonName } from "@/utils/formatPeople";
 
-declare const HSCore: any;
-declare const HSBsDropdown: any;
+interface UserListProps {
+  onUpdateUserId: (userId: number) => void;
+  isReload: boolean
+}
 
-export const UserList = () => {
+export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
   useInitTomSelect();
-
   const [users, setUsers] = useState<IUser[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isRealoadGrid, setRealoadGrid] = useState(false);
   const tableRef = useRef<HTMLTableElement>(null);
 
   const columns = [
     {
       data: "people",
-      render: (people: IPeopleList) => `
+      render: (people: Person) => `
         <div
         class="d-flex align-items-center"
         >
@@ -25,7 +27,7 @@ export const UserList = () => {
         </div>
         <div class="ms-3">
           <span class="d-block h5 text-inherit mb-0">
-            ${people.name}
+            ${ formatPersonName(people) }
           </span>
           <span class="d-block fs-5 text-body">
           ${people.email}
@@ -50,14 +52,18 @@ export const UserList = () => {
       data: null,
       label: "Acciones",
       orderable: false,
-      //with: 200,
       render: (user: any) => `
       <div class="d-flex align-items-center gap-2">
+        <div class="form-check form-switch">
+            <input type="checkbox" class="form-check-input" id="formSwitch${user.id}" data-action="status" data-id="${user.id}" ${user.status? 'checked' : ''}>
+            <label class="form-check-label" for="formSwitch${user.id}"></label>
+        </div>
         <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
         data-id="${user.id}" data-bs-target="#editUserModal">
               <i class="bi-pencil-fill me-1"></i> Editar
         </button>
-          <button type="button" class="btn btn-white btn-sm" data-action="delete" data-bs-toggle="modal" data-id="${user.id}" >
+          <button type="button" class="btn btn-white btn-sm" data-action="delete" 
+          data-bs-toggle="modal" data-id="${user.id}" >
           <i class="bi-trash me-1"></i> Eliminar
         </button>
       </div>
@@ -65,16 +71,62 @@ export const UserList = () => {
     },
   ];
 
-  const { datatable } = useClientDataTable({ tableRef, columns, data: users });
+   useClientDataTable({ tableRef, columns, data: users });
 
-  useEffect(() => {
-    debugger;
+  const handleRemove = async (id: number) => {
+    await removeUser(id);
+    setRealoadGrid(prev => !prev);
+  };
+
+  const handleUpdateStatus = async (id: number) => {
+    await updateStatus(id);
+    setTimeout( () => { setRealoadGrid(prev => !prev)}, 500)
+   ;
+  };
+
+/*   useEffect(() => {
     $("#datatable").on("click", 'button[data-action="edit"]', function () {
       const id = $(this).data("id");
-      alert(id);
-      setLoading(true);
+      onUpdateUserId(id);
     });
-  }, []);
+    $("#datatable").on("click", 'button[data-action="delete"]', function () {
+      const id = $(this).data("id");
+      handleRemove(id);
+    });
+    $("#datatable").on("change", 'input[data-action="status"]', function () {
+      const id = $(this).data("id");
+      handleUpdateStatus(id);
+    });
+  }, []); */
+
+  useEffect(() => {
+    const handleActions = (event: Event) => {
+      debugger;
+      const target = event.target as HTMLElement;
+      const action = target.dataset.action;
+      const userId = target.dataset.id;
+
+      if (action === 'edit') {
+        onUpdateUserId(Number(userId));
+      } else if (action === 'delete') {
+        handleRemove(Number(userId));
+      } else if (action === 'status') {
+        handleUpdateStatus(Number(userId));
+      }
+    };
+
+    const tableElement = tableRef.current;
+    if (tableElement) {
+      tableElement.addEventListener("click", handleActions);
+    }
+
+    return () => {
+      if (tableElement) {
+        tableElement.removeEventListener("click", handleActions);
+      }
+    };
+  }, []); 
+
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -83,12 +135,10 @@ export const UserList = () => {
         setUsers(users);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        // setLoading(false);
       }
-    };
+    }
     loadUsers();
-  }, [loading]);
+  }, [isRealoadGrid, isReload]);
 
   return (
     <div className="card">
@@ -325,7 +375,7 @@ export const UserList = () => {
           className="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
           data-hs-datatables-options='{
                "columnDefs": [{
-                      "targets": [0, 2, 3],
+                      "targets": [0, 1, 2],
                       "orderable": false
                     }],
                    "order": [],
@@ -351,45 +401,7 @@ export const UserList = () => {
           </thead>
 
           <tbody>
-            {/*         { users.map((user) => (
-               <tr key={user.id}>
-               <td>
-                 <a
-                   className="d-flex align-items-center"
-                   href="../user-profile.html"
-                 >
-                   <div className="avatar avatar-soft-primary avatar-circle">
-                     <span className="avatar-initials">A</span>
-                   </div>
-                   <div className="ms-3">
-                     <span className="d-block h5 text-inherit mb-0">
-                       {user.people.name}
-                     </span>
-                     <span className="d-block fs-5 text-body">
-                     {user.people.email}
-                     </span>
-                   </div>
-                 </a>
-               </td>
-               <td>
-               {user.people.personType === PersonType.Natural? "Natural" : "Juridico"}
-               </td>
-               <td>  {user.people.identification}</td>
-               <td>
-               {
-                  user.status ? (
-                    <>
-                      <span className="legend-indicator bg-success"></span> Activo
-                    </>
-                  ) : (
-                    <>
-                      <span className="legend-indicator bg-warning"></span> Inactivo
-                    </>
-                  )
-                }
-               </td>
-             </tr>
-            ))} */}
+           
           </tbody>
         </table>
       </div>

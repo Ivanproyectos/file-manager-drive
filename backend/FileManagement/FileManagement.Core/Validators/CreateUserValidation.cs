@@ -7,9 +7,9 @@ namespace FileManagement.Core.Validators
     {
         public CreateUserValidation()
         {
-            RuleFor(x => x.UserName)
-                    .NotEmpty().WithMessage("El User Name es obligatorio")
-                    .MaximumLength(100).WithMessage("El User Name no puede superar los {MaxLength} caracteres");
+            //RuleFor(x => x.UserName)
+            //        .NotEmpty().WithMessage("El User Name es obligatorio")
+            //        .MaximumLength(100).WithMessage("El User Name no puede superar los {MaxLength} caracteres");
 
             RuleFor(x => x.Password)
                     .NotEmpty().WithMessage("El Password es obligatorio")

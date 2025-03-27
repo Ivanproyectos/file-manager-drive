@@ -25,9 +25,9 @@ namespace FileManagement.Service.Mappers
              .ForMember(dest => dest.PersonType, opt => opt.MapFrom(src => src.People.PersonType));
 
             CreateMap<User, UserDto>();
- 
-            CreateMap<People, PeopleDto>()
-                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));
+
+            CreateMap<People, PeopleDto>();
+                //  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));
 
 
             #endregion
@@ -37,6 +37,7 @@ namespace FileManagement.Service.Mappers
             CreateMap<CreateUserRequest, User>()
                 .ForMember(dest => dest.People, opt => opt.Ignore());
             CreateMap<CreatePeopleRequest, People>();
+            CreateMap<UpdatePeopleRequest, People>();
             #endregion
         }
     }

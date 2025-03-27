@@ -39,13 +39,14 @@ namespace FileManagement.Service.UseCases
                 await _unitOfWork.BeginTransactionAsync();
 
                 var people = _mapper.Map<People>(request.People);
-                var userUpdate = _mapper.Map<User>(request);
+                //var userUpdate = _mapper.Map<User>(request);
 
-                userUpdate.PeopleId = people.Id;
+
+                //userUpdate.PeopleId = user.PeopleId;
+                people.Id = user.PeopleId;
                 await _peopleRepository.UpdatePeopleAsync(people);
 
-                await _userRepository.UpdateUserAsync(userUpdate);
-                await _unitOfWork.SaveChangesAsync();
+                //await _userRepository.UpdateUserAsync(userUpdate);
                 await _unitOfWork.CommitAsync();
 
                 return Unit.Value;

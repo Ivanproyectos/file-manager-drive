@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace FileManagement.Core.Contracts.Request
 {
     public record struct UpdatePeopleRequest(
-        int Id,
+        string PersonType,
         string FirstName,
         string LastName,
-        string BusinessName,
-        string PersonType,
-        string Email,
+        string BussinessName,
+        string Identification,
         string Address,
+        string Email,
         string Phone
         );
 

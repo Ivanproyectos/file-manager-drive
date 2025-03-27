@@ -25,11 +25,11 @@ namespace FileManagement.Persistence.Configurations
                   .HasMaxLength(500)
                   .IsRequired();
 
-            builder.HasIndex(x => x.UserName).IsUnique();
+            //builder.HasIndex(x => x.UserName).IsUnique();
 
-            builder.Property(x => x.UserName)
-              .HasMaxLength(100)
-              .IsRequired();
+            //builder.Property(x => x.UserName)
+            //  .HasMaxLength(100)
+            //  .IsRequired();
 
             builder.Property(x => x.CreatedBy)
                      .IsRequired(false);
@@ -70,7 +70,7 @@ namespace FileManagement.Persistence.Configurations
                 {
                     Id = 1,
                     PeopleId = 1,
-                    UserName = "admin",
+                    //UserName = "admin",
                     PasswordHash = "change password for password hash",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,

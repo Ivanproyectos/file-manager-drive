@@ -5,6 +5,7 @@ namespace FileManagement.Core.Entities
     public class Folder : AuditableBaseEntity
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public int? ParentFolderId { get; set; }
         public Folder ParentFolder { get; set; } // Referencia a la carpeta padre
         //public ICollection<Folder> SubFolders { get; set; } // Hijos de la carpeta

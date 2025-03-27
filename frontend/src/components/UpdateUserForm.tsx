@@ -1,69 +1,81 @@
 import { PersonType } from "@/types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createUserSchema } from "@/schemas";
-import { CreateUser } from "@/types";
+import { updateUserSchema } from "@/schemas";
+import { UpdateUser } from "@/types";
 import { useEffect } from "react";
-import { addUser } from "@/api/users";
+import { getUserById, updateUser} from "@/api/users";
 import { showError } from "@/utils/alerts";
 
-
-interface CreateUserFormProps {
+interface UpdateUserFormProps {
  onIsSubmitting: (isSubmitting: boolean) => void;
- onCreateComplete: (isComplete: boolean) => void
+ onUpdateComplete: (isComplete: boolean) => void;
+ userId: number
 }
 
-export const CreateUserForm = ({onIsSubmitting, onCreateComplete}:CreateUserFormProps) => {
+export const UpdateUserForm = ({onIsSubmitting, onUpdateComplete, userId}:UpdateUserFormProps) => {
   const {
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<CreateUser>({
-    resolver: yupResolver(createUserSchema),
+  } = useForm<UpdateUser>({
+    resolver: yupResolver(updateUserSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
   });
   const personType = watch("people.personType");
  
-  const onSubmit = async (user: CreateUser) => {
-    try {
-      const bussinessName = user.people.bussinessName;
-      user.people.identification = user.people.identification.toString();
-      user.people.phone = user.people.phone.toString();
-      user.people.bussinessName = bussinessName? bussinessName : '';
-      await addUser(user);
-      onCreateComplete(true);
-      reset()
-    }
-    catch (error) {
-      console.error("Error al actualizar el usuario:", error);
-      showError("Error al actualizar el usuario, vuelva a intentalor mas tarde");
-    }
-   
+  const onSubmit = async (user: UpdateUser) => {
+    const bussinessName = user.people.bussinessName;
+    user.people.identification = user.people.identification.toString();
+    user.people.phone = user.people.phone.toString();
+    user.people.bussinessName = bussinessName? bussinessName : '';
+    await updateUser(user);
+    onUpdateComplete(true);
+    reset()
   };
 
   useEffect(() => {
     onIsSubmitting(isSubmitting);
   }, [isSubmitting]);
 
+  
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const user = await getUserById(userId);
+        reset(user);
+        setValue('id', user.id);
+      } catch (error) {
+        console.error("Error al actualizar el usuario:", error);
+        showError("Error al actualizar el usuario, vuelva a intentalor mas tarde");
+      }
+    };
+    if (userId) {
+      loadUser();
+    }
+  }, [userId]);
+  
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id="createUserForm">
+    <form onSubmit={handleSubmit(onSubmit)} id="updateUserForm">
       <h4 className="text-muted mb-3">Informacion personal</h4>
       <div className="mb-4">
         <label htmlFor="projectNameNewProjectLabel" className="form-label">
           Tipo persona{" "}
         </label>
         <div className="input-group input-group-sm-vertical">
-          <label className="form-control" htmlFor="userAccountTypeRadio1">
+          <label className="form-control" htmlFor="userUpdateNatural">
             <span className="form-check">
               <input
                 {...register("people.personType")}
                 type="radio"
                 className="form-check-input"
                 value={PersonType.Natural}
-                id="userAccountTypeRadio1"
+                id="userUpdateNatural"
                 defaultChecked
               />
               <span className="form-check-label">
@@ -72,13 +84,13 @@ export const CreateUserForm = ({onIsSubmitting, onCreateComplete}:CreateUserForm
             </span>
           </label>
 
-          <label className="form-control" htmlFor="userAccountTypeRadio2">
+          <label className="form-control" htmlFor="userUpdateJuridico">
             <span className="form-check">
               <input
                 {...register("people.personType")}
                 type="radio"
                 className="form-check-input"
-                id="userAccountTypeRadio2"
+                id="userUpdateJuridico"
                 value={PersonType.Juridico}
              
               />
@@ -231,8 +243,8 @@ export const CreateUserForm = ({onIsSubmitting, onCreateComplete}:CreateUserForm
         </div>
         {errors.people?.address && <span className="invalid-feedback">{errors.people?.address?.message}</span>}
       </div>
-      <hr />
-      <h4 className="text-muted mb-3">Credenciales de acceso</h4>
+   {/*    <hr /> */}
+  {/*     <h4 className="text-muted mb-3">Credenciales de acceso</h4>
       <div className="mb-4">
         <label htmlFor="password" className="form-label">
           Contrasena{" "}
@@ -272,7 +284,7 @@ export const CreateUserForm = ({onIsSubmitting, onCreateComplete}:CreateUserForm
         </div>
         {errors.confirmPassword && <span className="invalid-feedback">{errors.confirmPassword.message}</span>}
       </div>
-  
+   */}
     </form>
   );
 };
