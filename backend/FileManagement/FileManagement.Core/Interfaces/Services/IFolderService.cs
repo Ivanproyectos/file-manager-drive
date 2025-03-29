@@ -1,4 +1,5 @@
 ﻿using FileManagement.Core.Contracts.Dtos;
+using FileManagement.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace FileManagement.Core.Interfaces.Services
 {
     public interface IFolderService
     {
-        public Task<List<FolderDto>> getAllFolders();
+        public Task<List<FolderDto>> GetAllFoldersAsync();
+        public Task<List<SubFolderDto>> GetSubFoldersAsync(int folderId);
+        public Task<List<FileDto>> GetFolderFiles(int folderId);
     }
 }

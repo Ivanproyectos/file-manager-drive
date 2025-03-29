@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326220720_InitialMigration")]
+    [Migration("20250329214353_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -410,7 +410,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 26, 17, 7, 20, 160, DateTimeKind.Local).AddTicks(3026),
+                            CreatedAt = new DateTime(2025, 3, 29, 16, 43, 52, 875, DateTimeKind.Local).AddTicks(5015),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -466,7 +466,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 26, 17, 7, 20, 160, DateTimeKind.Local).AddTicks(5866),
+                            CreatedAt = new DateTime(2025, 3, 29, 16, 43, 52, 876, DateTimeKind.Local).AddTicks(6614),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -474,7 +474,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 26, 17, 7, 20, 160, DateTimeKind.Local).AddTicks(5872),
+                            CreatedAt = new DateTime(2025, 3, 29, 16, 43, 52, 876, DateTimeKind.Local).AddTicks(6634),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -562,7 +562,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 26, 22, 7, 20, 161, DateTimeKind.Utc).AddTicks(3758),
+                            CreatedAt = new DateTime(2025, 3, 29, 21, 43, 52, 880, DateTimeKind.Utc).AddTicks(6972),
                             CreatedBy = 1,
                             Description = "Google Drive Provider",
                             ProviderName = "Google Drive"
@@ -623,11 +623,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 26, 17, 7, 20, 162, DateTimeKind.Local).AddTicks(7159),
+                            CreatedAt = new DateTime(2025, 3, 29, 16, 43, 52, 883, DateTimeKind.Local).AddTicks(5766),
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 26, 17, 7, 20, 162, DateTimeKind.Local).AddTicks(7163)
+                            UpdatedAt = new DateTime(2025, 3, 29, 16, 43, 52, 883, DateTimeKind.Local).AddTicks(5784)
                         });
                 });
 
@@ -716,7 +716,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 26, 17, 7, 20, 163, DateTimeKind.Local).AddTicks(5606),
+                            CreatedAt = new DateTime(2025, 3, 29, 16, 43, 52, 885, DateTimeKind.Local).AddTicks(2419),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1
@@ -726,7 +726,7 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.File", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
-                        .WithMany()
+                        .WithMany("Files")
                         .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -877,7 +877,7 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.UserFolder", b =>
                 {
                     b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
-                        .WithMany()
+                        .WithMany("UserFolders")
                         .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -916,6 +916,13 @@ namespace FileManagement.Persistence.Migrations
                 {
                     b.Navigation("FileStorage")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FileManagement.Core.Entities.Folder", b =>
+                {
+                    b.Navigation("Files");
+
+                    b.Navigation("UserFolders");
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.Module", b =>

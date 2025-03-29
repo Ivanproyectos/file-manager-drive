@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
 import { IFolder } from "@/types";
@@ -12,7 +12,9 @@ interface Props {
 }
 
 export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
-  useInitTomSelect();
+
+    useInitTomSelect();
+    const navigate = useNavigate();
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [refresh, setRefresh] = useState(false);
     const tableRef = useRef<HTMLTableElement>(null);
@@ -21,9 +23,9 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
       {
         data: null,
         render: ({id, name}: IFolder) => `
-           <a className="d-flex align-items-center" href="/dashboard/folders/${id}">
+           <a class="d-flex align-items-center" href="javascript:;" >
                   <i className="bi-folder me-2"></i>
-                  <span>${name}</span>
+                  <span data-action="navigate" data-id="${id}">${name}</span>
          </a>
       `,
       },
@@ -78,13 +80,15 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
         const target = event.target as HTMLElement;
         const action = target.dataset.action;
         const userId = target.dataset.id;
-  
+        debugger;
         if (action === 'edit') {
           onUpdateUserId(Number(userId));
         } else if (action === 'delete') {
           handleRemove(Number(userId));
         } else if (action === 'status') {
           handleUpdateStatus(Number(userId));
+        } else if (action === 'navigate') {
+          navigate(`/dashboard/folders/${userId}`);
         }
       };
   

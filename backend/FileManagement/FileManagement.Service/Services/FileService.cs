@@ -21,11 +21,11 @@ namespace FileManagement.Service.Services
             _filePermissionRepository = filePermissionRepository;
             _tokenService = tokenService;
         }
-        public async Task<List<FileDto>> GetFilesByFolderIdAsync(int FolderId)
+        public async Task<List<UserFileDto>> GetFilesByFolderIdAsync(int FolderId)
         {
            var decodedToken = _tokenService.DecodeToken();
            var files = await _fileRepository.GetFilesWithPermissionsAsync(FolderId, decodedToken.UserId);
-            return _mapper.Map<List<FileDto>>(files);
+            return _mapper.Map<List<UserFileDto>>(files);
         }
     }
 }

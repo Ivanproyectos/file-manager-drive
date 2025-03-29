@@ -1,8 +1,9 @@
 export interface IFile {
     id: number;
     fileName: string;
+    extension:  string
     sizeBytes: number;
-    SizeBytes: number;
+    createdDate: string;
 }
 
 export interface ICreateFile  {

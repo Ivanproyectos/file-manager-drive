@@ -12,3 +12,5 @@ export { ButtonSubmit } from './ButtonSubmit';
 export { UpdateUserForm } from './UpdateUserForm';
 export { FolderOptions } from './FolderOptions';
 export { FolderList } from './FolderList';
+export { FileList } from './FileList';
+export { FileItem } from './FileItem';

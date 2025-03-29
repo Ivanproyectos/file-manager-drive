@@ -1,6 +1,5 @@
 import { useState, useEffect,useRef } from 'react';
 
-import 'datatables.net';
 
 
 export const Datatable = () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ISubFolder } from "@/types";
-import { getUserFolders } from "@/api/userFolder";
+import { getSubFoldersAsync } from "@/api/folderApi";
 import { FolderOptions } from "@/components";
 interface FolderListProps {
   folderId: number;
@@ -11,7 +11,7 @@ export const FolderList = ({ folderId }: FolderListProps) => {
   useEffect(() => {
     const fetchFolders = async () => {
       try {
-        const folders = await getUserFolders(folderId);
+        const folders = await getSubFoldersAsync(folderId);
         setFolders(folders);
       } catch (error) {
         console.error("Error fetching data:", error);

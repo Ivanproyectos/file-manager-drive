@@ -15,7 +15,17 @@ namespace FileManagement.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFolders()
         {
-            return Ok(await _folderService.getAllFolders());
+            return Ok(await _folderService.GetAllFoldersAsync());
+        }
+        [HttpGet("{Id}/subfolders")]
+        public async Task<IActionResult> GetSubFoldersAsync(int Id)
+        {
+            return Ok(await _folderService.GetSubFoldersAsync(Id));
+        }
+        [HttpGet("{folderId}/files")]
+        public async Task<IActionResult> GetFolderFiles(int folderId)
+        {
+            return Ok(await _folderService.GetFolderFiles(folderId));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateFolderRequest folderRequest)

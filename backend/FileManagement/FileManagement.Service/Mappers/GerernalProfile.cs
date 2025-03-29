@@ -14,7 +14,7 @@ namespace FileManagement.Service.Mappers
             #region entity to dto
             CreateMap<Folder, CreateFolderResponse>();
             CreateMap<Folder, FolderDto>();
-            CreateMap<Core.Entities.File, FileDto>()
+            CreateMap<Core.Entities.File, UserFileDto>()
                 .ForMember(dest => dest.CanView, opt => opt.MapFrom(src => src.Permission.CanView))
                 .ForMember(dest => dest.CanDownload, opt => opt.MapFrom(src => src.Permission.CanDownload))
                 .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.Permission.ExpirationDate.ToString("o")));
@@ -25,6 +25,10 @@ namespace FileManagement.Service.Mappers
              .ForMember(dest => dest.PersonType, opt => opt.MapFrom(src => src.People.PersonType));
 
             CreateMap<User, UserDto>();
+            CreateMap<Core.Entities.File, FileDto>()
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt));
+
+            
 
             CreateMap<People, PeopleDto>();
                 //  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));

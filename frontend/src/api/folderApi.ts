@@ -1,5 +1,5 @@
 import { axiosInstance } from "./axiosInstance";
-import { CreateFolder, IFolder} from "@/types";
+import { CreateFolder, IFolder, ISubFolder, IFile} from "@/types";
 export const createFolderAsync = async (folder: CreateFolder):Promise<number> => {
 
    const response = await axiosInstance.post('/folders', folder);
@@ -9,5 +9,15 @@ export const createFolderAsync = async (folder: CreateFolder):Promise<number> =>
 
 export const getFoldersAsync = async ():Promise<IFolder[]> => {  
     const response = await axiosInstance.get('/folders');
+    return response.data;
+}
+
+export const getSubFoldersAsync = async (folderId: number):Promise<ISubFolder[]> => {  
+    const response = await axiosInstance.get(`/folders/${folderId}/subfolders`);
+    return response.data;
+}
+
+export const getFilesAsync = async (folderId: number):Promise<IFile[]> => {  
+    const response = await axiosInstance.get(`/folders/${folderId}/files`);
     return response.data;
 }

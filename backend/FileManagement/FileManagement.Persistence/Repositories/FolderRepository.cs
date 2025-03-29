@@ -3,6 +3,7 @@ using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace FileManagement.Persistence.Repositories
 {
@@ -96,6 +97,11 @@ namespace FileManagement.Persistence.Repositories
                             .ToListAsync();
 
             return folders;
+        }
+
+        public async Task<List<Folder>> GetSubFoldersAsync(int folderId)
+        {
+            return await _context.Folders.Where(x => x.ParentFolderId == folderId).ToListAsync();
         }
     }
 }
