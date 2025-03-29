@@ -2,8 +2,12 @@
 export interface IFolder {
     id: number;
     name: string;
+    size: number;
+    dateCreated: Date;
     description ?: string;
-    usersId: number[];
+    users: [];
 }
 
-export type CreateFolder = Omit<IFolder, 'id' | 'parentId'> 
+export type CreateFolder = Omit<IFolder, 'id' | 'parentId' | 'users'> & {
+    usersId: number[];
+}

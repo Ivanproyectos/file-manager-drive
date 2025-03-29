@@ -1,4 +1,4 @@
-import { FolderList, CreateFolderForm } from '@/components';
+import { FolderTable, CreateFolderForm } from '@/components';
 import { useState, useRef } from 'react';
 
 declare const bootstrap: any;
@@ -91,7 +91,7 @@ export const FoldersPage = () => {
       </div>
 
 
-      <FolderList />
+      <FolderTable />
 
     {/*End Tab Content */}
 

@@ -64,5 +64,9 @@ namespace FileManagement.Persistence.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<List<Folder>> GetFoldersAsync()
+        {
+            return await _context.Folders.ToListAsync();
+        }
     }
 }

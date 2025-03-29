@@ -1,88 +1,114 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useInitTomSelect, useClientDataTable } from "@/hooks";
+import { IFolder } from "@/types";
 
-declare const HSCore: any;
-declare const HSBsDropdown: any;
+interface Props {
+  onUpdateUserId: (userId: number) => void;
+  isReload: boolean
+}
 
-export const FolderList = () => {
+export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
+  useInitTomSelect();
+    const [folders, setFolders] = useState<IFolder[]>([]);
+    const [refresh, setRefresh] = useState(false);
+    const tableRef = useRef<HTMLTableElement>(null);
   
-  useEffect(() => {
-    HSBsDropdown.init();
-
-    HSCore.components.HSTomSelect.init(".js-select");
-
-    HSCore.components.HSDatatables.init($("#datatable"), {
-      dom: "Bfrtip",
-      buttons: [
-        {
-          extend: "copy",
-          className: "d-none",
-        },
-        {
-          extend: "excel",
-          className: "d-none",
-        },
-        {
-          extend: "csv",
-          className: "d-none",
-        },
-        {
-          extend: "pdf",
-          className: "d-none",
-        },
-        {
-          extend: "print",
-          className: "d-none",
-        },
-      ],
-      select: {
-        style: "multi",
-        selector: 'td:first-child input[type="checkbox"]',
-        classMap: {
-          checkAll: "#datatableCheckAll",
-          counter: "#datatableCounter",
-          counterInfo: "#datatableCounterInfo",
-        },
+    const columns = [
+      {
+        data: "name",
+        render: (name: string) => `
+           <Link className="d-flex align-items-center" to="/dashboard/folders/1">
+                  <i className="bi-folder me-2"></i>
+                  <span>${name}</span>
+         </Link>
+      `,
       },
-      language: {
-        zeroRecords: `<div className="text-center p-4">
-              <img className="mb-3" src="../assets/svg/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
-              <img className="mb-3" src="../assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
-            <p className="mb-0">No data to show</p>
-            </div>`,
+      {
+        data: "users",
+        render: (users: Array<any>) => (users.join(", ")),
       },
-    });
-
-    const datatable = HSCore.components.HSDatatables.getItem(0);
-
-    $("#export-copy").click(function () {
-      datatable.button(".buttons-copy").trigger();
-    });
-
-    $("#export-excel").click(function () {
-      datatable.button(".buttons-excel").trigger();
-    });
-
-    $("#export-csv").click(function () {
-      datatable.button(".buttons-csv").trigger();
-    });
-
-    $("#export-pdf").click(function () {
-      datatable.button(".buttons-pdf").trigger();
-    });
-
-    $("#export-print").click(function () {
-      datatable.button(".buttons-print").trigger();
-    });
-
-    $(".js-datatable-filter").on("change", function () {
-      var $this = $(this),
-        elVal = $this.val(),
-        targetColumnIndex = $this.data("target-column-index");
-
-      datatable.column(targetColumnIndex).search(elVal).draw();
-    });
-  }, []);
+      { data: "size" },
+      {
+        data: "dateCreated",
+        render: (date: Date) => date.toLocaleDateString()
+      },
+      {
+        data: null,
+        label: "Acciones",
+        orderable: false,
+        render: (user: any) => `
+        <div class="d-flex align-items-center gap-2">
+          <div class="form-check form-switch">
+              <input type="checkbox" class="form-check-input" id="formSwitch${user.id}" data-action="status" data-id="${user.id}" ${user.status? 'checked' : ''}>
+              <label class="form-check-label" for="formSwitch${user.id}"></label>
+          </div>
+          <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
+          data-id="${user.id}" data-bs-target="#editUserModal">
+                <i class="bi-pencil-fill me-1"></i> Editar
+          </button>
+            <button type="button" class="btn btn-white btn-sm" data-action="delete" 
+            data-bs-toggle="modal" data-id="${user.id}" >
+            <i class="bi-trash me-1"></i> Eliminar
+          </button>
+        </div>
+      `,
+      },
+    ];
+  
+     useClientDataTable({ tableRef, columns, data: users });
+  
+    const handleRemove = async (id: number) => {
+     /*  await removeUser(id);
+      setRefresh(prev => !prev); */
+    };
+  
+    const handleUpdateStatus = async (id: number) => {
+     /*  await updateStatus(id);
+      setTimeout( () => { setRefresh(prev => !prev)}, 500) */
+     ;
+    };
+  
+  
+    useEffect(() => {
+      const handleActions = (event: Event) => {
+        const target = event.target as HTMLElement;
+        const action = target.dataset.action;
+        const userId = target.dataset.id;
+  
+        if (action === 'edit') {
+          onUpdateUserId(Number(userId));
+        } else if (action === 'delete') {
+          handleRemove(Number(userId));
+        } else if (action === 'status') {
+          handleUpdateStatus(Number(userId));
+        }
+      };
+  
+      const tableElement = tableRef.current;
+      if (tableElement) {
+        tableElement.addEventListener("click", handleActions);
+      }
+  
+      return () => {
+        if (tableElement) {
+          tableElement.removeEventListener("click", handleActions);
+        }
+      };
+    }, []); 
+  
+  
+    useEffect(() => {
+      const loadUsers = async () => {
+        try {
+       /*    const users = await getUsers(); */
+       /*    setUsers(users); */
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      loadUsers();
+    }, [refresh, isReload]);
 
   return (
     <div className="card">

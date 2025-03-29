@@ -12,7 +12,7 @@ interface UserListProps {
 export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
   useInitTomSelect();
   const [users, setUsers] = useState<IUser[]>([]);
-  const [isRealoadGrid, setRealoadGrid] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const tableRef = useRef<HTMLTableElement>(null);
 
   const columns = [
@@ -75,33 +75,18 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
 
   const handleRemove = async (id: number) => {
     await removeUser(id);
-    setRealoadGrid(prev => !prev);
+    setRefresh(prev => !prev);
   };
 
   const handleUpdateStatus = async (id: number) => {
     await updateStatus(id);
-    setTimeout( () => { setRealoadGrid(prev => !prev)}, 500)
+    setTimeout( () => { setRefresh(prev => !prev)}, 500)
    ;
   };
 
-/*   useEffect(() => {
-    $("#datatable").on("click", 'button[data-action="edit"]', function () {
-      const id = $(this).data("id");
-      onUpdateUserId(id);
-    });
-    $("#datatable").on("click", 'button[data-action="delete"]', function () {
-      const id = $(this).data("id");
-      handleRemove(id);
-    });
-    $("#datatable").on("change", 'input[data-action="status"]', function () {
-      const id = $(this).data("id");
-      handleUpdateStatus(id);
-    });
-  }, []); */
 
   useEffect(() => {
     const handleActions = (event: Event) => {
-      debugger;
       const target = event.target as HTMLElement;
       const action = target.dataset.action;
       const userId = target.dataset.id;
@@ -138,7 +123,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
       }
     }
     loadUsers();
-  }, [isRealoadGrid, isReload]);
+  }, [refresh, isReload]);
 
   return (
     <div className="card">
@@ -178,76 +163,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
           </div>
           {/* End Datatable Info */}
 
-          {/* Dropdown */}
-          {/*    <div className="dropdown">
-            <button
-              type="button"
-              className="btn btn-white btn-sm dropdown-toggle w-100"
-              id="usersExportDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="bi-download me-2"></i> Export
-            </button>
-
-            <div
-              className="dropdown-menu dropdown-menu-sm-end"
-              aria-labelledby="usersExportDropdown"
-            >
-              <span className="dropdown-header">Options</span>
-              <a id="export-copy" className="dropdown-item" href="javascript:;">
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/illustrations/copy-icon.svg"
-                  alt="Image Description"
-                />
-                Copy
-              </a>
-              <a
-                id="export-print"
-                className="dropdown-item"
-                href="javascript:;"
-              >
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/illustrations/print-icon.svg"
-                  alt="Image Description"
-                />
-                Print
-              </a>
-              <div className="dropdown-divider"></div>
-              <span className="dropdown-header">Download options</span>
-              <a
-                id="export-excel"
-                className="dropdown-item"
-                href="javascript:;"
-              >
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/brands/excel-icon.svg"
-                  alt="Image Description"
-                />
-                Excel
-              </a>
-              <a id="export-csv" className="dropdown-item" href="javascript:;">
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/components/placeholder-csv-format.svg"
-                  alt="Image Description"
-                />
-                .CSV
-              </a>
-              <a id="export-pdf" className="dropdown-item" href="javascript:;">
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/brands/pdf-icon.svg"
-                  alt="Image Description"
-                />
-                PDF
-              </a>
-            </div>
-          </div> */}
-          {/* End Dropdown */}
+        
 
           {/* Dropdown */}
           <div className="dropdown">

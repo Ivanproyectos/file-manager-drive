@@ -1,6 +1,6 @@
 export { HeaderTop } from './HeaderTop';
 export { NavBar } from './NavBar';
-export { FolderList } from './FolderList';
+export { FolderTable } from './FolderTable';
 export { UserTable } from './UserTable';
 export { CreateFolderForm } from './CreateFolderForm';
 export { FileDropZone } from './FileDropZone';
