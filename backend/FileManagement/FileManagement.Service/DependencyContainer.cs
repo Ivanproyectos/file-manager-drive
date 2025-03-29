@@ -58,9 +58,9 @@ namespace FileManagement.Service
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["JWTSetting:Issuer"],
-                        ValidAudience = configuration["JWTSetting:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["JWTSetting:SecretKey"])),
+                        ValidIssuer = configuration["JWTSettings:Issuer"],
+                        ValidAudience = configuration["JWTSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["JWTSettings:SecretKey"])),
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,

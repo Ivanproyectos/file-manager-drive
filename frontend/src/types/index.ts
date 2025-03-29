@@ -5,7 +5,7 @@ export type { UserActionTypes } from "./userStateTypes";
 export type { IPeople as Person, IPeopleList } from "./PersonTypes";
 export type { CreateUser, IUser, IUserSummary, UpdateUser} from "./userTypes";
 export type { CreatePerson } from "./PersonTypes";
-export type { CreateFolder } from "./folderTypes";
+export type { CreateFolder, ISubFolder} from "./folderTypes";
 export type { IFolder } from "./folderTypes";
 export type { IFile, IUserFilePermission, ICreateFile } from "./fileTypes";
 

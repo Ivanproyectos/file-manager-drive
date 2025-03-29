@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Contracts.Dtos
 {
-    public record struct UserFolderDto(int IdUser, int IdFolder);
+    public record struct UserFolderDto
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+    };
 
 }

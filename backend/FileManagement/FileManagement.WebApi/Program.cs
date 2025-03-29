@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var allowSpecificOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
-var jwtSetting = builder.Configuration.GetSection("JwtSetting").Get<JWTSettings>();
+var jwtSetting = builder.Configuration.GetSection("JWTSettings").Get<JWTSettings>();
 //builder.Services.Configure<JwtSetting>(builder.Configuration.GetSection("JwtConfig"));
 
 builder.Services.AddControllers();

@@ -10,3 +10,5 @@ export { SearchUser } from './SearchUser';
 export { UserFilePersmision as FilePersmision } from './UserFilePersmision';
 export { ButtonSubmit } from './ButtonSubmit';
 export { UpdateUserForm } from './UpdateUserForm';
+export { FolderOptions } from './FolderOptions';
+export { FolderList } from './FolderList';

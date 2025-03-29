@@ -24,10 +24,16 @@ namespace FileManagement.Persistence.Repositories
             await _context.AddAsync(userFolder);
         }
 
+        public async Task<List<UserFolder>> GetFolderAsync(int FolderId)
+        {
+            return await _context.UserFolders.Include(uf => uf.User)
+                   .Where(uf => uf.Folder.ParentFolderId == FolderId).ToListAsync();
+        }
+
         public async Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int UserId, int FolderId)
         {
-           return await _context.UserFolders.Include(uf => uf.Folder)
-                .Where(uf => uf.Folder.ParentFolderId == FolderId && uf.UserId == UserId).ToListAsync();
+            return await _context.UserFolders.Include(uf => uf.Folder)
+                 .Where(uf => uf.Folder.ParentFolderId == FolderId && uf.UserId == UserId).ToListAsync();
         }
 
         public async Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId)

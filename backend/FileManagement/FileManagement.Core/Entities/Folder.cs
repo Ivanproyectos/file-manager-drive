@@ -10,9 +10,9 @@ namespace FileManagement.Core.Entities
         public Folder ParentFolder { get; set; } // Referencia a la carpeta padre
         //public ICollection<Folder> SubFolders { get; set; } // Hijos de la carpeta
 
-        //public ICollection<UserFolder> UserFolders { get; set; }
+        public ICollection<UserFolder> UserFolders { get; set; }
 
-        //public ICollection<File> Files { get; set; }
+        public ICollection<File> Files { get; set; }
 
         //public IEnumerable<FolderPermission> FolderPermissions { get; set; }
 

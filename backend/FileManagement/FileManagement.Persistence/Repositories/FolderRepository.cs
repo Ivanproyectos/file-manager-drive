@@ -15,7 +15,7 @@ namespace FileManagement.Persistence.Repositories
         }
         public async Task<Folder> CreateFolderAsync(Folder folder)
         {
-             var result = await _context.Folders.AddAsync(folder);
+            var result = await _context.Folders.AddAsync(folder);
             return result.Entity;
         }
 
@@ -26,7 +26,7 @@ namespace FileManagement.Persistence.Repositories
 
         public async Task<Folder> GetFolderByIdAsync(int id)
         {
-           return await _context.Folders.FirstOrDefaultAsync(f => f.Id == id);
+            return await _context.Folders.FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public Task<Folder> GetFolderByNameAsync(string name)
@@ -38,7 +38,7 @@ namespace FileManagement.Persistence.Repositories
         {
             var query = _context.Folders.AsQueryable(); // Permite filtros dinámicos en el futuro
 
-            if(!string.IsNullOrEmpty(searchTerm))
+            if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(f => f.Name.Contains(searchTerm));
             }
@@ -66,7 +66,36 @@ namespace FileManagement.Persistence.Repositories
 
         public async Task<List<Folder>> GetFoldersAsync()
         {
-            return await _context.Folders.ToListAsync();
+            //var folderDtos = await (from folder in _context.Folders
+            //                        join userFolder in _context.UserFolders
+            //                            on folder.Id equals userFolder.FolderId
+            //                        join file in _context.Files
+            //                            on folder.Id equals file.FolderId
+            //                        group new { folder, userFolder, file } by new { folder.Id, folder.Name, folder.CreatedAt } into g
+            //                        select new FolderDto
+            //                        {
+            //                            Id = g.Key.Id,  
+            //                            Name = g.Key.Name,
+            //                            CreatedDate = g.Key.CreatedAt,
+            //                            Users = g.Select(u => new UserFolderDto
+            //                            {
+            //                                Name = u.userFolder.User.People.FirstName,
+            //                                Email = u.userFolder.User.People.Email
+            //                            }).ToList(),
+            //                            Size = g.Select(x => new { x.file.Id, x.file.SizeBytes })
+            //                                            .Distinct()
+            //                                            .Sum(x => x.SizeBytes)
+            //                        }).ToListAsync();
+
+            var folders =  await _context.Folders.Where(x => x.ParentFolderId == null)
+                            .Include(f => f.UserFolders)
+                            .ThenInclude(uf => uf.User)
+                            .ThenInclude(u => u.People)
+                            .Include(f => f.UserFolders) // Incluir UserFolders
+                            .Include(f => f.Files)        // Incluir los archivos asociados
+                            .ToListAsync();
+
+            return folders;
         }
     }
 }

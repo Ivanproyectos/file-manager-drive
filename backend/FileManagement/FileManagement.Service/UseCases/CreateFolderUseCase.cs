@@ -32,6 +32,7 @@ namespace FileManagement.Service.UseCases
             var folder = new Folder
             {
                 Name = request.Name,
+                Description = request.Description,
                 ParentFolderId = request.ParentId == 0 ? null : request.ParentId
             };
 

@@ -91,7 +91,7 @@ export const FoldersPage = () => {
       </div>
 
 
-      <FolderTable />
+      <FolderTable onUpdateUserId={() => {}} isReload />
 
     {/*End Tab Content */}
 

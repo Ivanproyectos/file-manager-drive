@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 declare const HSCore: any;
+declare const bootstrap: any;
 interface Props<T> {
   tableRef: React.RefObject<HTMLTableElement | null>
   columns: any[],
@@ -11,7 +12,6 @@ export const useClientDataTable = <T>({ tableRef, columns, data }: Props<T>) => 
   const [datatable, setDatatable] = useState<any>(null);
 
   useEffect(() => {
-    debugger;
     if (!tableRef.current) return;
 
     if (!datatable) {
@@ -36,15 +36,16 @@ export const useClientDataTable = <T>({ tableRef, columns, data }: Props<T>) => 
                      <img class="mb-3" src="../assets/svg/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
                    <p class="mb-0">No data to show</p>
                    </div>`
+        },
+        drawCallback: function () {
+          const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+          tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl)
+          })
         }
       });
       setDatatable(HSCore.components.HSDatatables.getItem(0));
-    } else {
-      datatable.clear();
-      datatable.rows.add(data);
-      datatable.draw();
     }
-
     return () => {
       if (datatable) {
         datatable.destroy();

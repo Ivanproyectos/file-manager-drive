@@ -67,7 +67,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
           <i class="bi-trash me-1"></i> Eliminar
         </button>
       </div>
-    `,
+    `,    
     },
   ];
 

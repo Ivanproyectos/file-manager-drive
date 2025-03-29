@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
 import { IFolder } from "@/types";
+import { getFoldersAsync } from "@/api/folderApi";
+import { generateAvatar } from "@/utils/generateAvatarGroup";
+import { convertDateToLocaleString } from "@/utils/dateFormat";
 
 interface Props {
   onUpdateUserId: (userId: number) => void;
@@ -16,22 +19,22 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
   
     const columns = [
       {
-        data: "name",
-        render: (name: string) => `
-           <Link className="d-flex align-items-center" to="/dashboard/folders/1">
+        data: null,
+        render: ({id, name}: IFolder) => `
+           <a className="d-flex align-items-center" href="/dashboard/folders/${id}">
                   <i className="bi-folder me-2"></i>
                   <span>${name}</span>
-         </Link>
+         </a>
       `,
       },
       {
         data: "users",
-        render: (users: Array<any>) => (users.join(", ")),
+        render: (users: Array<any>) => (generateAvatar(users.map(user => user.name))),
       },
       { data: "size" },
       {
-        data: "dateCreated",
-        render: (date: Date) => date.toLocaleDateString()
+        data: "createdDate",
+        render: (date: string) => convertDateToLocaleString(date),
       },
       {
         data: null,
@@ -56,7 +59,7 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
       },
     ];
   
-     useClientDataTable({ tableRef, columns, data: users });
+     useClientDataTable({ tableRef, columns, data: folders });
   
     const handleRemove = async (id: number) => {
      /*  await removeUser(id);
@@ -101,8 +104,9 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
     useEffect(() => {
       const loadUsers = async () => {
         try {
-       /*    const users = await getUsers(); */
-       /*    setUsers(users); */
+           const folders = await getFoldersAsync(); 
+           debugger
+           setFolders(folders); 
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -448,6 +452,7 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
       {/* Table */}
       <div className="table-responsive datatable-custom">
         <table
+          ref={tableRef}
           id="datatable"
           className="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
           data-hs-datatables-options='{
@@ -473,6 +478,7 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
               <th>Usuarios</th>
               <th>Tamaño</th>
               <th>Fecha Creado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
 
