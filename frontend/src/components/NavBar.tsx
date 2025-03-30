@@ -87,6 +87,13 @@ export const NavBar = () => {
               {/* Collapse */}
               <div className="navbar-nav nav-compact"></div>
               <div id="navbarVerticalMenuPagesMenu">
+
+            {/*   <div className="nav-item">
+                <Link className="nav-link " to="/dashboard/users" data-placement="left">
+                     <i className="bi-stickies nav-icon"></i>
+                  <span className="nav-link-title">Usuarios</span>
+                </Link>
+              </div> */}
                 {/* Collapse */}
                 <div className="nav-item">
                   <a
@@ -98,8 +105,8 @@ export const NavBar = () => {
                     aria-expanded="false"
                     aria-controls="navbarVerticalMenuPagesUsersMenu"
                   >
-                    <i className="bi-people nav-icon"></i>
-                    <span className="nav-link-title">Users</span>
+                    <i className="bi-gear nav-icon"></i>
+                    <span className="nav-link-title">Administración</span>
                   </a>
 
                   <div
@@ -108,9 +115,9 @@ export const NavBar = () => {
                     data-bs-parent="#navbarVerticalMenuPagesMenu"
                   >
                     <Link className="nav-link " to="/dashboard/users">
-                      Overview
+                      Users
                     </Link>
-                    <a className="nav-link " href="../users-leaderboard.html">
+                  {/*   <a className="nav-link " href="../users-leaderboard.html">
                       Leaderboard
                     </a>
                     <a className="nav-link " href="../users-add-user.html">
@@ -118,7 +125,7 @@ export const NavBar = () => {
                       <span className="badge bg-info rounded-pill ms-1">
                         Hot
                       </span>
-                    </a>
+                    </a> */}
                   </div>
                 </div>
                 {/* End Collapse */}
@@ -148,7 +155,7 @@ export const NavBar = () => {
                     <Link className="nav-link " to="/dashboard/folders">
                       Folders
                     </Link>
-                    <a className="nav-link " href="../user-profile-teams.html">
+                  {/*   <a className="nav-link " href="../user-profile-teams.html">
                       Configuración
                     </a>
                     <a
@@ -168,7 +175,7 @@ export const NavBar = () => {
                       href="../user-profile-my-profile.html"
                     >
                       My Profile
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>

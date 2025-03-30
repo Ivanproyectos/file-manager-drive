@@ -33,7 +33,7 @@ namespace FileManagement.WebApi.Middleware
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 context.Response.ContentType = "application/json";
 
-                result.title = "Token expirado";
+                result.Title = "Token expirado";
                 result.Message = "El token ha expirado";
                 result.StatusCode = (int)HttpStatusCode.Unauthorized;
                 result.Details = Array.Empty<string>();

@@ -1,52 +1,59 @@
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
 import { IFolder } from "@/types";
 import { getFoldersAsync } from "@/api/folderApi";
 import { generateAvatar } from "@/utils/generateAvatarGroup";
 import { convertDateToLocaleString } from "@/utils/dateFormat";
+import { convertBytes } from "@/utils/formatBytes";
 
 interface Props {
   onUpdateUserId: (userId: number) => void;
-  isReload: boolean
+  isReload: boolean;
 }
 
-export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
+export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
+  useInitTomSelect();
+  const navigate = useNavigate();
+  const [folders, setFolders] = useState<IFolder[]>([]);
+  const [refresh, setRefresh] = useState(false);
+  const tableRef = useRef<HTMLTableElement>(null);
 
-    useInitTomSelect();
-    const navigate = useNavigate();
-    const [folders, setFolders] = useState<IFolder[]>([]);
-    const [refresh, setRefresh] = useState(false);
-    const tableRef = useRef<HTMLTableElement>(null);
-  
-    const columns = [
-      {
-        data: null,
-        render: ({id, name}: IFolder) => `
+  const columns = [
+    {
+      data: null,
+      render: ({ id, name }: IFolder) => `
            <a class="d-flex align-items-center" href="javascript:;" >
                   <i className="bi-folder me-2"></i>
-                  <span data-action="navigate" data-id="${id}">${name}</span>
+                  <span data-action="navigate" data-folder-id="${id}" data-folder-name="${name}">${name}</span>
          </a>
       `,
-      },
-      {
-        data: "users",
-        render: (users: Array<any>) => (generateAvatar(users.map(user => user.name))),
-      },
-      { data: "size" },
-      {
-        data: "createdDate",
-        render: (date: string) => convertDateToLocaleString(date),
-      },
-      {
-        data: null,
-        label: "Acciones",
-        orderable: false,
-        render: (user: any) => `
+    },
+    {
+      data: "users",
+      render: (users: Array<any>) =>
+        generateAvatar(users.map((user) => user.name)),
+    },
+    { data: "size", render: (size: number) => convertBytes(size) } ,
+    {
+      data: "createdDate",
+      render: (date: string) => convertDateToLocaleString(date),
+    },
+    {
+      data: null,
+      label: "Acciones",
+      orderable: false,
+      render: (user: any) => `
         <div class="d-flex align-items-center gap-2">
           <div class="form-check form-switch">
-              <input type="checkbox" class="form-check-input" id="formSwitch${user.id}" data-action="status" data-id="${user.id}" ${user.status? 'checked' : ''}>
-              <label class="form-check-label" for="formSwitch${user.id}"></label>
+              <input type="checkbox" class="form-check-input" id="formSwitch${
+                user.id
+              }" data-action="status" data-id="${user.id}" ${
+        user.status ? "checked" : ""
+      }>
+              <label class="form-check-label" for="formSwitch${
+                user.id
+              }"></label>
           </div>
           <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
           data-id="${user.id}" data-bs-target="#editUserModal">
@@ -58,65 +65,69 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
           </button>
         </div>
       `,
-      },
-    ];
-  
-     useClientDataTable({ tableRef, columns, data: folders });
-  
-    const handleRemove = async (id: number) => {
-     /*  await removeUser(id);
+    },
+  ];
+
+  useClientDataTable({ tableRef, columns, data: folders });
+
+  const handleRemove = async (id: number) => {
+    /*  await removeUser(id);
       setRefresh(prev => !prev); */
-    };
-  
-    const handleUpdateStatus = async (id: number) => {
-     /*  await updateStatus(id);
+  };
+
+  const handleUpdateStatus = async (id: number) => {
+    /*  await updateStatus(id);
       setTimeout( () => { setRefresh(prev => !prev)}, 500) */
-     ;
+  };
+
+  useEffect(() => {
+    const handleActions = (event: Event) => {
+      const target = event.target as HTMLElement;
+      const action = target.dataset.action;
+      const userId = target.dataset.id;
+      debugger;
+      if (action === "edit") {
+        onUpdateUserId(Number(userId));
+      } else if (action === "delete") {
+        handleRemove(Number(userId));
+      } else if (action === "status") {
+        handleUpdateStatus(Number(userId));
+      } else if (action === "navigate") {
+        const folderId = target.dataset.folderId;
+        const folderName = target.dataset.folderName;
+        const params = new URLSearchParams();
+        params.append("folder",folderName?.toString() || '');
+        navigate({
+          pathname: `/dashboard/folders/${folderId}`,
+          search: params.toString(),
+        });
+      }
     };
-  
-  
-    useEffect(() => {
-      const handleActions = (event: Event) => {
-        const target = event.target as HTMLElement;
-        const action = target.dataset.action;
-        const userId = target.dataset.id;
-        debugger;
-        if (action === 'edit') {
-          onUpdateUserId(Number(userId));
-        } else if (action === 'delete') {
-          handleRemove(Number(userId));
-        } else if (action === 'status') {
-          handleUpdateStatus(Number(userId));
-        } else if (action === 'navigate') {
-          navigate(`/dashboard/folders/${userId}`);
-        }
-      };
-  
-      const tableElement = tableRef.current;
+
+    const tableElement = tableRef.current;
+    if (tableElement) {
+      tableElement.addEventListener("click", handleActions);
+    }
+
+    return () => {
       if (tableElement) {
-        tableElement.addEventListener("click", handleActions);
+        tableElement.removeEventListener("click", handleActions);
       }
-  
-      return () => {
-        if (tableElement) {
-          tableElement.removeEventListener("click", handleActions);
-        }
-      };
-    }, []); 
-  
-  
-    useEffect(() => {
-      const loadUsers = async () => {
-        try {
-           const folders = await getFoldersAsync(); 
-           debugger
-           setFolders(folders); 
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const folders = await getFoldersAsync();
+        debugger;
+        setFolders(folders);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-      loadUsers();
-    }, [refresh, isReload]);
+    };
+    loadUsers();
+  }, [refresh, isReload]);
 
   return (
     <div className="card">
@@ -489,7 +500,10 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
           <tbody>
             <tr>
               <td>
-                <Link className="d-flex align-items-center" to="/dashboard/folders/1">
+                <Link
+                  className="d-flex align-items-center"
+                  to="/dashboard/folders/1"
+                >
                   <i className="bi-folder me-2"></i>
                   <span>Dashboard</span>
                 </Link>
@@ -566,20 +580,52 @@ export const FolderTable = ({onUpdateUserId, isReload }:Props) => {
                 </a>
               </td>
               <td>
-              <div className="avatar-group avatar-group-xs avatar-circle">
-                    <a className="avatar" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Amanda Harvey">
-                      <img className="avatar-img" src="./assets/img/160x160/img10.jpg" alt="Image Description"/>
-                    </a>
-                    <a className="avatar" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="David Harrison">
-                      <img className="avatar-img" src="./assets/img/160x160/img3.jpg" alt="Image Description" />
-                    </a>
-                    <a className="avatar avatar-soft-info" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Lisa Iston">
-                      <span className="avatar-initials">L</span>
-                    </a>
-                    <a className="avatar avatar-light avatar-circle" href="./user-profile.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Lewis Clarke, Chris Mathew and 3 more">
-                      <span className="avatar-initials">+5</span>
-                    </a>
-                  </div>
+                <div className="avatar-group avatar-group-xs avatar-circle">
+                  <a
+                    className="avatar"
+                    href="./user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Amanda Harvey"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="./assets/img/160x160/img10.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar"
+                    href="./user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="David Harrison"
+                  >
+                    <img
+                      className="avatar-img"
+                      src="./assets/img/160x160/img3.jpg"
+                      alt="Image Description"
+                    />
+                  </a>
+                  <a
+                    className="avatar avatar-soft-info"
+                    href="./user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Lisa Iston"
+                  >
+                    <span className="avatar-initials">L</span>
+                  </a>
+                  <a
+                    className="avatar avatar-light avatar-circle"
+                    href="./user-profile.html"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Lewis Clarke, Chris Mathew and 3 more"
+                  >
+                    <span className="avatar-initials">+5</span>
+                  </a>
+                </div>
               </td>
               <td> 45 MB </td>
               <td> 01 Jun 2021 </td>

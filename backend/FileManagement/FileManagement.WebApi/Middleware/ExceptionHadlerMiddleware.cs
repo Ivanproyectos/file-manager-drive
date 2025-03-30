@@ -1,5 +1,4 @@
 ﻿using FileManagement.Core.Contracts.Dtos;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 namespace FileManagement.WebApi.Middleware
@@ -32,22 +31,22 @@ namespace FileManagement.WebApi.Middleware
                 {
                     case Core.Exceptions.ValidationException ex:
                         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        result.title = "Error de validacion";
+                        result.Title = "Error de validacion";
                         result.Message = ex.Message;
                         result.Details = ex.Failures;
                         break;
                     case KeyNotFoundException ex:
-                        result.title = ex.Message;
+                        result.Title = ex.Message;
                         context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     case Core.Exceptions.UnauthorizedException ex:
-                        result.title = "Unauthorized";
+                        result.Title = "Unauthorized";
                         result.Message = ex.Message;
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         break;
                     default:    
                       
-                        result.title = "Error interno del servidor";
+                        result.Title = "Error interno del servidor";
                         result.Message = _env.IsDevelopment() ? error.Message : "Consulte al administrador del sistema";
                         result.Details = Array.Empty<string>();
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -56,9 +55,16 @@ namespace FileManagement.WebApi.Middleware
 
                 result.StatusCode = context.Response.StatusCode;
 
-                var json = JsonSerializer.Serialize(result);
+                var options = new JsonSerializerOptions
+                {
+                    // Configurar para que los nombres de las propiedades se serialicen en camelCase
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+
+
+                var json = JsonSerializer.Serialize(result, options);
                 //await context.Response.WriteAsync(JsonSerializer.Serialize(result));
-                await JsonSerializer.SerializeAsync(context.Response.Body, result);
+                await JsonSerializer.SerializeAsync(context.Response.Body, result, options);
             }
         }
     }

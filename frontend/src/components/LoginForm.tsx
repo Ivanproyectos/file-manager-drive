@@ -1,0 +1,184 @@
+import { ILogin, IUserSession } from "@/types";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "@/schemas";
+import { useAuth } from "@/context/AuthContext";
+import { loginAsync } from "@/api/login";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {  getUserById } from "@/api/users";
+import { formatPersonName } from "@/utils/formatPeople";
+
+export const LoginForm = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [message, setMessage] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<ILogin>({
+    mode: "onBlur",
+    resolver: yupResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: ILogin)  => {
+    try {
+        setMessage("");
+        const response = await loginAsync(data)
+        const user = await getUserById(response.userId);
+        debugger;
+        const userSession: IUserSession = {
+            id: user.id,
+            name: formatPersonName(user.people),
+            email: user.people.email,
+            personType : user.people.personType
+        }
+        login(response.token, userSession);
+        navigate("/dashboard");
+    } catch (error: any) {
+        if(error.response.status === 401){
+            setMessage(error.response.data.message);
+            return
+        }
+        console.error(error);
+    }
+
+  }
+
+  return (
+    <form
+      className="js-validate needs-validation"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+    >
+      <div className="text-center">
+        <div className="mb-5">
+          <h1 className="display-5">Iniciar sesión </h1>
+          <p>
+            ¿ Aun no tienes una cuenta ?{" "}
+            <a className="link" href="./authentication-signup-basic.html">
+              Registrate aqui
+            </a>
+          </p>
+        </div>
+
+        <div className="d-grid mb-4" style ={{placeContent: "center"}}>
+          <img
+            className="img-fluid me-2"
+            src="./assets/img/others/file-manager.png"
+            alt="file manageer"
+            width="300"
+
+          />
+        </div>
+        {/* 
+        <span className="divider-center text-muted mb-4">OR</span>  */}
+      </div>
+
+      {/* htmlForm */}
+      <div className="mb-4">
+        <label className="form-label" htmlFor="signinSrEmail">
+          Correo
+        </label>
+        <input
+          {...register("email")}
+          type="email"
+          className = {`form-control form-control-lg ${errors.email ? "is-invalid" : ""}`} 
+          name="email"
+          id="signinSrEmail"
+          tabIndex={1}
+          placeholder="email@address.com"
+          aria-label="email@address.com"
+          required
+        />
+
+        {errors.email && <span className="invalid-feedback">{errors?.email?.message}</span>}
+      </div>
+
+      <div className="mb-4">
+        <label
+          className="form-label w-100"
+          htmlFor="signupSrPassword"
+          tabIndex={0}
+        >
+          <span className="d-flex justify-content-between align-items-center">
+            <span>Contraseña</span>
+            <a
+              className="form-label-link mb-0"
+              href="./authentication-reset-password-basic.html"
+            >
+              Olvidaste tu contraseña?
+            </a>
+          </span>
+        </label>
+
+        <div
+          className= {`input-group input-group-merge ${errors.password ? "is-invalid" : ""}`} 
+          data-hs-validation-validate-className
+        >
+          <input
+            {...register("password")}
+            type="password"
+            className = "js-toggle-password form-control form-control-lg"
+            name="password"
+            id="signupSrPassword"
+            placeholder="8+ characters required"
+            aria-label="8+ characters required"
+            required
+            minLength={8}
+            data-hs-toggle-password-options='{
+                 "target": "#changePassTarget",
+                 "defaultclassName": "bi-eye-slash",
+                 "showclassName": "bi-eye",
+                 "classNameChangeTarget": "#changePassIcon"
+               }'
+          />
+          <a
+            id="changePassTarget"
+            className="input-group-append input-group-text"
+            href="javascript:;"
+          >
+            <i id="changePassIcon" className="bi-eye"></i>
+          </a>
+        </div>
+
+        {errors.password && <span className="invalid-feedback">{errors?.password?.message}</span>}
+      </div>
+
+      <div className="form-check mb-4">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value=""
+          id="termsCheckbox"
+        />
+        <label className="form-check-label" htmlFor="termsCheckbox">
+          Recuerdame
+        </label>
+      </div>
+
+      <div className="d-grid">
+        <button
+          type="submit"
+          className="btn btn-primary btn-lg"
+          disabled={!isValid}
+        >
+          {isSubmitting ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Validando...
+            </>
+          ) : (
+            "Ingresar"
+          )}
+        </button>
+      </div>
+      {message && <div className="text-danger text-center mt-3" role="alert">{message}</div>}
+    </form>
+  );
+};

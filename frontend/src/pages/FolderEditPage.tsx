@@ -1,31 +1,57 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { FolderDetailsForm, FileDropZone, FolderList, FileList } from "@/components";
+import { useParams, Link, useLocation } from "react-router-dom";
+import {
+  FolderDetailsForm,
+  FileDropZone,
+  FolderList,
+  FileList,
+} from "@/components";
 import { IFolder } from "@/types";
-
 
 declare const HSBsDropdown: any;
 declare const HSCore: any;
 interface Breadcrumbs {
   id: number;
   name: string;
+  class?: string;
 }
 export const FolderEditPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const folderName = queryParams.get("folder");
   const { id } = useParams();
   const [folderId, setFolderId] = useState<number>(Number(id));
   const [uploadId, setUploadId] = useState<string>();
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
 
-  const handleNavigateToSubfolder  = (newFolderId: number, newFolderName: string) => {
+  const handleNavigateToSubfolder = (
+    newFolderId: number,
+    newFolderName: string
+  ) => {
     const newSubFolder = { id: newFolderId, name: newFolderName };
-   // setFolderId(newFolderId);
-    setBreadcrumbs(prevState => [...prevState, newSubFolder]);
+    // setFolderId(newFolderId);
+    setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
   };
 
-  const handleGoBackToFolder  = (folderId: number) => {
-   // setFolderId(folderId);
-    setBreadcrumbs(prevState => prevState.slice(0, prevState.findIndex(x => x.id === folderId) ));
+  const handleGoBackToFolder = (folderId: number) => {
+    // setFolderId(folderId);
+    setBreadcrumbs((prevState) =>
+      prevState.slice(
+        0,
+        prevState.findIndex((x) => x.id === folderId) + 1
+      )
+    );
+    console.log(breadcrumbs);
   };
+
+  useEffect(() => {
+    const newSubFolder = { 
+      id: Number(id), 
+      name: folderName?.toString() || "", 
+      class: "text-primary"
+     };
+    setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
+  }, []);
 
   useEffect(() => {
     HSBsDropdown.init();
@@ -39,20 +65,24 @@ export const FolderEditPage = () => {
             <div className="col-sm mb-2 mb-sm-0">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb breadcrumb-no-gutter mb-4">
-                  <li className="breadcrumb-item">
-                    <Link className="breadcrumb-link" to="/dashboard/folders">
-                      Mis folders
-                    </Link>
-                  </li>
-               {/*    <li className="breadcrumb-item">
+                  {/*      <li className="breadcrumb-item">
+                    <a className="breadcrumb-link" href="javascript:;" onClick={() => handleGoBackToFolder(Number(id))}>
+                      {queryParams.get("folder")}
+                    </a>
+                  </li> */}
+                  {/*    <li className="breadcrumb-item">
                     <a className="breadcrumb-link" href="javascript:;">
                       Mis archivos
                     </a>
                   </li> */}
-                  {breadcrumbs.map((subfolder, index) => (
-                    <li className="breadcrumb-item" key={index} onClick={() => handleGoBackToFolder(subfolder.id)}>
-                      <a className="breadcrumb-link" href="javascript:;">
-                        {subfolder.name}
+                  {breadcrumbs.map((breadcrumb, index) => (
+                    <li
+                      className="breadcrumb-item"
+                      key={index}
+                      onClick={() => handleGoBackToFolder(breadcrumb.id)}
+                    >
+                      <a className={`breadcrumb-link ${breadcrumb.class}`} href="javascript:;">
+                        {breadcrumb.name}
                       </a>
                     </li>
                   ))}
@@ -418,9 +448,10 @@ export const FolderEditPage = () => {
 
         {/*Folders */}
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
-
-         <FolderList folderId={Number(folderId)} onSelectSubFolder={handleNavigateToSubfolder} />
-     
+          <FolderList
+            folderId={Number(folderId)}
+            onSelectSubFolder={handleNavigateToSubfolder}
+          />
         </div>
         {/*End Folders */}
 
@@ -430,7 +461,7 @@ export const FolderEditPage = () => {
             <h2 className="h4 mb-0">Files</h2>
           </div>
 
-         {/*  <div className="col-auto">
+          {/*  <div className="col-auto">
             
             <ul className="nav nav-segment" id="connectionsTab" role="tablist">
               <li className="nav-item">
@@ -464,12 +495,10 @@ export const FolderEditPage = () => {
             </ul>
          
           </div> */}
-
         </div>
-   
-       <FileList folderId={Number(folderId)} />
-   
-     
+
+        <FileList folderId={Number(folderId)} />
+
         {/*End Tab Content */}
       </div>
 
@@ -528,7 +557,7 @@ export const FolderEditPage = () => {
             </div>
             <div className="modal-body">
               <form>
-                  <FileDropZone onGetUploadId={setUploadId} />
+                <FileDropZone onGetUploadId={setUploadId} />
               </form>
             </div>
           </div>

@@ -52,7 +52,11 @@ namespace FileManagement.Service.UseCases
 
             var tokenDto = await _tokenService.GenerateToken(user.Id, userDto);
             
-            return new LoginResponse { Token = tokenDto.Token, ExpiresIn = tokenDto.ExpiresIn };
+            return new LoginResponse { 
+                UserId = user.Id,
+                Token = tokenDto.Token,
+                ExpiresIn = tokenDto.ExpiresIn 
+            };
 
 
         }

@@ -76,7 +76,7 @@ namespace FileManagement.Service
                             context.Response.StatusCode = 500;
                             context.Response.ContentType = "application/json";
 
-                            result.title = "Error authenticating";
+                            result.Title = "Error authenticating";
                             result.Message = "Ocurrio un error en la autenticacion.";
                             result.StatusCode = context.Response.StatusCode;
                             return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
@@ -92,7 +92,7 @@ namespace FileManagement.Service
                                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                                     context.Response.ContentType = "application/json";
 
-                                    result.title = "Unauthorized";
+                                    result.Title = "Unauthorized";
                                     result.Message = "Token es invalido.";
                                     result.StatusCode = context.Response.StatusCode;
                                     return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
@@ -110,7 +110,7 @@ namespace FileManagement.Service
                             context.Response.StatusCode = 400;
                             context.Response.ContentType = "application/json";
 
-                            result.title = "Unauthorized";
+                            result.Title = "Unauthorized";
                             result.Message = "Usted no tiene permiso para este recurso.";
                             result.StatusCode = context.Response.StatusCode;
                             return context.Response.WriteAsync(JsonConvert.SerializeObject(result));

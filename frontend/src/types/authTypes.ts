@@ -1,13 +1,9 @@
-export interface IUserToken {
-    id: number;
-    name: string;
-  }
-  
+import { IUserSession } from "./loginTypes";
   export interface AuthContextType {
     isAuthenticated : boolean;
-    user: IUserToken | null;
+    user: IUserSession | null;
     token: string | null;
-    login: (userData: IUserToken, token: string) => void;
+    login: (token: string, user: IUserSession) => void;
     logout: () => void;
     loading: boolean;
   }

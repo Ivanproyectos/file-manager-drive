@@ -1,36 +1,37 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import {  User, AuthContextType  } from "@/types";
+import {  IUserSession, AuthContextType  } from "@/types";
 import Cookies from "js-cookie";
 
 const AuthContext = createContext<AuthContextType | null>(null); 
 
 export const AuthProvider = ({children}: { children: React.ReactNode}) => { 
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<IUserSession | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(true); // cambiar
     const [token, setToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
+        const storedToken = Cookies.get("token");
         if (storedToken){
             setToken(storedToken);
             setIsAuthenticated((prev) => !prev);
+            if(!localStorage.getItem("user")) return
+            setUser(JSON.parse(localStorage.getItem("user") || ""));
         }
         setLoading(false);
       }, []); 
 
-      const login = (userData: User, authToken: string) => {
-       // Cookies.set('token', token, { expires: 7, path: '' });
+      const login = (authToken: string, userData: IUserSession) => {
+        Cookies.set('token', authToken, { expires: 7, path: '' });
         localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", authToken);
-        setUser(userData);
         setToken(authToken);
+        setUser(userData);
       };
     
       // Función para cerrar sesión
       const logout = () => {
+        Cookies.remove('token');
         localStorage.removeItem("user");
-        localStorage.removeItem("token");
         setUser(null);
         setToken(null);
       };

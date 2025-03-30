@@ -1,4 +1,15 @@
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom"; 
+
 export const HeaderTop = () => {
+  const navigate = useNavigate();
+  const { logout, user } = useAuth();
+
+  const handleLogout = () => { 
+    logout();
+    navigate("/login");
+  }
+
     return (
         <header id="header" className="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
         <div className="navbar-nav-wrap">
@@ -16,9 +27,6 @@ export const HeaderTop = () => {
               <i className="bi-arrow-bar-right navbar-toggler-full-align" data-bs-template='<div className="tooltip d-none d-md-block" role="tooltip"><div className="arrow"></div><div className="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
             </button>
     
-       
-    
-       
             <div className="dropdown ms-2">
             
               <div className="d-none d-lg-block">
@@ -699,8 +707,8 @@ export const HeaderTop = () => {
                           <img className="avatar-img" src="../assets/img/160x160/img6.jpg" alt="Image Description" />
                         </div>
                         <div className="flex-grow-1 ms-3">
-                          <h5 className="mb-0">Mark Williams</h5>
-                          <p className="card-text text-body">mark@site.com</p>
+                          <h5 className="mb-0">{user?.name}</h5>
+                          <p className="card-text text-body">{user?.email}</p>
                         </div>
                       </div>
                     </div>
@@ -773,7 +781,7 @@ export const HeaderTop = () => {
     
                     <div className="dropdown-divider"></div>
     
-                    <a className="dropdown-item" href="#">Sign out</a>
+                    <a className="dropdown-item" href="#" onClick={handleLogout}>Sign out</a>
                   </div>
                 </div>
               

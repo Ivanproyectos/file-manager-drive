@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Contracts.Dtos
 {
-    public record struct ProblemDetailsDto(string title, string Message, object Details, int StatusCode);
+    public record struct ProblemDetailsDto(string Title, string Message, object Details, int StatusCode);
 }
