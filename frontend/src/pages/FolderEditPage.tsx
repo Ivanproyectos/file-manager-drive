@@ -1,15 +1,32 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { FolderDetailsForm, FileDropZone, FolderList, FileList } from "@/components";
+import { IFolder } from "@/types";
 
 
 declare const HSBsDropdown: any;
 declare const HSCore: any;
+interface Breadcrumbs {
+  id: number;
+  name: string;
+}
 export const FolderEditPage = () => {
-  const { id: folderId } = useParams();
-  const [uploadId, setUploagId] = useState<string | null>(null);
+  const { id } = useParams();
+  const [folderId, setFolderId] = useState<number>(Number(id));
+  const [uploadId, setUploadId] = useState<string>();
+  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
 
-  
+  const handleNavigateToSubfolder  = (newFolderId: number, newFolderName: string) => {
+    const newSubFolder = { id: newFolderId, name: newFolderName };
+   // setFolderId(newFolderId);
+    setBreadcrumbs(prevState => [...prevState, newSubFolder]);
+  };
+
+  const handleGoBackToFolder  = (folderId: number) => {
+   // setFolderId(folderId);
+    setBreadcrumbs(prevState => prevState.slice(0, prevState.findIndex(x => x.id === folderId) ));
+  };
+
   useEffect(() => {
     HSBsDropdown.init();
     HSCore.components.HSTomSelect.init(".js-select");
@@ -23,15 +40,22 @@ export const FolderEditPage = () => {
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb breadcrumb-no-gutter mb-4">
                   <li className="breadcrumb-item">
-                    <a className="breadcrumb-link" href="javascript:;">
-                      Pages
-                    </a>
+                    <Link className="breadcrumb-link" to="/dashboard/folders">
+                      Mis folders
+                    </Link>
                   </li>
-                  <li className="breadcrumb-item">
+               {/*    <li className="breadcrumb-item">
                     <a className="breadcrumb-link" href="javascript:;">
                       Mis archivos
                     </a>
-                  </li>
+                  </li> */}
+                  {breadcrumbs.map((subfolder, index) => (
+                    <li className="breadcrumb-item" key={index} onClick={() => handleGoBackToFolder(subfolder.id)}>
+                      <a className="breadcrumb-link" href="javascript:;">
+                        {subfolder.name}
+                      </a>
+                    </li>
+                  ))}
                 </ol>
               </nav>
 
@@ -395,7 +419,7 @@ export const FolderEditPage = () => {
         {/*Folders */}
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
 
-         <FolderList folderId={Number(folderId)} />
+         <FolderList folderId={Number(folderId)} onSelectSubFolder={handleNavigateToSubfolder} />
      
         </div>
         {/*End Folders */}
@@ -474,7 +498,7 @@ export const FolderEditPage = () => {
                 <FolderDetailsForm />
                 <div className="mb-4">
                   <label className="form-label">Adjuntar archivos</label>
-                  <FileDropZone onGetUploadId={setUploagId} />
+                  <FileDropZone onGetUploadId={setUploadId} />
                 </div>
               </form>
             </div>
@@ -504,7 +528,7 @@ export const FolderEditPage = () => {
             </div>
             <div className="modal-body">
               <form>
-                  <FileDropZone onGetUploadId={setUploagId} />
+                  <FileDropZone onGetUploadId={setUploadId} />
               </form>
             </div>
           </div>

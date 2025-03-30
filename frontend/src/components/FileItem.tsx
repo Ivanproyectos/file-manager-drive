@@ -1,6 +1,7 @@
 import { IFile } from "@/types"
 import { getFileIcon } from "@/utils/fileIconMapping"
 import { convertDateToLocaleString } from "@/utils/dateFormat"
+import { convertBytes } from "@/utils/formatBytes"
 
 interface fileItemProps{
     file:IFile
@@ -26,7 +27,7 @@ export const FileItem = ({file}:fileItemProps) => {
         </h5>
         <ul className="list-inline list-separator small text-body">
           <li className="list-inline-item">{convertDateToLocaleString(createdDate)}</li>
-          <li className="list-inline-item">{sizeBytes}</li>
+          <li className="list-inline-item">{convertBytes(sizeBytes)}</li>
         </ul>
       </div>
 
