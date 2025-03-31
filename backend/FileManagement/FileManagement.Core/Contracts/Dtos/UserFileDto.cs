@@ -9,6 +9,7 @@
         public int SizeBytes { get; set; }
         public bool CanView { get; set; }
         public bool CanDownload { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public bool IsDateExpired { get; set; }
+        public DateTime? ExpirationDate { get; set; }
     }
 }

@@ -88,13 +88,15 @@ namespace FileManagement.Persistence.Repositories
             //                                            .Sum(x => x.SizeBytes)
             //                        }).ToListAsync();
 
-            var folders =  await _context.Folders.Where(x => x.ParentFolderId == null)
+            var folders = await _context.Folders.Where(x => x.ParentFolderId == null)
                             .Include(f => f.UserFolders)
                             .ThenInclude(uf => uf.User)
                             .ThenInclude(u => u.People)
                             .Include(f => f.UserFolders) // Incluir UserFolders
-                            .Include(f => f.Files)        // Incluir los archivos asociados
+                            .Include(f => f.Files)
+                            .OrderByDescending(f => f.Id)// Incluir los archivos asociados
                             .ToListAsync();
+                            
 
             return folders;
         }

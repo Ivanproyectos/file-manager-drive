@@ -6,5 +6,6 @@ export interface IUserFile{
     createdDate: string,
     canView: boolean,
     canDownload: boolean,
+    isDateExpired:boolean,
     expirationDate: string
 }

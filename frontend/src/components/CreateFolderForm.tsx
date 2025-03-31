@@ -9,9 +9,10 @@ import { showError } from "@/utils/alerts";
 
 interface CreateFolderFormProps {
   onCloseModal: () => void;
+  onCreateComplete: () => void;
 }
 
-export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
+export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolderFormProps) => {
   const [users, setUsers] = useState<IUserFilePermission[]>([]);
   const [uploadId, setUploadId] = useState<string>("");
 
@@ -57,6 +58,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
   const onSubmit = async (folderData: CreateFolder) => {
 
     let folderId = 0;
+    console.log(users);
     try {
       const newFolder = {
         ...folderData,
@@ -64,8 +66,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
         asignedFolder: users.length > 0
       };
       folderId = await createFolderAsync(newFolder);
-
-      // showSuccess("Folder creado con exito");
+      onCreateComplete();
     } catch (error) {
       console.error(error);
       showError("Error al crear la carpeta, vuelva a intentalor mas tarde");

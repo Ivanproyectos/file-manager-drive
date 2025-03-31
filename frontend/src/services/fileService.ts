@@ -7,7 +7,7 @@ export const createFileAsync = async (createFile: ICreateFile) => {
 
   createFile.filePermissions = createFile.filePermissions.map((permission) => ({
     ...permission,
-    expirationDate: formatISO(parse(permission.expirationDate, 'dd/MM/yyyy', new Date())),
+    expirationDate:permission.expirationDate ? formatISO(parse(permission.expirationDate, 'dd/MM/yyyy', new Date())) : null
   }));
 
   await createFileApi(createFile);

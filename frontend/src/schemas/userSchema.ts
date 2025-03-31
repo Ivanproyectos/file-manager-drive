@@ -16,9 +16,15 @@ export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
           .mixed<PersonType>()
           .oneOf([PersonType.Natural, PersonType.Juridico], 'Tipo de persona inválido')
           .required('El tipo de persona es obligatorio'),
-        identification: yup.number()
+        identification: yup.string()
         .typeError('La identificación debe ser un número')
-        .integer('Debe ser un número entero').required('La identificación es obligatoria'),
+        .matches(/^\d+$/, 'La identificación debe ser un número válido')
+        .required('La identificación es obligatoria')
+        .when('personType', {
+          is: PersonType.Natural,
+          then: (schema) => schema.length(8, 'La identificación debe tener 8 caracteres'),
+          otherwise: (schema) => schema.length(11, 'La identificación debe tener 11 caracteres'),
+        }),
         lastName: yup.string()
         .when('personType', {
           is: PersonType.Natural,

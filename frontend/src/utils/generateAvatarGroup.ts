@@ -27,7 +27,7 @@ export const generateAvatar = (names: string[]): string => {
    `
 }
 
-const createAvatarHTML = (name: string, color: string): string => {
+export const createAvatarHTML = (name: string, color: string): string => {
     const letter = name.charAt(0);
     return `
       <a class="avatar avatar-soft-${color}" href="javascript:;" data-bs-toggle="tooltip" data-bs-placement="top" title="${name}">

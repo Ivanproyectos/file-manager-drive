@@ -106,6 +106,7 @@ namespace FileManagement.Service.Services
                     UserId = fm.UserId,
                     CanView = fm.CanView,
                     CanDownload = fm.CanDownload,
+                    IsDateExpired = fm.IsDateExpired,
                     ExpirationDate = fm.ExpirationDate
                 }).ToList();
 

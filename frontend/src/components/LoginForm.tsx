@@ -37,10 +37,11 @@ export const LoginForm = () => {
         login(response.token,response.expiresIn, userSession);
         navigate("/dashboard");
     } catch (error: any) {
-        if(error.response.status === 401){
+        if(error.response?.status === 401){
             setMessage(error.response.data.message);
             return
         }
+        setMessage("Ocurrio un error inesperado al iniciar sesión");
         console.error(error);
     }
 

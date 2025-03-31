@@ -14,9 +14,10 @@ interface userFileListProps {
 interface FileActionsProps {
   canDownload: boolean;
   expirationDate: string;
+  isDateExpired: boolean;
 }
 
-const FileActions = ({ canDownload, expirationDate }: FileActionsProps) => {
+const FileActions = ({ canDownload, expirationDate, isDateExpired }: FileActionsProps) => {
   return (
     <div className="dropdown">
       <button
@@ -36,7 +37,7 @@ const FileActions = ({ canDownload, expirationDate }: FileActionsProps) => {
         style={{ minWidth: "13rem" }}
       >
         <span className="dropdown-header">Opciones</span>
-        {canDownload && validateExpirationDate(expirationDate) && (
+        {canDownload && !isDateExpired && (
           <a className="dropdown-item" href="#">
             <i className="bi-download dropdown-item-icon"></i> Descargar
           </a>
@@ -62,6 +63,7 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
             canView,
             canDownload,
             expirationDate,
+            isDateExpired
           }) => (
             <li className="list-group-item" key={id}>
               <div className="row align-items-center">
@@ -92,6 +94,7 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
                 <div className="col-auto">
                   <FileActions
                     canDownload={canDownload}
+                    isDateExpired={isDateExpired}
                     expirationDate={expirationDate}
                   />
                 </div>

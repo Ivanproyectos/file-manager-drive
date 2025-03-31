@@ -5,8 +5,14 @@ declare const bootstrap: any;
 
 export const FoldersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleCreateComplete = () => {  
+
+    setRefresh(prev => !prev);
+  };
 
   const handleModalOpen = () => {  
     setTimeout(() => {
@@ -91,7 +97,7 @@ export const FoldersPage = () => {
       </div>
 
 
-      <FolderTable onUpdateUserId={() => {}} isReload />
+      <FolderTable onUpdateUserId={() => {}} isReload={refresh} />
 
     {/*End Tab Content */}
 
@@ -106,7 +112,7 @@ export const FoldersPage = () => {
           <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => handleModalOpen()} aria-label="Close"></button>
         </div>
           <div className="modal-body">
-            {isModalOpen && <CreateFolderForm onCloseModal={() => handleModalOpen()} />}
+            {isModalOpen && <CreateFolderForm onCloseModal={() => handleModalOpen()} onCreateComplete={handleCreateComplete} />}
           </div>
 
       </div>

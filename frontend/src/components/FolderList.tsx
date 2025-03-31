@@ -7,26 +7,11 @@ interface FolderListProps {
   onSelectSubFolder: (folderId: number, folderName: string) => void;
 }
 export const FolderList = ({ folders, onSelectSubFolder }: FolderListProps) => {
- /*  const [folders, setFolders] = useState<ISubFolder[]>([]);
-
-  useEffect(() => {
-    const fetchFolders = async () => {
-      try {
-        const folders = await getSubFoldersAsync(folderId);
-        setFolders(folders);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        // setLoading(false);
-      }
-    };
-    fetchFolders();
-  }, [folderId]); */
 
   return (
     <>
       {folders.map(({ id, name }) => (
-        <div className="col mb-3 mb-lg-5" key={id} onClick={() => onSelectSubFolder(id, name)}>
+        <article className="col mb-3 mb-lg-5" key={id} onClick={() => onSelectSubFolder(id, name)}>
           {/*Card */}
           <div className="card card-sm card-hover-shadow h-100">
             <div className="card-body d-flex flex-column">
@@ -44,7 +29,7 @@ export const FolderList = ({ folders, onSelectSubFolder }: FolderListProps) => {
             <a className="stretched-link" href="#"></a>
           </div>
           {/*End Card */}
-        </div>
+        </article>
       ))}
     </>
   );

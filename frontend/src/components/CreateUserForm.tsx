@@ -19,7 +19,7 @@ export const CreateUserForm = ({onIsSubmitting, onCreateComplete}:CreateUserForm
     handleSubmit,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<CreateUser>({
     resolver: yupResolver(createUserSchema),
     mode: 'onBlur',
@@ -38,8 +38,8 @@ export const CreateUserForm = ({onIsSubmitting, onCreateComplete}:CreateUserForm
       reset()
     }
     catch (error) {
-      console.error("Error al actualizar el usuario:", error);
-      showError("Error al actualizar el usuario, vuelva a intentalor mas tarde");
+      console.error("Error al crear el usuario:", error);
+      showError("Ocurrio un error al crear el usuario, vuelva a intentalor mas tarde");
     }
    
   };

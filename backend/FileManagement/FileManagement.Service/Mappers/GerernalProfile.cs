@@ -17,6 +17,7 @@ namespace FileManagement.Service.Mappers
             CreateMap<Core.Entities.File, UserFileDto>()
                 .ForMember(dest => dest.CanView, opt => opt.MapFrom(src => src.Permission.CanView))
                 .ForMember(dest => dest.CanDownload, opt => opt.MapFrom(src => src.Permission.CanDownload))
+                 .ForMember(dest => dest.IsDateExpired, opt => opt.MapFrom(src => src.Permission.IsDateExpired))
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.Permission.ExpirationDate));
 

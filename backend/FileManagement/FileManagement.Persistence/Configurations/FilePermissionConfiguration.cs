@@ -24,6 +24,10 @@ namespace FileManagement.Persistence.Configurations
                .HasColumnType("bit")
                .HasConversion<bool>().IsRequired();
 
+            builder.Property(x => x.IsDateExpired)
+                .HasColumnType("bit")
+                .HasConversion<bool>().IsRequired();
+
             builder.HasOne(x => x.File)
                  .WithMany()
                  .HasForeignKey(x => x.FileId)
