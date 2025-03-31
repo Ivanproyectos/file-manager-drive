@@ -34,7 +34,7 @@ export const LoginForm = () => {
             email: user.people.email,
             personType : user.people.personType
         }
-        login(response.token, userSession);
+        login(response.token,response.expiresIn, userSession);
         navigate("/dashboard");
     } catch (error: any) {
         if(error.response.status === 401){

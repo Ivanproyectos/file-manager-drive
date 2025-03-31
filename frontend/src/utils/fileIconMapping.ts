@@ -6,22 +6,21 @@ import xlsxIcon from '@/assets/svg/brands/google-sheets-icon.svg';
 
 
 const fileIconMapping = {
-    pdf: pdfIcon,
-    jpg: imageIcon,
-    jpeg: imageIcon,
-    png: imageIcon,
-    gif: imageIcon,
-    doc: docIcon,
-    docx: docIcon,
-    txt: txtIcon,
-    zip: docIcon,
-    rar: docIcon,
-    xlsx: xlsxIcon
-  };
-  
+  ".pdf": pdfIcon,
+  ".jpg": imageIcon,
+  ".jpeg": imageIcon,
+  ".png": imageIcon,
+  gif: imageIcon,
+  ".doc": docIcon,
+  ".docx": docIcon,
+  ".txt": txtIcon,
+  zip: docIcon,
+  rar: docIcon,
+  ".xlsx": xlsxIcon
+};
 
-  export const getFileIcon = (extension: string) => {
 
-    return fileIconMapping[extension.toLowerCase() as keyof typeof fileIconMapping] || docIcon;
-  };
-  
+export const getFileIcon = (extension: string) => {
+
+  return fileIconMapping[extension.toLowerCase() as keyof typeof fileIconMapping] || txtIcon;
+};

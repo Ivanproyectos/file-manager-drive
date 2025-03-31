@@ -1,27 +1,10 @@
-import { useEffect, useState } from "react";
 import { ISubFolder } from "@/types";
-import { getSubFoldersAsync } from "@/api/folderApi";
-import { FolderActions } from "@/components";
 interface FolderListProps {
   folders: ISubFolder[];
+  loading: boolean;
   onSelectSubFolder: (folderId: number, folderName: string) => void;
 }
-export const FolderList = ({ folders, onSelectSubFolder }: FolderListProps) => {
- /*  const [folders, setFolders] = useState<ISubFolder[]>([]);
-
-  useEffect(() => {
-    const fetchFolders = async () => {
-      try {
-        const folders = await getSubFoldersAsync(folderId);
-        setFolders(folders);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        // setLoading(false);
-      }
-    };
-    fetchFolders();
-  }, [folderId]); */
+export const UserFoderList = ({ folders,loading, onSelectSubFolder }: FolderListProps) => {
 
   return (
     <>
@@ -34,12 +17,7 @@ export const FolderList = ({ folders, onSelectSubFolder }: FolderListProps) => {
                 <i className="bi-folder fs-2 text-body me-2"></i>
 
                 <h5 className="text-truncate ms-2 mb-0">{name}</h5>
-
-                {/*Dropdown */}
-                <FolderActions />
-                {/*End Dropdown */}
               </div>
-              {/*           <span className="text-muted">24 elementos</span> */}
             </div>
             <a className="stretched-link" href="#"></a>
           </div>

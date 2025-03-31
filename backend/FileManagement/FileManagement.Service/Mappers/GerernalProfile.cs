@@ -17,7 +17,8 @@ namespace FileManagement.Service.Mappers
             CreateMap<Core.Entities.File, UserFileDto>()
                 .ForMember(dest => dest.CanView, opt => opt.MapFrom(src => src.Permission.CanView))
                 .ForMember(dest => dest.CanDownload, opt => opt.MapFrom(src => src.Permission.CanDownload))
-                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.Permission.ExpirationDate.ToString("o")));
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.Permission.ExpirationDate));
 
             CreateMap<User, UserSummaryResponse>()
              .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.People.Email))
@@ -31,6 +32,9 @@ namespace FileManagement.Service.Mappers
             
 
             CreateMap<People, PeopleDto>();
+            CreateMap<Folder, UserFolderResponse>();
+            CreateMap<Folder, SubFolderDto>();
+            
                 //  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));
 
 

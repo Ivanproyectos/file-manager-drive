@@ -21,5 +21,6 @@ export interface ISubFolder {
 
 
 export type CreateFolder = Omit<IFolder, 'id' | 'parentId' | 'users'> & {
+    asignedFolder: boolean
     usersId: number[];
 }

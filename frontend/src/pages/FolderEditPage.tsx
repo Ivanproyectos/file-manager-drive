@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   FolderDetailsForm,
   FileDropZone,
   FolderList,
   FileList,
 } from "@/components";
-import { IFolder } from "@/types";
+import { useFolderContent } from "@/hooks";
 
 declare const HSBsDropdown: any;
 declare const HSCore: any;
@@ -24,32 +24,32 @@ export const FolderEditPage = () => {
   const [uploadId, setUploadId] = useState<string>();
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
 
+  const { files, folders, loadingFolders, loadingFiles } = useFolderContent({
+    folderId,
+  });
+
   const handleNavigateToSubfolder = (
     newFolderId: number,
     newFolderName: string
   ) => {
     const newSubFolder = { id: newFolderId, name: newFolderName };
-    // setFolderId(newFolderId);
+     setFolderId(newFolderId);
     setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
   };
 
   const handleGoBackToFolder = (folderId: number) => {
-    // setFolderId(folderId);
+     setFolderId(folderId);
     setBreadcrumbs((prevState) =>
-      prevState.slice(
-        0,
-        prevState.findIndex((x) => x.id === folderId) + 1
-      )
+      prevState.slice(0, prevState.findIndex((x) => x.id === folderId) + 1)
     );
-    console.log(breadcrumbs);
   };
 
   useEffect(() => {
-    const newSubFolder = { 
-      id: Number(id), 
-      name: folderName?.toString() || "", 
-      class: "text-primary"
-     };
+    const newSubFolder = {
+      id: Number(id),
+      name: folderName?.toString() || "",
+      class: "text-primary",
+    };
     setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
   }, []);
 
@@ -81,7 +81,10 @@ export const FolderEditPage = () => {
                       key={index}
                       onClick={() => handleGoBackToFolder(breadcrumb.id)}
                     >
-                      <a className={`breadcrumb-link ${breadcrumb.class}`} href="javascript:;">
+                      <a
+                        className={`breadcrumb-link ${breadcrumb.class}`}
+                        href="javascript:;"
+                      >
                         {breadcrumb.name}
                       </a>
                     </li>
@@ -405,7 +408,7 @@ export const FolderEditPage = () => {
               </div>
             </div>
 
-            <div className="d-flex align-items-center">
+            {/*     <div className="d-flex align-items-center">
               <ul
                 className="nav nav-segment"
                 id="connectionsTab"
@@ -440,66 +443,45 @@ export const FolderEditPage = () => {
                   </a>
                 </li>
               </ul>
+            </div> */}
+          </div>
+        </div>
+        {folders.length > 0 && (
+          <>
+            <h2 className="h4 mb-3">Folders</h2>
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
+              <FolderList
+                folders={folders}
+                onSelectSubFolder={handleNavigateToSubfolder}
+              />
             </div>
+          </>
+        )}
+
+        {files.length > 0 && (
+          <>
+            <div className="row align-items-center mb-2">
+              <div className="col">
+                <h2 className="h4 mb-0">Files</h2>
+              </div>
+            </div>
+            <FileList files={files} loading={loadingFiles} />
+          </>
+        )}
+
+        {files.length === 0 && folders.length === 0 && (
+          <div className="row align-items-center justify-content-center mt-4">
+            <div className="col text-center">
+              <img
+                className="img-fluid"
+                src="/assets/svg/illustrations-light/oc-browse-file.svg"
+                width="150"
+                height="150"
+              />
+            </div>
+            <p className="text-center text-muted mt-3">Ningun resultado para mostrar</p>
           </div>
-        </div>
-
-        <h2 className="h4 mb-3">Folders</h2>
-
-        {/*Folders */}
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
-          <FolderList
-            folderId={Number(folderId)}
-            onSelectSubFolder={handleNavigateToSubfolder}
-          />
-        </div>
-        {/*End Folders */}
-
-        {/*Header */}
-        <div className="row align-items-center mb-2">
-          <div className="col">
-            <h2 className="h4 mb-0">Files</h2>
-          </div>
-
-          {/*  <div className="col-auto">
-            
-            <ul className="nav nav-segment" id="connectionsTab" role="tablist">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  id="grid-tab"
-                  data-bs-toggle="tab"
-                  href="#grid"
-                  role="tab"
-                  aria-controls="grid"
-                  aria-selected="true"
-                  title="Column view"
-                >
-                  <i className="bi-grid"></i>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  id="list-tab"
-                  data-bs-toggle="tab"
-                  href="#list"
-                  role="tab"
-                  aria-controls="list"
-                  aria-selected="false"
-                  title="List view"
-                >
-                  <i className="bi-view-list"></i>
-                </a>
-              </li>
-            </ul>
-         
-          </div> */}
-        </div>
-
-        <FileList folderId={Number(folderId)} />
-
-        {/*End Tab Content */}
+        )}
       </div>
 
       <div

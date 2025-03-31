@@ -61,6 +61,7 @@ export const CreateFolderForm = ({ onCloseModal }: CreateFolderFormProps) => {
       const newFolder = {
         ...folderData,
         usersId: users.map((user) => user.userId),
+        asignedFolder: users.length > 0
       };
       folderId = await createFolderAsync(newFolder);
 

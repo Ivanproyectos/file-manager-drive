@@ -9,4 +9,5 @@ export type { CreateFolder, ISubFolder} from "./folderTypes";
 export type { IFolder } from "./folderTypes";
 export type { IFile, IUserFilePermission, ICreateFile } from "./fileTypes";
 export type { ILogin, IUserToken, IUserSession } from "./loginTypes";
+export type { IUserFile } from "./userFileTypes";
 

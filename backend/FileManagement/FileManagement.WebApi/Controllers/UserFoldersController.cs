@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
-    [Route("/users/folders")]
+    [Route("api/users/folders")]
     public class UserFoldersController : BaseApiController
     {
         private readonly IUserFolderService _userFolderService;
@@ -25,10 +25,10 @@ namespace FileManagement.WebApi.Controllers
             return Ok(await _userFolderService.GerUserFolderAsync());
         }
 
-        [HttpGet("{FolderId:int}")]
+        [HttpGet("{FolderId:int}/subfolders")]
         public async Task<IActionResult> GetFolderById(int FolderId)
         {
-            return Ok(await _userFolderService.GerUserFolderByFolderIdAsync(FolderId));
+            return Ok(await _userFolderService.GetUserSubFolderAsync(FolderId));
         }
         [HttpGet("{FolderId:int}/files")]
         public async Task<IActionResult> GetFiles(int FolderId)

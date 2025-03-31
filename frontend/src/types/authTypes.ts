@@ -3,7 +3,7 @@ import { IUserSession } from "./loginTypes";
     isAuthenticated : boolean;
     user: IUserSession | null;
     token: string | null;
-    login: (token: string, user: IUserSession) => void;
+    login: (token: string,expiresIn: number, user: IUserSession) => void;
     logout: () => void;
     loading: boolean;
   }

@@ -4,10 +4,11 @@ import { FileItem, FileItemSkeleton } from "@/components";
 import { getFilesAsync } from "@/api/folderApi";
 
 interface fileItemProps {
-  folderId: number;
+  files: IFile[]
+  loading: boolean
 }
-export const FileList = ({ folderId }: fileItemProps) => {
-  const [files, setFiles] = useState<IFile[]>([]);
+export const FileList = ({ files, loading }: fileItemProps) => {
+/*   const [files, setFiles] = useState<IFile[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export const FileList = ({ folderId }: fileItemProps) => {
     };
 
     fetchFiles();
-  }, []);
+  }, []); */
 
   return (
     <ul className="list-group">

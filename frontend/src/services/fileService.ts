@@ -12,3 +12,7 @@ export const createFileAsync = async (createFile: ICreateFile) => {
 
   await createFileApi(createFile);
 }
+
+export const validateExpirationDate = (expirationDate: string) => {
+  return  new Date(expirationDate) > new Date(); 
+}
