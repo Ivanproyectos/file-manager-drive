@@ -35,7 +35,7 @@ export const FolderActions = () => {
       aria-labelledby="folderDropdown1"
       style={{ minWidth: "13rem" }}
     >
-      <span className="dropdown-header">Settings</span>
+      <span className="dropdown-header">Opciones </span>
 
       <a className="dropdown-item" href="#">
         <i className="bi-share dropdown-item-icon"></i> Share folder

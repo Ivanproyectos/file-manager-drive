@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.StaticFiles;
+using System.Management;
 
 namespace FileManagement.Service.Services
 {
@@ -41,6 +43,8 @@ namespace FileManagement.Service.Services
 
                 _logger.LogInformation("Procesando carga de archivos desde {Path}", request.UploadId);
                 var uploadPath = Path.Combine(Path.GetTempPath(), "uploads", request.UploadId.ToString());
+
+                if (!Directory.Exists(uploadPath)) return;
 
                 var files = Directory.GetFiles(uploadPath);
 
@@ -78,10 +82,18 @@ namespace FileManagement.Service.Services
             {
                 await unitOfWork.BeginTransactionAsync();
 
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(file, out string contentType))
+                {
+                    contentType = "application/octet-stream"; 
+                }
+
+
                 var fileEntity = new Core.Entities.File
                 {
                     FileName = Path.GetFileName(file),
                     Extension = Path.GetExtension(file),
+                    MimeType = contentType,
                     SizeBytes = new FileInfo(file).Length,
                     FolderId = request.FolderId,
                 };

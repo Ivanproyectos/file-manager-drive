@@ -173,7 +173,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
             <div className="mb-4">
               <label className="form-label">
                 Descripción{" "}
-                <span className="form-label-secondary">(Optional)</span>
+                <span className="form-label-secondary">(Opcional)</span>
               </label>
               <div className="js-form-message">
                 <textarea
@@ -187,7 +187,9 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
             </div>
 
             <div className="mb-4">
-              <label className="form-label">Adjuntar archivos</label>
+              <label className="form-label">Adjuntar archivos {" "}
+              <span className="form-label-secondary">(Opcional)</span>
+              </label>
               <FileDropZone onGetUploadId={setUploadId} />
             </div>
 
@@ -210,7 +212,10 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
 
           <div id="createProjectStepMembers" style={{ display: "none" }}>
             {/*Form */}
-            <h4>Agregue los miembros para el folder</h4>
+            <h4>Agregue los miembros para el folder 
+            {" "}
+              <span className="form-label-secondary">(Opcional)</span>
+            </h4>
             <p className="text-muted">
               Agregue los usuarios que
               tendran acceso a este folder y configure sus permisos para los

@@ -5,6 +5,7 @@ import { getFileIcon } from "@/utils/fileIconMapping";
 import { convertDateToLocaleString } from "@/utils/dateFormat";
 import { convertBytes } from "@/utils/formatBytes";
 import { validateExpirationDate } from "@/services/fileService";
+import { downloadFile } from "@/api/files";
 
 interface userFileListProps {
     files: IUserFile[];
@@ -12,12 +13,31 @@ interface userFileListProps {
 }
 
 interface FileActionsProps {
+  fileId: number;
   canDownload: boolean;
   expirationDate: string;
   isDateExpired: boolean;
 }
 
-const FileActions = ({ canDownload, expirationDate, isDateExpired }: FileActionsProps) => {
+/* const handleDownload = async (fileId: number) => {
+  debugger;
+  try{
+    const data = await downloadFile(fileId);
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'filename.pdf'); 
+    document.body.appendChild(link);
+    link.click(); 
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log(error);
+  }
+};
+ */
+const FileActions = ({ fileId, canDownload, expirationDate, isDateExpired }: FileActionsProps) => {
   return (
     <div className="dropdown">
       <button
@@ -38,7 +58,7 @@ const FileActions = ({ canDownload, expirationDate, isDateExpired }: FileActions
       >
         <span className="dropdown-header">Opciones</span>
         {canDownload && !isDateExpired && (
-          <a className="dropdown-item" href="#">
+          <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
             <i className="bi-download dropdown-item-icon"></i> Descargar
           </a>
         )}
@@ -93,6 +113,7 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
 
                 <div className="col-auto">
                   <FileActions
+                    fileId={id}
                     canDownload={canDownload}
                     isDateExpired={isDateExpired}
                     expirationDate={expirationDate}

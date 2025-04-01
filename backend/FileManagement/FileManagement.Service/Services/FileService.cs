@@ -10,17 +10,39 @@ namespace FileManagement.Service.Services
         private readonly IFileRepository _fileRepository;
         private readonly IFilePermissionRepository _filePermissionRepository;
         private readonly ITokenService _tokenService;
+        private readonly IGoogleDriveService _googleDriveService;
         private readonly IMapper _mapper;
         public FileService(IFileRepository fileRepository,
             IMapper mapper,
             IFilePermissionRepository filePermissionRepository,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IGoogleDriveService googleDriveService)
         {
             _fileRepository = fileRepository;
             _mapper = mapper;
             _filePermissionRepository = filePermissionRepository;
             _tokenService = tokenService;
+            _googleDriveService = googleDriveService;
         }
+
+        public async Task<Stream> DownloadFile(string FileId)
+        {
+            var stream = await _googleDriveService.DownloadFileAsync(FileId); 
+            return stream;
+            //string directory = Path.Combine(Path.GetTempPath(), "donwloads");
+            //string path = Path.Combine(directory, $"{file.FileName}");
+
+            //if (!Directory.Exists(directory))
+            //{
+            //    Directory.CreateDirectory(directory);
+            //}
+
+            //using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            //{
+            //    await stream.CopyToAsync(fileStream);
+            //}
+        }
+
         public async Task<List<UserFileDto>> GetFilesByFolderIdAsync(int FolderId)
         {
            var decodedToken = _tokenService.DecodeToken();

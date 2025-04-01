@@ -31,8 +31,11 @@ export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
     },
     {
       data: "users",
-      render: (users: Array<any>) =>
-        generateAvatar(users.map((user) => user.name)),
+      render: (users: Array<any>) => {
+        if(users?.length == 0 ) return "sin usuarios";
+        return generateAvatar(users.map((user) => user.name))
+      }
+       ,
     },
     { data: "size", render: (size: number) => convertBytes(size) } ,
     {
@@ -490,7 +493,7 @@ export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
           <thead className="thead-light">
             <tr>
               <th>Name</th>
-              <th>Usuarios</th>
+              <th>Miembros</th>
               <th>Tamaño</th>
               <th>Fecha Creado</th>
               <th>Acciones</th>

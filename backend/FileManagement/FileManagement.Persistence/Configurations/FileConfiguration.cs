@@ -26,6 +26,10 @@ namespace FileManagement.Persistence.Configurations
                 .HasMaxLength(100)
                 .IsRequired();
 
+            builder.Property(x => x.MimeType)
+               .HasMaxLength(100)
+               .IsRequired();
+
             builder.Property(x => x.SizeBytes)
                .IsRequired();
 

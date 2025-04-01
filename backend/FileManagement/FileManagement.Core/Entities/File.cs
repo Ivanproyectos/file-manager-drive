@@ -6,6 +6,7 @@ namespace FileManagement.Core.Entities
     {
         public string FileName { get; set; }
         public string Extension { get; set; }
+        public string MimeType { get; set; }
         public long SizeBytes { get; set; }
         public int FolderId { get; set; }
         public Folder Folder { get; set; }

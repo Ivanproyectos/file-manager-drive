@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUsersSummary } from "@/api/users";
 import { IUserSummary } from "@/types";
-import { createAvatarHTML } from "@/utils/generateAvatarGroup";
 
 declare const HSFormSearch: any;
 declare const HSGoTo: any;
@@ -12,14 +11,23 @@ interface SearchUserProps {
 }
 
 export const SearchUser = ({ onSelectedUser }: SearchUserProps) => {
+  const [search, setSearch] = useState<string>("");
   const [users, setUsers] = useState<IUserSummary[]>([]);
+
+  const filtersUsers = (users: IUserSummary[], search: string) => {
+    if(!search) return users;
+
+    return users.filter((user) => {
+      return user.name.toLowerCase().includes(search.toLowerCase()) || user.email.toLowerCase().includes(search.toLowerCase());
+    });
+  };
 
   useEffect(() => {
     HSCore.components.HSList.init("#docsSearch");
     new HSGoTo(".js-go-to");
     new HSFormSearch(".js-form-search");
-  });
-
+  },[]);
+  
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -46,6 +54,8 @@ export const SearchUser = ({ onSelectedUser }: SearchUserProps) => {
             type="text"
             className="js-form-search form-control"
             placeholder="Buscar por nombre o correo..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             data-hs-form-search-options='{
                "clearIcon": "#clearIconMenuEg",
                "defaultIcon": "#defaultIconMenuEg",
@@ -74,7 +84,7 @@ export const SearchUser = ({ onSelectedUser }: SearchUserProps) => {
       >
         <div className="card-body-height">
           <span className="dropdown-header">Usuarios</span>
-          {users.map((user) => (
+          {filtersUsers(users, search).map((user) => (
             <a
               className="dropdown-item"
               href="javascript:;"

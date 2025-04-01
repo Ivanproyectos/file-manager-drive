@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, 
-  timeout: 10000,
+  timeout: 50000,
 });
 
 axiosInstance.interceptors.request.use(
@@ -17,5 +17,19 @@ axiosInstance.interceptors.request.use(
     },
     (error) => {
       return Promise.reject(error);
+    }
+  );
+
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      debugger;
+      if (error.response && error.response.status === 401) {
+        console.log('Token expirado o no válido. Redirigiendo al login...');   
+         window.location.href = '/login'; 
+         Cookies.remove('auth_token');
+  
+      }
+      return Promise.reject(error); 
     }
   );

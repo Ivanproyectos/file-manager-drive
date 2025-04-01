@@ -54,6 +54,11 @@ namespace FileManagement.Persistence.Migrations
                     b.Property<int>("FolderId")
                         .HasColumnType("int");
 
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<long>("SizeBytes")
                         .HasColumnType("bigint");
 
@@ -410,7 +415,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 3, 31, 17, 55, 47, 99, DateTimeKind.Local).AddTicks(4368),
+                            CreatedAt = new DateTime(2025, 3, 31, 23, 48, 55, 844, DateTimeKind.Local).AddTicks(2993),
                             Email = "ivanperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -466,7 +471,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 31, 17, 55, 47, 99, DateTimeKind.Local).AddTicks(8412),
+                            CreatedAt = new DateTime(2025, 3, 31, 23, 48, 55, 844, DateTimeKind.Local).AddTicks(5907),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -474,7 +479,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 31, 17, 55, 47, 99, DateTimeKind.Local).AddTicks(8420),
+                            CreatedAt = new DateTime(2025, 3, 31, 23, 48, 55, 844, DateTimeKind.Local).AddTicks(5912),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -562,7 +567,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 31, 22, 55, 47, 100, DateTimeKind.Utc).AddTicks(7357),
+                            CreatedAt = new DateTime(2025, 4, 1, 4, 48, 55, 845, DateTimeKind.Utc).AddTicks(3498),
                             CreatedBy = 1,
                             Description = "Google Drive Provider",
                             ProviderName = "Google Drive"
@@ -623,11 +628,11 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 31, 17, 55, 47, 102, DateTimeKind.Local).AddTicks(8627),
+                            CreatedAt = new DateTime(2025, 3, 31, 23, 48, 55, 846, DateTimeKind.Local).AddTicks(6352),
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 3, 31, 17, 55, 47, 102, DateTimeKind.Local).AddTicks(8636)
+                            UpdatedAt = new DateTime(2025, 3, 31, 23, 48, 55, 846, DateTimeKind.Local).AddTicks(6356)
                         });
                 });
 
@@ -716,7 +721,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 31, 17, 55, 47, 103, DateTimeKind.Local).AddTicks(9155),
+                            CreatedAt = new DateTime(2025, 3, 31, 23, 48, 55, 847, DateTimeKind.Local).AddTicks(4796),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1
