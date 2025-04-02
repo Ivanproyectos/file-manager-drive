@@ -7,7 +7,7 @@ namespace FileManagement.Core.Contracts.Request
         string Name,
         string Description,
         int? ParentId, 
-        List<int> UsersId, 
+        List<CreateFolderPermissionRequest> folderPermissions, 
         bool AsignedFolder = false) : IRequest<CreateFolderResponse>
     {
     }

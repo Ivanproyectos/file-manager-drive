@@ -18,6 +18,7 @@ namespace FileManagement.Persistence.Contexts
         public DbSet<People> Peoples { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<FilePermission> FilePermissions { get; set; }
+        public DbSet<FolderPermission> FolderPermissions { get; set; }
         public DbSet<FileManagement.Core.Entities.File> Files { get; set; }
         public DbSet<FileStorage> FilesStorage { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

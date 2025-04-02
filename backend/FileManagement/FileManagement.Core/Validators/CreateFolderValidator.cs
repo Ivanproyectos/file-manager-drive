@@ -11,7 +11,7 @@ namespace FileManagement.Core.Validators
                 .NotEmpty().WithMessage("El nombre del folder es obligatorio")
                 .MaximumLength(100).WithMessage("El nombre del folder no puede superar los {MaxLength} caracteres");
 
-            RuleFor(x => x.UsersId)
+            RuleFor(x => x.folderPermissions)
                  .NotNull().WithMessage("Los usuarios son obligatorios.") // Evita que la lista sea null
                  .NotEmpty().WithMessage("Debe haber al menos un usuario asignado.")
                  .When(x => x.AsignedFolder);

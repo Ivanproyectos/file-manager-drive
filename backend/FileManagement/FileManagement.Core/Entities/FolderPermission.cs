@@ -7,6 +7,7 @@ namespace FileManagement.Core.Entities
         public int UserId { get; set; }
         public int FolderId { get; set; }
         public bool CanView { get; set; } = true;
+        public bool IsDateExpired { get; set; }
         public bool CanDownload { get; set; }
         public DateTime? ExpirationDate { get; set; }
         public User User { get; set; }

@@ -9,7 +9,7 @@ export interface IFile {
 export interface ICreateFile  {
     folderId: number;
     uploadId: string;
-    filePermissions: IUserFilePermission[]
+    filePermissions?: IUserFilePermission[] | null
 
 }
 

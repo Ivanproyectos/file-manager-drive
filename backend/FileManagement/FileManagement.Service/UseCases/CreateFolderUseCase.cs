@@ -4,6 +4,7 @@ using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Entities;
 using FileManagement.Core.Exceptions;
 using FileManagement.Core.Interfaces.Repositories;
+using Google.Apis.Drive.v3.Data;
 using MediatR;
 
 namespace FileManagement.Service.UseCases
@@ -15,17 +16,20 @@ namespace FileManagement.Service.UseCases
         private readonly IMapper _mapper;
         private readonly IUserFolderRepository _userFolderRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IFolderPermissionRepository _folderPermissionRepository;
         public CreateFolderUseCase(IFolderRepository folderRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IUserFolderRepository userFolderRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IFolderPermissionRepository folderPermissionRepository)
         {
             _folderRepository = folderRepository;
             _userFolderRepository = userFolderRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userRepository = userRepository;
+            _folderPermissionRepository = folderPermissionRepository;
         }
         public async Task<CreateFolderResponse> Handle(CreateFolderRequest request, CancellationToken cancellationToken)
         {
@@ -45,24 +49,28 @@ namespace FileManagement.Service.UseCases
 
                 if (request.AsignedFolder)
                 {
-                    if (!request.UsersId.Any())
+                    if (!request.folderPermissions.Any())
                     {
                         throw new ValidationException("No se asignaron usuarios a la carpeta");
                     }
 
-                    foreach (var item in request.UsersId)
-                    {
-                        User user = await _userRepository.GetUserByIdAsync(item);
-                        if (user is null)
-                        {
-                            throw new ValidationException("Uno o mas de los usuarios no existen");
-                        }
-                    }
+               
 
-                    var userFolders = request.UsersId
-                          .Select(idUser => new UserFolder { FolderId = newFolder.Id, UserId = idUser })
+                    var userFolders = request.folderPermissions
+                          .Select(permission => new UserFolder { FolderId = newFolder.Id, UserId = permission.UserId })
                           .ToList();
+
+                    var folderPermissionsDto = request.folderPermissions.Select(permission =>
+                    {
+                        permission.FolderId = newFolder.Id;
+                        return permission;
+                    });
+
+                    var folderPermissions = _mapper.Map<List<FolderPermission>>(folderPermissionsDto);
+
                     await _userFolderRepository.AddRangeUsersFolder(userFolders);
+                    await _folderPermissionRepository.AddFolderPermissionRangeAsync(folderPermissions);
+
                 }
                 await _unitOfWork.CommitAsync();
 

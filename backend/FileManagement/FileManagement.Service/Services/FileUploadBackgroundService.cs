@@ -56,8 +56,6 @@ namespace FileManagement.Service.Services
                         var driveFileId = await _googleDriveService.UploadFileAsync(file, fileName, _googleDriveSettings.FolderId);
 
                         await SaveFileRepository(driveFileId, file, request);
-
-                        // await _fileRepository.UpdateFileStatusAsync(file, driveFileId); // Actualizar tabla
                     }
                     catch (Exception ex)
                     {
@@ -74,7 +72,7 @@ namespace FileManagement.Service.Services
             // Creamos un scope para usar servicios Scoped
             using var scope = _serviceProvider.CreateScope();
             var fileRepository = scope.ServiceProvider.GetRequiredService<IFileRepository>();
-            var filePermissionRepository = scope.ServiceProvider.GetRequiredService<IFilePermissionRepository>();
+       
             var fileStorageRepository = scope.ServiceProvider.GetRequiredService<IFileStorageRepository>();
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
@@ -112,18 +110,20 @@ namespace FileManagement.Service.Services
                 await fileStorageRepository.AddFileStorageAsync(fileStorage);
                 await unitOfWork.SaveChangesAsync();
 
-                var filesPermisions = request.FilePermissions.Select(fm => new FilePermission
+                if (request.FilePermissions != null && request.FilePermissions.Any())
                 {
-                    FileId = fileEntity.Id,
-                    UserId = fm.UserId,
-                    CanView = fm.CanView,
-                    CanDownload = fm.CanDownload,
-                    IsDateExpired = fm.IsDateExpired,
-                    ExpirationDate = fm.ExpirationDate
-                }).ToList();
+                    var filesPermisions = request.FilePermissions.Select(fm => new FilePermission
+                    {
+                        FileId = fileEntity.Id,
+                        UserId = fm.UserId,
+                        CanView = fm.CanView,
+                        CanDownload = fm.CanDownload,
+                        IsDateExpired = fm.IsDateExpired,
+                        ExpirationDate = fm.ExpirationDate
+                    }).ToList();
 
-
-                await filePermissionRepository.AddFilePermissionsAsync(filesPermisions);
+                    AddFilePermisions(filesPermisions);
+                }
                 await unitOfWork.CommitAsync();
             }
             catch (Exception ex)
@@ -132,6 +132,25 @@ namespace FileManagement.Service.Services
                 _logger.LogError(ex, "Error al guardar el archivo en la base de datos", file);
             }
    
+        }
+
+        private void AddFilePermisions(List<FilePermission> filesPermisions)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    using var scope = _serviceProvider.CreateScope();
+                    var filePermissionRepository = scope.ServiceProvider.GetRequiredService<IFilePermissionRepository>();
+
+                    await filePermissionRepository.AddFilePermissionsAsync(filesPermisions);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error al guardar los permisos de los archivos en la base de datos");
+                }
+            });
+           
         }
     }
 }

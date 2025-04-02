@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef} from "react";
 import { useParams, useLocation } from "react-router-dom";
 import {
   FolderDetailsForm,
@@ -7,42 +7,77 @@ import {
   FileList,
 } from "@/components";
 import { useFolderContent } from "@/hooks";
+import { ICreateFile } from "@/types";
+import { useInitTomSelect } from "@/hooks/useInitTomSelect";
+import { createFile } from "@/api/files";
+import { showError } from "@/utils/alerts";
 
-declare const HSBsDropdown: any;
-declare const HSCore: any;
 interface Breadcrumbs {
   id: number;
   name: string;
   class?: string;
 }
-export const FolderEditPage = () => {
+
+declare const bootstrap: any;
+export const FolderManagerPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const folderName = queryParams.get("folder");
   const { id } = useParams();
   const [folderId, setFolderId] = useState<number>(Number(id));
   const [uploadId, setUploadId] = useState<string>();
+  const [dropzone, setDropzone] = useState<any>();
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
+  const [isValid, setIsValid] = useState(true);
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  const { files, folders, loadingFolders, loadingFiles } = useFolderContent({
+  const { files, folders, loadingFiles } = useFolderContent({
     folderId,
   });
 
+  useInitTomSelect();
   const handleNavigateToSubfolder = (
     newFolderId: number,
     newFolderName: string
   ) => {
     const newSubFolder = { id: newFolderId, name: newFolderName };
-     setFolderId(newFolderId);
+    setFolderId(newFolderId);
     setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
   };
 
   const handleGoBackToFolder = (folderId: number) => {
-     setFolderId(folderId);
+    setFolderId(folderId);
     setBreadcrumbs((prevState) =>
       prevState.slice(0, prevState.findIndex((x) => x.id === folderId) + 1)
     );
   };
+
+  const handleUploadFiles = async (uploadId: string) => {
+    try {
+ 
+      setIsValid(true);
+      if (dropzone.files.length === 0) {
+        setIsValid(false);
+        return;
+      }
+      const file: ICreateFile = { folderId, uploadId };
+      await createFile(file);
+      closeModal();
+    } catch (error) {
+      console.error(error);
+      showError("Error al cargar los archivos, vuelva a intentalor mas tarde");
+    }
+  };
+
+  const closeModal = () => {
+    const modal = bootstrap.Modal.getInstance(modalRef.current);
+    modal.hide();
+  }
+
+  const handleDropzone = useCallback((uploadId: string, dropzone?: any) => {
+    setUploadId(uploadId);
+    setDropzone(dropzone);
+  }, []);
 
   useEffect(() => {
     const newSubFolder = {
@@ -53,10 +88,6 @@ export const FolderEditPage = () => {
     setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
   }, []);
 
-  useEffect(() => {
-    HSBsDropdown.init();
-    HSCore.components.HSTomSelect.init(".js-select");
-  }, []);
   return (
     <>
       <div className="content container-fluid">
@@ -479,7 +510,9 @@ export const FolderEditPage = () => {
                 height="150"
               />
             </div>
-            <p className="text-center text-muted mt-3">Ningun resultado para mostrar</p>
+            <p className="text-center text-muted mt-3">
+              Ningun resultado para mostrar
+            </p>
           </div>
         )}
       </div>
@@ -509,7 +542,7 @@ export const FolderEditPage = () => {
                 <FolderDetailsForm />
                 <div className="mb-4">
                   <label className="form-label">Adjuntar archivos</label>
-                  <FileDropZone onGetUploadId={setUploadId} />
+                  {/* <FileDropZone onGetUploadId={setUploadId} /> */}
                 </div>
               </form>
             </div>
@@ -518,6 +551,7 @@ export const FolderEditPage = () => {
       </div>
 
       <div
+        ref={modalRef}
         className="modal fade"
         id="uploadFilesModal"
         tabIndex={-1}
@@ -539,8 +573,27 @@ export const FolderEditPage = () => {
             </div>
             <div className="modal-body">
               <form>
-                <FileDropZone onGetUploadId={setUploadId} />
+                <FileDropZone onGetUploadId={handleDropzone} validate={isValid} />
               </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary d-flex justify-content-center align-items-center"
+                onClick={() =>
+                  handleUploadFiles(uploadId?.toString() as string)
+                }
+              >
+                Cargar archivos
+              </button>
             </div>
           </div>
         </div>

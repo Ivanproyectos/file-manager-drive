@@ -22,5 +22,13 @@ export interface ISubFolder {
 
 export type CreateFolder = Omit<IFolder, 'id' | 'parentId' | 'users'> & {
     asignedFolder: boolean
-    usersId: number[];
+    folderPermissions: IFolderPermission[];
+}
+
+export interface IFolderPermission {
+    userId: number
+    expirationDate?: string | null
+    canView: boolean
+    canDownload: boolean
+    isDateExpired: boolean
 }

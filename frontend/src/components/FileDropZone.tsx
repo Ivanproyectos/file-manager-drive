@@ -1,35 +1,48 @@
 
 import { useDropZoneServer } from '@/hooks/useDropZoneServer'
-import { useEffect, useRef} from 'react'
+import React, { useEffect, useRef, useState} from 'react'
 
-declare const HSCore : any
 interface Props {
-  onGetUploadId: (uploadId: string) => void
+  onGetUploadId: (uploadId: string, dropzone?: any) => void
+  validate: boolean
 }
-export const FileDropZone = ({ onGetUploadId }: Props) => {
+export const FileDropZone = React.memo(({ onGetUploadId, validate = true}: Props) => {
+  const [isValid, setIsValid] = useState(validate);
   const elementRef = useRef<HTMLDivElement | null>(null);
-  const { uploadId } =  useDropZoneServer({ elementRef });
+  const { uploadId, dropzone} =  useDropZoneServer({ elementRef });
 
   useEffect(() => {
-    onGetUploadId(uploadId as string);
+    if(!dropzone) return
+   
+    dropzone.on('complete', function(file: File) {
+      setIsValid(true);
+    });
+  },[dropzone])
+
+  useEffect(() => {
+    setIsValid(validate)
+  },[validate])
+
+  useEffect(() => {
+    if(uploadId === null) return
+    onGetUploadId(uploadId as string, dropzone);
   }, [uploadId])
 
   return (
     <div
-      id="dropzoneFileUpload"
       ref={elementRef}
       className="js-dropzone dz-dropzone dz-dropzone-card"
     >
       <div className="dz-message">
         <img
           className="avatar avatar-xl avatar-4x3 mb-3"
-          src="../assets/svg/illustrations/oc-browse.svg"
+          src="/assets/svg/illustrations/oc-browse.svg"
           alt="Image Description"
           data-hs-theme-appearance="default"
         />
         <img
           className="avatar avatar-xl avatar-4x3 mb-3"
-          src="../assets/svg/illustrations-light/oc-browse.svg"
+          src="/assets/svg/illustrations-light/oc-browse.svg"
           alt="Image Description"
           data-hs-theme-appearance="dark"
         />
@@ -38,9 +51,10 @@ export const FileDropZone = ({ onGetUploadId }: Props) => {
 
         <p className="mb-2">o</p>
 
-        <span className="btn btn-white btn-sm">Explorar archivos</span>
+        <span className="btn btn-white btn-sm" role="button" aria-label="Explorar archivos">Explorar archivos</span>
       </div>
+      {!isValid && <div className="mt-2 text-danger text-center w-100"> Agregue al menos un archivos para subir </div>  }
     </div>
   
   )
-}
+})

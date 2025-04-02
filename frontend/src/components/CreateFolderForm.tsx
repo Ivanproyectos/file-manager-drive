@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { FileDropZone, FilePersmision, ButtonSubmit } from "@/components";
-import { IUserFilePermission, CreateFolder, ICreateFile } from "@/types";
+import { IUserFilePermission, CreateFolder, ICreateFile, IFolderPermission } from "@/types";
 import { useForm } from "react-hook-form";
 import { useFormStep } from "@/hooks";
-import { createFolderAsync } from "@/api/folderApi";
-import { createFileAsync } from "@/services/fileService";
+import { createFile } from "@/api/files";
+import { createFolder } from "@/services/folderService";
 import { showError } from "@/utils/alerts";
+
 
 interface CreateFolderFormProps {
   onCloseModal: () => void;
@@ -58,23 +59,34 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
   const onSubmit = async (folderData: CreateFolder) => {
 
     let folderId = 0;
-    console.log(users);
     try {
-      const newFolder = {
+
+      const filePermissions: IFolderPermission[] = users.map((user) => ({
+        userId: user.userId,
+        canView: user.canView,
+        canDownload: user.canDownload,
+        isDateExpired: user.isDateExpired, 
+        expirationDate: user.expirationDate
+      }));
+
+      const newFolder: CreateFolder = {
         ...folderData,
-        usersId: users.map((user) => user.userId),
-        asignedFolder: users.length > 0
+        folderPermissions: filePermissions,
+        asignedFolder: filePermissions.length > 0
       };
-      folderId = await createFolderAsync(newFolder);
+    
+      folderId = await createFolder(newFolder);
       onCreateComplete();
     } catch (error) {
       console.error(error);
       showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
+      return;
     }
 
     try {
-      const file: ICreateFile = { folderId, uploadId, filePermissions: users };
-      await createFileAsync(file);
+
+      const file: ICreateFile = { folderId, uploadId };
+      await createFile(file);
 
       finishCreate();
     }catch (error) {
@@ -190,7 +202,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
               <label className="form-label">Adjuntar archivos {" "}
               <span className="form-label-secondary">(Opcional)</span>
               </label>
-              <FileDropZone onGetUploadId={setUploadId} />
+              <FileDropZone onGetUploadId={setUploadId} validate />
             </div>
 
             {/*Footer */}

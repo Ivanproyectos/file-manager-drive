@@ -8,7 +8,7 @@ import {
   UsersPage,
   UserFoldersPage,
   FoldersPage,
-  FolderEditPage,
+  FolderManagerPage,
 } from "@/pages";
 import { PrivateRoute } from "./PrivateRoute";
 import { useAuth } from "@/context/AuthContext";
@@ -41,7 +41,7 @@ export const AppRoutes = () => {
           <Route path="/dashboard/users" element={<UsersPage />} />
           <Route path="/dashboard/user-folders" element={<UserFoldersPage />} />
           <Route path="/dashboard/folders" element={<FoldersPage />} />
-          <Route path="/dashboard/folders/:id" element={<FolderEditPage />} />
+          <Route path="/dashboard/folders/:id" element={<FolderManagerPage />} />
           <Route path="/dashboard/datatable" element={<Datatable />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>
