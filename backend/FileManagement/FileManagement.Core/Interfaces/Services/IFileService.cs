@@ -6,5 +6,7 @@ namespace FileManagement.Core.Interfaces.Services
     {
         Task<List<UserFileDto>> GetFilesByFolderIdAsync(int FolderId);
         Task<Stream> DownloadFile(string FileId);
+
+        Task DeleteFileAsync(int FileId);
     }
 }

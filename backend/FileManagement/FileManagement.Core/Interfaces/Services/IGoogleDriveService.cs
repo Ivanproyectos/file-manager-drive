@@ -10,5 +10,7 @@ namespace FileManagement.Core.Interfaces.Services
     {
         Task<string> UploadFileAsync(string localPath, string fileName, string folderDriveId);
         Task<Stream> DownloadFileAsync(string fileId);
+
+        void DeleteFile(string fileId);
     }
 }

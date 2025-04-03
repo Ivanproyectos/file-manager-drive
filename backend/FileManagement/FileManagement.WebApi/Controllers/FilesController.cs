@@ -21,6 +21,14 @@ namespace FileManagement.WebApi.Controllers
             return Accepted(await Mediator.Send(createFileRequest));
         }
 
+        [HttpDelete("{fileId}")]
+        public async Task<IActionResult> Delete(int fileId)
+        {
+            await _fileService.DeleteFileAsync(fileId);
+            return NoContent();
+        }
+
+
         [HttpGet("{fileId}/download")]
         public async Task<IActionResult> Download(int fileId)
         {

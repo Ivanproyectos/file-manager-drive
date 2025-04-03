@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.StaticFiles;
 using System.Management;
+using Microsoft.AspNetCore.SignalR;
+using FileManagement.Core.Hubs;
 
 namespace FileManagement.Service.Services
 {
@@ -37,31 +39,62 @@ namespace FileManagement.Service.Services
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("El servicio de fondo ha comenzado.");
+
             while (!stoppingToken.IsCancellationRequested)
             {
-                var request = await _channel.DequeueAsync(stoppingToken);
-
-                _logger.LogInformation("Procesando carga de archivos desde {Path}", request.UploadId);
-                var uploadPath = Path.Combine(Path.GetTempPath(), "uploads", request.UploadId.ToString());
-
-                if (!Directory.Exists(uploadPath)) return;
-
-                var files = Directory.GetFiles(uploadPath);
-
-                foreach (var file in files)
+                try
                 {
-                    try
-                    {
-                        var fileName = Path.GetFileName(file);
-                        var driveFileId = await _googleDriveService.UploadFileAsync(file, fileName, _googleDriveSettings.FolderId);
+                    var request = await _channel.DequeueAsync(stoppingToken);
+                    //if (request == null)
+                    //{
+                    //    await Task.Delay(1000, stoppingToken); // Retraso cuando no hay tareas que procesar
+                    //    continue;
+                    //}
 
-                        await SaveFileRepository(driveFileId, file, request);
-                    }
-                    catch (Exception ex)
+                    _logger.LogInformation("Procesando carga de archivos desde {Path}", request.UploadId);
+                    var uploadPath = Path.Combine(Path.GetTempPath(), "uploads", request.UploadId.ToString());
+
+                    if (!Directory.Exists(uploadPath))
                     {
-                        //await unitOfWork.RollbackAsync();
-                        _logger.LogError(ex, "Error subiendo archivo {File}", file);
+                        _logger.LogWarning("La carpeta de carga no existe para el UploadId {UploadId}", request.UploadId);
+                        continue;
                     }
+
+                    var files = Directory.GetFiles(uploadPath);
+
+                    foreach (var file in files)
+                    {
+                        try
+                        {
+                            var fileName = Path.GetFileName(file);
+                            var driveFileId = await _googleDriveService.UploadFileAsync(file, fileName, _googleDriveSettings.FolderId);
+
+                            await SaveFileRepository(driveFileId, file, request);
+
+                            using var scope = _serviceProvider.CreateScope();
+                            var fileHub = scope.ServiceProvider.GetRequiredService<IHubContext<FileHub>>();
+
+                            await fileHub.Clients.User(request.UserId.ToString())
+                                .SendAsync("FileUploaded", "File uploaded successfully");
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Error subiendo archivo {File}", file);
+                            throw;
+                        }
+                    }
+                }
+                catch (OperationCanceledException ex)
+                {
+                    _logger.LogInformation("La operación fue cancelada.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error al leer del canal");
                 }
             }
         }

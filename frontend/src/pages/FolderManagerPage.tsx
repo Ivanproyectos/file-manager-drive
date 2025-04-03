@@ -1,16 +1,13 @@
-import { useCallback, useEffect, useState, useRef} from "react";
+import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import {
-  FolderDetailsForm,
-  FileDropZone,
   FolderList,
   FileList,
+  UploadFileManager,
+  CreateSubFolder,
 } from "@/components";
 import { useFolderContent } from "@/hooks";
-import { ICreateFile } from "@/types";
 import { useInitTomSelect } from "@/hooks/useInitTomSelect";
-import { createFile } from "@/api/files";
-import { showError } from "@/utils/alerts";
 
 interface Breadcrumbs {
   id: number;
@@ -25,14 +22,19 @@ export const FolderManagerPage = () => {
   const folderName = queryParams.get("folder");
   const { id } = useParams();
   const [folderId, setFolderId] = useState<number>(Number(id));
-  const [uploadId, setUploadId] = useState<string>();
-  const [dropzone, setDropzone] = useState<any>();
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
-  const [isValid, setIsValid] = useState(true);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const [isModalSubFolderOpen, setIsModalSubFolderOpen] = useState(false);
+  const [isModalFilesOpen, setIsModalFilesOpen] = useState(false);
+  const [isReload, setIsReload] = useState(false);
+
+
+  const openUploadFilesModal = () => {
+    setIsModalFilesOpen(true);
+  };
 
   const { files, folders, loadingFiles } = useFolderContent({
     folderId,
+    refresh: isReload,
   });
 
   useInitTomSelect();
@@ -51,33 +53,6 @@ export const FolderManagerPage = () => {
       prevState.slice(0, prevState.findIndex((x) => x.id === folderId) + 1)
     );
   };
-
-  const handleUploadFiles = async (uploadId: string) => {
-    try {
- 
-      setIsValid(true);
-      if (dropzone.files.length === 0) {
-        setIsValid(false);
-        return;
-      }
-      const file: ICreateFile = { folderId, uploadId };
-      await createFile(file);
-      closeModal();
-    } catch (error) {
-      console.error(error);
-      showError("Error al cargar los archivos, vuelva a intentalor mas tarde");
-    }
-  };
-
-  const closeModal = () => {
-    const modal = bootstrap.Modal.getInstance(modalRef.current);
-    modal.hide();
-  }
-
-  const handleDropzone = useCallback((uploadId: string, dropzone?: any) => {
-    setUploadId(uploadId);
-    setDropzone(dropzone);
-  }, []);
 
   useEffect(() => {
     const newSubFolder = {
@@ -140,6 +115,7 @@ export const FolderManagerPage = () => {
               {/*Button Group */}
               <div className="btn-group" role="group">
                 <button
+                  onClick={openUploadFilesModal}
                   type="button"
                   className="btn btn-primary"
                   data-bs-toggle="modal"
@@ -162,6 +138,7 @@ export const FolderManagerPage = () => {
                     aria-labelledby="uploadGroupDropdown"
                   >
                     <a
+                      onClick={() => setIsModalSubFolderOpen(true)}
                       className="dropdown-item"
                       href="#"
                       data-bs-toggle="modal"
@@ -172,6 +149,7 @@ export const FolderManagerPage = () => {
                     </a>
                     <div className="dropdown-divider"></div>
                     <a
+                      onClick={openUploadFilesModal}
                       className="dropdown-item"
                       href="javascript:;"
                       data-bs-toggle="modal"
@@ -496,7 +474,7 @@ export const FolderManagerPage = () => {
                 <h2 className="h4 mb-0">Files</h2>
               </div>
             </div>
-            <FileList files={files} loading={loadingFiles} />
+            <FileList files={files} loading={loadingFiles} onRefresh={setIsReload} />
           </>
         )}
 
@@ -517,87 +495,17 @@ export const FolderManagerPage = () => {
         )}
       </div>
 
-      <div
-        className="modal fade"
-        id="newFolderModal"
-        tabIndex={-1}
-        aria-labelledby="newFolderModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="newProjectModalLabel">
-                Nuevo folder
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <FolderDetailsForm />
-                <div className="mb-4">
-                  <label className="form-label">Adjuntar archivos</label>
-                  {/* <FileDropZone onGetUploadId={setUploadId} /> */}
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        ref={modalRef}
-        className="modal fade"
-        id="uploadFilesModal"
-        tabIndex={-1}
-        aria-labelledby="uploadFilesModal"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="uploadFilesModalLabel">
-                Cargar archivos
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <FileDropZone onGetUploadId={handleDropzone} validate={isValid} />
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="btn btn-primary d-flex justify-content-center align-items-center"
-                onClick={() =>
-                  handleUploadFiles(uploadId?.toString() as string)
-                }
-              >
-                Cargar archivos
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CreateSubFolder
+        setIsCreated={setIsReload}
+        folderId={folderId}
+        isModalOpen={isModalSubFolderOpen}
+        setIsModalOpen={setIsModalSubFolderOpen}
+      />
+      <UploadFileManager
+        folderId={folderId}
+        isModalOpen={isModalFilesOpen}
+        setIsModalOpen={setIsModalFilesOpen}
+      />
     </>
   );
 };

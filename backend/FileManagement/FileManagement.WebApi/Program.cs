@@ -1,4 +1,4 @@
-using FileManagement.Core.Interfaces.Services;
+using FileManagement.Core.Hubs;
 using FileManagement.Core.Settings;
 using FileManagement.IoC;
 using FileManagement.WebApi.Middleware;
@@ -65,7 +65,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 
 /*builder.Services.AddCors(options =>
 {
@@ -78,6 +80,7 @@ builder.Services.AddHttpContextAccessor();
 }); */
 
 var app = builder.Build();
+app.MapHub<FileHub>("/fileHub");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

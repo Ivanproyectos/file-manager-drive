@@ -14,7 +14,7 @@ export interface IUserFolder {
 
 export interface ISubFolder {
     id: number;
-    FolderId: number;
+    folderId: number;
     name: string;
 }
 
@@ -31,4 +31,8 @@ export interface IFolderPermission {
     canView: boolean
     canDownload: boolean
     isDateExpired: boolean
+}
+
+export type ICreateSubFolder = Omit<ISubFolder, 'id'> & {
+    description: string
 }

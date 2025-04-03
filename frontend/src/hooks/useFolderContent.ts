@@ -5,9 +5,10 @@ import { IFile } from "@/types";
 import { getFilesAsync } from "@/api/folderApi";
 
 interface Props{
-    folderId: number
+    folderId: number,
+    refresh: boolean
 }
-export const useFolderContent = ({ folderId }: Props) => {
+export const useFolderContent = ({ folderId, refresh }: Props) => {
     const [files, setFiles] = useState<IFile[]>([]);
     const [folders, setFolders] = useState<ISubFolder[]>([]);
     const [loadingFolders, setloadingFolders] = useState(true);
@@ -26,7 +27,7 @@ export const useFolderContent = ({ folderId }: Props) => {
           }
         };
         fetchFolders();
-      }, [folderId]);
+      }, [folderId, refresh]);
 
         useEffect(() => {
           const fetchFiles = async () => {
@@ -44,7 +45,7 @@ export const useFolderContent = ({ folderId }: Props) => {
           };
       
           fetchFiles();
-        }, [folderId]);
+        }, [folderId, refresh]);
 
       return { folders,files, loadingFiles, loadingFolders };
     }

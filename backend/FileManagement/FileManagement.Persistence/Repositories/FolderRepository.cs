@@ -3,7 +3,6 @@ using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
 
 namespace FileManagement.Persistence.Repositories
 {
@@ -67,34 +66,14 @@ namespace FileManagement.Persistence.Repositories
 
         public async Task<List<Folder>> GetFoldersAsync()
         {
-            //var folderDtos = await (from folder in _context.Folders
-            //                        join userFolder in _context.UserFolders
-            //                            on folder.Id equals userFolder.FolderId
-            //                        join file in _context.Files
-            //                            on folder.Id equals file.FolderId
-            //                        group new { folder, userFolder, file } by new { folder.Id, folder.Name, folder.CreatedAt } into g
-            //                        select new FolderDto
-            //                        {
-            //                            Id = g.Key.Id,  
-            //                            Name = g.Key.Name,
-            //                            CreatedDate = g.Key.CreatedAt,
-            //                            Users = g.Select(u => new UserFolderDto
-            //                            {
-            //                                Name = u.userFolder.User.People.FirstName,
-            //                                Email = u.userFolder.User.People.Email
-            //                            }).ToList(),
-            //                            Size = g.Select(x => new { x.file.Id, x.file.SizeBytes })
-            //                                            .Distinct()
-            //                                            .Sum(x => x.SizeBytes)
-            //                        }).ToListAsync();
 
             var folders = await _context.Folders.Where(x => x.ParentFolderId == null)
                             .Include(f => f.UserFolders)
                             .ThenInclude(uf => uf.User)
                             .ThenInclude(u => u.People)
-                            .Include(f => f.UserFolders) // Incluir UserFolders
+                            .Include(f => f.UserFolders) 
                             .Include(f => f.Files)
-                            .OrderByDescending(f => f.Id)// Incluir los archivos asociados
+                            .OrderByDescending(f => f.Id)
                             .ToListAsync();
                             
 

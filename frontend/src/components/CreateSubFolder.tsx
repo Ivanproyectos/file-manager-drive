@@ -1,0 +1,189 @@
+import { useState, useRef } from "react";
+import { FileDropZone } from "@/components";
+import { ICreateSubFolder, ICreateFile } from "@/types";
+import { useForm } from "react-hook-form";
+import { createSubFolder } from "@/api/folderApi";
+import { createFile } from "@/api/files";
+import { showError } from "@/utils/alerts";
+
+declare const bootstrap: any;
+interface Props {
+  folderId: number;
+  isModalOpen: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
+  setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const CreateSubFolder = ({
+  folderId,
+  isModalOpen,
+  setIsModalOpen,
+  setIsCreated, 
+}: Props) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm();
+  const [dropzoneInstance, setdropzoneInstance] = useState<any>({
+    dropzone: null,
+    uploadId: null,
+  });
+
+  const handleDropzone = (uploadId: string, dropzone?: any) => {
+    setdropzoneInstance({ dropzone, uploadId });
+  };
+  const handleCreateSubFolder = async (data: any) => {
+    let subFolderId: number;
+
+    try {
+      const { uploadId } = dropzoneInstance;
+      const folder: ICreateSubFolder = {
+        folderId,
+        name: data.name,
+        description: data.description,
+      };
+      subFolderId = await createSubFolder(folder);
+
+      const file: ICreateFile = { folderId, uploadId };
+      await createFile(file);
+      handleCloseModal();
+      setIsCreated((preve: boolean) => !preve);
+    } catch (error) {
+        showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
+    }
+
+    try {
+        const { uploadId, dropzone } = dropzoneInstance;
+        
+        if(dropzone.files.length === 0) return 
+
+        const file: ICreateFile = { folderId: subFolderId!, uploadId };
+        await createFile(file);
+        handleCloseModal();
+      } catch (error) {
+        console.error(error);
+      }
+  };
+
+  const handleCloseModal = () => {
+    setTimeout(() => {
+      setIsModalOpen(false);
+    }, 500);
+    const modal = bootstrap.Modal.getInstance(modalRef.current);
+    modal.hide();
+  };
+
+  return (
+    <div
+      ref={modalRef}
+      className="modal fade"
+      id="newFolderModal"
+      tabIndex={-1}
+      aria-labelledby="newFolderModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="newProjectModalLabel">
+              Nuevo folder
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="modal-body">
+            <form
+              onSubmit={handleSubmit(handleCreateSubFolder)}
+              id="newSubFolder"
+            >
+              <div className="mb-4">
+                <label htmlFor="nameSubfolder" className="form-label">
+                  Folder{" "}
+                  <i
+                    className="bi-question-circle text-body ms-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Displayed on public forums, such as Front."
+                  ></i>
+                </label>
+
+                <div className="js-form-message">
+                  <input
+                    {...register("name", { required: true })}
+                    type="text"
+                    className={`form-control ${
+                      errors.name ? "is-invalid" : ""
+                    }`}
+                    name="name"
+                    id="nameSubfolder"
+                    placeholder="Ingrese el nombre del folder"
+                    aria-label="Ingrese el nombre del folder"
+                    required
+                    data-msg="Nombre de folder es requerido."
+                  />
+                  {errors.name && (
+                    <span className="invalid-feedback">
+                      Nombre del folder es requerido
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/*End Form */}
+
+              <div className="mb-4">
+                <label className="form-label">
+                  Descripción{" "}
+                  <span className="form-label-secondary">(Optional)</span>
+                </label>
+                <div className="js-form-message">
+                  <textarea
+                    {...register("description")}
+                    className="form-control"
+                    name="description"
+                    placeholder="Ingrese una descripción"
+                    aria-label="Ingrese una descripción"
+                  ></textarea>
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="form-label">Adjuntar archivos</label>
+                {isModalOpen && (
+                  <FileDropZone
+                    validate={true}
+                    onGetUploadId={handleDropzone}
+                  />
+                )}
+              </div>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button
+              onClick={handleCloseModal}
+              type="button"
+              className="btn btn-white"
+              /*       data-bs-dismiss="modal" */
+              aria-label="Close"
+            >
+              Cancelar
+            </button>
+            <button
+              disabled={!isValid}
+              form="newSubFolder"
+              type="submit"
+              className="btn btn-primary d-flex justify-content-center align-items-center"
+            >
+              Cargar archivos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

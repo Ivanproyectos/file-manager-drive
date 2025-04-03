@@ -8,3 +8,7 @@ export const downloadFile = async (fileId: number):Promise<Blob> => {
     const response = await axiosInstance.get(`/files/${fileId}/download`);
     return response.data;
 }
+
+export const deleteFile = async (fileId: number):Promise<any> => {
+    await axiosInstance.delete(`/files/${fileId}`);
+}

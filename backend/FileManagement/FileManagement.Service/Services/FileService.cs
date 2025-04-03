@@ -12,17 +12,20 @@ namespace FileManagement.Service.Services
         private readonly ITokenService _tokenService;
         private readonly IGoogleDriveService _googleDriveService;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
         public FileService(IFileRepository fileRepository,
             IMapper mapper,
             IFilePermissionRepository filePermissionRepository,
             ITokenService tokenService,
-            IGoogleDriveService googleDriveService)
+            IGoogleDriveService googleDriveService,
+            IUnitOfWork unitOfWork)
         {
             _fileRepository = fileRepository;
             _mapper = mapper;
             _filePermissionRepository = filePermissionRepository;
             _tokenService = tokenService;
             _googleDriveService = googleDriveService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Stream> DownloadFile(string FileId)
@@ -48,6 +51,15 @@ namespace FileManagement.Service.Services
            var decodedToken = _tokenService.DecodeToken();
            var files = await _fileRepository.GetFilesWithPermissionsAsync(FolderId, decodedToken.UserId);
             return _mapper.Map<List<UserFileDto>>(files);
+        }
+        public async Task DeleteFileAsync(int FileId)
+        {
+            var user = await _fileRepository.GetFileByIdAsync(FileId);
+            await _fileRepository.DeleteFileAsync(user);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            _googleDriveService.DeleteFile(user.FileStorage.StorageIdentifier);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FileManagement.Core.Interfaces.Services;
 using Google.Apis.Download;
+using Google.Apis.Drive.v3;
 
 
 namespace FileManagement.Service.External
@@ -65,6 +66,12 @@ namespace FileManagement.Service.External
             {
                 throw new Exception("Error descargando archivo: " + progress.Status);
             }
+        }
+
+        public void DeleteFile(string fileId)
+        {
+            var service = _client.GetDriveService();
+            service.Files.Delete(fileId).Execute();
         }
 
     }

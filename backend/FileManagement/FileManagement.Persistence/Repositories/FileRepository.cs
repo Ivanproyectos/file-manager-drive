@@ -20,7 +20,9 @@ namespace FileManagement.Persistence.Repositories
 
         public Task DeleteFileAsync(Core.Entities.File File)
         {
-            throw new NotImplementedException();
+            File.DeletedAt = DateTime.Now;
+            _context.Files.Update(File);
+            return Task.CompletedTask;
         }
 
         public Task<Core.Entities.File> GetFileByIdAsync(int FileId)

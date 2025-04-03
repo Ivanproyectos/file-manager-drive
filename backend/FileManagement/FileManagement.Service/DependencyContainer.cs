@@ -39,9 +39,9 @@ namespace FileManagement.Service
             services.AddTransient<IGoogleDriveService, GoogleDriveService>();
             services.AddSingleton<GoogleDriveClient>();
             services.AddSingleton<IFileUploadChannel, FileUploadChannel>();
-            services.AddHostedService<FileUploadBackgroundService>();
             services.AddTransient<IFolderService, FolderService>();
-            
+
+            services.AddHostedService<FileUploadBackgroundService>();
 
 
             services.AddTransient<SeedUseCase>();
@@ -114,6 +114,15 @@ namespace FileManagement.Service
                             result.Message = "Usted no tiene permiso para este recurso.";
                             result.StatusCode = context.Response.StatusCode;
                             return context.Response.WriteAsync(JsonConvert.SerializeObject(result));
+                        },
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"]; // configuracion para websockets
+                            if (!string.IsNullOrEmpty(accessToken))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
                         }
                     };
                 });

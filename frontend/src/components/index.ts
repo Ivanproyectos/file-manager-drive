@@ -17,4 +17,7 @@ export { FileItem } from './FileItem';
 export { FileItemSkeleton } from './skeletons/FileItemSkeleton';
 export { LoginForm } from './LoginForm';
 export { UserFoderList } from './UserFoderList';
-export { UserFileList } from './UserFIleList';
+export { UserFileList } from './UserFileList';
+export { UploadFileManager } from './UploadFileManager';
+export { CreateSubFolder } from './CreateSubFolder';
+export { StatusLoadFiles } from './StatusLoadFiles';

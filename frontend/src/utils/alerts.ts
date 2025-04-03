@@ -1,12 +1,14 @@
 import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
 
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
+const theme = Cookies.get('theme');
+debugger;
 const defualtSettigs = {
   customClass: {
     confirmButton: 'btn btn-primary',
     cancelButton: 'btn btn-white',
-    popup: 'popup-dark' ,
+    popup: theme == 'dark' ? 'popup-dark' : '' ,
   }
 }
 export const showSuccess = (msg: string) =>
@@ -44,6 +46,7 @@ export const showConfirm = (msg: string): Promise<boolean> =>
     title: '¿Estás seguro?',
     text: msg,
     showCancelButton: true,
-    confirmButtonText: 'Sí',
-    cancelButtonText: 'No',
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar',
+    ...defualtSettigs
   }).then((result) => result.isConfirmed);

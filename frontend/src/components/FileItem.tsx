@@ -2,12 +2,24 @@ import { IFile } from "@/types";
 import { getFileIcon } from "@/utils/fileIconMapping";
 import { convertDateToLocaleString } from "@/utils/dateFormat";
 import { convertBytes } from "@/utils/formatBytes";
+import { showConfirm } from  "@/utils/alerts";
+import { deleteFile } from "@/api/files";
 
 interface fileItemProps {
-  file: IFile;
+  file: IFile
+  onRefresh: React.Dispatch<React.SetStateAction<boolean>>
 }
-export const FileItem = ({ file }: fileItemProps) => {
+export const FileItem = ({ file, onRefresh }: fileItemProps) => {
   const { fileName, extension, sizeBytes, createdDate } = file;
+  
+  const hanldeDeleteFile = async (fileName: string) => {
+   const result = await showConfirm(`¿Estas seguro de eliminar el archivo ${fileName}?`);
+  if(!result) return;
+  
+    await deleteFile(file.id);
+    onRefresh((preve) => !preve);
+  }
+
   return (
     <li className="list-group-item">
       <div className="row align-items-center">
@@ -42,7 +54,7 @@ export const FileItem = ({ file }: fileItemProps) => {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <span className="d-none d-sm-inline-block me-1">More</span>
+              <span className="d-none d-sm-inline-block me-1">Mas</span>
               <i className="bi-chevron-down"></i>
             </button>
 
@@ -61,7 +73,7 @@ export const FileItem = ({ file }: fileItemProps) => {
               >
                 <i className="bi-download dropdown-item-icon"></i> Descargar
               </a>
-              <a className="dropdown-item" href="#">
+              <a className="dropdown-item" href="#" onClick={() => hanldeDeleteFile(fileName)} >
                 <i className="bi-trash dropdown-item-icon"></i> Delete
               </a>
             </div>
