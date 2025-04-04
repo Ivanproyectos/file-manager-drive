@@ -1,33 +1,40 @@
 import { useEffect, useRef, useState } from "react";
+import { StatusUploadFile } from "@/types";
 
 declare const bootstrap: any;
 interface Props {
-  files: File[];
+  filesNames: string[] | null;
+  status: StatusUploadFile | null;
 }
-export const StatusLoadFiles = ({ files }: Props) => {
+export const StatusLoadFiles = ({ filesNames, status }: Props) => {
   const alertRef = useRef<HTMLDivElement>(null);
   const [alert, setAlert] = useState<any>(null);
+  const [localFilesNames, setLocalFilesNames] = useState<any[] | null>(null);
 
   useEffect(() => {
     if (!alertRef.current) return;
+
     const liveToast = new bootstrap.Toast(alertRef.current);
     setAlert(liveToast);
-    /*  document.querySelector('#liveToastBtn').addEventListener('click', () => liveToast.show()) */
-
-    return () => {
-      /*  if(alert) liveToast.hide(); */
-    };
   }, [alertRef.current]);
 
   useEffect(() => {
-    if (!alert || !files) return;
-    if(files.length > 0){
-        alert.show();
-    }else{
+    setLocalFilesNames(filesNames);
+  }, [filesNames]);
+
+  useEffect(() => {
+
+    if (!alert || !localFilesNames) return;
+
+    if (status == StatusUploadFile.LOADING) {
+      // abrir toast
+      alert.show();
+    } else {
+      setTimeout(() => {
         alert.hide();
+      }, 5000);
     }
-   
-  }, [files]);
+  }, [localFilesNames, status]);
 
   return (
     <div
@@ -42,15 +49,24 @@ export const StatusLoadFiles = ({ files }: Props) => {
       <div className="toast-header">
         <div className="d-flex align-items-center flex-grow-1">
           <ul className="list-group flex-grow-1 list-group-flush">
-            {files?.map((file) => (
-                <li className="list-group-item d-flex align-items-center">
-                <div
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                {file.name}
+            {localFilesNames?.map((fileName) => (
+              <li className="list-group-item d-flex align-items-center" key={fileName}>
+                {StatusUploadFile.LOADING == status && (
+                  <div
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
+                {StatusUploadFile.SUCCESS == status && (
+                  <i className="bi bi-check-circle-fill text-success me-2"></i>
+                )}
+                    {StatusUploadFile.ERROR == status && (
+                  <i className="bi bi-x-circle-fill text-danger me-2"></i>
+                )}
+
+                {fileName}
               </li>
             ))}
           </ul>
@@ -65,7 +81,15 @@ export const StatusLoadFiles = ({ files }: Props) => {
         </div>
       </div>
       <div className="toast-body">
-         Estamos procesando tus archivos. Esto puede tardar un momento.
+        {status === StatusUploadFile.LOADING && (
+          <>Estamos procesando tus archivos. Esto puede tardar un momento.</>
+        )}
+        {status === StatusUploadFile.SUCCESS && (
+          <>Tus archivos se han cargado correctamente.</>
+        )}
+        {status === StatusUploadFile.ERROR && (
+          <>Uno o más archivos no pudieron ser cargados.</>
+        )}
       </div>
     </div>
   );

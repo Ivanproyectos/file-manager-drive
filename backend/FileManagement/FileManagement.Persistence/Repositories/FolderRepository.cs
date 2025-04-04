@@ -21,7 +21,9 @@ namespace FileManagement.Persistence.Repositories
 
         public Task DeleteFolderAsync(Folder folder)
         {
-            throw new NotImplementedException();
+            folder.DeletedAt = DateTime.UtcNow;
+            _context.Folders.Update(folder);
+            return Task.CompletedTask;
         }
 
         public async Task<Folder> GetFolderByIdAsync(int id)
@@ -61,7 +63,8 @@ namespace FileManagement.Persistence.Repositories
 
         public Task<Folder> UpdateFolderAsync(Folder folder)
         {
-            throw new NotImplementedException();
+            _context.Folders.Update(folder);
+            return Task.FromResult(folder);
         }
 
         public async Task<List<Folder>> GetFoldersAsync()
@@ -83,6 +86,18 @@ namespace FileManagement.Persistence.Repositories
         public async Task<List<Folder>> GetSubFoldersAsync(int folderId)
         {
             return await _context.Folders.Where(x => x.ParentFolderId == folderId).ToListAsync();
+        }
+
+        public Task DeleteFolderRangeAsync(List<Folder> folders)
+        {
+            foreach (var folder in folders)
+            {
+                folder.DeletedAt = DateTime.UtcNow;
+                _context.Folders.Update(folder);
+            }
+
+            return Task.CompletedTask;
+
         }
     }
 }

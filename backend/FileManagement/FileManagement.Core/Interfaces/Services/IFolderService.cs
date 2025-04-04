@@ -13,5 +13,6 @@ namespace FileManagement.Core.Interfaces.Services
         public Task<List<FolderDto>> GetAllFoldersAsync();
         public Task<List<SubFolderDto>> GetSubFoldersAsync(int folderId);
         public Task<List<FileDto>> GetFolderFiles(int folderId);
+        public Task DeleteFolderAndFiles(int folderId);
     }
 }

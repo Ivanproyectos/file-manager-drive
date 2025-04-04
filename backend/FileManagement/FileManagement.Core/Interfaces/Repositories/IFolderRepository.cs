@@ -14,5 +14,7 @@ namespace FileManagement.Core.Interfaces.Repositories
         Task<Folder> CreateFolderAsync(Folder folder);
         Task<Folder> UpdateFolderAsync(Folder folder);
         Task DeleteFolderAsync(Folder folder);
+
+        Task DeleteFolderRangeAsync(List<Folder> folder);
     }
 }

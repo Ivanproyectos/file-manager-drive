@@ -40,6 +40,8 @@ namespace FileManagement.Service
             services.AddSingleton<GoogleDriveClient>();
             services.AddSingleton<IFileUploadChannel, FileUploadChannel>();
             services.AddTransient<IFolderService, FolderService>();
+            services.AddScoped<IUploadNotifierService, UploadNotifierService>();
+            
 
             services.AddHostedService<FileUploadBackgroundService>();
 

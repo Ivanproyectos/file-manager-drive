@@ -25,8 +25,8 @@ export const FolderManagerPage = () => {
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
   const [isModalSubFolderOpen, setIsModalSubFolderOpen] = useState(false);
   const [isModalFilesOpen, setIsModalFilesOpen] = useState(false);
-  const [isReload, setIsReload] = useState(false);
-
+  const [folderRefresh, setFolderRefresh] = useState(false);
+  const [fileRefresh, setFileRefresh] = useState(false);
 
   const openUploadFilesModal = () => {
     setIsModalFilesOpen(true);
@@ -34,7 +34,8 @@ export const FolderManagerPage = () => {
 
   const { files, folders, loadingFiles } = useFolderContent({
     folderId,
-    refresh: isReload,
+    folderRefresh,
+    fileRefresh
   });
 
   useInitTomSelect();
@@ -474,7 +475,7 @@ export const FolderManagerPage = () => {
                 <h2 className="h4 mb-0">Files</h2>
               </div>
             </div>
-            <FileList files={files} loading={loadingFiles} onRefresh={setIsReload} />
+            <FileList files={files} loading={loadingFiles} onRefresh={setFileRefresh} />
           </>
         )}
 
@@ -496,15 +497,16 @@ export const FolderManagerPage = () => {
       </div>
 
       <CreateSubFolder
-        setIsCreated={setIsReload}
+        onCreated={setFolderRefresh}
         folderId={folderId}
         isModalOpen={isModalSubFolderOpen}
-        setIsModalOpen={setIsModalSubFolderOpen}
+        onModalOpen={setIsModalSubFolderOpen}
       />
       <UploadFileManager
         folderId={folderId}
         isModalOpen={isModalFilesOpen}
         setIsModalOpen={setIsModalFilesOpen}
+        onFilesRefresh={setFileRefresh}
       />
     </>
   );

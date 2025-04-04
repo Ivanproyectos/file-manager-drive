@@ -54,8 +54,6 @@ namespace FileManagement.Service.UseCases
                         throw new ValidationException("No se asignaron usuarios a la carpeta");
                     }
 
-               
-
                     var userFolders = request.folderPermissions
                           .Select(permission => new UserFolder { FolderId = newFolder.Id, UserId = permission.UserId })
                           .ToList();

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.Management;
 using Microsoft.AspNetCore.SignalR;
 using FileManagement.Core.Hubs;
+using MediatR;
 
 namespace FileManagement.Service.Services
 {
@@ -45,7 +46,10 @@ namespace FileManagement.Service.Services
             {
                 try
                 {
+                    var filesNames = new List<string>();
                     var request = await _channel.DequeueAsync(stoppingToken);
+
+                    filesNames?.RemoveRange(0, filesNames.Count);
                     //if (request == null)
                     //{
                     //    await Task.Delay(1000, stoppingToken); // Retraso cuando no hay tareas que procesar
@@ -71,21 +75,27 @@ namespace FileManagement.Service.Services
                             var driveFileId = await _googleDriveService.UploadFileAsync(file, fileName, _googleDriveSettings.FolderId);
 
                             await SaveFileRepository(driveFileId, file, request);
+                            filesNames?.Add(Path.GetFileName(file));
 
-                            using var scope = _serviceProvider.CreateScope();
-                            var fileHub = scope.ServiceProvider.GetRequiredService<IHubContext<FileHub>>();
-
-                            await fileHub.Clients.User(request.UserId.ToString())
-                                .SendAsync("FileUploaded", "File uploaded successfully");
 
 
                         }
                         catch (Exception ex)
                         {
+                            NotifyUpload(request.UserId, StatusUploadFileEnum.Error, filesNames);
                             _logger.LogError(ex, "Error subiendo archivo {File}", file);
-                            throw;
+                            continue;
                         }
                     }
+
+                    //using var scope = _serviceProvider.CreateScope();
+                    //var fileHub = scope.ServiceProvider.GetRequiredService<IHubContext<FileUploadHub>>();
+
+                    //await fileHub.Clients.User(request.UserId.ToString())
+                    //    .SendAsync("FileUploaded", new UploadedFileRequest(StatusUploadFileEnum.Success, filesNames));
+
+                    NotifyUpload(request.UserId, StatusUploadFileEnum.Success, filesNames);
+
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -94,7 +104,9 @@ namespace FileManagement.Service.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error al leer del canal");
+                  
+                    continue;
+                 
                 }
             }
         }
@@ -184,6 +196,14 @@ namespace FileManagement.Service.Services
                 }
             });
            
+        }
+
+        private void NotifyUpload(int userId, StatusUploadFileEnum status, List<string> filesNames)
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var fileHubService = scope.ServiceProvider.GetRequiredService<IUploadNotifierService>();
+
+            fileHubService.Notify(userId, new UploadedFileRequest(status, filesNames));
         }
     }
 }

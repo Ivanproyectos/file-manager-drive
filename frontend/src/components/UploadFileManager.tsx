@@ -1,7 +1,7 @@
 import { FileDropZone, StatusLoadFiles } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { createFile } from "@/api/files";
-import { ICreateFile } from "@/types";
+import { ICreateFile, StatusUploadFile, StatusUploadedFile } from "@/types";
 import { showError } from "@/utils/alerts";
 import { useConnectSignalr } from "@/hooks";
 
@@ -10,12 +10,14 @@ interface Props {
   folderId: number;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
+  onFilesRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UploadFileManager = ({
   folderId,
   isModalOpen,
   setIsModalOpen,
+  onFilesRefresh,
 }: Props) => {
   const [isValid, setIsValid] = useState(true);
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
@@ -23,8 +25,8 @@ export const UploadFileManager = ({
     uploadId: null,
   });
   const modalRef = useRef<HTMLDivElement>(null);
-  const [files, setFiles] = useState<any>(null);
-
+  const [files, setFiles] = useState<string[] | null>(null);
+  const [status, setStatus] = useState<StatusUploadFile | null>(null);
   const { signalr } = useConnectSignalr();
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
@@ -32,18 +34,19 @@ export const UploadFileManager = ({
   };
   const handleUploadFiles = async () => {
     try {
-     
       setIsValid(true);
       const { uploadId, dropzone } = dropzoneInstance;
       if (dropzone.files.length === 0) {
         setIsValid(false);
         return;
       }
-      
+
       const file: ICreateFile = { folderId, uploadId };
       await createFile(file);
-      setFiles(dropzone.files);
       onCloseModal();
+
+      setFiles(dropzone.files.map((file: any) => file.name));
+      setStatus(StatusUploadFile.LOADING);
     } catch (error) {
       console.error(error);
       showError("Error al cargar los archivos, vuelva a intentalor mas tarde");
@@ -60,8 +63,11 @@ export const UploadFileManager = ({
 
   useEffect(() => {
     if (signalr) {
-      signalr.on("FileUploaded", (msg: string) => {
-        setFiles([]);
+      signalr.on("FileUploaded", (response: StatusUploadedFile) => {
+        debugger;
+        setFiles(response.files);
+        setStatus(response.status);
+        onFilesRefresh((prev)=> !prev); 
       });
     }
   }, [signalr]);
@@ -120,7 +126,7 @@ export const UploadFileManager = ({
           </div>
         </div>
       </div>
-      <StatusLoadFiles files={files} />
+      <StatusLoadFiles filesNames={files} status={status} />
     </>
   );
 };

@@ -22,4 +22,15 @@ export interface IUserFilePermission {
     canDownload: boolean
     isDateExpired: boolean
   }
+
+export  enum StatusUploadFile {
+    LOADING = 0,
+    SUCCESS = 1,
+    ERROR = 2,
+  }
+
+  export interface StatusUploadedFile {
+    status: StatusUploadFile;
+    files: string[];
+  }
   

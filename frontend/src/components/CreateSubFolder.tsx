@@ -10,15 +10,15 @@ declare const bootstrap: any;
 interface Props {
   folderId: number;
   isModalOpen: boolean;
-  setIsModalOpen: (isOpen: boolean) => void;
-  setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
+  onModalOpen: (isOpen: boolean) => void;
+  onCreated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateSubFolder = ({
   folderId,
   isModalOpen,
-  setIsModalOpen,
-  setIsCreated, 
+  onModalOpen,
+  onCreated, 
 }: Props) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const {
@@ -49,7 +49,7 @@ export const CreateSubFolder = ({
       const file: ICreateFile = { folderId, uploadId };
       await createFile(file);
       handleCloseModal();
-      setIsCreated((preve: boolean) => !preve);
+      onCreated((preve: boolean) => !preve);
     } catch (error) {
         showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
     }
@@ -69,7 +69,7 @@ export const CreateSubFolder = ({
 
   const handleCloseModal = () => {
     setTimeout(() => {
-      setIsModalOpen(false);
+      onModalOpen(false);
     }, 500);
     const modal = bootstrap.Modal.getInstance(modalRef.current);
     modal.hide();

@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace FileManagement.Core.Hubs
 {
-    public class FileHub: Hub
+    public class FileUploadHub: Hub
     {
         public override async Task OnConnectedAsync()
         {
@@ -15,11 +15,6 @@ namespace FileManagement.Core.Hubs
         {
             await Clients.Caller.SendAsync("FileUploaded", mensaje);
         }
-        //public async Task SendToUser(string message)
-        //{
-        //    var userId = Context.UserIdentifier; // Esto está basado en el JWT que el cliente pasa en la conexión
-        //    await Clients.User(userId).SendAsync("FileUploaded", message);
-        //}
 
     }
 }

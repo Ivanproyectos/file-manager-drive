@@ -80,7 +80,7 @@ builder.Services.AddSignalR();
 }); */
 
 var app = builder.Build();
-app.MapHub<FileHub>("/fileHub");
+app.MapHub<FileUploadHub>("/fileHub");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

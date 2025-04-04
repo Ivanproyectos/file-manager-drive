@@ -6,7 +6,7 @@ export const FileItemSkeleton = () => {
     <>
       {[...Array(5)].map((_, index) => (
         <li className="list-group-item" key={index}>
-          <Skeleton height={50} />
+          <Skeleton height={44} />
         </li>
       ))}
     </>

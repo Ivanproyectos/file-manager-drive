@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 
-export const FolderActions = () => {
+interface userFilePermissionProps {
+  id : number
+  onUpdate(id : number): void
+}
+export const FolderActions = ({id, onUpdate }: userFilePermissionProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,30 +41,11 @@ export const FolderActions = () => {
     >
       <span className="dropdown-header">Opciones </span>
 
-      <a className="dropdown-item" href="#">
-        <i className="bi-share dropdown-item-icon"></i> Share folder
+      <a className="dropdown-item" href="#" onClick={() => onUpdate(id)}>
+        <i className="bi-pencil dropdown-item-icon"></i> Cambiar nombre
       </a>
       <a className="dropdown-item" href="#">
-        <i className="bi-folder-plus dropdown-item-icon"></i> Move to
-      </a>
-      <a className="dropdown-item" href="#">
-        <i className="bi-star dropdown-item-icon"></i> Add to stared
-      </a>
-      <a className="dropdown-item" href="#">
-        <i className="bi-pencil dropdown-item-icon"></i> Rename
-      </a>
-      <a className="dropdown-item" href="#">
-        <i className="bi-download dropdown-item-icon"></i> Download
-      </a>
-
-      <div className="dropdown-divider"></div>
-
-      <a className="dropdown-item" href="#">
-        <i className="bi-chat-left-dots dropdown-item-icon"></i>{" "}
-        Report
-      </a>
-      <a className="dropdown-item" href="#">
-        <i className="bi-trash dropdown-item-icon"></i> Delete
+        <i className="bi-trash dropdown-item-icon"></i> Eliminar
       </a>
     </div>
   </div>

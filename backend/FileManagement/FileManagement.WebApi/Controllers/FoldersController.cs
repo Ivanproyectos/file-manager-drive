@@ -38,5 +38,10 @@ namespace FileManagement.WebApi.Controllers
         {
             return Ok(await Mediator.Send(folderRequest));
         }
+        [HttpPatch("{folderId}")]
+        public async Task<IActionResult> UpdateName([FromBody] PatchFolderRequest folderRequest)
+        {
+            return Ok(await Mediator.Send(folderRequest));
+        }
     }
 }
