@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
 import { IFolder } from "@/types";
 
@@ -9,13 +9,13 @@ import { convertBytes } from "@/utils/formatBytes";
 
 interface Props {
   folders: IFolder[];
-  onUpdateUserId: (userId: number) => void;
-  onUpdateStatus: (userId: number) => void;
+  onEdit: (folderId: number) => void;
+  onUpdateStatus: (folderId: number) => void;
   onRemove: (userId: number) => void;
   isReload: boolean;
 }
 
-export const FolderTable = ({ folders, onUpdateUserId,onUpdateStatus,onRemove, isReload }: Props) => {
+export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload }: Props) => {
   useInitTomSelect();
   const navigate = useNavigate();
 
@@ -48,24 +48,24 @@ export const FolderTable = ({ folders, onUpdateUserId,onUpdateStatus,onRemove, i
       data: null,
       label: "Acciones",
       orderable: false,
-      render: (user: any) => `
+      render: (folder: any) => `
         <div class="d-flex align-items-center gap-2">
           <div class="form-check form-switch">
               <input type="checkbox" class="form-check-input" id="formSwitch${
-                user.id
-              }" data-action="status" data-id="${user.id}" ${
-        user.status ? "checked" : ""
+                folder.id
+              }" data-action="status" data-id="${folder.id}" ${
+        folder.status ? "checked" : ""
       }>
               <label class="form-check-label" for="formSwitch${
-                user.id
+                folder.id
               }"></label>
           </div>
           <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
-          data-id="${user.id}" data-bs-target="#editUserModal">
+          data-id="${folder.id}" data-bs-target="#editFolderModal">
                 <i class="bi-pencil-fill me-1"></i> Editar
           </button>
             <button type="button" class="btn btn-white btn-sm" data-action="delete" 
-            data-bs-toggle="modal" data-id="${user.id}" >
+            data-bs-toggle="modal" data-id="${folder.id}" >
             <i class="bi-trash me-1"></i> Eliminar
           </button>
         </div>
@@ -79,14 +79,14 @@ export const FolderTable = ({ folders, onUpdateUserId,onUpdateStatus,onRemove, i
     const handleActions = (event: Event) => {
       const target = event.target as HTMLElement;
       const action = target.dataset.action;
-      const userId = target.dataset.id;
+      const folderId = target.dataset.id;
       debugger;
       if (action === "edit") {
-        onUpdateUserId(Number(userId));
+        onEdit(Number(folderId));
       } else if (action === "delete") {
-        onRemove(Number(userId));
+        onRemove(Number(folderId));
       } else if (action === "status") {
-        onUpdateStatus(Number(userId));
+        onUpdateStatus(Number(folderId));
       } else if (action === "navigate") {
         const folderId = target.dataset.folderId;
         const folderName = target.dataset.folderName;

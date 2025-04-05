@@ -21,3 +21,4 @@ export { UserFileList } from './UserFileList';
 export { UploadFileManager } from './UploadFileManager';
 export { CreateSubFolder } from './CreateSubFolder';
 export { StatusLoadFiles } from './StatusLoadFiles';
+export { EditFolderForm } from './EditFolderForm';

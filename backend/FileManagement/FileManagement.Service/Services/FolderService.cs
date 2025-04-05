@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FileManagement.Core.Contracts.Dtos;
+using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Exceptions;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
@@ -82,12 +83,31 @@ namespace FileManagement.Service.Services
         public async Task<List<SubFolderDto>> GetSubFoldersAsync(int FolderId)
         {
             var subFolders = await _folderRepository.GetSubFoldersAsync(FolderId);
-            var subFolderDtos = subFolders.Select(subFolder => new SubFolderDto {
+            var subFoldersDto = subFolders.Select(subFolder => new SubFolderDto {
                 Id = subFolder.Id, 
                 Name = subFolder.Name, 
                 ParentId = subFolder.ParentFolderId,
             }).ToList();
-            return subFolderDtos;
+            return subFoldersDto;
+        }
+
+        public async Task UpdateStatus(int folderId)
+        {
+            var folder = await _folderRepository.GetFolderByIdAsync(folderId);
+            if (folder == null)
+            {
+                throw new KeyNotFoundException($"El folder con el id {folderId} no existe");
+            }
+
+            await _folderRepository.UpdateStatusAsync(folder);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<GetFolderByIdRequest> GetFolderByIdAsync(int folderId)
+        {
+            var folder = await _folderRepository.GetFolderByIdAsync(folderId);
+            return new GetFolderByIdRequest(folder.Id, folder.Name, folder.Description);
+            
         }
     }
 }

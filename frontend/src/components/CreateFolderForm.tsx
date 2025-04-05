@@ -20,7 +20,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
   const {
     register,
     handleSubmit,
-    formState: { isSubmitted },
+    formState: { isSubmitting },
   } = useForm<CreateFolder>();
 
   const formFolerRef = useRef<HTMLFormElement>(null);
@@ -257,7 +257,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
                 {/*  <button  type="submit" className="btn btn-primary">Create Folder</button> */}
                 <ButtonSubmit
                   title="Crear Folder"
-                  isSubmitting={isSubmitted}
+                  isSubmitting={isSubmitting}
                 ></ButtonSubmit>
               </div>
             </div>

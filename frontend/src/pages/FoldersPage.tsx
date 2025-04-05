@@ -1,13 +1,20 @@
-import { FolderTable, CreateFolderForm } from "@/components";
+import { FolderTable, CreateFolderForm, EditFolderForm } from "@/components";
 import { useState, useRef, useEffect } from "react";
-import { getFoldersAsync, deleteFolder, updateStatusFolder } from "@/api/folderApi";
-import { IFolder } from "@/types";
-import { showError } from "@/utils/alerts";
+import {
+  getFoldersAsync,
+  deleteFolder,
+  updateStatusFolder,
+  getFolderByIdAsync
+} from "@/api/folderApi";
+import { IFolder, IFolderById } from "@/types";
+import { showError, showConfirm } from "@/utils/alerts";
 
 declare const bootstrap: any;
 
 export const FoldersPage = () => {
   const [folders, setFolders] = useState<IFolder[]>([]);
+  const [folder, setFolder] = useState<IFolderById | null >(null);
+  const [folderIdToEdit, setfolderIdToEdit] = useState<number | null>(null);
   /*   const [refresh, setRefresh] = useState(false); */
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -19,30 +26,40 @@ export const FoldersPage = () => {
   };
 
   const handleUpdateStatus = async (id: number) => {
-    try{
+    try {
       await updateStatusFolder(id);
-      setTimeout( () => { setRefresh(prev => !prev)}, 500)
-    }catch (error) {
+      setTimeout(() => {
+        setRefresh((prev) => !prev);
+      }, 500);
+    } catch (error) {
       console.error("Error updating status:", error);
       showError("Error al actualizar el estado del folder.");
     }
-    
   };
 
   const handleRemoveFolder = async (id: number) => {
-    try{
+    try {
+      const isAccepted = await showConfirm(
+        "¿Está seguro de eliminar el folder?"
+      );
+      if (!isAccepted) return;
+
       await deleteFolder(id);
-      setRefresh(prev => !prev)
-    }catch (error) {
+      setRefresh((prev) => !prev);
+    } catch (error) {
       console.error(error);
       showError("Error al eliminar el folder.");
     }
-  }
+  };
 
   const handleModalOpen = () => {
     setTimeout(() => {
       setIsModalOpen(false);
     }, 500);
+  };
+  
+  const hanldeUpdateFolder = () => {
+
   };
 
   useEffect(() => {
@@ -55,7 +72,23 @@ export const FoldersPage = () => {
       }
     };
     loadUsers();
-  }, [refresh, refresh]);
+  }, [refresh]);
+
+  useEffect(() => {
+    if (!folderIdToEdit) return
+
+    const loadFolder = async () => {
+      try {
+        const folder = await getFolderByIdAsync(folderIdToEdit);
+        setFolder(folder);
+      }
+      catch (error) { 
+        console.error("Error fetching data:", error);
+      }
+    }
+      loadFolder(); 
+
+  },[folderIdToEdit]);
 
   return (
     <>
@@ -155,7 +188,7 @@ export const FoldersPage = () => {
 
         <FolderTable
           onRemove={handleRemoveFolder}
-          onUpdateUserId={() => {}}
+          onEdit={setfolderIdToEdit}
           onUpdateStatus={handleUpdateStatus}
           folders={folders}
           isReload={refresh}
@@ -198,6 +231,12 @@ export const FoldersPage = () => {
           </div>
         </div>
       </div>
+      <EditFolderForm
+        folder={folder}
+        isModalOpen={isModalOpen}
+        onModalOpen={handleModalOpen}
+        onSubmit={hanldeUpdateFolder}
+      />
     </>
   );
 };

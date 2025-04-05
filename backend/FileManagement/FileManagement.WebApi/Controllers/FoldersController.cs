@@ -1,4 +1,5 @@
 ﻿using FileManagement.Core.Contracts.Request;
+using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +18,15 @@ namespace FileManagement.WebApi.Controllers
         {
             return Ok(await _folderService.GetAllFoldersAsync());
         }
-        [HttpGet("{Id}/subfolders")]
-        public async Task<IActionResult> GetSubFoldersAsync(int Id)
+        [HttpGet("{folderId}")]
+        public async Task<IActionResult> GetFolderById(int folderId)
         {
-            return Ok(await _folderService.GetSubFoldersAsync(Id));
+            return Ok(await _folderService.GetFolderByIdAsync(folderId));
+        }
+        [HttpGet("{id}/subfolders")]
+        public async Task<IActionResult> GetSubFoldersAsync(int id)
+        {
+            return Ok(await _folderService.GetSubFoldersAsync(id));
         }
         [HttpPost("subfolders")]
         public async Task<IActionResult> CreateSubFoldersAsync(CreateSubFolderRequest createSubFolderRequest)
@@ -50,9 +56,10 @@ namespace FileManagement.WebApi.Controllers
             return NoContent();
         }
         [HttpPatch("{folderId}/status")]
-        public async Task<IActionResult> UpdateStatus([FromBody] PatchFolderRequest folderRequest)
+        public async Task<IActionResult> UpdateStatus(int folderId)
         {
-            return Ok(await Mediator.Send(folderRequest));
+            await _folderService.UpdateStatus(folderId);
+            return NoContent();
         }
     }
 }

@@ -99,5 +99,13 @@ namespace FileManagement.Persistence.Repositories
             return Task.CompletedTask;
 
         }
+
+        public Task UpdateStatusAsync(Folder folder)
+        {
+            folder.Status = !folder.Status;
+            _context.Folders.Update(folder);
+
+            return Task.CompletedTask;
+        }
     }
 }

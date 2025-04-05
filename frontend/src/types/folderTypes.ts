@@ -8,6 +8,11 @@ export interface IFolder {
     description ?: string;
     users: IUserFolder[];
 }
+export interface IFolderById {
+    id: number;
+    name: string;
+    description ?: string;
+}
 export interface IUserFolder {
     name: string;
     email: string;

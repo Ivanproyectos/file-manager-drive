@@ -6,7 +6,7 @@ export type { IPeople as Person, IPeopleList } from "./PersonTypes";
 export type { CreateUser, IUser, IUserSummary, UpdateUser} from "./userTypes";
 export type { CreatePerson } from "./PersonTypes";
 export type { CreateFolder, ISubFolder, IFolderPermission, ICreateSubFolder} from "./folderTypes";
-export type { IFolder } from "./folderTypes";
+export type { IFolder, IFolderById } from "./folderTypes";
 export type { IFile, IUserFilePermission, ICreateFile, StatusUploadedFile } from "./fileTypes";
 export type { ILogin, IUserToken, IUserSession } from "./loginTypes";
 export type { IUserFile } from "./userFileTypes";
