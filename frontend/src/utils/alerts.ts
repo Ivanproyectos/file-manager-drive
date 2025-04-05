@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const theme = Cookies.get('theme');
-debugger;
+
 const defualtSettigs = {
   customClass: {
     confirmButton: 'btn btn-primary',
@@ -27,6 +27,7 @@ export const showError = (msg: string, title: string = 'Algo no funcionó como e
     title: title,
     text: msg,
     showConfirmButton: true,
+    confirmButtonText: 'Aceptar',
     ...defualtSettigs,
     customClass: {
       confirmButton: 'btn btn-danger',

@@ -20,6 +20,13 @@ namespace FileManagement.Persistence.Configurations
             .HasForeignKey(f => f.ParentFolderId) // FK recursiva
             .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(x => x.Status)
+               .HasColumnType("BIT") 
+               .HasConversion<bool>().IsRequired()
+               .HasDefaultValue(true)
+               .HasMaxLength(500)
+               .IsRequired();
+
             builder.Property(x => x.Name)
                 .HasMaxLength(500)
                 .IsRequired();

@@ -39,6 +39,7 @@ namespace FileManagement.Service.Services
                 Id = folder.Id,
                 Name = folder.Name,
                 CreatedDate = folder.CreatedAt,
+                Status = folder.Status,
                 Users = folder.UserFolders.Select(userFolder => new UserFolderDto
                 {
                     Name = FormatPeopleName.FormatPeopleType(userFolder.User.People),
@@ -60,7 +61,7 @@ namespace FileManagement.Service.Services
             var folder = await _folderRepository.GetFolderByIdAsync(folderId);
             if (folder == null)
             {
-                throw new ValidationException("Folder not found");
+                throw new KeyNotFoundException($"El folder con el id {folderId} no existe");
             }
 
             var files = await _fileRepository.GetFilesByFolderIdAsync(folderId);

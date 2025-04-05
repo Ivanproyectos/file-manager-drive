@@ -3,6 +3,7 @@ export interface IFolder {
     id: number;
     name: string;
     size: number;
+    status: boolean
     createdDate: string;
     description ?: string;
     users: IUserFolder[];

@@ -43,5 +43,16 @@ namespace FileManagement.WebApi.Controllers
         {
             return Ok(await Mediator.Send(folderRequest));
         }
+        [HttpDelete("{folderId}")]
+        public async Task<IActionResult> Delete(int folderId)
+        {
+            await _folderService.DeleteFolderAndFiles(folderId);
+            return NoContent();
+        }
+        [HttpPatch("{folderId}/status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] PatchFolderRequest folderRequest)
+        {
+            return Ok(await Mediator.Send(folderRequest));
+        }
     }
 }

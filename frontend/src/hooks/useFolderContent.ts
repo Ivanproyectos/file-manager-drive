@@ -48,5 +48,5 @@ export const useFolderContent = ({ folderId, folderRefresh, fileRefresh }: Props
           fetchFiles();
         }, [folderId, fileRefresh]);
 
-      return { folders,files, loadingFiles, loadingFolders };
+      return {setFolders, folders,files, loadingFiles, loadingFolders };
     }

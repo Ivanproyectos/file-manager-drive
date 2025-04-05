@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
+import { deleteFolder , UpdateNameFolder} from "@/api/folderApi";
 import {
   FolderList,
   FileList,
   UploadFileManager,
   CreateSubFolder,
 } from "@/components";
-import { useFolderContent } from "@/hooks";
+import { useFolderContent, useFolderBreadcrumbs } from "@/hooks";
 import { useInitTomSelect } from "@/hooks/useInitTomSelect";
+import { showError, showConfirm } from "@/utils/alerts";
 
-interface Breadcrumbs {
+/* interface Breadcrumbs {
   id: number;
   name: string;
   class?: string;
-}
+} */
 
 declare const bootstrap: any;
 export const FolderManagerPage = () => {
@@ -21,8 +23,9 @@ export const FolderManagerPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const folderName = queryParams.get("folder");
   const { id } = useParams();
-  const [folderId, setFolderId] = useState<number>(Number(id));
-  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
+
+ /*  const [folderId, setFolderId] = useState<number>(Number(id)); */
+ /*  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]); */
   const [isModalSubFolderOpen, setIsModalSubFolderOpen] = useState(false);
   const [isModalFilesOpen, setIsModalFilesOpen] = useState(false);
   const [folderRefresh, setFolderRefresh] = useState(false);
@@ -32,14 +35,21 @@ export const FolderManagerPage = () => {
     setIsModalFilesOpen(true);
   };
 
-  const { files, folders, loadingFiles } = useFolderContent({
+  const { 
+    handleNavigateToSubfolder, 
+    handleGoBackToFolder, 
+    setBreadcrumbs,
+    folderId, 
+    breadcrumbs } = useFolderBreadcrumbs(Number(id));
+
+  const { setFolders, files, folders, loadingFiles } = useFolderContent({
     folderId,
     folderRefresh,
-    fileRefresh
+    fileRefresh,
   });
 
   useInitTomSelect();
-  const handleNavigateToSubfolder = (
+/*   const handleNavigateToSubfolder = (
     newFolderId: number,
     newFolderName: string
   ) => {
@@ -53,6 +63,37 @@ export const FolderManagerPage = () => {
     setBreadcrumbs((prevState) =>
       prevState.slice(0, prevState.findIndex((x) => x.id === folderId) + 1)
     );
+  }; */
+
+  const handleDeleteFolder = async (folderId: number) => {
+  
+    try {
+      const result = await showConfirm("¿Estas seguro de eliminar esta carpeta?");
+      if (!result) return;
+
+      setFolders((prevFolders) => prevFolders.filter((folder) => folder.id !== folderId));
+
+      await deleteFolder(folderId);
+    } catch (error) {
+      console.error(error);
+      showError("Error al eliminar la carpeta, vuelva a intentalor mas tarde");
+    } finally{
+    /*   setFolderRefresh((prev) => !prev); */
+    }
+  };
+
+  const handleUpdateFolderName = async (
+    folderId: number,
+    folderName: string
+  ) => {
+    try {
+      UpdateNameFolder(folderId, folderName);
+    } catch (error) {
+      console.error(error);
+      showError("Error al cambiar el nombre de la carpeta, vuelva a intentalor mas tarde");
+    } finally{
+    /*   setFolderRefresh((prev) => !prev); */
+    }
   };
 
   useEffect(() => {
@@ -462,6 +503,8 @@ export const FolderManagerPage = () => {
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
               <FolderList
                 folders={folders}
+                onDelete={handleDeleteFolder}
+                onUpdateName={handleUpdateFolderName}
                 onSelectSubFolder={handleNavigateToSubfolder}
               />
             </div>
@@ -475,7 +518,11 @@ export const FolderManagerPage = () => {
                 <h2 className="h4 mb-0">Files</h2>
               </div>
             </div>
-            <FileList files={files} loading={loadingFiles} onRefresh={setFileRefresh} />
+            <FileList
+              files={files}
+              loading={loadingFiles}
+              onRefresh={setFileRefresh}
+            />
           </>
         )}
 

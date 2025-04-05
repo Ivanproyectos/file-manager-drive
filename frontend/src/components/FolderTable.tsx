@@ -2,21 +2,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
 import { IFolder } from "@/types";
-import { getFoldersAsync } from "@/api/folderApi";
+
 import { generateAvatar } from "@/utils/generateAvatarGroup";
 import { convertDateToLocaleString } from "@/utils/dateFormat";
 import { convertBytes } from "@/utils/formatBytes";
 
 interface Props {
+  folders: IFolder[];
   onUpdateUserId: (userId: number) => void;
+  onUpdateStatus: (userId: number) => void;
+  onRemove: (userId: number) => void;
   isReload: boolean;
 }
 
-export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
+export const FolderTable = ({ folders, onUpdateUserId,onUpdateStatus,onRemove, isReload }: Props) => {
   useInitTomSelect();
   const navigate = useNavigate();
-  const [folders, setFolders] = useState<IFolder[]>([]);
-  const [refresh, setRefresh] = useState(false);
+
   const tableRef = useRef<HTMLTableElement>(null);
 
   const columns = [
@@ -73,16 +75,6 @@ export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
 
   useClientDataTable({ tableRef, columns, data: folders });
 
-  const handleRemove = async (id: number) => {
-    /*  await removeUser(id);
-      setRefresh(prev => !prev); */
-  };
-
-  const handleUpdateStatus = async (id: number) => {
-    /*  await updateStatus(id);
-      setTimeout( () => { setRefresh(prev => !prev)}, 500) */
-  };
-
   useEffect(() => {
     const handleActions = (event: Event) => {
       const target = event.target as HTMLElement;
@@ -92,9 +84,9 @@ export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
       if (action === "edit") {
         onUpdateUserId(Number(userId));
       } else if (action === "delete") {
-        handleRemove(Number(userId));
+        onRemove(Number(userId));
       } else if (action === "status") {
-        handleUpdateStatus(Number(userId));
+        onUpdateStatus(Number(userId));
       } else if (action === "navigate") {
         const folderId = target.dataset.folderId;
         const folderName = target.dataset.folderName;
@@ -119,18 +111,7 @@ export const FolderTable = ({ onUpdateUserId, isReload }: Props) => {
     };
   }, []);
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        const folders = await getFoldersAsync();
-        debugger;
-        setFolders(folders);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    loadUsers();
-  }, [refresh, isReload]);
+
 
   return (
     <div className="card">

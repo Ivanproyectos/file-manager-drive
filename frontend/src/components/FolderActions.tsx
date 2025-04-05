@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 
 interface userFilePermissionProps {
   id : number
-  onUpdate(id : number): void
+  onUpdate(id : number): void, 
+  onDelete(id : number): void
 }
-export const FolderActions = ({id, onUpdate }: userFilePermissionProps) => {
+export const FolderActions = ({id, onUpdate, onDelete }: userFilePermissionProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export const FolderActions = ({id, onUpdate }: userFilePermissionProps) => {
       <a className="dropdown-item" href="#" onClick={() => onUpdate(id)}>
         <i className="bi-pencil dropdown-item-icon"></i> Cambiar nombre
       </a>
-      <a className="dropdown-item" href="#">
+      <a className="dropdown-item" href="#" onClick={() => onDelete(id)}>
         <i className="bi-trash dropdown-item-icon"></i> Eliminar
       </a>
     </div>

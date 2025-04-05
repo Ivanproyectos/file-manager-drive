@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { FileDropZone } from "@/components";
+import { FileDropZone, ButtonSubmit} from "@/components";
 import { ICreateSubFolder, ICreateFile } from "@/types";
 import { useForm } from "react-hook-form";
 import { createSubFolder } from "@/api/folderApi";
@@ -24,7 +24,7 @@ export const CreateSubFolder = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm();
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
@@ -173,14 +173,15 @@ export const CreateSubFolder = ({
             >
               Cancelar
             </button>
-            <button
+           {/*  <button
               disabled={!isValid}
               form="newSubFolder"
               type="submit"
               className="btn btn-primary d-flex justify-content-center align-items-center"
             >
-              Cargar archivos
-            </button>
+              Crear folder 
+            </button> */}
+            <ButtonSubmit title="Crear folder" formName="newSubFolder" isSubmitting={isSubmitting} />
           </div>
         </div>
       </div>

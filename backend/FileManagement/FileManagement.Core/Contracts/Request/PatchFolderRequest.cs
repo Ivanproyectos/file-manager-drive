@@ -10,7 +10,7 @@ namespace FileManagement.Core.Contracts.Request
     public record struct PatchFolderRequest(
         int Id,
         string? Name,
-        string? Description
+        string? Description, 
         ): IRequest<Unit>;
   
 }

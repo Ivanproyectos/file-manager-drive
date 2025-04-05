@@ -34,3 +34,6 @@ export const createSubFolder = async (folder: ICreateSubFolder):Promise<number> 
     }
     await axiosInstance.patch(`/folders/${folderId}`, data);
  }
+ export const updateStatusFolder = async (folderId: number):Promise<void> => {
+    await axiosInstance.patch(`/folders/${folderId}/status`);
+ }

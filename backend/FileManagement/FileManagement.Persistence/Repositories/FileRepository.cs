@@ -27,12 +27,14 @@ namespace FileManagement.Persistence.Repositories
 
         public Task<Core.Entities.File> GetFileByIdAsync(int FileId)
         {
-           return _context.Files.Include(x => x.FileStorage).FirstOrDefaultAsync(x => x.Id == FileId);
+           return _context.Files.Include(x => x.FileStorage)
+                .FirstOrDefaultAsync(x => x.Id == FileId);
         }
 
         public async Task<List<Core.Entities.File>> GetFilesByFolderIdAsync(int FolderId)
         {
-            return await _context.Files.Where(x => x.FolderId == FolderId).ToListAsync();
+            return await _context.Files.Include(x => x.FileStorage)
+                .Where(x => x.FolderId == FolderId).ToListAsync();
         }
 
         public Task<List<Core.Entities.File>> GetFilesWithPermissionsAsync(int FolderId, int UserId)
