@@ -15,7 +15,7 @@ class SignalRService {
 
         const token = Cookies.get(import.meta.env.VITE_TOKEN_NAME);
         this.connection = new HubConnectionBuilder()
-            .withUrl(`${import.meta.env.VITE_BASE_URL}/fileHub`, {
+            .withUrl(`${import.meta.env.VITE_BASE_URL}/fileUploadHub`, {
                 accessTokenFactory: () => token || "",
                 skipNegotiation: true,
                 transport: HttpTransportType.WebSockets,

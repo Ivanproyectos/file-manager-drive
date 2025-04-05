@@ -62,6 +62,7 @@ export const UploadFileManager = ({
   };
 
   useEffect(() => {
+    debugger;
     if (signalr) {
       signalr.on("FileUploaded", (response: StatusUploadedFile) => {
         debugger;
@@ -70,6 +71,11 @@ export const UploadFileManager = ({
         onFilesRefresh((prev)=> !prev); 
       });
     }
+    return () => {
+      if (signalr) {
+        signalr.off("FileUploaded");
+      }
+    };
   }, [signalr]);
 
   return (
