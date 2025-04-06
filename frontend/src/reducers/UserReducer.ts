@@ -1,17 +1,17 @@
-import { IUserFilePermission, UserAction, UserActionTypes } from "@/types";
+import { IFolderPermission, UserAction, UserActionTypes } from "@/types";
 
-export const initialState: { users: IUserFilePermission[] | [] } = {
+export const initialState: { users: IFolderPermission[] | [] } = {
     users: []
 }
 
-export const userFilePermissionReducer = (state = initialState, action: UserActionTypes ) : { users: IUserFilePermission[] | [] } => {
+export const userFilePermissionReducer = (state = initialState, action: UserActionTypes ) : { users: IFolderPermission[] | [] } => {
     switch(action.type) {
         case UserAction.ADD_USER:
             return { ...state, users: [...state.users, action.payload] }
         case UserAction.UPDATE_USER:
             return { 
                 ...state,
-                users: state.users.map<IUserFilePermission>(user => user.userId === action.payload.userId ? action.payload : user)
+                users: state.users.map<IFolderPermission>(user => user.userId === action.payload.userId ? action.payload : user)
             }
         case UserAction.DELETE_USER:
             return {

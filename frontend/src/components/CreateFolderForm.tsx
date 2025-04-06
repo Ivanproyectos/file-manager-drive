@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { FileDropZone, FilePersmision, ButtonSubmit } from "@/components";
-import { IUserFilePermission, CreateFolder, ICreateFile, IFolderPermission } from "@/types";
+import { FileDropZone, UserFolderPersmision, ButtonSubmit } from "@/components";
+import { IFolderPermission, CreateFolder, ICreateFile, CreateFolderPermission } from "@/types";
 import { useForm } from "react-hook-form";
 import { useFormStep } from "@/hooks";
 import { createFile } from "@/api/files";
@@ -9,13 +9,20 @@ import { showError } from "@/utils/alerts";
 
 
 interface CreateFolderFormProps {
-  onCloseModal: () => void;
+  onCloseModal: () => void;                                                                                                            
   onCreateComplete: () => void;
+  onUploadFiles: (files: string[]) => void
 }
 
-export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolderFormProps) => {
-  const [users, setUsers] = useState<IUserFilePermission[]>([]);
-  const [uploadId, setUploadId] = useState<string>("");
+export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles }: CreateFolderFormProps) => {
+  const [users, setUsers] = useState<IFolderPermission[]>([]);
+ /*  const [uploadId, setUploadId] = useState<string>(""); */
+  const [dropzoneInstance, setdropzoneInstance] = useState<any>({
+    dropzone: null,
+    uploadId: null,
+  });
+
+  const { uploadId, dropzone } = dropzoneInstance;
 
   const {
     register,
@@ -27,6 +34,9 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
   const messagaElementRef = useRef<HTMLDivElement>(null);
   const uploadIdRef = useRef<string>("");
 
+  const handleDropzone = (uploadId: string, dropzone?: any) => {
+    setdropzoneInstance({ dropzone, uploadId });
+  };
   const preventNextStep = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       if (!uploadIdRef.current) {
@@ -48,7 +58,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
 
   useFormStep({ formFolerRef, messagaElementRef, preventNextStep });
 
-  const handleAddUser = useCallback((user: IUserFilePermission[]) => {
+  const handleAddUser = useCallback((user: IFolderPermission[]) => {
     setUsers(user);
   }, []);
 
@@ -61,7 +71,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
     let folderId = 0;
     try {
 
-      const filePermissions: IFolderPermission[] = users.map((user) => ({
+      const filePermissions: CreateFolderPermission[] = users.map((user) => ({
         userId: user.userId,
         canView: user.canView,
         canDownload: user.canDownload,
@@ -87,8 +97,8 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
 
       const file: ICreateFile = { folderId, uploadId };
       await createFile(file);
-
       finishCreate();
+      onUploadFiles(dropzone.files.map((file: any) => file.name));
     }catch (error) {
       console.error(error);
       showError("Error al cargar los archivos, vuelva a intentalor mas tarde");
@@ -202,7 +212,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
               <label className="form-label">Adjuntar archivos {" "}
               <span className="form-label-secondary">(Opcional)</span>
               </label>
-              <FileDropZone onGetUploadId={setUploadId} validate />
+              <FileDropZone onGetUploadId={handleDropzone} validate  />
             </div>
 
             {/*Footer */}
@@ -234,7 +244,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
               archivos
             </p>
 
-            <FilePersmision onUpdateUsers={handleAddUser} />
+            <UserFolderPersmision onUpdateUsers={handleAddUser} />
 
             <hr className="mt-2" />
 
@@ -293,15 +303,6 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete }: CreateFolde
             <button data-bs-dismiss="modal" className="btn btn-white" onClick={() => onCloseModal()}>
               Cerrar
             </button>
-
-            {/*  <button
-              className="btn btn-primary"
-              data-bs-dismiss="modal"
-              data-toggle="modal"
-              data-target="#newFolderModal"
-            >
-              <i className="bi-building"></i> Crear Folder
-            </button> */}
           </div>
         </div>
       </div>

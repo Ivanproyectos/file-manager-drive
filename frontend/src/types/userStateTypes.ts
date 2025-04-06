@@ -1,4 +1,4 @@
-import { IUserFilePermission } from "@/types";
+import { IFolderPermission } from "@/types";
 export enum UserAction {
     ADD_USER = 'ADD_USER',
     UPDATE_USER = 'UPDATE_USER',
@@ -7,12 +7,12 @@ export enum UserAction {
   
   interface AddUserAction {
     type: typeof UserAction.ADD_USER;
-    payload: IUserFilePermission;
+    payload: IFolderPermission;
   }
   
   interface UpdateUserAction {
     type: typeof UserAction.UPDATE_USER;
-    payload: IUserFilePermission;
+    payload: IFolderPermission;
   }
   
   interface DeleteUserAction {

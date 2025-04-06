@@ -1,22 +1,26 @@
 import { SearchUser } from "@/components";
-import { userFilePermissionReducer, initialState } from "@/reducers";
-import React, { useEffect, useReducer, useRef, useState } from "react";
-import { IUserFilePermission, IUserSummary } from "@/types";
+import { userFilePermissionReducer} from "@/reducers";
+import React, { useEffect, useReducer, useRef } from "react";
+import { IFolderPermission, IUserSummary } from "@/types";
 import { addUser, updateUser, deleteUser } from "@/actions";
 import { useInitTooltip } from "@/hooks";
 
 declare const HSCore: any;
 
-interface userFilePermissionProps {
-  onUpdateUsers: (users: IUserFilePermission[]) => void;
+
+interface userFolderPermissionProps {
+  onUpdateUsers: (users: IFolderPermission[]) => void;
+  initialState?: { users: IFolderPermission[] | [] };
 }
 
-export const UserFilePersmision = React.memo(
-  ({ onUpdateUsers }: userFilePermissionProps) => {
+export const UserFolderPersmision = React.memo(
+  ({initialState = { users: [] }, onUpdateUsers }: userFolderPermissionProps) => {
+    
     const [state, dispatch] = useReducer(
       userFilePermissionReducer,
       initialState
     );
+    debugger;
     const inputDateRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -38,11 +42,11 @@ export const UserFilePersmision = React.memo(
     const handleSelectedUser = (userSummary: IUserSummary) => {
       if (
         state?.users?.find(
-          (user: IUserFilePermission) => user.userId === userSummary.id
+          (user: IFolderPermission) => user.userId === userSummary.id
         )
       )
         return;
-      const user: IUserFilePermission = {
+      const user: IFolderPermission = {
         userId: userSummary.id,
         name: userSummary.name,
         expirationDate: "",
@@ -55,17 +59,17 @@ export const UserFilePersmision = React.memo(
       onUpdateUsers(state?.users);
     };
 
-    const handleCanview = (id: number) => {
+  /*   const handleCanview = (id: number) => {
       const user = state?.users?.find(
         (user: IUserFilePermission) => user.userId === id
       );
       if (!user) return;
       dispatch(updateUser({ ...user, canView: !user?.canView }));
     };
-
+ */
     const handleCandownload = (id: number) => {
       const user = state?.users?.find(
-        (user: IUserFilePermission) => user.userId === id
+        (user: IFolderPermission) => user.userId === id
       );
       if (!user) return;
       dispatch(updateUser({ ...user, canDownload: !user?.canDownload }));
@@ -77,9 +81,9 @@ export const UserFilePersmision = React.memo(
       isDateExpired: boolean
     ) => {
       const user = state?.users?.find(
-        (user: IUserFilePermission) => user.userId === id
+        (user: IFolderPermission) => user.userId === id
       );
-      debugger;
+  
       if (!user) return;
       dispatch(updateUser({ ...user, expirationDate, isDateExpired }));
     };
@@ -111,7 +115,7 @@ export const UserFilePersmision = React.memo(
               </tr>
             </thead>
             <tbody>
-              {state?.users?.map((user: IUserFilePermission) => (
+              {state?.users?.map((user: IFolderPermission) => (
                 <tr key={user.userId}>
                   <td>
                     <div className="d-flex align-items-center">
@@ -125,7 +129,7 @@ export const UserFilePersmision = React.memo(
                       </div> */}
                         <span className="avatar avatar-soft-primary avatar-circle">
                           <span className="avatar-initials">
-                            {user.name.charAt(0)}
+                            {user?.name?.charAt(0)}
                           </span>
                         </span>
                       </div>

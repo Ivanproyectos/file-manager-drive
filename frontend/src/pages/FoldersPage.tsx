@@ -1,4 +1,4 @@
-import { FolderTable, CreateFolderForm, EditFolderForm } from "@/components";
+import { FolderTable, CreateFolderForm, EditFolderForm, StatusLoadFiles } from "@/components";
 import { useState, useRef, useEffect } from "react";
 import {
   getFoldersAsync,
@@ -6,18 +6,27 @@ import {
   updateStatusFolder,
   getFolderByIdAsync
 } from "@/api/folderApi";
-import { IFolder, IFolderById } from "@/types";
+import { IFolder, IFolderById, StatusUploadedFile, StatusUploadFile, IFolderPermission } from "@/types";
 import { showError, showConfirm } from "@/utils/alerts";
+import { useConnectSignalr } from "@/hooks";
+import { getFolderPermission } from "@/api/folderPermission";
 
 declare const bootstrap: any;
 
 export const FoldersPage = () => {
   const [folders, setFolders] = useState<IFolder[]>([]);
-  const [folder, setFolder] = useState<IFolderById | null >(null);
+  const [folder, setFolder] = useState<IFolderById | null>(null);
   const [folderIdToEdit, setfolderIdToEdit] = useState<number | null>(null);
   /*   const [refresh, setRefresh] = useState(false); */
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [fileNames, setfileNames] = useState<string[] | null>(null);
+  const [status, setStatus] = useState<StatusUploadFile | null>(null);
+  const [folderPermissions, setFolderPermissions] = useState<IFolderPermission[]>([]);
+
+  const { signalr } = useConnectSignalr();
+
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -52,17 +61,36 @@ export const FoldersPage = () => {
     }
   };
 
+  const hanldeUpdateFolder = () => {
+  
+  };
+
+
+  const hanldeEditFolder = (folderId: number) => {
+    setIsModalEditOpen(true);
+    setfolderIdToEdit(folderId);
+  };
+
   const handleModalOpen = () => {
     setTimeout(() => {
       setIsModalOpen(false);
     }, 500);
   };
   
-  const hanldeUpdateFolder = () => {
-
+  const handleCloseEditModal = () => {
+    setTimeout(() => {
+      setIsModalEditOpen(false);
+    }, 500);
   };
 
+  const handleUploadFiles = (filesNames: string[]) => {
+    setfileNames(filesNames);
+    setStatus(StatusUploadFile.LOADING);
+  }
+  
+
   useEffect(() => {
+
     const loadUsers = async () => {
       try {
         const folders = await getFoldersAsync();
@@ -75,12 +103,16 @@ export const FoldersPage = () => {
   }, [refresh]);
 
   useEffect(() => {
+
     if (!folderIdToEdit) return
 
     const loadFolder = async () => {
       try {
         const folder = await getFolderByIdAsync(folderIdToEdit);
+        const folderPermission = await getFolderPermission(folderIdToEdit);
+   
         setFolder(folder);
+        setFolderPermissions(folderPermission);
       }
       catch (error) { 
         console.error("Error fetching data:", error);
@@ -89,6 +121,24 @@ export const FoldersPage = () => {
       loadFolder(); 
 
   },[folderIdToEdit]);
+
+  useEffect(() => {
+  
+    if (signalr) {
+      signalr.on("FileUploaded", (response: StatusUploadedFile) => {
+     
+        setfileNames(response.files);
+        setStatus(response.status);
+        setRefresh((prev) => !prev);
+      });
+    }
+    return () => {
+      if (signalr) {
+        signalr.off("FileUploaded");
+      }
+    };
+  }, [signalr]);
+
 
   return (
     <>
@@ -188,7 +238,7 @@ export const FoldersPage = () => {
 
         <FolderTable
           onRemove={handleRemoveFolder}
-          onEdit={setfolderIdToEdit}
+          onEdit={hanldeEditFolder}
           onUpdateStatus={handleUpdateStatus}
           folders={folders}
           isReload={refresh}
@@ -223,7 +273,8 @@ export const FoldersPage = () => {
             <div className="modal-body">
               {isModalOpen && (
                 <CreateFolderForm
-                  onCloseModal={() => handleModalOpen()}
+                  onUploadFiles={handleUploadFiles}
+                  onCloseModal={handleModalOpen}
                   onCreateComplete={handleCreateComplete}
                 />
               )}
@@ -232,11 +283,13 @@ export const FoldersPage = () => {
         </div>
       </div>
       <EditFolderForm
+        folderPermissions={folderPermissions}
         folder={folder}
-        isModalOpen={isModalOpen}
-        onModalOpen={handleModalOpen}
+        isModalOpen={isModalEditOpen}
+        onCloseModal={handleCloseEditModal}
         onSubmit={hanldeUpdateFolder}
       />
+      <StatusLoadFiles filesNames={fileNames} status={status} />
     </>
   );
 };

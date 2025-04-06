@@ -1,32 +1,52 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IFolderById } from "@/types";
-import { ButtonSubmit, FileDropZone } from "@/components";
+import { IFolderById, IFolderPermission} from "@/types";
+import { ButtonSubmit, FileDropZone, UserFolderPersmision } from "@/components";
 
 interface Props {
   folder: IFolderById | null;
+  folderPermissions: IFolderPermission[];
   isModalOpen: boolean;
-  onModalOpen: (isOpen: boolean) => void;
   onSubmit: (data: IFolderById) => void;
+  onCloseModal?: () => void;
 }
 
-export const EditFolderForm = ({ folder , isModalOpen, onModalOpen, onSubmit }: Props) => {
+export const EditFolderForm = ({
+  folder,
+  isModalOpen,
+  folderPermissions,
+  onCloseModal,
+  onSubmit,
+}: Props) => {
+  const [users, setUsers] = useState<IFolderPermission[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
     uploadId: null,
   });
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<IFolderById>({defaultValues: folder ?? {}});
+  } = useForm<IFolderById>();
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId });
   };
 
-  
+  const handleAddUser = (user: IFolderPermission[]) => {
+    setUsers(user);
+  }
+
+
+  useEffect(() => {
+    if (folder) {
+      reset(folder);
+    }
+  }, [folder]);
+
   return (
     <div
       ref={modalRef}
@@ -35,14 +55,17 @@ export const EditFolderForm = ({ folder , isModalOpen, onModalOpen, onSubmit }: 
       tabIndex={-1}
       aria-labelledby="newFolderModalLabel"
       aria-hidden="true"
+      data-bs-backdrop="static"
     >
       <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="newProjectModalLabel">
-              Nuevo folder
+              Editar folder{" "} 
+              <span className="badge bg-soft-primary text-primary ms-2">{folder?.name}</span>
             </h5>
             <button
+              onClick={onCloseModal}
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
@@ -50,10 +73,7 @@ export const EditFolderForm = ({ folder , isModalOpen, onModalOpen, onSubmit }: 
             ></button>
           </div>
           <div className="modal-body">
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              id="editSubFolder"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} id="editSubFolder">
               <div className="mb-4">
                 <label htmlFor="nameSubfolder" className="form-label">
                   Folder{" "}
@@ -113,10 +133,17 @@ export const EditFolderForm = ({ folder , isModalOpen, onModalOpen, onSubmit }: 
                   />
                 )}
               </div>
+              <div className="mb-4">
+                <h4 className="text-muted mb-3">
+                  Miembros del folder
+                </h4>
+                <UserFolderPersmision onUpdateUsers={handleAddUser} initialState={{ users: folderPermissions }}  />
+              </div>
             </form>
           </div>
           <div className="modal-footer">
             <button
+              onClick={onCloseModal}
               type="button"
               className="btn btn-white"
               data-bs-dismiss="modal"

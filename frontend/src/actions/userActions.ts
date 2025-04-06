@@ -1,11 +1,11 @@
-import {  IUserFilePermission, UserAction, UserActionTypes } from '@/types';
+import {  IFolderPermission, UserAction, UserActionTypes } from '@/types';
 
-export const addUser = (user: IUserFilePermission) : UserActionTypes => ({
+export const addUser = (user: IFolderPermission) : UserActionTypes => ({
   type: UserAction.ADD_USER,
   payload: user,
 });
 
-export const updateUser = (user: IUserFilePermission) : UserActionTypes => ({
+export const updateUser = (user: IFolderPermission) : UserActionTypes => ({
   type: UserAction.UPDATE_USER,
   payload: user,
 });

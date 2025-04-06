@@ -62,10 +62,10 @@ export const UploadFileManager = ({
   };
 
   useEffect(() => {
-    debugger;
+  
     if (signalr) {
       signalr.on("FileUploaded", (response: StatusUploadedFile) => {
-        debugger;
+     
         setFiles(response.files);
         setStatus(response.status);
         onFilesRefresh((prev)=> !prev); 
