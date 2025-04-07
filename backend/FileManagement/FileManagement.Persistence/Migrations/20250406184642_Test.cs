@@ -6,110 +6,119 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FileManagement.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class StatusFolder : Migration
+    public partial class Test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "Status",
-                table: "Folders",
-                type: "BIT",
-                maxLength: 500,
-                nullable: false,
-                defaultValue: true);
+            migrationBuilder.DropIndex(
+                name: "IX_FolderPermissions_UserId_FolderId",
+                table: "FolderPermissions");
 
             migrationBuilder.UpdateData(
                 table: "Peoples",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 5, 12, 57, 25, 531, DateTimeKind.Local).AddTicks(8550));
+                value: new DateTime(2025, 4, 6, 13, 46, 41, 995, DateTimeKind.Local).AddTicks(4489));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 5, 12, 57, 25, 532, DateTimeKind.Local).AddTicks(5203));
+                value: new DateTime(2025, 4, 6, 13, 46, 41, 995, DateTimeKind.Local).AddTicks(7158));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 5, 12, 57, 25, 532, DateTimeKind.Local).AddTicks(5217));
+                value: new DateTime(2025, 4, 6, 13, 46, 41, 995, DateTimeKind.Local).AddTicks(7163));
 
             migrationBuilder.UpdateData(
                 table: "SourceProviders",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 5, 17, 57, 25, 533, DateTimeKind.Utc).AddTicks(5413));
+                value: new DateTime(2025, 4, 6, 18, 46, 41, 996, DateTimeKind.Utc).AddTicks(4226));
 
             migrationBuilder.UpdateData(
                 table: "UserRoles",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 5, 12, 57, 25, 536, DateTimeKind.Local).AddTicks(2685));
+                value: new DateTime(2025, 4, 6, 13, 46, 41, 998, DateTimeKind.Local).AddTicks(4306));
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2025, 4, 5, 12, 57, 25, 535, DateTimeKind.Local).AddTicks(1892), new DateTime(2025, 4, 5, 12, 57, 25, 535, DateTimeKind.Local).AddTicks(1900) });
+                values: new object[] { new DateTime(2025, 4, 6, 13, 46, 41, 997, DateTimeKind.Local).AddTicks(6453), new DateTime(2025, 4, 6, 13, 46, 41, 997, DateTimeKind.Local).AddTicks(6457) });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FolderPermissions_UserId_FolderId",
+                table: "FolderPermissions",
+                columns: new[] { "UserId", "FolderId" },
+                unique: true,
+                filter: "DeletedAt IS NULL");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Folders");
+            migrationBuilder.DropIndex(
+                name: "IX_FolderPermissions_UserId_FolderId",
+                table: "FolderPermissions");
 
             migrationBuilder.UpdateData(
                 table: "Peoples",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 4, 19, 26, 49, 659, DateTimeKind.Local).AddTicks(3417));
+                value: new DateTime(2025, 4, 5, 20, 44, 33, 705, DateTimeKind.Local).AddTicks(4070));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 4, 19, 26, 49, 660, DateTimeKind.Local).AddTicks(563));
+                value: new DateTime(2025, 4, 5, 20, 44, 33, 705, DateTimeKind.Local).AddTicks(6977));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 4, 19, 26, 49, 660, DateTimeKind.Local).AddTicks(579));
+                value: new DateTime(2025, 4, 5, 20, 44, 33, 705, DateTimeKind.Local).AddTicks(6983));
 
             migrationBuilder.UpdateData(
                 table: "SourceProviders",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 5, 0, 26, 49, 661, DateTimeKind.Utc).AddTicks(2606));
+                value: new DateTime(2025, 4, 6, 1, 44, 33, 706, DateTimeKind.Utc).AddTicks(4317));
 
             migrationBuilder.UpdateData(
                 table: "UserRoles",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 4, 4, 19, 26, 49, 664, DateTimeKind.Local).AddTicks(2681));
+                value: new DateTime(2025, 4, 5, 20, 44, 33, 708, DateTimeKind.Local).AddTicks(5700));
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "UpdatedAt" },
-                values: new object[] { new DateTime(2025, 4, 4, 19, 26, 49, 663, DateTimeKind.Local).AddTicks(714), new DateTime(2025, 4, 4, 19, 26, 49, 663, DateTimeKind.Local).AddTicks(728) });
+                values: new object[] { new DateTime(2025, 4, 5, 20, 44, 33, 707, DateTimeKind.Local).AddTicks(7278), new DateTime(2025, 4, 5, 20, 44, 33, 707, DateTimeKind.Local).AddTicks(7282) });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FolderPermissions_UserId_FolderId",
+                table: "FolderPermissions",
+                columns: new[] { "UserId", "FolderId" },
+                unique: true);
         }
     }
 }

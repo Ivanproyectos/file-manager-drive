@@ -1,15 +1,23 @@
-import { FolderTable, CreateFolderForm, EditFolderForm, StatusLoadFiles } from "@/components";
-import { useState, useRef, useEffect } from "react";
 import {
-  getFoldersAsync,
   deleteFolder,
-  updateStatusFolder,
-  getFolderByIdAsync
+  getFolderByIdAsync,
+  getFoldersAsync,
+  updateFolder,
+  updateStatusFolder
 } from "@/api/folderApi";
-import { IFolder, IFolderById, StatusUploadedFile, StatusUploadFile, IFolderPermission } from "@/types";
-import { showError, showConfirm } from "@/utils/alerts";
-import { useConnectSignalr } from "@/hooks";
 import { getFolderPermission } from "@/api/folderPermission";
+import { CreateFolderForm, EditFolderForm, FolderTable, StatusLoadFiles } from "@/components";
+import { useConnectSignalr } from "@/hooks";
+import {
+  IFolder,
+  IFolderById,
+  IFolderPermission,
+  StatusUploadFile,
+  StatusUploadedFile,
+  UpdateFolder
+} from "@/types";
+import { showConfirm, showError } from "@/utils/alerts";
+import { useEffect, useRef, useState } from "react";
 
 declare const bootstrap: any;
 
@@ -61,10 +69,22 @@ export const FoldersPage = () => {
     }
   };
 
-  const hanldeUpdateFolder = () => {
-  
+  const hanldeUpdateFolder = async (folder: UpdateFolder) => {
+    try{
+      const isAccepted = await showConfirm("¿Está seguro de actualizar la carpeta?");
+      if(!isAccepted) {
+
+       await updateFolder(folder);
+      setRefresh((prev) => !prev);
+      return;
+      }
+    } catch (error) {
+      console.error(error);
+      showError("Error al actualizar la carpeta.");
+    }
   };
 
+  
 
   const hanldeEditFolder = (folderId: number) => {
     setIsModalEditOpen(true);
@@ -74,13 +94,13 @@ export const FoldersPage = () => {
   const handleModalOpen = () => {
     setTimeout(() => {
       setIsModalOpen(false);
-    }, 500);
+    }, 100);
   };
   
   const handleCloseEditModal = () => {
     setTimeout(() => {
       setIsModalEditOpen(false);
-    }, 500);
+    }, 100);
   };
 
   const handleUploadFiles = (filesNames: string[]) => {
@@ -110,7 +130,7 @@ export const FoldersPage = () => {
       try {
         const folder = await getFolderByIdAsync(folderIdToEdit);
         const folderPermission = await getFolderPermission(folderIdToEdit);
-   
+ 
         setFolder(folder);
         setFolderPermissions(folderPermission);
       }

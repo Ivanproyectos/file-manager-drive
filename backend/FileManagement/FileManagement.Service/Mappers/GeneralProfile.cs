@@ -4,12 +4,13 @@ using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Entities;
+using FileManagement.Service.Helpers;
 
 namespace FileManagement.Service.Mappers
 {
-    internal class GerernalProfile: Profile
+    internal class GeneralProfile: Profile
     {
-        public GerernalProfile()
+        public GeneralProfile()
         {
             #region entity to dto
             CreateMap<Folder, CreateFolderResponse>();
@@ -26,17 +27,24 @@ namespace FileManagement.Service.Mappers
              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.People.PersonType == PersonTypes.Natural ? src.People.FirstName + " " + src.People.LastName : src.People.BussinessName))
              .ForMember(dest => dest.PersonType, opt => opt.MapFrom(src => src.People.PersonType));
 
-            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto>()
+                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(x => x.Role.RoleName)
+                 .ToList()));
+
             CreateMap<Core.Entities.File, FileDto>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt));
-
-            
+          
 
             CreateMap<People, PeopleDto>();
             CreateMap<Folder, UserFolderResponse>();
             CreateMap<Folder, SubFolderDto>();
-            
-                //  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));
+
+            CreateMap<FolderPermission, FolderPermissionResponse>()
+                .ForMember(dest => dest.name,
+                    opt => opt.MapFrom(src => FormatPeopleName.FormatPeopleType(src.User.People)))
+                .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.User.People.Email));
+
+            //  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PersonType == PersonTypes.Natural ? src.FirstName + " " + src.LastName : src.BussinessName));
 
 
             #endregion
@@ -48,7 +56,9 @@ namespace FileManagement.Service.Mappers
             CreateMap<CreatePeopleRequest, People>();
             CreateMap<UpdatePeopleRequest, People>();
             CreateMap<CreateFolderPermissionRequest, FolderPermission>();
+            CreateMap<UpdateFolderPermissionRequest, FolderPermission>();
             
+
             #endregion
         }
     }

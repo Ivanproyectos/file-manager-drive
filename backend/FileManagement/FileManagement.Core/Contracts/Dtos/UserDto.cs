@@ -9,7 +9,8 @@ namespace FileManagement.Core.Contracts.Dtos
     public record  struct UserDto(
      int Id,
      bool Status,
-     PeopleDto People
+     PeopleDto People, 
+     List<string> Roles
      );
 
 }

@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
-import { useInitTomSelect, useClientDataTable } from "@/hooks";
+import { useClientDataTable, useInitTomSelect } from "@/hooks";
 import { IFolder } from "@/types";
+import { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { generateAvatar } from "@/utils/generateAvatarGroup";
 import { convertDateToLocaleString } from "@/utils/dateFormat";
 import { convertBytes } from "@/utils/formatBytes";
+import { generateAvatar } from "@/utils/generateAvatarGroup";
 
 interface Props {
   folders: IFolder[];
@@ -152,7 +152,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
           {/* End Datatable Info */}
 
           {/* Dropdown */}
-          <div className="dropdown">
+      {/*     <div className="dropdown">
             <button
               type="button"
               className="btn btn-white btn-sm dropdown-toggle w-100"
@@ -219,7 +219,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
                 PDF
               </a>
             </div>
-          </div>
+          </div> */}
           {/* End Dropdown */}
 
           {/* Dropdown */}
@@ -271,7 +271,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
                               type="checkbox"
                               value=""
                               id="usersFilterCheckAll"
-                              checked
+                              defaultChecked
                             />
                             <label
                               className="form-check-label"
@@ -393,14 +393,14 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
                             <option label="empty"></option>
                             <option
                               value="AH"
-                              selected
+                              defaultValue={0}
                               data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img10.jpg" alt="Image Description" /><span className="text-truncate">Amanda Harvey</span></span>'
                             >
                               Amanda Harvey
                             </option>
                             <option
                               value="DH"
-                              selected
+                              defaultValue={0}
                               data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img3.jpg" alt="Image Description" /><span className="text-truncate">David Harrison</span></span>'
                             >
                               David Harrison
@@ -419,7 +419,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
                             </option>
                             <option
                               value="CQ"
-                              selected
+                              defaultValue={0}
                               data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img6.jpg" alt="Image Description" /><span className="text-truncate">Costa Quinn</span></span>'
                             >
                               Costa Quinn
@@ -1136,7 +1136,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
                           }'
                 >
                   <option value="10">10</option>
-                  <option value="15" selected>
+                  <option value="15"    defaultValue={0}>
                     15
                   </option>
                   <option value="20">20</option>

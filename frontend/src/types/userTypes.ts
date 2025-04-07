@@ -6,6 +6,7 @@ export interface IUser {
   password: string;
   status?: boolean
   people: Person;
+  roles: string[];
 }
 
 export interface IUserSummary {

@@ -1,3 +1,5 @@
+import { AuthorizedForRole } from "@/components";
+import { Role } from "@/types/rolTypes";
 import { Link } from "react-router-dom";
 
 export const NavBar = () => {
@@ -65,21 +67,6 @@ export const NavBar = () => {
               id="navbarVerticalMenu"
               className="nav nav-pills nav-vertical card-navbar-nav"
             >
-              {/* Collapse */}
-
-              {/*        <div className="nav-item">
-              <a className="nav-link dropdown-toggle active" href="#navbarVerticalMenuDashboards" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuDashboards" aria-expanded="true" aria-controls="navbarVerticalMenuDashboards">
-                <i className="bi-house-door nav-icon"></i>
-                <span className="nav-link-title">Dashboards</span>
-              </a>
-
-              <div id="navbarVerticalMenuDashboards" className="nav-collapse collapse show" data-bs-parent="#navbarVerticalMenu">
-                <a className="nav-link active" href="../index.html">Default</a>
-                <a className="nav-link " href="../dashboard-alternative.html">Alternative</a>
-              </div>
-            </div> */}
-
-              {/* End Collapse */}
 
               <span className="dropdown-header mt-4">Pages</span>
               <small className="bi-three-dots nav-subtitle-replacer"></small>
@@ -88,36 +75,31 @@ export const NavBar = () => {
               <div className="navbar-nav nav-compact"></div>
               <div id="navbarVerticalMenuPagesMenu">
 
-            {/*   <div className="nav-item">
-                <Link className="nav-link " to="/dashboard/users" data-placement="left">
-                     <i className="bi-stickies nav-icon"></i>
-                  <span className="nav-link-title">Usuarios</span>
-                </Link>
-              </div> */}
-                {/* Collapse */}
-                <div className="nav-item">
-                  <a
-                    className="nav-link dropdown-toggle "
-                    href="#navbarVerticalMenuPagesUsersMenu"
-                    role="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarVerticalMenuPagesUsersMenu"
-                    aria-expanded="false"
-                    aria-controls="navbarVerticalMenuPagesUsersMenu"
-                  >
-                    <i className="bi-gear nav-icon"></i>
-                    <span className="nav-link-title">Administración</span>
-                  </a>
 
-                  <div
-                    id="navbarVerticalMenuPagesUsersMenu"
-                    className="nav-collapse collapse "
-                    data-bs-parent="#navbarVerticalMenuPagesMenu"
-                  >
-                    <Link className="nav-link " to="/dashboard/users">
-                      Users
-                    </Link>
-                  {/*   <a className="nav-link " href="../users-leaderboard.html">
+                <AuthorizedForRole allowedRoles={[Role.ADMIN]}>
+                  <div className="nav-item">
+                    <a
+                      className="nav-link dropdown-toggle "
+                      href="#navbarVerticalMenuPagesUsersMenu"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarVerticalMenuPagesUsersMenu"
+                      aria-expanded="false"
+                      aria-controls="navbarVerticalMenuPagesUsersMenu"
+                    >
+                      <i className="bi-gear nav-icon"></i>
+                      <span className="nav-link-title">Administración</span>
+                    </a>
+
+                    <div
+                      id="navbarVerticalMenuPagesUsersMenu"
+                      className="nav-collapse collapse "
+                      data-bs-parent="#navbarVerticalMenuPagesMenu"
+                    >
+                      <Link className="nav-link " to="/dashboard/users">
+                        Users
+                      </Link>
+                      {/*   <a className="nav-link " href="../users-leaderboard.html">
                       Leaderboard
                     </a>
                     <a className="nav-link " href="../users-add-user.html">
@@ -126,36 +108,36 @@ export const NavBar = () => {
                         Hot
                       </span>
                     </a> */}
+                    </div>
                   </div>
-                </div>
-                {/* End Collapse */}
+                </AuthorizedForRole>
 
-                {/* Collapse */}
-                <div className="nav-item">
-                  <a
-                    className="nav-link dropdown-toggle "
-                    href="#navbarVerticalMenuPagesUserProfileMenu"
-                    role="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarVerticalMenuPagesUserProfileMenu"
-                    aria-expanded="false"
-                    aria-controls="navbarVerticalMenuPagesUserProfileMenu"
-                  >
-                   <i className="bi-folder2-open nav-icon"></i>
-                    <span className="nav-link-title">
-                        File manager 
-                    </span>
-                  </a>
+                <AuthorizedForRole allowedRoles={[Role.ADMIN]}>
+                  <div className="nav-item">
+                    <a
+                      className="nav-link dropdown-toggle "
+                      href="#navbarVerticalMenuPagesUserProfileMenu"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarVerticalMenuPagesUserProfileMenu"
+                      aria-expanded="false"
+                      aria-controls="navbarVerticalMenuPagesUserProfileMenu"
+                    >
+                      <i className="bi-folder2-open nav-icon"></i>
+                      <span className="nav-link-title">
+                        File manager
+                      </span>
+                    </a>
 
-                  <div
-                    id="navbarVerticalMenuPagesUserProfileMenu"
-                    className="nav-collapse collapse "
-                    data-bs-parent="#navbarVerticalMenuPagesMenu"
-                  >
-                    <Link className="nav-link " to="/dashboard/folders">
-                      Folders
-                    </Link>
-                  {/*   <a className="nav-link " href="../user-profile-teams.html">
+                    <div
+                      id="navbarVerticalMenuPagesUserProfileMenu"
+                      className="nav-collapse collapse "
+                      data-bs-parent="#navbarVerticalMenuPagesMenu"
+                    >
+                      <Link className="nav-link " to="/dashboard/folders">
+                        Folders
+                      </Link>
+                      {/*   <a className="nav-link " href="../user-profile-teams.html">
                       Configuración
                     </a>
                     <a
@@ -176,17 +158,19 @@ export const NavBar = () => {
                     >
                       My Profile
                     </a> */}
+                    </div>
                   </div>
+                </AuthorizedForRole>
+              </div>
+
+              <AuthorizedForRole allowedRoles={[Role.ADMIN, Role.USER]}>
+                <div className="nav-item">
+                  <Link className="nav-link " to="/dashboard/user-folders" data-placement="left">
+                    <i className="bi-stickies nav-icon"></i>
+                    <span className="nav-link-title">Mis Archivos</span>
+                  </Link>
                 </div>
-              </div>
-             
-              {/* End Collapse */}
-              <div className="nav-item">
-                <Link className="nav-link " to="/dashboard/user-folders" data-placement="left">
-                     <i className="bi-stickies nav-icon"></i>
-                  <span className="nav-link-title">Mis Archivos</span>
-                </Link>
-              </div>
+              </AuthorizedForRole>
 
             </div>
           </div>
@@ -256,159 +240,7 @@ export const NavBar = () => {
                 {/* End Style Switcher */}
               </li>
 
-              <li className="navbar-vertical-footer-list-item">
-                {/* Other Links */}
-                <div className="dropdown dropup">
-                  <button
-                    type="button"
-                    className="btn btn-ghost-secondary btn-icon rounded-circle"
-                    id="otherLinksDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    data-bs-dropdown-animation
-                  >
-                    <i className="bi-info-circle"></i>
-                  </button>
-
-                  <div
-                    className="dropdown-menu navbar-dropdown-menu-borderless"
-                    aria-labelledby="otherLinksDropdown"
-                  >
-                    <span className="dropdown-header">Help</span>
-                    <a className="dropdown-item" href="#">
-                      <i className="bi-journals dropdown-item-icon"></i>
-                      <span
-                        className="text-truncate"
-                        title="Resources &amp; tutorials"
-                      >
-                        Resources &amp; tutorials
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i className="bi-command dropdown-item-icon"></i>
-                      <span
-                        className="text-truncate"
-                        title="Keyboard shortcuts"
-                      >
-                        Keyboard shortcuts
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i className="bi-alt dropdown-item-icon"></i>
-                      <span
-                        className="text-truncate"
-                        title="Connect other apps"
-                      >
-                        Connect other apps
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i className="bi-gift dropdown-item-icon"></i>
-                      <span className="text-truncate" title="What's new?">
-                        What's new?
-                      </span>
-                    </a>
-                    <div className="dropdown-divider"></div>
-                    <span className="dropdown-header">Contacts</span>
-                    <a className="dropdown-item" href="#">
-                      <i className="bi-chat-left-dots dropdown-item-icon"></i>
-                      <span className="text-truncate" title="Contact support">
-                        Contact support
-                      </span>
-                    </a>
-                  </div>
-                </div>
-                {/* End Other Links */}
-              </li>
-
-              <li className="navbar-vertical-footer-list-item">
-                {/* Language */}
-                <div className="dropdown dropup">
-                  <button
-                    type="button"
-                    className="btn btn-ghost-secondary btn-icon rounded-circle"
-                    id="selectLanguageDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    data-bs-dropdown-animation
-                  >
-                    <img
-                      className="avatar avatar-xss avatar-circle"
-                      src="../assets/vendor/flag-icon-css/flags/1x1/us.svg"
-                      alt="United States Flag"
-                    />
-                  </button>
-
-                  <div
-                    className="dropdown-menu navbar-dropdown-menu-borderless"
-                    aria-labelledby="selectLanguageDropdown"
-                  >
-                    <span className="dropdown-header">Select language</span>
-                    <a className="dropdown-item" href="#">
-                      <img
-                        className="avatar avatar-xss avatar-circle me-2"
-                        src="../assets/vendor/flag-icon-css/flags/1x1/us.svg"
-                        alt="Flag"
-                      />
-                      <span className="text-truncate" title="English">
-                        English (US)
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <img
-                        className="avatar avatar-xss avatar-circle me-2"
-                        src="../assets/vendor/flag-icon-css/flags/1x1/gb.svg"
-                        alt="Flag"
-                      />
-                      <span className="text-truncate" title="English">
-                        English (UK)
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <img
-                        className="avatar avatar-xss avatar-circle me-2"
-                        src="../assets/vendor/flag-icon-css/flags/1x1/de.svg"
-                        alt="Flag"
-                      />
-                      <span className="text-truncate" title="Deutsch">
-                        Deutsch
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <img
-                        className="avatar avatar-xss avatar-circle me-2"
-                        src="../assets/vendor/flag-icon-css/flags/1x1/dk.svg"
-                        alt="Flag"
-                      />
-                      <span className="text-truncate" title="Dansk">
-                        Dansk
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <img
-                        className="avatar avatar-xss avatar-circle me-2"
-                        src="../assets/vendor/flag-icon-css/flags/1x1/it.svg"
-                        alt="Flag"
-                      />
-                      <span className="text-truncate" title="Italiano">
-                        Italiano
-                      </span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <img
-                        className="avatar avatar-xss avatar-circle me-2"
-                        src="../assets/vendor/flag-icon-css/flags/1x1/cn.svg"
-                        alt="Flag"
-                      />
-                      <span className="text-truncate" title="中文 (繁體)">
-                        中文 (繁體)
-                      </span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* End Language */}
-              </li>
+        
             </ul>
           </div>
           {/* End Footer */}

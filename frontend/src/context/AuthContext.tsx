@@ -1,25 +1,27 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { IUserSession, AuthContextType } from "@/types";
+import { authLogin, authLogout } from "@/actions";
+import { authReducer } from "@/reducers/authReducer";
+import { AuthContextType, IUserSession } from "@/types";
+import { IUserInfoPayload } from "@/types/loginStateTypes";
 import Cookies from "js-cookie";
+import { createContext, useContext, useReducer } from "react";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUserSession | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // cambiar
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+const initAuth  = () => {
+  const storedToken = Cookies.get("auth_token") ?? "";
+  const storedUser = localStorage.getItem("user");
+  const initialState: IUserInfoPayload = {
+    user: storedUser ? JSON.parse(storedUser) : null,
+    token: storedToken,
+    isAuthenticated: !!storedToken,
+  }
+  return initialState;
+}
 
-  useEffect(() => {
-    const storedToken = Cookies.get("auth_token");
-    if (storedToken) {
-      setToken(storedToken);
-      setIsAuthenticated((prev) => !prev);
-      if (!localStorage.getItem("user")) return;
-      setUser(JSON.parse(localStorage.getItem("user") || ""));
-    }
-    setLoading(false);
-  }, []);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+
+  const [authState, dispach] = useReducer(authReducer, {}, initAuth);
+
 
   const login = (
     authToken: string,
@@ -27,24 +29,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     userData: IUserSession
   ) => {
     const expiresDate = new Date(expiresIn * 1000);
-    debugger;
+
     Cookies.set("auth_token", authToken, { expires: expiresDate, path: "" });
     localStorage.setItem("user", JSON.stringify(userData));
-    setToken(authToken);
-    setUser(userData);
+
+    const data = {
+      user: userData,
+      token: authToken, 
+      isAuthenticated: true
+    }
+    dispach(authLogin(data));
   };
 
-  // Función para cerrar sesión
+
   const logout = () => {
     Cookies.remove("auth_token");
     localStorage.removeItem("user");
-    setUser(null);
-    setToken(null);
+
+    const data = {
+      user: null,
+      token: null, 
+      isAuthenticated: false
+    }
+    dispach(authLogout(data));
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, token, login, logout, loading }}
+      value={{ ...authState, login, logout }}
     >
       {children}
     </AuthContext.Provider>

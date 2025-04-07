@@ -1,4 +1,4 @@
-import { CreateFolderPermission, UpdateFolderPermission } from "./folderPermissionTypes";
+import { CreateFolderPermission, IUserFolderPermission } from "./folderPermissionTypes";
 export interface IFolder {
     id: number;
     name: string;
@@ -33,9 +33,11 @@ export type CreateFolder = Omit<IFolder, 'id' | 'parentId' | 'users'> & {
 export type ICreateSubFolder = Omit<ISubFolder, 'id'> & {
     description: string
 }
-export interface UpdateFolder extends CreateFolder {
+export interface UpdateFolder {
+    id: number;
+    name: string;
+    description?: string;
     deletedFileIds: number[];
-    folderPermissions: UpdateFolderPermission[];
-    deletePermissionIds: number[]
+    folderPermissions: IUserFolderPermission[];
 }
 

@@ -15,12 +15,12 @@ namespace FileManagement.Persistence.Configurations
             builder.HasIndex(ur => new { ur.UserId, ur.RoleId }).IsUnique();
 
             builder.HasOne(ur => ur.User)
-                .WithMany()
+                .WithMany(u => u.Roles)
                 .HasForeignKey(ur => ur.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(ur => ur.Role)
-                .WithMany()
+                .WithMany(ur => ur.UserRoles)
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 

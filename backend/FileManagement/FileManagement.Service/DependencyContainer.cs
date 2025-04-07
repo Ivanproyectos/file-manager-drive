@@ -41,8 +41,9 @@ namespace FileManagement.Service
             services.AddSingleton<IFileUploadChannel, FileUploadChannel>();
             services.AddTransient<IFolderService, FolderService>();
             services.AddScoped<IUploadNotifierService, UploadNotifierService>();
-            
+            services.AddTransient<IFolderPermissionService, FolderPermissionService>();
 
+            
             services.AddHostedService<FileUploadBackgroundService>();
 
 

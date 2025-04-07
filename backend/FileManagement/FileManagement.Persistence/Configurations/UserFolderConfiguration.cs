@@ -11,7 +11,7 @@ namespace FileManagement.Persistence.Configurations
             builder.ToTable("UserFolders");
             builder.HasKey(x => x.Id); 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.HasIndex(x => new { x.UserId, x.FolderId }).IsUnique();
+            //builder.HasIndex(x => new { x.UserId, x.FolderId }).IsUnique();
 
             builder.HasOne(x => x.Folder)
                 .WithMany(x => x.UserFolders)

@@ -1,13 +1,14 @@
-import { useRef, useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { IFolderById, IFolderPermission} from "@/types";
 import { ButtonSubmit, FileDropZone, UserFolderPersmision } from "@/components";
+import { IFolderById, IFolderPermission, UpdateFolder } from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+
 
 interface Props {
   folder: IFolderById | null;
   folderPermissions: IFolderPermission[];
   isModalOpen: boolean;
-  onSubmit: (data: IFolderById) => void;
+  onSubmit: (data: UpdateFolder) => void;
   onCloseModal?: () => void;
 }
 
@@ -20,7 +21,8 @@ export const EditFolderForm = ({
 }: Props) => {
   const [users, setUsers] = useState<IFolderPermission[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
-  const [dropzoneInstance, setdropzoneInstance] = useState<any>({
+  const closeModalButtonRef = useRef<HTMLButtonElement>(null);
+  const [_dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
     uploadId: null,
   });
@@ -40,6 +42,17 @@ export const EditFolderForm = ({
     setUsers(user);
   }
 
+  const handleOnsubmit = async (data: IFolderById) => {
+
+    const request: UpdateFolder = {
+      ...data,
+      folderPermissions: users,
+      deletedFileIds: []
+    }
+    await onSubmit(request);
+    onCloseModal?.();
+    closeModalButtonRef.current?.click();
+  }
 
   useEffect(() => {
     if (folder) {
@@ -61,7 +74,7 @@ export const EditFolderForm = ({
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="newProjectModalLabel">
-              Editar folder{" "} 
+              Editar folder{" "}
               <span className="badge bg-soft-primary text-primary ms-2">{folder?.name}</span>
             </h5>
             <button
@@ -73,7 +86,7 @@ export const EditFolderForm = ({
             ></button>
           </div>
           <div className="modal-body">
-            <form onSubmit={handleSubmit(onSubmit)} id="editSubFolder">
+            <form onSubmit={handleSubmit(handleOnsubmit)} id="editFodlderForm">
               <div className="mb-4">
                 <label htmlFor="nameSubfolder" className="form-label">
                   Folder{" "}
@@ -89,9 +102,8 @@ export const EditFolderForm = ({
                   <input
                     {...register("name", { required: true })}
                     type="text"
-                    className={`form-control ${
-                      errors.name ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors.name ? "is-invalid" : ""
+                      }`}
                     name="name"
                     id="nameSubfolder"
                     placeholder="Ingrese el nombre del folder"
@@ -137,12 +149,13 @@ export const EditFolderForm = ({
                 <h4 className="text-muted mb-3">
                   Miembros del folder
                 </h4>
-                <UserFolderPersmision onUpdateUsers={handleAddUser} initialState={{ users: folderPermissions }}  />
+                <UserFolderPersmision onUpdateUsers={handleAddUser} initialState={{ users: folderPermissions }} />
               </div>
             </form>
           </div>
           <div className="modal-footer">
             <button
+              ref={closeModalButtonRef}
               onClick={onCloseModal}
               type="button"
               className="btn btn-white"
@@ -161,7 +174,7 @@ export const EditFolderForm = ({
              </button> */}
             <ButtonSubmit
               title="Guardar cambios"
-              formName="editSubFolder"
+              formName="editFodlderForm"
               isSubmitting={isSubmitting}
             />
           </div>

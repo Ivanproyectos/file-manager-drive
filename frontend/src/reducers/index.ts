@@ -1,1 +1,2 @@
-export { userFilePermissionReducer, initialState } from './UserReducer';
+export { userFilePermissionReducer } from './UserReducer';
+export { authReducer } from './authReducer';

@@ -1,13 +1,13 @@
-import { ILogin, IUserSession } from "@/types";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "@/schemas";
-import { useAuth } from "@/context/AuthContext";
 import { loginAsync } from "@/api/login";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {  getUserById } from "@/api/users";
+import { getUserById } from "@/api/users";
+import { useAuth } from "@/context/AuthContext";
+import { loginSchema } from "@/schemas";
+import { ILogin, IUserSession } from "@/types";
 import { formatPersonName } from "@/utils/formatPeople";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -27,12 +27,13 @@ export const LoginForm = () => {
         setMessage("");
         const response = await loginAsync(data)
         const user = await getUserById(response.userId);
-        debugger;
+  
         const userSession: IUserSession = {
             id: user.id,
             name: formatPersonName(user.people),
             email: user.people.email,
-            personType : user.people.personType
+            personType : user.people.personType, 
+            roles: user.roles
         }
         login(response.token,response.expiresIn, userSession);
         navigate("/dashboard");
@@ -116,7 +117,6 @@ export const LoginForm = () => {
 
         <div
           className= {`input-group input-group-merge ${errors.password ? "is-invalid" : ""}`} 
-          data-hs-validation-validate-className
         >
           <input
             {...register("password")}

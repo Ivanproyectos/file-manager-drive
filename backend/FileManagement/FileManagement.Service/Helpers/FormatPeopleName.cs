@@ -12,12 +12,12 @@ namespace FileManagement.Service.Helpers
     {
         public static string FormatPeopleType(People people)
         {
-           if(people.PersonType == PersonTypes.Natural)
+            if (people.PersonType == PersonTypes.Natural)
             {
                 return $"{people.FirstName} {people.LastName}";
             }
 
-           return people.BussinessName;
+            return people.BussinessName;
         }
     }
 }

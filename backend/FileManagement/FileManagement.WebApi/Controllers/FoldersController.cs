@@ -61,5 +61,12 @@ namespace FileManagement.WebApi.Controllers
             await _folderService.UpdateStatus(folderId);
             return NoContent();
         }
+        [HttpPut("{folderId}")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateFolderRequest folderRequest)
+        {
+            return Ok(await Mediator.Send(folderRequest));
+        }
+
+        
     }
 }

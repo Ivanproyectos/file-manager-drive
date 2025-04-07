@@ -5,5 +5,5 @@ import { IUserSession } from "./loginTypes";
     token: string | null;
     login: (token: string,expiresIn: number, user: IUserSession) => void;
     logout: () => void;
-    loading: boolean;
+ /*    loading: boolean; */
   }

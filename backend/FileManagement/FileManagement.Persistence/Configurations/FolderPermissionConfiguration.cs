@@ -13,8 +13,9 @@ namespace FileManagement.Persistence.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.HasIndex(x => new { x.UserId, x.FolderId })
-             .IsUnique();
+            //builder.HasIndex(x => new { x.UserId, x.FolderId })
+            //  .HasFilter("DeletedAt IS NULL")
+            // .IsUnique();
 
             builder.Property(x => x.CanView)
                 .HasColumnType("bit")
@@ -29,10 +30,11 @@ namespace FileManagement.Persistence.Configurations
                  .HasForeignKey(x => x.FolderId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-             builder.HasOne(x => x.User)
-                 .WithMany()
-                 .HasForeignKey(x => x.UserId)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasQueryFilter(x => x.DeletedAt == null);
         }
     }

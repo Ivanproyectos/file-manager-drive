@@ -15,7 +15,9 @@ namespace FileManagement.Persistence.Repositories
         }
 
         public async Task AddRangeUsersFolder(List<UserFolder> usersFolder)
-        {
+        { 
+            if(usersFolder == null || usersFolder.Count == 0) return;
+
             await _context.AddRangeAsync(usersFolder);
         }
 
@@ -27,7 +29,7 @@ namespace FileManagement.Persistence.Repositories
         public async Task<List<UserFolder>> GetFolderAsync(int FolderId)
         {
             return await _context.UserFolders.Include(uf => uf.User)
-                   .Where(uf => uf.Folder.ParentFolderId == FolderId).ToListAsync();
+                   .Where(uf => uf.FolderId == FolderId).ToListAsync();
         }
 
         public async Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int UserId, int FolderId)
@@ -40,6 +42,16 @@ namespace FileManagement.Persistence.Repositories
         {
             return await _context.UserFolders.Include(uf => uf.Folder)
                 .Where(uf => uf.UserId == UserId && uf.Folder.ParentFolderId == null).ToListAsync();
+        }
+
+        public Task RemoveUserFolderRangeASync(List<UserFolder> userFolders)
+        {
+            foreach (var folder in userFolders)
+            {
+                folder.DeletedAt = DateTime.UtcNow;
+                _context.Update(folder);
+            }
+            return Task.CompletedTask;
         }
     }
 }

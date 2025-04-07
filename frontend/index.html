@@ -17,29 +17,38 @@
   <link rel="stylesheet" href="./assets/vendor/flatpickr/dist/flatpickr.min.css">
 
   <link rel="stylesheet" href="./assets/css/theme.min.css" data-hs-appearance="default">
- <!--  <link rel="stylesheet" href="./assets/css/docs.min.css" data-hs-appearance="default"> -->
+  <!--  <link rel="stylesheet" href="./assets/css/docs.min.css" data-hs-appearance="default"> -->
   <link rel="stylesheet" href="./assets/css/theme-dark.min.css" data-hs-appearance="dark">
   <link rel="stylesheet" href="./assets/css/custom.css">
-<!--   <link rel="stylesheet" href="./assets/css/docs-dark.min.css" data-hs-appearance="dark"> -->
+  <!--   <link rel="stylesheet" href="./assets/css/docs-dark.min.css" data-hs-appearance="dark"> -->
 
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>File Manager</title>
+  <style data-hs-appearance-onload-styles>
+    * {
+      transition: unset !important;
+    }
+
+    body {
+      opacity: 0;
+    }
+  </style>
 </head>
 
-<body>
+<body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl footer-offset">
   <div id="root"></div>
 
   <script type="module" src="/src/main.tsx"></script>
-    <!-- JS Global Compulsory  -->
-    <script src="./assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="./assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
-    <script src="./assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-   <!-- JS Implementing Plugins -->
-   <script src="./assets/js/hs.theme-init.js"></script>
+  <!-- JS Global Compulsory  -->
+  <script src="./assets/vendor/jquery/dist/jquery.min.js"></script>
+  <script src="./assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
+  <script src="./assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- JS Implementing Plugins -->
+  <script src="./assets/js/hs.theme-init.js"></script>
 
-    <!-- JS Implementing Plugins -->
-  <script src="./assets/js/hs.theme-appearance.js"></script>
+  <!-- JS Implementing Plugins -->
+  <script defer src="./assets/js/hs.theme-appearance.js"></script>
   <script src="./assets/vendor/hs-header/dist/hs-header.min.js"></script>
   <script src="./assets/vendor/hs-nav-scroller/dist/hs-nav-scroller.min.js"></script>
   <script src="./assets/vendor/list.js/dist/list.min.js"></script>
@@ -60,12 +69,12 @@
   <script src="./assets/vendor/datatables.net.extensions/dataTables.fixedColumns.min.js"></script>
   <script src="./assets/vendor/sortablejs/Sortable.min.js"></script>
   <script src="./assets/vendor/tom-select/dist/js/tom-select.complete.min.js"></script>
-  <script src="./assets/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside.min.js"></script>
+  <script defer src="./assets/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside.min.js"></script>
   <script src="./assets/vendor/hs-file-attach/dist/hs-file-attach.min.js"></script>
   <script src="./assets/vendor/hs-step-form/dist/hs-step-form.min.js"></script>
-  <script  src="./assets/vendor/hs-form-search/dist/hs-form-search.min.js"></script>
-  <script  src="./assets/vendor/dropzone/dist/min/dropzone.min.js"></script>
-  <script  src="./assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
+  <script src="./assets/vendor/hs-form-search/dist/hs-form-search.min.js"></script>
+  <script src="./assets/vendor/dropzone/dist/min/dropzone.min.js"></script>
+  <script src="./assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
   <!-- JS Front -->
   <script src="./assets/js/theme.min.js"></script>
 

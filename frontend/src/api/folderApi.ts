@@ -1,5 +1,5 @@
+import { CreateFolder, ICreateSubFolder, IFile, IFolder, IFolderById, ISubFolder, UpdateFolder } from "@/types";
 import { axiosInstance } from "./axiosInstance";
-import { CreateFolder, IFolder, ISubFolder, IFile, ICreateSubFolder, IFolderById } from "@/types";
 export const createFolderAsync = async (folder: CreateFolder): Promise<number> => {
     const response = await axiosInstance.post('/folders', folder);
     return response.data?.id;
@@ -40,4 +40,8 @@ export const UpdateNameFolder = async (folderId: number, name: string): Promise<
 }
 export const updateStatusFolder = async (folderId: number): Promise<void> => {
     await axiosInstance.patch(`/folders/${folderId}/status`);
+}
+
+export const updateFolder = async (folder: UpdateFolder): Promise<void> => {
+    await axiosInstance.put(`/folders/${folder.id}`,folder);
 }

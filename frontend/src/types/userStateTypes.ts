@@ -3,11 +3,17 @@ export enum UserAction {
     ADD_USER = 'ADD_USER',
     UPDATE_USER = 'UPDATE_USER',
     DELETE_USER = 'DELETE_USER',
+    ADD_USERS = 'ADD_USERS',
   }
   
   interface AddUserAction {
     type: typeof UserAction.ADD_USER;
     payload: IFolderPermission;
+  }
+
+  interface AddUsersAction {
+    type: typeof UserAction.ADD_USERS;
+    payload: IFolderPermission[];
   }
   
   interface UpdateUserAction {
@@ -20,4 +26,4 @@ export enum UserAction {
     payload: number; 
   }
   
-  export type UserActionTypes = AddUserAction | UpdateUserAction | DeleteUserAction;
+  export type UserActionTypes = AddUserAction | UpdateUserAction | DeleteUserAction | AddUsersAction;

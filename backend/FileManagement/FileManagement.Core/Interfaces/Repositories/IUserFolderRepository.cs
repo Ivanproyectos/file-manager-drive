@@ -6,9 +6,10 @@ namespace FileManagement.Core.Interfaces.Repositories
     {
         Task<List<UserFolder>> GetFolderAsync(int FolderId);
         Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId);
-
         Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int UserId, int FolderId);
         Task AddUserFolder(UserFolder userFolder);
         Task AddRangeUsersFolder(List<UserFolder> usersFolder);
+
+        Task RemoveUserFolderRangeASync(List<UserFolder> userFolder);
     }
 }

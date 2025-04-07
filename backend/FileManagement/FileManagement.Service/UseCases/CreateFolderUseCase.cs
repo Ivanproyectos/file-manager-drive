@@ -49,16 +49,16 @@ namespace FileManagement.Service.UseCases
 
                 if (request.AsignedFolder)
                 {
-                    if (!request.folderPermissions.Any())
+                    if (!request.FolderPermissions.Any())
                     {
                         throw new ValidationException("No se asignaron usuarios a la carpeta");
                     }
 
-                    var userFolders = request.folderPermissions
+                    var userFolders = request.FolderPermissions
                           .Select(permission => new UserFolder { FolderId = newFolder.Id, UserId = permission.UserId })
                           .ToList();
 
-                    var folderPermissionsDto = request.folderPermissions.Select(permission =>
+                    var folderPermissionsDto = request.FolderPermissions.Select(permission =>
                     {
                         permission.FolderId = newFolder.Id;
                         return permission;

@@ -14,4 +14,6 @@ export interface IUserSession{
     name: string,
     email: string,
     personType: string
+    roles: string[]
 }
+

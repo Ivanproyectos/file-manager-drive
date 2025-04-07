@@ -34,7 +34,7 @@ namespace FileManagement.Persistence.Repositories
         public Task<List<User>> GetAllUsersAsync()
         {
             return _context.Users.Include(u => u.People)
-                .ToListAsync();
+                               .ToListAsync();
         }
 
         public Task<User?> GetUserByEmailAsync(string email)
@@ -44,7 +44,11 @@ namespace FileManagement.Persistence.Repositories
 
         public async Task<User?> GetUserByIdAsync(int userId)
         {
-            return await _context.Users.Include(u => u.People).FirstOrDefaultAsync(u => u.Id == userId);
+            return await _context.Users
+                .Include(x => x.Roles)
+                .ThenInclude(r => r.Role)
+                .Include(u => u.People)
+                .FirstOrDefaultAsync(u => u.Id == userId);
         }
 
         public async Task UpdateStatusAsync(int userId)

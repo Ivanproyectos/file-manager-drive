@@ -6,9 +6,8 @@ namespace FileManagement.Core.Contracts.Request
     public record struct CreateFolderRequest(
         string Name,
         string Description,
-        int? ParentId, 
-        List<CreateFolderPermissionRequest> folderPermissions, 
-        bool AsignedFolder = false) : IRequest<CreateFolderResponse>
-    {
-    }
+        int? ParentId,
+        List<CreateFolderPermissionRequest> FolderPermissions,
+        bool AsignedFolder = false
+    ) : IRequest<CreateFolderResponse>;
 }

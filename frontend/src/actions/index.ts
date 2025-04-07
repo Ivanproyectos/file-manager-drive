@@ -1,1 +1,2 @@
-export { addUser, updateUser, deleteUser } from './userActions';
+export { authLogin, authLogout } from './authActions';
+export { addUser, addUsers, deleteUser, updateUser } from './userActions';

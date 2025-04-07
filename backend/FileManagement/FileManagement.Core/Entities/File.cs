@@ -5,7 +5,7 @@ namespace FileManagement.Core.Entities
     public class File : AuditableBaseEntity
     {
         public string FileName { get; set; }
-        public string Extension { get; set; }
+        public required string Extension { get; set; }
         public string MimeType { get; set; }
         public long SizeBytes { get; set; }
         public int FolderId { get; set; }
