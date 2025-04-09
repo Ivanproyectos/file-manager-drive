@@ -80,7 +80,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
       const target = event.target as HTMLElement;
       const action = target.dataset.action;
       const folderId = target.dataset.id;
-      debugger;
+
       if (action === "edit") {
         onEdit(Number(folderId));
       } else if (action === "delete") {

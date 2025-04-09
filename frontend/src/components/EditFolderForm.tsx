@@ -146,7 +146,7 @@ export const EditFolderForm = ({
                 )}
               </div>
               <div className="mb-4">
-                <h4 className="text-muted mb-3">
+                <h4 className="mb-3">
                   Miembros del folder
                 </h4>
                 <UserFolderPersmision onUpdateUsers={handleAddUser} initialState={{ users: folderPermissions }} />

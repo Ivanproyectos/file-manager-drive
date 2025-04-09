@@ -6,19 +6,20 @@ import { useNavigate } from 'react-router-dom';
 export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated} = useAuth();
+  
   useEffect(() => {
-    if (!loading && isAuthenticated) {
+    if (isAuthenticated) {
       navigate("/dashboard");
     }
-  }, [isAuthenticated, loading]);
+  }, [isAuthenticated]);
 
   return (
     <main id="content" role="main" className="main">
 
       <div className="position-fixed top-0 end-0 start-0 bg-img-start" style={{ height: '32rem', backgroundImage: 'url(./assets/svg/components/card-6.svg)' }}>
 
-        <div className="shape shape-bottom zi-1">
+               <div className="shape shape-bottom zi-1">
           <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1921 273">
             <polygon fill="#fff" points="0,273 1921,273 1921,0 " />
           </svg>

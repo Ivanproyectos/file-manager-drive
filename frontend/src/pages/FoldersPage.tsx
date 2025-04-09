@@ -7,7 +7,6 @@ import {
 } from "@/api/folderApi";
 import { getFolderPermission } from "@/api/folderPermission";
 import { CreateFolderForm, EditFolderForm, FolderTable, StatusLoadFiles } from "@/components";
-import { useConnectSignalr } from "@/hooks";
 import {
   IFolder,
   IFolderById,
@@ -18,6 +17,8 @@ import {
 } from "@/types";
 import { showConfirm, showError } from "@/utils/alerts";
 import { useEffect, useRef, useState } from "react";
+/* import { useSignalr } from "@/context/SignalrContext";  */
+import { useConnectSignalr } from "@/hooks"; 
 
 declare const bootstrap: any;
 
@@ -33,7 +34,8 @@ export const FoldersPage = () => {
   const [status, setStatus] = useState<StatusUploadFile | null>(null);
   const [folderPermissions, setFolderPermissions] = useState<IFolderPermission[]>([]);
 
-  const { signalr } = useConnectSignalr();
+/*   const { signalr } = useConnectSignalr(); */
+  const signalr = useConnectSignalr();
 
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -141,9 +143,9 @@ export const FoldersPage = () => {
       loadFolder(); 
 
   },[folderIdToEdit]);
-
+  debugger
   useEffect(() => {
-  
+    debugger
     if (signalr) {
       signalr.on("FileUploaded", (response: StatusUploadedFile) => {
      

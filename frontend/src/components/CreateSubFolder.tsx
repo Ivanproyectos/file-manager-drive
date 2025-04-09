@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
-import { FileDropZone, ButtonSubmit} from "@/components";
-import { ICreateSubFolder, ICreateFile } from "@/types";
+import { useState, useRef, useEffect } from "react";
+import { FileDropZone, ButtonSubmit, StatusLoadFiles} from "@/components";
+import { ICreateSubFolder, ICreateFile, StatusUploadFile, StatusUploadedFile } from "@/types";
 import { useForm } from "react-hook-form";
 import { createSubFolder } from "@/api/folderApi";
 import { createFile } from "@/api/files";
 import { showError } from "@/utils/alerts";
+/* import { useSignalr } from "@/context/SignalrContext";  */
+import { useConnectSignalr } from "@/hooks";
 
 declare const bootstrap: any;
 interface Props {
@@ -12,24 +14,30 @@ interface Props {
   isModalOpen: boolean;
   onModalOpen: (isOpen: boolean) => void;
   onCreated: React.Dispatch<React.SetStateAction<boolean>>;
+  onFilesRefresh: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const CreateSubFolder = ({
   folderId,
   isModalOpen,
   onModalOpen,
-  onCreated, 
+  onCreated,
+  onFilesRefresh
 }: Props) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm();
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
     uploadId: null,
   });
+  const [files, setFiles] = useState<string[] | null>(null);
+  const [status, setStatus] = useState<StatusUploadFile | null>(null);
+  const signalr = useConnectSignalr();
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId });
@@ -49,6 +57,7 @@ export const CreateSubFolder = ({
       const file: ICreateFile = { folderId, uploadId };
       await createFile(file);
       handleCloseModal();
+      reset();
       onCreated((preve: boolean) => !preve);
     } catch (error) {
         showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
@@ -61,7 +70,9 @@ export const CreateSubFolder = ({
 
         const file: ICreateFile = { folderId: subFolderId!, uploadId };
         await createFile(file);
-        handleCloseModal();
+        handleCloseModal(); 
+      setFiles(dropzone.files.map((file: any) => file.name));
+      setStatus(StatusUploadFile.LOADING);
       } catch (error) {
         console.error(error);
       }
@@ -75,7 +86,24 @@ export const CreateSubFolder = ({
     modal.hide();
   };
 
+  useEffect(() => {
+    if (signalr) {
+      signalr.on("FileUploaded", (response: StatusUploadedFile) => {
+     
+        setFiles(response.files);
+        setStatus(response.status);
+        onFilesRefresh((prev)=> !prev); 
+      });
+    }
+    return () => {
+      if (signalr) {
+        signalr.off("FileUploaded");
+      }
+    };
+  }, [signalr]);
+
   return (
+    <>
     <div
       ref={modalRef}
       className="modal fade"
@@ -186,5 +214,7 @@ export const CreateSubFolder = ({
         </div>
       </div>
     </div>
+       <StatusLoadFiles filesNames={files} status={status} />
+       </>
   );
 };

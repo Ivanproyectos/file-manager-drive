@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { createFile } from "@/api/files";
 import { ICreateFile, StatusUploadFile, StatusUploadedFile } from "@/types";
 import { showError } from "@/utils/alerts";
-import { useConnectSignalr } from "@/hooks";
+/* import { useSignalr } from "@/context/SignalrContext";  */
+ import { useConnectSignalr } from "@/hooks"; 
 
 declare const bootstrap: any;
 interface Props {
@@ -27,7 +28,7 @@ export const UploadFileManager = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const [files, setFiles] = useState<string[] | null>(null);
   const [status, setStatus] = useState<StatusUploadFile | null>(null);
-  const { signalr } = useConnectSignalr();
+  const  signalr  = useConnectSignalr();
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId });
@@ -60,10 +61,11 @@ export const UploadFileManager = ({
     const modal = bootstrap.Modal.getInstance(modalRef.current);
     modal.hide();
   };
-
+ 
   useEffect(() => {
-  
+
     if (signalr) {
+      debugger;
       signalr.on("FileUploaded", (response: StatusUploadedFile) => {
      
         setFiles(response.files);
@@ -72,6 +74,7 @@ export const UploadFileManager = ({
       });
     }
     return () => {
+      debugger;
       if (signalr) {
         signalr.off("FileUploaded");
       }

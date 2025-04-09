@@ -23,3 +23,4 @@ export { UserFoderList } from './UserFoderList';
 export { UserFolderPersmision } from './UserFolderPersmision';
 export { UserTable } from './UserTable';
 export { FileItemSkeleton } from './skeletons/FileItemSkeleton';
+export { SearchFilterFiles } from './SearchFilterFiles';

@@ -52,21 +52,17 @@ export const FolderList = ({
   };
 
   const handleSaveName = (id: number, name: string) => {
+    let newFolderName = "";
     const updatedFolders = localFolders.map((folder) => {
       if (folder.id === id) {
-        return { ...folder, name, isUpdated: false };
+        newFolderName = name ? name : folder.name;
+        return { ...folder, name: newFolderName, isUpdated: false };
       }
       return folder;
     });
     setLocalFolders(updatedFolders);
-    onUpdateName(id, name);
+    onUpdateName(id, newFolderName);
   };
-
-  /* const handleDeleteFolder = (folderId: number) => {
-    const updatedFolders = folders.filter((folder) => folder.id !== folderId);
-    setLocalFolders(updatedFolders);
-    onDelete(folderId);
-  }; */
 
   return (
     <>
