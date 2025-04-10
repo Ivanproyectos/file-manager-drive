@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { FileDropZone, ButtonSubmit, StatusLoadFiles} from "@/components";
+import { FileDropZone, ButtonSubmit, StatusLoadFiles } from "@/components";
 import { ICreateSubFolder, ICreateFile, StatusUploadFile, StatusUploadedFile } from "@/types";
 import { useForm } from "react-hook-form";
 import { createSubFolder } from "@/api/folderApi";
 import { createFile } from "@/api/files";
 import { showError } from "@/utils/alerts";
 /* import { useSignalr } from "@/context/SignalrContext";  */
-import { useConnectSignalr } from "@/hooks";
+/* import { useConnectSignalr } from "@/hooks"; */
 
 declare const bootstrap: any;
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   isModalOpen: boolean;
   onModalOpen: (isOpen: boolean) => void;
   onCreated: React.Dispatch<React.SetStateAction<boolean>>;
-  onFilesRefresh: React.Dispatch<React.SetStateAction<boolean>>
+  onUploadedFiles: (filesNames: string[]) => void;
 }
 
 export const CreateSubFolder = ({
@@ -22,7 +22,7 @@ export const CreateSubFolder = ({
   isModalOpen,
   onModalOpen,
   onCreated,
-  onFilesRefresh
+  onUploadedFiles
 }: Props) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const {
@@ -35,10 +35,8 @@ export const CreateSubFolder = ({
     dropzone: null,
     uploadId: null,
   });
-  const [files, setFiles] = useState<string[] | null>(null);
-  const [status, setStatus] = useState<StatusUploadFile | null>(null);
-  const signalr = useConnectSignalr();
-
+  /*   const signalr = useConnectSignalr();
+   */
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId });
   };
@@ -60,22 +58,21 @@ export const CreateSubFolder = ({
       reset();
       onCreated((preve: boolean) => !preve);
     } catch (error) {
-        showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
+      showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
     }
 
     try {
-        const { uploadId, dropzone } = dropzoneInstance;
-        
-        if(dropzone.files.length === 0) return 
+      const { uploadId, dropzone } = dropzoneInstance;
 
-        const file: ICreateFile = { folderId: subFolderId!, uploadId };
-        await createFile(file);
-        handleCloseModal(); 
-      setFiles(dropzone.files.map((file: any) => file.name));
-      setStatus(StatusUploadFile.LOADING);
-      } catch (error) {
-        console.error(error);
-      }
+      if (dropzone.files.length === 0) return
+
+      const file: ICreateFile = { folderId: subFolderId!, uploadId };
+      await createFile(file);
+      handleCloseModal();
+      onUploadedFiles(dropzone.files.map((file: any) => file.name));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -86,122 +83,121 @@ export const CreateSubFolder = ({
     modal.hide();
   };
 
-  useEffect(() => {
-    if (signalr) {
-      signalr.on("FileUploaded", (response: StatusUploadedFile) => {
-     
-        setFiles(response.files);
-        setStatus(response.status);
-        onFilesRefresh((prev)=> !prev); 
-      });
-    }
-    return () => {
+  /*   useEffect(() => {
       if (signalr) {
-        signalr.off("FileUploaded");
+        signalr.on("FileUploaded", (response: StatusUploadedFile) => {
+       
+          setFiles(response.files);
+          setStatus(response.status);
+          onFilesRefresh((prev)=> !prev); 
+        });
       }
-    };
-  }, [signalr]);
-
+      return () => {
+        if (signalr) {
+          signalr.off("FileUploaded");
+        }
+      };
+    }, [signalr]);
+   */
   return (
     <>
-    <div
-      ref={modalRef}
-      className="modal fade"
-      id="newFolderModal"
-      tabIndex={-1}
-      aria-labelledby="newFolderModalLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered modal-lg">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="newProjectModalLabel">
-              Nuevo folder
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="modal-body">
-            <form
-              onSubmit={handleSubmit(handleCreateSubFolder)}
-              id="newSubFolder"
-            >
-              <div className="mb-4">
-                <label htmlFor="nameSubfolder" className="form-label">
-                  Folder{" "}
-                  <i
-                    className="bi-question-circle text-body ms-1"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Displayed on public forums, such as Front."
-                  ></i>
-                </label>
+      <div
+        ref={modalRef}
+        className="modal fade"
+        id="newFolderModal"
+        tabIndex={-1}
+        aria-labelledby="newFolderModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="newProjectModalLabel">
+                Nuevo folder
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form
+                onSubmit={handleSubmit(handleCreateSubFolder)}
+                id="newSubFolder"
+              >
+                <div className="mb-4">
+                  <label htmlFor="nameSubfolder" className="form-label">
+                    Folder{" "}
+                    <i
+                      className="bi-question-circle text-body ms-1"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Displayed on public forums, such as Front."
+                    ></i>
+                  </label>
 
-                <div className="js-form-message">
-                  <input
-                    {...register("name", { required: true })}
-                    type="text"
-                    className={`form-control ${
-                      errors.name ? "is-invalid" : ""
-                    }`}
-                    name="name"
-                    id="nameSubfolder"
-                    placeholder="Ingrese el nombre del folder"
-                    aria-label="Ingrese el nombre del folder"
-                    required
-                    data-msg="Nombre de folder es requerido."
-                  />
-                  {errors.name && (
-                    <span className="invalid-feedback">
-                      Nombre del folder es requerido
-                    </span>
+                  <div className="js-form-message">
+                    <input
+                      {...register("name", { required: true })}
+                      type="text"
+                      className={`form-control ${errors.name ? "is-invalid" : ""
+                        }`}
+                      name="name"
+                      id="nameSubfolder"
+                      placeholder="Ingrese el nombre del folder"
+                      aria-label="Ingrese el nombre del folder"
+                      required
+                      data-msg="Nombre de folder es requerido."
+                    />
+                    {errors.name && (
+                      <span className="invalid-feedback">
+                        Nombre del folder es requerido
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/*End Form */}
+
+                <div className="mb-4">
+                  <label className="form-label">
+                    Descripción{" "}
+                    <span className="form-label-secondary">(Optional)</span>
+                  </label>
+                  <div className="js-form-message">
+                    <textarea
+                      {...register("description")}
+                      className="form-control"
+                      name="description"
+                      placeholder="Ingrese una descripción"
+                      aria-label="Ingrese una descripción"
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <label className="form-label">Adjuntar archivos</label>
+                  {isModalOpen && (
+                    <FileDropZone
+                      validate={true}
+                      onGetUploadId={handleDropzone}
+                    />
                   )}
                 </div>
-              </div>
-
-              {/*End Form */}
-
-              <div className="mb-4">
-                <label className="form-label">
-                  Descripción{" "}
-                  <span className="form-label-secondary">(Optional)</span>
-                </label>
-                <div className="js-form-message">
-                  <textarea
-                    {...register("description")}
-                    className="form-control"
-                    name="description"
-                    placeholder="Ingrese una descripción"
-                    aria-label="Ingrese una descripción"
-                  ></textarea>
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="form-label">Adjuntar archivos</label>
-                {isModalOpen && (
-                  <FileDropZone
-                    validate={true}
-                    onGetUploadId={handleDropzone}
-                  />
-                )}
-              </div>
-            </form>
-          </div>
-          <div className="modal-footer">
-            <button
-              onClick={handleCloseModal}
-              type="button"
-              className="btn btn-white"
-              /*       data-bs-dismiss="modal" */
-              aria-label="Close"
-            >
-              Cancelar
-            </button>
-           {/*  <button
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                onClick={handleCloseModal}
+                type="button"
+                className="btn btn-white"
+                /*       data-bs-dismiss="modal" */
+                aria-label="Close"
+              >
+                Cancelar
+              </button>
+              {/*  <button
               disabled={!isValid}
               form="newSubFolder"
               type="submit"
@@ -209,12 +205,11 @@ export const CreateSubFolder = ({
             >
               Crear folder 
             </button> */}
-            <ButtonSubmit title="Crear folder" formName="newSubFolder" isSubmitting={isSubmitting} />
+              <ButtonSubmit title="Crear folder" formName="newSubFolder" isSubmitting={isSubmitting} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-       <StatusLoadFiles filesNames={files} status={status} />
-       </>
+    </>
   );
 };

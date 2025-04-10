@@ -1,3 +1,5 @@
+import { formatISO, parse } from 'date-fns';
+
 export const convertDateToLocaleString = (isoDate: string): string => {
     const date = new Date(isoDate);
     
@@ -12,4 +14,9 @@ export const convertDateToLocaleString = (isoDate: string): string => {
       hour12: false // Usar formato de 24 horas
     });
     return friendlyDateWithTime;
+}
+
+export const convertDateStringToIso = (dateString: string): string => {
+     if(dateString) return formatISO(parse(dateString, 'dd/MM/yyyy', new Date()));
+     return ""
 }

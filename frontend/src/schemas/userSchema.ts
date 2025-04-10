@@ -4,9 +4,17 @@ import { CreateUser, PersonType, UpdateUser } from '@/types';
 
 
 export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
-    password: yup.string().required('La contraseña es obligatoria').min(6, 'La contraseña debe tener al menos 6 caracteres'),
-    confirmPassword: yup.string().required('La confirmación de la contraseña es obligatoria').oneOf([yup.ref('password')], 'Las contraseñas no coinciden'),
+   /*  password: yup.string().required('La contraseña es obligatoria').min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    confirmPassword: yup.string().required('La confirmación de la contraseña es obligatoria').oneOf([yup.ref('password')], 'Las contraseñas no coinciden'), */
     status: yup.boolean(),
+    roles: yup.array().min(1, 'Debes seleccionar al menos un rol').required('Los roles son obligatorios'),
+    isExpired: yup.boolean().required('La fecha de espiración es obligatoria'),
+    expirationDate: yup.string()
+    .when('isExpired', {
+      is: true,
+      then: (schema) => schema.required('La fecha de espiración es obligatoria'),
+    }),
+     
     people: yup.object({
         phone: yup.number()
         .typeError('El teléfono debe ser un número')
@@ -49,6 +57,14 @@ export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
 
 export const updateUserSchema:  yup.ObjectSchema<UpdateUser>  = yup.object({
   id: yup.number(),
+  roles: yup.array().min(1, 'Debes seleccionar al menos un rol').required('Los roles son obligatorios'),
+  isExpired: yup.boolean().required('La fecha de espiración es obligatoria'),
+  expirationDate: yup.string()
+  .when('isExpired', {
+    is: true,
+    then: (schema) => schema.required('La fecha de espiración es obligatoria'),
+  }),
+   
   people: yup.object({
       phone: yup.number()
       .typeError('El teléfono debe ser un número')

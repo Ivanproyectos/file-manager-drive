@@ -1,12 +1,14 @@
-import { CreatePerson, Person } from "@/types";
+import { CreatePerson, Person, RoleId } from "@/types";
 
 export interface IUser {
   id?: number;
   userName: string;
-  password: string;
+  /* password: string; */
   status?: boolean
   people: Person;
-  roles: string[];
+  isExpired: boolean
+  expirationDate?: string | null;
+  roles?: RoleId[];
 }
 
 export interface IUserSummary {
@@ -16,11 +18,11 @@ export interface IUserSummary {
   personType: string;
 }
 export type CreateUser = Omit<IUser, "id" | "userName" | "people"> & {
-  confirmPassword: string;
+  /* confirmPassword: string; */
   people: CreatePerson
 }
 
-export type UpdateUser = Omit<IUser, "status"| "password"| "userName" | "people"> & {
+export type UpdateUser = Omit<IUser, "status"| "password"| "userName" | "people" > & {
   people: CreatePerson
 }
 

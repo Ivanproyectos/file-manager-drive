@@ -1,85 +1,58 @@
 import { PersonType } from "@/types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createUserSchema } from "@/schemas";
-import { CreateUser, RoleId } from "@/types";
-import { RolList } from "./RolList";
-import { useEffect, useState, useRef } from "react";
-
-declare const HSCore: any;
-
-interface CreateUserFormProps {
+import { updateUserSchema } from "@/schemas";
+import { UpdateUser, IUser } from "@/types";
+import { useEffect } from "react";
+interface UpdateUserFormProps {
   modalRef: React.RefObject<HTMLDivElement | null>;
-  onSubmit: (user: CreateUser) => Promise<boolean>
+  user: IUser | null;
+  onSubmit : (user: UpdateUser) => void;
+  
 }
-export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
-  const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([]);
-  const inputDateRef = useRef<HTMLInputElement | null>(null);
+
+export const EditUserForm = ({ modalRef, user,  onSubmit }: UpdateUserFormProps) => {
   const {
     register,
     handleSubmit,
     watch,
     reset,
     setValue,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<CreateUser>({
-    resolver: yupResolver(createUserSchema),
+    formState: { errors, isSubmitting },
+  } = useForm<UpdateUser>({
+    resolver: yupResolver(updateUserSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: {
-      people: {
-        personType: PersonType.Natural
-      }
-    }
+    defaultValues: user ?? {},
   });
 
   const personType = watch("people.personType");
-  const identification = watch("people.identification");
-  const isExpired = watch("isExpired");
 
-  const handleUserSubmit = async (user: CreateUser) => {
-   const result = await onSubmit(user);
-   if(!result) return;
+  const onUpdateSubmit = async (user: UpdateUser) => {
+   await onSubmit(user);
     reset()
   };
 
-  useEffect(() => {
-    setValue("roles", selectedRoles);
-  }, [selectedRoles]);
-
-  useEffect(() => {
-    if (isExpired) {
-      HSCore.components.HSFlatpickr.init(inputDateRef.current, {
-        onChange: function (
-          _selectedDates: Array<Date>,
-          dateStr: string,
-          _instance: any,
-        ) {
-          setValue("expirationDate", dateStr);
-        },
-      });
-    } else {
-      setValue("expirationDate", '');
-    }
-
-  }, [isExpired]);
+ useEffect(() => {
+  reset(user ?? {});
+  setValue('id', user?.id ?? 0);
+ },[user])
 
 
   return (
-
     <div
       ref={modalRef}
       className="modal fade"
-      id="createUserModal"
+      id="editUserModal"
       tabIndex={-1}
-      aria-labelledby="createUserModal"
+      aria-labelledby="editUserModal"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="uploadFilesModalLabel">
-              Nuevo usuario
+            <h5 className="modal-title">
+              Actualizar usuario
             </h5>
             <button
               type="button"
@@ -89,22 +62,21 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
             ></button>
           </div>
           <div className="modal-body">
-
-            <form onSubmit={handleSubmit(handleUserSubmit)} id="createUserForm">
+            <form onSubmit={handleSubmit(onUpdateSubmit)} id="updateUserForm">
               <h4 className="text-muted mb-3">Informacion personal</h4>
               <div className="mb-4">
                 <label htmlFor="projectNameNewProjectLabel" className="form-label">
                   Tipo persona{" "}
                 </label>
                 <div className="input-group input-group-sm-vertical">
-                  <label className="form-control" htmlFor="userAccountTypeRadio1">
+                  <label className="form-control" htmlFor="userUpdateNatural">
                     <span className="form-check">
                       <input
                         {...register("people.personType")}
                         type="radio"
                         className="form-check-input"
                         value={PersonType.Natural}
-                        id="userAccountTypeRadio1"
+                        id="userUpdateNatural"
                         defaultChecked
                       />
                       <span className="form-check-label">
@@ -113,13 +85,13 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                     </span>
                   </label>
 
-                  <label className="form-control" htmlFor="userAccountTypeRadio2">
+                  <label className="form-control" htmlFor="userUpdateJuridico">
                     <span className="form-check">
                       <input
                         {...register("people.personType")}
                         type="radio"
                         className="form-check-input"
-                        id="userAccountTypeRadio2"
+                        id="userUpdateJuridico"
                         value={PersonType.Juridico}
 
                       />
@@ -272,106 +244,6 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                 </div>
                 {errors.people?.address && <span className="invalid-feedback">{errors.people?.address?.message}</span>}
               </div>
-              <div className="mb-4">
-                <h4 className="text-muted mb-3">Agregue permisos para el usuario</h4>
-                <RolList onSelected={setSelectedRoles} />
-                {errors.roles && <span className="invalid-feedback">{errors.roles?.message}</span>}
-              </div>
-
-              <div className="row">
-                <div className="col-sm-6">
-                  <div className="mb-4">
-                    <div className="form-check form-switch mb-4">
-                      <input
-                        {...register("isExpired")}
-                        type="checkbox"
-                        className="form-check-input" id="input-isExpired" name="isExpired" />
-                      <label className="form-check-label" htmlFor="input-isExpired"> ¿ La contrasena expira ?</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  {/*     <label
-                    htmlFor="expirationDate"
-                    className="form-label"
-                  >
-                    Fecha de expiración
-                  </label>
- */}
-                  {isExpired && (
-                    <>
-                      <div className="mb-4">
-                        <input
-                          {...register("expirationDate")}
-                          ref={inputDateRef}
-                          id="expirationDate"
-                          type="text"
-                          className={`form-control js-flatpickr flatpickr-custom ${errors.expirationDate ? "is-invalid" : ""}`}
-                          data-hs-flatpickr-options='{
-                            "dateFormat": "d/m/Y"
-                            }'
-                          placeholder="Ingrese fecha de expiración"
-                          aria-label="Ingrese el telefono"
-                        />
-                        {errors.expirationDate && <span className="invalid-feedback">{errors.expirationDate.message}</span>}
-                      </div>
-                    </>
-
-                  )}
-
-                </div>
-              </div>
-
-              {identification && (
-                <>
-                  <div className="alert alert-soft-primary" role="alert">
-                    <i className="bi-info-circle me-2"></i> La contrasena por defecto para este usuario es: <strong>{identification}</strong>
-                  </div>
-                </>
-              )}
-
-              {/*     <hr />
-              <h4 className="text-muted mb-3">Credenciales de acceso</h4>
-              <div className="mb-4">
-                <label htmlFor="password" className="form-label">
-                  Contrasena{" "}
-                </label>
-                <div className={`input-group input-group-merge ${errors.password ? "is-invalid" : ""}`}>
-                  <div className="input-group-prepend input-group-text">
-                    <i className="bi-lock"></i>
-                  </div>
-                  <input
-                    {...register("password")}
-                    id="password"
-                    type="text"
-                    className="form-control"
-                    placeholder="Ingrese una contraseña"
-                    aria-label="Ingrese una contraseña"
-                  />
-
-                </div>
-                {errors.password && <span className="invalid-feedback">{errors.password.message}</span>}
-              </div>
-              <div className="mb-4">
-                <label htmlFor="confirmPassword" className="form-label">
-                  Repita la contrasena{" "}
-                </label>
-                <div className={`input-group input-group-merge ${errors.confirmPassword ? "is-invalid" : ""}`}>
-                  <div className="input-group-prepend input-group-text">
-                    <i className="bi-lock"></i>
-                  </div>
-                  <input
-                    {...register("confirmPassword")}
-                    type="text"
-                    id="confirmPassword"
-                    className="form-control"
-                    placeholder="Repita la contraseña"
-                    aria-label="Repita la contraseña"
-                  />
-                </div>
-                {errors.confirmPassword && <span className="invalid-feedback">{errors.confirmPassword.message}</span>}
-              </div> */}
 
             </form>
           </div>
@@ -387,8 +259,8 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
             <button
               type="submit"
               className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
-              form="createUserForm"
-              disabled={!isValid && selectedRoles.length === 0}
+              form="updateUserForm"
+              disabled={isSubmitting}
 
             >
               <div
@@ -404,7 +276,6 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
         </div>
       </div>
     </div>
-
 
   );
 };

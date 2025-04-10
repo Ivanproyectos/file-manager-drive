@@ -6,11 +6,15 @@ import { SignalrProvider } from './context/SignalrContext';
 function App() {
 
   return (
+
     <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <SignalrProvider>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </SignalrProvider>
     </BrowserRouter>
+
   );
 }
 

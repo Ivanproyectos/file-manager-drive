@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [authState, dispach] = useReducer(authReducer, {}, initAuth);
 
-
   const login = (
     authToken: string,
     expiresIn: number,

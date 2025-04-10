@@ -3,6 +3,7 @@ import { getUsers, removeUser, updateStatus } from "@/api/users";
 import { IUser, PersonType, Person } from "@/types";
 import { useInitTomSelect, useClientDataTable } from "@/hooks";
 import { formatPersonName } from "@/utils/formatPeople";
+import { convertDateToLocaleString } from "@/utils/dateFormat";
 
 interface UserListProps {
   onUpdateUserId: (userId: number) => void;
@@ -14,6 +15,23 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
   const [users, setUsers] = useState<IUser[]>([]);
   const [refresh, setRefresh] = useState(false);
   const tableRef = useRef<HTMLTableElement>(null);
+
+  const getExpirationBadge = (user: IUser) => {
+    if (user.isExpired) {
+      const expirationDate = new Date(user.expirationDate || '');
+      const currentDate = new Date();
+
+      if (expirationDate < currentDate) {
+        return '<span class="badge bg-soft-danger text-danger">Expirado</span>';
+      }
+
+      return `<span class="badge bg-soft-warning text-warning">${convertDateToLocaleString(
+        user.expirationDate || ''
+      )}</span>`;
+    }
+
+    return '<span class="badge bg-soft-success text-success">No expira</span>';
+  };
 
   const columns = [
     {
@@ -42,6 +60,10 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
     },
     { data: "people.identification" },
     {
+      data: null,
+      render: getExpirationBadge,
+    },
+    {
       data: "status",
       render: (status: boolean) =>
         status
@@ -55,8 +77,8 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
       render: (user: any) => `
       <div class="d-flex align-items-center gap-2">
         <div class="form-check form-switch">
-            <input type="checkbox" class="form-check-input" id="formSwitch${user.id}" data-action="status" data-id="${user.id}" ${user.status? 'checked' : ''}>
-            <label class="form-check-label" for="formSwitch${user.id}"></label>
+            <input type="checkbox" class="form-check-input" id="user-status-${user.id}" data-action="status" data-id="${user.id}" ${user.status? 'checked' : ''}>
+            <label class="form-check-label" for="user-status-${user.id}"></label>
         </div>
         <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
         data-id="${user.id}" data-bs-target="#editUserModal">
@@ -72,6 +94,8 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
   ];
 
    useClientDataTable({ tableRef, columns, data: users });
+
+
 
   const handleRemove = async (id: number) => {
     await removeUser(id);
@@ -311,6 +335,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
               <th>Nombre</th>
               <th>Tipo</th>
               <th>Identificación</th>
+              <th>Expiración</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>

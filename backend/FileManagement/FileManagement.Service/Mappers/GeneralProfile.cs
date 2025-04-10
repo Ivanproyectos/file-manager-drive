@@ -52,7 +52,9 @@ namespace FileManagement.Service.Mappers
             #region dto to entity
             CreateMap<CreateFolderRequest, Folder>();
             CreateMap<CreateUserRequest, User>()
+                .ForMember(dest => dest.Roles, opt => opt.Ignore())
                 .ForMember(dest => dest.People, opt => opt.Ignore());
+
             CreateMap<CreatePeopleRequest, People>();
             CreateMap<UpdatePeopleRequest, People>();
             CreateMap<CreateFolderPermissionRequest, FolderPermission>();

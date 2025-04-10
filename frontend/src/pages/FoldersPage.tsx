@@ -17,8 +17,8 @@ import {
 } from "@/types";
 import { showConfirm, showError } from "@/utils/alerts";
 import { useEffect, useRef, useState } from "react";
-/* import { useSignalr } from "@/context/SignalrContext";  */
-import { useConnectSignalr } from "@/hooks"; 
+import { useSignalr } from "@/context/SignalrContext";
+/* import { useConnectSignalr } from "@/hooks";  */
 
 declare const bootstrap: any;
 
@@ -26,17 +26,17 @@ export const FoldersPage = () => {
   const [folders, setFolders] = useState<IFolder[]>([]);
   const [folder, setFolder] = useState<IFolderById | null>(null);
   const [folderIdToEdit, setfolderIdToEdit] = useState<number | null>(null);
-  /*   const [refresh, setRefresh] = useState(false); */
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [fileNames, setfileNames] = useState<string[] | null>(null);
-  const [status, setStatus] = useState<StatusUploadFile | null>(null);
   const [folderPermissions, setFolderPermissions] = useState<IFolderPermission[]>([]);
 
-/*   const { signalr } = useConnectSignalr(); */
-  const signalr = useConnectSignalr();
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [statusUploaded, setStatusUploaded] = useState<StatusUploadFile | null>(null);
 
+  const { signalr } = useSignalr();
+  /*   const signalr = useConnectSignalr();
+   */
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -72,13 +72,13 @@ export const FoldersPage = () => {
   };
 
   const hanldeUpdateFolder = async (folder: UpdateFolder) => {
-    try{
+    try {
       const isAccepted = await showConfirm("¿Está seguro de actualizar la carpeta?");
-      if(!isAccepted) {
+      if (!isAccepted) {
 
-       await updateFolder(folder);
-      setRefresh((prev) => !prev);
-      return;
+        await updateFolder(folder);
+        setRefresh((prev) => !prev);
+        return;
       }
     } catch (error) {
       console.error(error);
@@ -86,7 +86,7 @@ export const FoldersPage = () => {
     }
   };
 
-  
+
 
   const hanldeEditFolder = (folderId: number) => {
     setIsModalEditOpen(true);
@@ -98,7 +98,7 @@ export const FoldersPage = () => {
       setIsModalOpen(false);
     }, 100);
   };
-  
+
   const handleCloseEditModal = () => {
     setTimeout(() => {
       setIsModalEditOpen(false);
@@ -106,10 +106,10 @@ export const FoldersPage = () => {
   };
 
   const handleUploadFiles = (filesNames: string[]) => {
-    setfileNames(filesNames);
-    setStatus(StatusUploadFile.LOADING);
+    setUploadedFiles(filesNames);
+    setStatusUploaded(StatusUploadFile.LOADING);
   }
-  
+
 
   useEffect(() => {
 
@@ -132,36 +132,34 @@ export const FoldersPage = () => {
       try {
         const folder = await getFolderByIdAsync(folderIdToEdit);
         const folderPermission = await getFolderPermission(folderIdToEdit);
- 
+
         setFolder(folder);
         setFolderPermissions(folderPermission);
       }
-      catch (error) { 
+      catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-      loadFolder(); 
+    loadFolder();
 
-  },[folderIdToEdit]);
-  debugger
+  }, [folderIdToEdit]);
+
   useEffect(() => {
-    debugger
     if (signalr) {
-      signalr.on("FileUploaded", (response: StatusUploadedFile) => {
-     
-        setfileNames(response.files);
-        setStatus(response.status);
+      signalr?.on("FileUploaded", (response: StatusUploadedFile) => {
+        debugger;
+        setUploadedFiles(response.files);
+        setStatusUploaded(response.status);
         setRefresh((prev) => !prev);
       });
     }
     return () => {
+
       if (signalr) {
         signalr.off("FileUploaded");
       }
     };
   }, [signalr]);
-
-
   return (
     <>
       <div className="content container-fluid">
@@ -311,7 +309,7 @@ export const FoldersPage = () => {
         onCloseModal={handleCloseEditModal}
         onSubmit={hanldeUpdateFolder}
       />
-      <StatusLoadFiles filesNames={fileNames} status={status} />
+      <StatusLoadFiles filesNames={uploadedFiles} status={statusUploaded} />
     </>
   );
 };

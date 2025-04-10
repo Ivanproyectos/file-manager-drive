@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FileManagement.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InicitalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -291,7 +291,10 @@ namespace FileManagement.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PeopleId = table.Column<int>(type: "int", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Status = table.Column<bool>(type: "BIT", maxLength: 500, nullable: false, defaultValue: true),
+                    Status = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
+                    IsExpired = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
+                    HasChangedPassword = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -386,31 +389,31 @@ namespace FileManagement.Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "Peoples",
                 columns: new[] { "Id", "Address", "BussinessName", "CreatedAt", "CreatedBy", "DeletedAt", "Email", "FirstName", "Identification", "LastName", "PersonType", "Phone", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 5, 20, 44, 33, 705, DateTimeKind.Local).AddTicks(4070), null, null, "ivanperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
+                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 9, 17, 4, 19, 66, DateTimeKind.Local).AddTicks(777), null, null, "ivanperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "RoleName", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 5, 20, 44, 33, 705, DateTimeKind.Local).AddTicks(6977), 1, null, "Administrador", "Admin", null, null },
-                    { 2, new DateTime(2025, 4, 5, 20, 44, 33, 705, DateTimeKind.Local).AddTicks(6983), 1, null, "Usuario", "User", null, null }
+                    { 1, new DateTime(2025, 4, 9, 17, 4, 19, 66, DateTimeKind.Local).AddTicks(5125), 1, null, "Administrador", "Admin", null, null },
+                    { 2, new DateTime(2025, 4, 9, 17, 4, 19, 66, DateTimeKind.Local).AddTicks(5137), 1, null, "Usuario", "User", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "SourceProviders",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "ProviderName", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 6, 1, 44, 33, 706, DateTimeKind.Utc).AddTicks(4317), 1, null, "Google Drive Provider", "Google Drive", null, null });
+                values: new object[] { 1, new DateTime(2025, 4, 9, 22, 4, 19, 67, DateTimeKind.Utc).AddTicks(4482), 1, null, "Google Drive Provider", "Google Drive", null, null });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 5, 20, 44, 33, 707, DateTimeKind.Local).AddTicks(7278), null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 5, 20, 44, 33, 707, DateTimeKind.Local).AddTicks(7282), null });
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "ExpirationDate", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy" },
+                values: new object[] { 1, new DateTime(2025, 4, 9, 17, 4, 19, 69, DateTimeKind.Local).AddTicks(3073), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 9, 17, 4, 19, 69, DateTimeKind.Local).AddTicks(3086), null });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "RoleId", "UpdatedAt", "UpdatedBy", "UserId" },
-                values: new object[] { 1, new DateTime(2025, 4, 5, 20, 44, 33, 708, DateTimeKind.Local).AddTicks(5700), 1, null, 1, null, null, 1 });
+                values: new object[] { 1, new DateTime(2025, 4, 9, 17, 4, 19, 70, DateTimeKind.Local).AddTicks(6628), 1, null, 1, null, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilePermissions_FileId",
@@ -445,10 +448,9 @@ namespace FileManagement.Persistence.Migrations
                 column: "FolderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FolderPermissions_UserId_FolderId",
+                name: "IX_FolderPermissions_UserId",
                 table: "FolderPermissions",
-                columns: new[] { "UserId", "FolderId" },
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Folders_ParentFolderId",
@@ -512,10 +514,9 @@ namespace FileManagement.Persistence.Migrations
                 column: "FolderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserFolders_UserId_FolderId",
+                name: "IX_UserFolders_UserId",
                 table: "UserFolders",
-                columns: new[] { "UserId", "FolderId" },
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",

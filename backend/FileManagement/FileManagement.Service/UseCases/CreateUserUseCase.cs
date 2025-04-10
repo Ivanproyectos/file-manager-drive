@@ -44,11 +44,12 @@ namespace FileManagement.Service.UseCases
 
                 var user = _mapper.Map<User>(request);
 
-                user.PasswordHash = _passwordService.HashPassword(request.Password);
+                user.PasswordHash = _passwordService.HashPassword(request.People.Identification);
 
                 user.PeopleId = people.Id;
                 user.People = null;
-
+                user.Roles =  request.Roles.Select(x => new UserRole { UserId = user.Id, RoleId = x })
+                    .ToList();
                 await _userRepository.AddUserAsync(user);
 
                 await _unitOfWork.CommitAsync();

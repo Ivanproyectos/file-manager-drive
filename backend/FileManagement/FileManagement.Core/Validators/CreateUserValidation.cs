@@ -11,14 +11,17 @@ namespace FileManagement.Core.Validators
             //        .NotEmpty().WithMessage("El User Name es obligatorio")
             //        .MaximumLength(100).WithMessage("El User Name no puede superar los {MaxLength} caracteres");
 
-            RuleFor(x => x.Password)
-                    .NotEmpty().WithMessage("El Password es obligatorio")
-                    .MaximumLength(100).WithMessage("El Password no puede superar los {MaxLength} caracteres");
+            //RuleFor(x => x.Password)
+            //        .NotEmpty().WithMessage("El Password es obligatorio")
+            //        .MaximumLength(100).WithMessage("El Password no puede superar los {MaxLength} caracteres");
 
-            RuleFor(x => x.ConfirmPassword)
-                    .NotEmpty().WithMessage("El campo repetir password es obligatorio")
-                    .MaximumLength(100).WithMessage("El correo no puede superar los {MaxLength} caracteres")
-                    .Equal(x => x.Password).WithMessage("Las contraseñas no coinciden");
+            //RuleFor(x => x.ConfirmPassword)
+            //        .NotEmpty().WithMessage("El campo repetir password es obligatorio")
+            //        .MaximumLength(100).WithMessage("El correo no puede superar los {MaxLength} caracteres")
+            //        .Equal(x => x.Password).WithMessage("Las contraseñas no coinciden");
+            RuleFor(x => x.Roles)
+                .NotNull().WithMessage("Los roles son obligatorios.")
+                .NotEmpty().WithMessage("Debe haber al menos un rol.");
 
             RuleFor(x => x.People)
                 .NotNull().WithMessage("Los datos de la persona son obligatorios.")

@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { deleteFolder , UpdateNameFolder} from "@/api/folderApi";
+import { deleteFolder, UpdateNameFolder } from "@/api/folderApi";
 import {
   FolderList,
   FileList,
   UploadFileManager,
   CreateSubFolder,
-  SearchFilterFiles
+  SearchFilterFiles, 
+  StatusLoadFiles
 } from "@/components";
 import { useFolderContent, useFolderBreadcrumbs } from "@/hooks";
 import { useInitTomSelect } from "@/hooks/useInitTomSelect";
 import { showError, showConfirm } from "@/utils/alerts";
+import { StatusUploadedFile, StatusUploadFile } from "@/types";
+import { useSignalr } from "@/context/SignalrContext";
 
-declare const bootstrap: any;
 export const FolderManagerPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -23,19 +25,17 @@ export const FolderManagerPage = () => {
   const [isModalFilesOpen, setIsModalFilesOpen] = useState(false);
   const [folderRefresh, setFolderRefresh] = useState(false);
   const [fileRefresh, setFileRefresh] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [statusUploaded, setStatusUploaded] = useState<StatusUploadFile | null>(null);
   const [filter, setFilter] = useState("");
 
   useInitTomSelect();
 
-  const openUploadFilesModal = () => {
-    setIsModalFilesOpen(true);
-  };
-
-  const { 
-    handleNavigateToSubfolder, 
-    handleGoBackToFolder, 
+  const {
+    handleNavigateToSubfolder,
+    handleGoBackToFolder,
     setBreadcrumbs,
-    folderId, 
+    folderId,
     breadcrumbs } = useFolderBreadcrumbs(Number(id));
 
   const { setFolders, files, folders, loadingFiles } = useFolderContent({
@@ -43,13 +43,18 @@ export const FolderManagerPage = () => {
     folderRefresh,
     fileRefresh,
   });
+  const { signalr } = useSignalr();
+
+  const openUploadFilesModal = () => {
+    setIsModalFilesOpen(true);
+  };
 
   const foldersFiltered = folders.filter((folder) => folder.name.toLowerCase().includes(filter.toLowerCase()));
   const FilesFiltered = files.filter((file) => file.fileName.toLowerCase().includes(filter.toLowerCase()));
-  
+
 
   const handleDeleteFolder = async (folderId: number) => {
-  
+
     try {
       const result = await showConfirm("¿Estas seguro de eliminar esta carpeta?");
       if (!result) return;
@@ -60,8 +65,8 @@ export const FolderManagerPage = () => {
     } catch (error) {
       console.error(error);
       showError("Error al eliminar la carpeta, vuelva a intentalor mas tarde");
-    } finally{
-    /*   setFolderRefresh((prev) => !prev); */
+    } finally {
+      /*   setFolderRefresh((prev) => !prev); */
     }
   };
 
@@ -74,9 +79,14 @@ export const FolderManagerPage = () => {
     } catch (error) {
       console.error(error);
       showError("Error al cambiar el nombre de la carpeta, vuelva a intentalor mas tarde");
-    } finally{
-    /*   setFolderRefresh((prev) => !prev); */
+    } finally {
+      /*   setFolderRefresh((prev) => !prev); */
     }
+  };
+
+  const handelUploadedFiles = (filesNames : string[]) => {
+    setStatusUploaded(StatusUploadFile.LOADING);
+    setUploadedFiles(filesNames)
   };
 
   useEffect(() => {
@@ -87,6 +97,23 @@ export const FolderManagerPage = () => {
     };
     setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
   }, []);
+
+  useEffect(() => {
+    if (signalr) {
+      signalr?.on("FileUploaded", (response: StatusUploadedFile) => {
+        debugger;
+        setUploadedFiles(response.files);
+        setStatusUploaded(response.status);
+        setFileRefresh((prev) => !prev);
+      });
+    }
+    return () => {
+
+      if (signalr) {
+        signalr.off("FileUploaded");
+      }
+    };
+  }, [signalr]);
 
   return (
     <>
@@ -114,14 +141,14 @@ export const FolderManagerPage = () => {
               </nav>
 
               <h1 className="page-header-title mb-2">Files</h1>
-              <div className="d-flex align-items-center gap-2">
+              <div className="d-flex align-items-center gap-4">
                 <div>
-                  <i className="bi-folder me-1"></i>
-                  <strong>2</strong> Folders
+                  <i className="bi-folder me-2"></i>
+                  <strong>{folders.length}</strong> Folders
                 </div>
                 <div>
-                  <i className="bi-files me-1"></i>
-                  <strong>3</strong> Archivos
+                  <i className="bi-files me-2"></i>
+                  <strong>{files.length}</strong> Archivos
                 </div>
               </div>
             </div>
@@ -237,7 +264,7 @@ export const FolderManagerPage = () => {
       </div>
 
       <CreateSubFolder
-        onFilesRefresh={setFileRefresh}
+        onUploadedFiles={handelUploadedFiles}
         onCreated={setFolderRefresh}
         folderId={folderId}
         isModalOpen={isModalSubFolderOpen}
@@ -247,8 +274,9 @@ export const FolderManagerPage = () => {
         folderId={folderId}
         isModalOpen={isModalFilesOpen}
         setIsModalOpen={setIsModalFilesOpen}
-        onFilesRefresh={setFileRefresh}
+        onUploadedFiles={handelUploadedFiles}
       />
+         <StatusLoadFiles filesNames={uploadedFiles} status={statusUploaded} />
     </>
   );
 };

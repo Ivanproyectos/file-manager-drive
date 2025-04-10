@@ -9,6 +9,8 @@ namespace FileManagement.Core.Contracts.Dtos
     public record  struct UserDto(
      int Id,
      bool Status,
+     bool IsExpired,
+     DateTime? ExpirationDate,
      PeopleDto People, 
      List<string> Roles
      );

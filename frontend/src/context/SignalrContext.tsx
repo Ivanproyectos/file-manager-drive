@@ -1,63 +1,55 @@
-import React, { createContext, useContext, useState, useEffect, useReducer} from 'react';
-import { HubConnection } from '@microsoft/signalr'; 
+import React, { createContext, useContext, useState, useEffect, useReducer } from 'react';
+import { HubConnection } from '@microsoft/signalr';
 import signalRService from '@/services/signalrService';
 import { signalrReducer } from '@/reducers/signalrReducer';
 
-const SignalrContext = createContext<HubConnection | null>(null);
 
-  const init = async () => {
-    await signalRService.connect();
-    return signalRService.connection
-  }
+interface SignalrContextValue {
+  signalr: HubConnection | null;
+  loading: boolean;
+}
+
+const SignalrContext = createContext<SignalrContextValue>({ signalr: null, loading: true });
 
 export const SignalrProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [signalr, dispach] = useState(signalRService);
-    const [loading, setLoading] = useState(true);
+  const [signalr, setSignalr] = useState<HubConnection | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    debugger;
+  useEffect(() => {
+    const setupConnection = async () => {
+      try {
+        setLoading(true);
+        if(signalr) return
 
+        await signalRService.connect();
+        setSignalr(signalRService.connection);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al conectar con SignalR:", error);
+      }
+    };
 
-  /*   useEffect(() => {
+    setupConnection();
+
+ /*    return () => {
       debugger;
-      let isMounted = true; // Para evitar actualizar el estado si el componente se desmontó
+      setSignalr(null);
+      signalRService.disconnect();
+    }; */
+  }, []);
 
-      const setupConnection = async () => {
-          try {
-              await signalRService.connect();
-              
-              if (isMounted) {
-                  setSignalr(signalRService.connection);
-                  setLoading(false);
-              }
-          } catch (error) {
-              console.error("Error al conectar con SignalR:", error);
-              if (isMounted) {
-                  setLoading(false);
-              }
-          }
-      };
+  return (
+    <SignalrContext.Provider value={{ signalr, loading}}>
+      {children}
+    </SignalrContext.Provider>
+  );
+};
 
-      setupConnection();
-  
-      return () => {
-        debugger;
-        signalRService.disconnect();
-      };
-    }, []); */
-   
-    return (
-      <SignalrContext.Provider value={signalr}>
-        {children}
-      </SignalrContext.Provider>
-    );
-  };
-  
-  export const useSignalr = (): HubConnection | null => {
-    debugger;
-    const context = useContext(SignalrContext);
-    if (!context) {
-      throw new Error('useSignalr must be used within a SignalrProvider');
-    }
-    return context;
-  };
+export const useSignalr = (): SignalrContextValue => {
+  const context = useContext(SignalrContext);
+  if (!context) {
+    throw new Error('useSignalr must be used within a SignalrProvider');
+  }
+  return context;
+};

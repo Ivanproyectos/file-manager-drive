@@ -1,34 +1,76 @@
-import { UserTable, CreateUserForm, UpdateUserForm } from "@/components";
+import { UserTable, CreateUserForm, EditUserForm } from "@/components";
 import { useState,useEffect, useRef } from "react";
+import  * as api from "@/api/users";
+import { showError } from "@/utils/alerts";
+import { CreateUser, UpdateUser, IUser } from "@/types";
+import { convertDateStringToIso } from "@/utils/dateFormat";
+
 
 declare const bootstrap: any;
 
 export const UsersPage = () => {
-  const modalUpdateRef = useRef<HTMLDivElement>(null);
-  const modalCreateRef = useRef<HTMLDivElement>(null);
-  const [isCompleteUpdate, setIsCompleteUpdate] = useState(false);
-  const [isCompleteCreate, setIsCompleteCreate] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const modalUpdateRef = useRef<HTMLDivElement | null >(null);
+  const modalCreateRef = useRef<HTMLDivElement | null>(null);
   const [userId, setUserId] = useState(0);
+  const [userById, setUserById] = useState<IUser | null>(null);
   const [isReload, setIsReload] = useState(false);
 
-  useEffect(() => { 
-    if (isCompleteUpdate) {
-       const modal = bootstrap.Modal.getInstance(modalUpdateRef.current);
-       modal.hide();
-       setIsCompleteUpdate(false)
-       setIsReload((prev) => !prev);
-    }
-  }, [isCompleteUpdate]);
 
-  useEffect(() => { 
-    if (isCompleteCreate) {
-       const modal = bootstrap.Modal.getInstance(modalCreateRef.current);
-       modal.hide();
-       setIsCompleteCreate(false)
-       setIsReload((prev) => !prev);
+  const handleCreateUser = async (user: CreateUser) : Promise<boolean> => {
+   try {
+       const bussinessName = user.people.bussinessName;
+        user.people.identification = user.people.identification.toString();
+        user.people.phone = user.people.phone.toString();
+        user.people.bussinessName = bussinessName ? bussinessName : '';
+        user.expirationDate = convertDateStringToIso(user.expirationDate || '');
+        await api.addUser(user);
+        setIsReload((prev) => !prev);
+        closeModlal(modalCreateRef);
+        return true;
+      }
+      catch (error) {
+        console.error("Error al crear el usuario:", error);
+        showError("Ocurrio un error al crear el usuario, vuelva a intentalor mas tarde");
+        return false;
+      }
+  };
+
+  const handleUpdateUser = async (user: UpdateUser) => {
+    try {
+      const bussinessName = user.people.bussinessName;
+      user.people.identification = user.people.identification.toString();
+      user.people.phone = user.people.phone.toString();
+      user.people.bussinessName = bussinessName ? bussinessName : '';
+      await api.updateUser(user);
+      setIsReload((prev) => !prev);
+      closeModlal(modalUpdateRef);
     }
-  }, [isCompleteCreate]);
+    catch (error) {
+      console.error("Error al actualizar el usuario:", error);
+      showError("Ocurrio un error al actualizar el usuario, vuelva a intentalor mas tarde");
+    }
+  };
+
+  const closeModlal = (ref : React.RefObject<HTMLDivElement | null > ) => {
+    const modal = bootstrap.Modal.getInstance(ref.current);
+    modal.hide();
+  }
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const user = await api.getUserById(userId);
+        setUserById(user);
+      } catch (error) {
+        console.error("Error al actualizar el usuario:", error);
+        showError("Error al actualizar el usuario, vuelva a intentalor mas tarde");
+      }
+    };
+    if (userId) {
+      loadUser();
+    }
+  }, [userId]);
+
 
   return (
     <>
@@ -163,114 +205,10 @@ export const UsersPage = () => {
         {/*End Tab Content */}
       </div>
 
-      <div
-        ref={modalCreateRef}
-        className="modal fade"
-        id="createUserModal"
-        tabIndex={-1}
-        aria-labelledby="createUserModal"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="uploadFilesModalLabel">
-                Nuevo usuario
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <CreateUserForm onIsSubmitting={setIsSubmitting} onCreateComplete={setIsCompleteCreate} />
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
-                form="createUserForm"
-                disabled={isSubmitting}
-
-              >
-                <div
-                  className="spinner-border text-light status-spinner"
-                  role="status"
-                  hidden={!isSubmitting}
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                Guardar cambios
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        ref={modalUpdateRef}
-        className="modal fade"
-        id="editUserModal"
-        tabIndex={-1}
-        aria-labelledby="editUserModal"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">
-                Actualizar usuario
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <UpdateUserForm onIsSubmitting={setIsSubmitting} onUpdateComplete={setIsCompleteUpdate} userId={userId} />
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
-                form="updateUserForm"
-                disabled={isSubmitting}
-
-              >
-                <div
-                  className="spinner-border text-light status-spinner"
-                  role="status"
-                  hidden={!isSubmitting}
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                Guardar cambios
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <CreateUserForm modalRef={modalCreateRef} onSubmit={handleCreateUser} />
+      <EditUserForm user={userById} modalRef={modalUpdateRef} onSubmit={handleUpdateUser} />
+      
+     
     </>
   );
 };

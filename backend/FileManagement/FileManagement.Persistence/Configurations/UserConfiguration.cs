@@ -1,4 +1,5 @@
-﻿using FileManagement.Core.Entities;
+﻿using System.Xml;
+using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,11 +16,26 @@ namespace FileManagement.Persistence.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Status)
-                .HasColumnType("BIT") // Para SQL Server
+                .HasColumnType("BIT")
                 .HasConversion<bool>().IsRequired()
-                .HasDefaultValue(true)
-                .HasMaxLength(500)
+                .HasDefaultValue(false)
                 .IsRequired();
+
+            builder.Property(x => x.IsExpired)
+                .HasColumnType("BIT") 
+                .HasConversion<bool>().IsRequired()
+                .HasDefaultValue(false)
+                .IsRequired();
+
+            builder.Property(x => x.HasChangedPassword)
+                .HasColumnType("BIT")
+                .HasConversion<bool>().IsRequired()
+                .HasDefaultValue(false)
+                .IsRequired();
+
+            builder.Property(x => x.ExpirationDate)
+                .IsRequired(false);
+
 
             builder.Property(x => x.PasswordHash)
                   .HasMaxLength(500)
