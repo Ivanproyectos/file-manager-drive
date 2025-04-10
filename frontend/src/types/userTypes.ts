@@ -1,4 +1,4 @@
-import { CreatePerson, Person, RoleId } from "@/types";
+import { CreatePerson, Person, IRole } from "@/types";
 
 export interface IUser {
   id?: number;
@@ -8,7 +8,7 @@ export interface IUser {
   people: Person;
   isExpired: boolean
   expirationDate?: string | null;
-  roles?: RoleId[];
+  roles?: IRole[];
 }
 
 export interface IUserSummary {
@@ -17,13 +17,15 @@ export interface IUserSummary {
   email: string;
   personType: string;
 }
-export type CreateUser = Omit<IUser, "id" | "userName" | "people"> & {
+export type CreateUser = Omit<IUser, "id" | "userName" | "people" | "roles"> & {
   /* confirmPassword: string; */
   people: CreatePerson
+  roles?: number[];
 }
 
-export type UpdateUser = Omit<IUser, "status"| "password"| "userName" | "people" > & {
+export type UpdateUser = Omit<IUser, "status"| "password"| "userName" | "people" | "roles" > & {
   people: CreatePerson
+  roles?: number[];
 }
 
 

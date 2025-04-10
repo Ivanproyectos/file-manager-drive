@@ -13,4 +13,5 @@ export { UserAction } from "./userStateTypes";
 export type { UserActionTypes } from "./userStateTypes";
 export type { CreateUser, IUser, IUserSummary, UpdateUser } from "./userTypes";
 export { RoleId } from "./rolTypes";
+export type { IRole } from "./rolTypes";
 

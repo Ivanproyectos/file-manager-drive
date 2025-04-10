@@ -1,5 +1,5 @@
 import { AuthorizedForRole } from "@/components";
-import { Role } from "@/types/rolTypes";
+import { RoleName } from "@/types/rolTypes";
 import { Link } from "react-router-dom";
 
 export const NavBar = () => {
@@ -76,7 +76,7 @@ export const NavBar = () => {
               <div id="navbarVerticalMenuPagesMenu">
 
 
-                <AuthorizedForRole allowedRoles={[Role.ADMIN]}>
+                <AuthorizedForRole allowedRoles={[RoleName.ADMIN]}>
                   <div className="nav-item">
                     <a
                       className="nav-link dropdown-toggle "
@@ -112,7 +112,7 @@ export const NavBar = () => {
                   </div>
                 </AuthorizedForRole>
 
-                <AuthorizedForRole allowedRoles={[Role.ADMIN]}>
+                <AuthorizedForRole allowedRoles={[RoleName.ADMIN]}>
                   <div className="nav-item">
                     <a
                       className="nav-link dropdown-toggle "
@@ -163,7 +163,7 @@ export const NavBar = () => {
                 </AuthorizedForRole>
               </div>
 
-              <AuthorizedForRole allowedRoles={[Role.ADMIN, Role.USER]}>
+              <AuthorizedForRole allowedRoles={[RoleName.ADMIN, RoleName.USER]}>
                 <div className="nav-item">
                   <Link className="nav-link " to="/dashboard/user-folders" data-placement="left">
                     <i className="bi-stickies nav-icon"></i>

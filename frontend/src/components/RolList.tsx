@@ -4,7 +4,7 @@ import { RoleId } from '@/types';
 const roles = [
     {
         id: RoleId.ADMIN,
-        icon: "bi bi-shield-lock-fill",
+        icon: "bi bi-shield-lock",
         name: "administrador",
         description : "Permisos para gestionar todos los archivos"
     },

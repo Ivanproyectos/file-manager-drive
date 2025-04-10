@@ -33,7 +33,7 @@ export const LoginForm = () => {
             name: formatPersonName(user.people),
             email: user.people.email,
             personType : user.people.personType, 
-            roles: user.roles
+            roles: user.roles?.map(role => role.roleName) || []
         }
         login(response.token,response.expiresIn, userSession);
         navigate("/dashboard");

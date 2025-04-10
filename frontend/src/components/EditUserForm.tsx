@@ -2,19 +2,25 @@ import { PersonType } from "@/types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { updateUserSchema } from "@/schemas";
-import { UpdateUser, IUser } from "@/types";
-import { useEffect } from "react";
+import { UpdateUser, IUser, RoleId } from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { RolList } from "@/components";
+
+declare const HSCore: any;
 interface UpdateUserFormProps {
   modalRef: React.RefObject<HTMLDivElement | null>;
   user: IUser | null;
-  onSubmit : (user: UpdateUser) => void;
-  
+  onSubmit: (user: UpdateUser) => Promise<boolean>;
+
 }
 
-export const EditUserForm = ({ modalRef, user,  onSubmit }: UpdateUserFormProps) => {
+export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) => {
+  const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([]);
+  const inputDateRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
     handleSubmit,
+    trigger,
     watch,
     reset,
     setValue,
@@ -23,20 +29,58 @@ export const EditUserForm = ({ modalRef, user,  onSubmit }: UpdateUserFormProps)
     resolver: yupResolver(updateUserSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: user ?? {},
   });
 
   const personType = watch("people.personType");
+  const isExpired = watch("isExpired");
+
+  debugger;
 
   const onUpdateSubmit = async (user: UpdateUser) => {
-   await onSubmit(user);
+
+   const result = await onSubmit(user);
+    if (!result) return;
     reset()
   };
 
- useEffect(() => {
-  reset(user ?? {});
-  setValue('id', user?.id ?? 0);
- },[user])
+  useEffect(() => {
+    setValue("roles", selectedRoles);
+  }, [selectedRoles]);
+
+  useEffect(() => {
+
+    const initialRoles = user?.roles?.map(role => role.id) ?? [];
+    const initialState = { ...user, roles: initialRoles };
+    reset(initialState);
+    setValue('id', user?.id ?? 0);
+    setSelectedRoles(initialRoles);
+
+    if (inputDateRef.current) {
+      debugger;
+      inputDateRef.current.value = user?.expirationDate ?? "";
+    }
+
+  }, [user, inputDateRef]);
+
+  useEffect(() => {
+  /*   if (isExpired) {
+      setValue("expirationDate", user?.expirationDate ?? "");
+    }  */
+       HSCore.components.HSFlatpickr.init(inputDateRef.current, {
+        minDate: "today", 
+        onChange: function (
+          _selectedDates: Array<Date>,
+          dateStr: string,
+          _instance: any,
+        ) {
+          setValue("expirationDate", dateStr);
+          trigger("expirationDate");
+        },
+      });
+
+
+  }, [user, isExpired]);
+
 
 
   return (
@@ -244,6 +288,57 @@ export const EditUserForm = ({ modalRef, user,  onSubmit }: UpdateUserFormProps)
                 </div>
                 {errors.people?.address && <span className="invalid-feedback">{errors.people?.address?.message}</span>}
               </div>
+
+              <div className="mb-4">
+                <h4 className="text-muted mb-3">Agregue permisos para el usuario</h4>
+                <RolList onSelected={setSelectedRoles} selectedRoles={selectedRoles} />
+                {errors.roles && <span className="invalid-feedback">{errors.roles?.message}</span>}
+              </div>
+
+              <div className="mb-4">
+                <div className="form-check form-switch d-flex justify-content-between p-0">
+                  <label className="form-check-label" htmlFor="input-isExpired"> ¿ El acceso expira ?</label>
+                  <input
+                    {...register("isExpired")}
+                    type="checkbox"
+                    className="form-check-input" id="input-isExpired" name="isExpired" />
+
+                </div>
+              </div>
+           {/*    <div className="mb-4">
+                <div className="form-check form-switch d-flex justify-content-between p-0">
+                  <label className="l"> fecha</label>
+                  <input
+                     {...register("expirationDate")}
+                    type="text"
+                    className="form-control"  name="expirationDate" />
+
+                </div>
+              </div>  */}
+              {isExpired && (
+                <div className="mb-4">
+                  <div className={`input-group input-group-merge ${errors.expirationDate ? "is-invalid" : ""}`}  >
+                    <div className="input-group-prepend input-group-text">
+                      <i className="bi-calendar"></i>
+                    </div>
+                    <input
+
+                      {...register("expirationDate")}
+                       ref={inputDateRef} 
+                      id="expirationDate-update"
+                      type="text"
+                      className={`form-control ${errors.expirationDate ? "is-invalid" : ""}`}
+                      data-hs-flatpickr-options='{
+                                          "dateFormat": "d/m/Y"
+                                          }'
+                      placeholder="Ingrese fecha de expiración"
+                      aria-label="Ingrese fecha de expiración"
+                    />
+
+                  </div>
+                  {errors.expirationDate && <span className="invalid-feedback">{errors.expirationDate.message}</span>}
+                </div>
+              )}
 
             </form>
           </div>

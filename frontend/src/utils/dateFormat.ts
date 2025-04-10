@@ -1,4 +1,4 @@
-import { formatISO, parse } from 'date-fns';
+import { formatISO, parse, format } from 'date-fns';
 
 export const convertDateToLocaleString = (isoDate: string): string => {
     const date = new Date(isoDate);
@@ -20,3 +20,9 @@ export const convertDateStringToIso = (dateString: string): string => {
      if(dateString) return formatISO(parse(dateString, 'dd/MM/yyyy', new Date()));
      return ""
 }
+
+export const convertIsoDateToString = (isoDate: string): string => {
+  if(!isoDate) return "";
+  const date = new Date(isoDate);
+  return format(date, 'dd/MM/yyyy');
+};

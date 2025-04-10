@@ -12,7 +12,7 @@ namespace FileManagement.Core.Contracts.Dtos
      bool IsExpired,
      DateTime? ExpirationDate,
      PeopleDto People, 
-     List<string> Roles
+     List<RoleDto> Roles
      );
 
 }

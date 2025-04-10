@@ -21,6 +21,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
     watch,
     reset,
     setValue,
+    trigger,
     formState: { errors, isSubmitting, isValid },
   } = useForm<CreateUser>({
     resolver: yupResolver(createUserSchema),
@@ -38,8 +39,8 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
   const isExpired = watch("isExpired");
 
   const handleUserSubmit = async (user: CreateUser) => {
-   const result = await onSubmit(user);
-   if(!result) return;
+    const result = await onSubmit(user);
+    if (!result) return;
     reset()
   };
 
@@ -50,12 +51,14 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
   useEffect(() => {
     if (isExpired) {
       HSCore.components.HSFlatpickr.init(inputDateRef.current, {
+        minDate: "today",
         onChange: function (
           _selectedDates: Array<Date>,
           dateStr: string,
           _instance: any,
         ) {
           setValue("expirationDate", dateStr);
+          trigger("expirationDate");
         },
       });
     } else {
@@ -278,51 +281,41 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                 {errors.roles && <span className="invalid-feedback">{errors.roles?.message}</span>}
               </div>
 
-              <div className="row">
-                <div className="col-sm-6">
-                  <div className="mb-4">
-                    <div className="form-check form-switch mb-4">
-                      <input
-                        {...register("isExpired")}
-                        type="checkbox"
-                        className="form-check-input" id="input-isExpired" name="isExpired" />
-                      <label className="form-check-label" htmlFor="input-isExpired"> ¿ La contrasena expira ?</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  {/*     <label
-                    htmlFor="expirationDate"
-                    className="form-label"
-                  >
-                    Fecha de expiración
-                  </label>
- */}
-                  {isExpired && (
-                    <>
-                      <div className="mb-4">
-                        <input
-                          {...register("expirationDate")}
-                          ref={inputDateRef}
-                          id="expirationDate"
-                          type="text"
-                          className={`form-control js-flatpickr flatpickr-custom ${errors.expirationDate ? "is-invalid" : ""}`}
-                          data-hs-flatpickr-options='{
-                            "dateFormat": "d/m/Y"
-                            }'
-                          placeholder="Ingrese fecha de expiración"
-                          aria-label="Ingrese el telefono"
-                        />
-                        {errors.expirationDate && <span className="invalid-feedback">{errors.expirationDate.message}</span>}
-                      </div>
-                    </>
-
-                  )}
+              <div className="mb-4">
+                <div className="form-check form-switch d-flex justify-content-between p-0">
+                  <label className="form-check-label" htmlFor="input-isExpired"> ¿ El acceso expira ?</label>
+                  <input
+                    {...register("isExpired")}
+                    type="checkbox"
+                    className="form-check-input" id="input-isExpired" name="isExpired" />
 
                 </div>
               </div>
+              {isExpired && (
+                <div className="mb-4">
+                  <div className={`input-group input-group-merge ${errors.expirationDate ? "is-invalid" : ""}`}  >
+                    <div className="input-group-prepend input-group-text">
+                      <i className="bi-calendar"></i>
+                    </div>
+                    <input
 
+                      {...register("expirationDate")}
+                      ref={inputDateRef}
+                      id="expirationDate"
+                      type="text"
+                      className={`form-control js-flatpickr flatpickr-custom ${errors.expirationDate ? "is-invalid" : ""}`}
+                      data-hs-flatpickr-options='{
+                            "dateFormat": "d/m/Y"
+                            }'
+                      placeholder="Ingrese fecha de expiración"
+                      aria-label="Ingrese fecha de expiración"
+                    />
+                    
+                  </div>
+                  {errors.expirationDate && <span className="invalid-feedback">{errors.expirationDate.message}</span>}
+                </div>
+              )}
+  
               {identification && (
                 <>
                   <div className="alert alert-soft-primary" role="alert">

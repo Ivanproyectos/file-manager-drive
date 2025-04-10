@@ -3,7 +3,7 @@ import { useState,useEffect, useRef } from "react";
 import  * as api from "@/api/users";
 import { showError } from "@/utils/alerts";
 import { CreateUser, UpdateUser, IUser } from "@/types";
-import { convertDateStringToIso } from "@/utils/dateFormat";
+import { convertDateStringToIso, convertIsoDateToString } from "@/utils/dateFormat";
 
 
 declare const bootstrap: any;
@@ -35,19 +35,22 @@ export const UsersPage = () => {
       }
   };
 
-  const handleUpdateUser = async (user: UpdateUser) => {
+  const handleUpdateUser = async (user: UpdateUser) : Promise<boolean> => {
     try {
       const bussinessName = user.people.bussinessName;
       user.people.identification = user.people.identification.toString();
       user.people.phone = user.people.phone.toString();
       user.people.bussinessName = bussinessName ? bussinessName : '';
+      user.expirationDate = convertDateStringToIso(user.expirationDate || '');
       await api.updateUser(user);
       setIsReload((prev) => !prev);
       closeModlal(modalUpdateRef);
+      return true;
     }
     catch (error) {
       console.error("Error al actualizar el usuario:", error);
       showError("Ocurrio un error al actualizar el usuario, vuelva a intentalor mas tarde");
+      return false;
     }
   };
 
@@ -57,18 +60,18 @@ export const UsersPage = () => {
   }
 
   useEffect(() => {
+    if (!userId || userId === 0) return
     const loadUser = async () => {
       try {
         const user = await api.getUserById(userId);
+        user.expirationDate = convertIsoDateToString(user.expirationDate ?? '');
         setUserById(user);
       } catch (error) {
         console.error("Error al actualizar el usuario:", error);
         showError("Error al actualizar el usuario, vuelva a intentalor mas tarde");
       }
     };
-    if (userId) {
-      loadUser();
-    }
+    loadUser();
   }, [userId]);
 
 

@@ -27,9 +27,13 @@ namespace FileManagement.Service.Mappers
              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.People.PersonType == PersonTypes.Natural ? src.People.FirstName + " " + src.People.LastName : src.People.BussinessName))
              .ForMember(dest => dest.PersonType, opt => opt.MapFrom(src => src.People.PersonType));
 
-            CreateMap<User, UserDto>()
-                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(x => x.Role.RoleName)
-                 .ToList()));
+            CreateMap<User, UserDto>();
+                 //.ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(x => x.Role.RoleName)
+                 //.ToList()));
+
+            CreateMap<UserRole, RoleDto>()
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Role.Id));
 
             CreateMap<Core.Entities.File, FileDto>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt));
