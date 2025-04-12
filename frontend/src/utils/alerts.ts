@@ -1,15 +1,15 @@
-import Swal from 'sweetalert2';
-import Cookies from 'js-cookie';
+import Swal from 'sweetalert2'
+import Cookies from 'js-cookie'
 
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const theme = Cookies.get('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+const theme = Cookies.get('theme')
 
 const defualtSettigs = {
   customClass: {
     confirmButton: 'btn btn-primary',
     cancelButton: 'btn btn-white',
-    popup: theme == 'dark' ? 'popup-dark' : '' ,
-  }
+    popup: theme == 'dark' ? 'popup-dark' : '',
+  },
 }
 export const showSuccess = (msg: string) =>
   Swal.fire({
@@ -18,10 +18,14 @@ export const showSuccess = (msg: string) =>
     text: msg,
     //timer: 5000,
     showConfirmButton: true,
-    ...defualtSettigs
-  });
+    confirmButtonText: 'Aceptar',
+    ...defualtSettigs,
+  })
 
-export const showError = (msg: string, title: string = 'Algo no funcionó como esperábamos') =>
+export const showError = (
+  msg: string,
+  title: string = 'Algo no funcionó como esperábamos'
+) =>
   Swal.fire({
     icon: 'error',
     title: title,
@@ -31,15 +35,15 @@ export const showError = (msg: string, title: string = 'Algo no funcionó como e
     ...defualtSettigs,
     customClass: {
       confirmButton: 'btn btn-danger',
-    }
-  });
+    },
+  })
 
 export const showInfo = (msg: string) =>
   Swal.fire({
     icon: 'info',
     title: 'Info',
     text: msg,
-  });
+  })
 
 export const showConfirm = (msg: string): Promise<boolean> =>
   Swal.fire({
@@ -49,5 +53,5 @@ export const showConfirm = (msg: string): Promise<boolean> =>
     showCancelButton: true,
     confirmButtonText: 'Aceptar',
     cancelButtonText: 'Cancelar',
-    ...defualtSettigs
-  }).then((result) => result.isConfirmed);
+    ...defualtSettigs,
+  }).then((result) => result.isConfirmed)

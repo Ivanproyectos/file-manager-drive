@@ -25,11 +25,11 @@ namespace FileManagement.Service.Services
             _unitOfWork = unitOfWork;
             _passwordService = passwordService;
         }
-        public async Task DeleteUserAsync(int Id)
+        public async Task DeleteUserAsync(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(Id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
-                throw new KeyNotFoundException($"usuario con el id {Id} no existe");
+                throw new KeyNotFoundException($"usuario con el id {id} no existe");
 
             await _userRepository.DeleteUserAsync(user);
             await _unitOfWork.SaveChangesAsync();
@@ -47,21 +47,31 @@ namespace FileManagement.Service.Services
             return _mapper.Map<List<UserSummaryResponse>>(users);
         }
 
-        public async Task<UserDto> GetUserByIdAsync(int Id)
+        public async Task<UserDto> GetUserByIdAsync(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(Id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
-                    throw new KeyNotFoundException($"usuario con el id {Id} no existe");
-
-            //var userDto = _mapper.Map<UserDto>(user);
-            //userDto.Password = _passwordService.VerifyPassword(user.Password);
-
+                    throw new KeyNotFoundException($"usuario con el id {id} no existe");
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task UpdateStatusAsync(int Id)
+        public async Task ResetPasswordAsync(int id)
         {
-            await _userRepository.UpdateStatusAsync(Id);
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"usuario con el id {id} no existe");
+            }
+
+            user.PasswordHash = _passwordService.HashPassword(user.People.Identification);
+
+            await _userRepository.UpdateUserAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task UpdateStatusAsync(int id)
+        {
+            await _userRepository.UpdateStatusAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
     }

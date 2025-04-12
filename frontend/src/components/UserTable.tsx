@@ -1,51 +1,55 @@
-import { useEffect, useState, useRef } from "react";
-import { getUsers, removeUser, updateStatus } from "@/api/users";
-import { IUser, PersonType, Person } from "@/types";
-import { useInitTomSelect, useClientDataTable } from "@/hooks";
-import { formatPersonName } from "@/utils/formatPeople";
-import { convertDateToLocaleString } from "@/utils/dateFormat";
+import { useEffect, useState, useRef, Dispatch } from 'react'
+import * as api from '@/api/users'
+import { IUser, PersonType, Person } from '@/types'
+import { useInitTomSelect, useClientDataTable } from '@/hooks'
+import { formatPersonName } from '@/utils/formatPeople'
+import { convertDateToLocaleString } from '@/utils/dateFormat'
+import { showSuccess, showConfirm } from '@/utils/alerts'
 
 interface UserListProps {
-  onUpdateUserId: (userId: number) => void;
-  isReload: boolean
+  users: IUser[]
+  onUpdateUserId: (userId: number) => void
+  onReload: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
-  useInitTomSelect();
-  const [users, setUsers] = useState<IUser[]>([]);
-  const [refresh, setRefresh] = useState(false);
-  const tableRef = useRef<HTMLTableElement>(null);
+export const UserTable = ({
+  onUpdateUserId,
+  users,
+  onReload,
+}: UserListProps) => {
+  useInitTomSelect()
+  const tableRef = useRef<HTMLTableElement>(null)
 
   const getExpirationBadge = (user: IUser) => {
     if (user.isExpired) {
-      const expirationDate = new Date(user.expirationDate || '');
-      const currentDate = new Date();
+      const expirationDate = new Date(user.expirationDate || '')
+      const currentDate = new Date()
 
       if (expirationDate < currentDate) {
-        return '<span class="badge bg-soft-danger text-danger">Expirado</span>';
+        return '<span class="badge bg-soft-danger text-danger">Expirado</span>'
       }
 
       return `<span class="badge bg-soft-warning text-warning">${convertDateToLocaleString(
         user.expirationDate || ''
-      )}</span>`;
+      )}</span>`
     }
 
-    return '<span class="badge bg-soft-success text-success">No expira</span>';
-  };
+    return '<span class="badge bg-soft-success text-success">No expira</span>'
+  }
 
   const columns = [
     {
-      data: "people",
+      data: 'people',
       render: (people: Person) => `
         <div
         class="d-flex align-items-center"
         >
         <div class="avatar avatar-soft-primary avatar-circle">
-          <span class="avatar-initials">A</span>
+          <span class="avatar-initials">${formatPersonName(people).charAt(0)}</span>
         </div>
         <div class="ms-3">
           <span class="d-block h5 text-inherit mb-0">
-            ${ formatPersonName(people) }
+            ${formatPersonName(people)}
           </span>
           <span class="d-block fs-5 text-body">
           ${people.email}
@@ -55,16 +59,16 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
     `,
     },
     {
-      data: "people.personType",
-      render: (personType: PersonType) => (personType ? "Natural" : "Juridica"),
+      data: 'people.personType',
+      render: (personType: PersonType) => (personType ? 'Natural' : 'Juridica'),
     },
-    { data: "people.identification" },
+    { data: 'people.identification' },
     {
       data: null,
       render: getExpirationBadge,
     },
     {
-      data: "status",
+      data: 'status',
       render: (status: boolean) =>
         status
           ? `<span class="legend-indicator bg-success"></span> Activo`
@@ -72,82 +76,91 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
     },
     {
       data: null,
-      label: "Acciones",
+      label: 'Acciones',
       orderable: false,
       render: (user: any) => `
       <div class="d-flex align-items-center gap-2">
         <div class="form-check form-switch">
-            <input type="checkbox" class="form-check-input" id="user-status-${user.id}" data-action="status" data-id="${user.id}" ${user.status? 'checked' : ''}>
+            <input type="checkbox" class="form-check-input" id="user-status-${user.id}" data-action="status" data-id="${user.id}" ${user.status ? 'checked' : ''}>
             <label class="form-check-label" for="user-status-${user.id}"></label>
         </div>
-        <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
-        data-id="${user.id}" data-bs-target="#editUserModal">
-              <i class="bi-pencil-fill me-1"></i> Editar
-        </button>
-          <button type="button" class="btn btn-white btn-sm" data-action="delete" 
-          data-bs-toggle="modal" data-id="${user.id}" >
-          <i class="bi-trash me-1"></i> Eliminar
-        </button>
+
+      <div class="btn-group" role="group">
+          <a class="btn btn-white btn-sm" href="javascript:void(0);" data-action="edit" data-bs-toggle="modal" 
+          data-id="${user.id}" data-bs-target="#editUserModal">
+            <i class="bi-pencil-fill me-1"></i> Editar
+          </a>
+          <div class="btn-group">
+            <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" 
+              id="optionsUser" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="optionsUser" style="">
+              <a class="dropdown-item" href="#"  data-action="delete" data-id="${user.id}" >
+                <i class="bi-trash dropdown-item-icon"></i> Eliminar
+              </a>
+              <a class="dropdown-item" href="#" data-action="reset-password" data-id="${user.id}">
+                <i class="bi-key dropdown-item-icon"></i> Restablecer contraseña
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    `,    
+    `,
     },
-  ];
+  ]
 
-   useClientDataTable({ tableRef, columns, data: users });
-
-
+  useClientDataTable({ tableRef, columns, data: users })
 
   const handleRemove = async (id: number) => {
-    await removeUser(id);
-    setRefresh(prev => !prev);
-  };
+    const isAcepted = await showConfirm('¿Desea eliminar el usuario?')
+    if (!isAcepted) return
+
+    await api.removeUser(id)
+    onReload((prev) => !prev)
+  }
 
   const handleUpdateStatus = async (id: number) => {
-    await updateStatus(id);
-    setTimeout( () => { setRefresh(prev => !prev)}, 500)
-   ;
-  };
+    await api.updateStatus(id)
+    setTimeout(() => {
+      onReload((prev) => !prev)
+    }, 500)
+  }
 
+  const handleResetPassword = async (id: number) => {
+    const isAcepted = await showConfirm('¿ Desea restablecer la contraseña ?')
+    if (!isAcepted) return
+
+    await api.resetPassword(id)
+    showSuccess('Contraseña restablecida')
+  }
 
   useEffect(() => {
     const handleActions = (event: Event) => {
-      const target = event.target as HTMLElement;
-      const action = target.dataset.action;
-      const userId = target.dataset.id;
+      const target = event.target as HTMLElement
+      const action = target.dataset.action
+      const userId = target.dataset.id
 
       if (action === 'edit') {
-        onUpdateUserId(Number(userId));
+        onUpdateUserId(Number(userId))
       } else if (action === 'delete') {
-        handleRemove(Number(userId));
+        handleRemove(Number(userId))
       } else if (action === 'status') {
-        handleUpdateStatus(Number(userId));
+        handleUpdateStatus(Number(userId))
+      } else if (action === 'reset-password') {
+        handleResetPassword(Number(userId))
       }
-    };
+    }
 
-    const tableElement = tableRef.current;
+    const tableElement = tableRef.current
     if (tableElement) {
-      tableElement.addEventListener("click", handleActions);
+      tableElement.addEventListener('click', handleActions)
     }
 
     return () => {
       if (tableElement) {
-        tableElement.removeEventListener("click", handleActions);
-      }
-    };
-  }, []); 
-
-
-  useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        const users = await getUsers();
-        setUsers(users);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        tableElement.removeEventListener('click', handleActions)
       }
     }
-    loadUsers();
-  }, [refresh, isReload]);
+  }, [])
 
   return (
     <div className="card">
@@ -174,7 +187,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
 
         <div className="d-grid d-sm-flex justify-content-md-end align-items-sm-center gap-2">
           {/* Datatable Info */}
-          <div id="datatableCounterInfo" style={{ display: "none" }}>
+          <div id="datatableCounterInfo" style={{ display: 'none' }}>
             <div className="d-flex align-items-center">
               <span className="fs-5 me-3">
                 <span id="datatableCounter">0</span>
@@ -187,10 +200,9 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
           </div>
           {/* End Datatable Info */}
 
-        
-
           {/* Dropdown */}
-          <div className="dropdown">
+
+          {/*     <div className="dropdown">
             <button
               type="button"
               className="btn btn-white btn-sm w-100"
@@ -198,7 +210,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <i className="bi-filter me-1"></i> Filter{" "}
+              <i className="bi-filter me-1"></i> Filter{' '}
               <span className="badge bg-soft-dark text-dark rounded-circle ms-1">
                 2
               </span>
@@ -207,21 +219,21 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
             <div
               className="dropdown-menu dropdown-menu-sm-end dropdown-card card-dropdown-filter-centered"
               aria-labelledby="usersFilterDropdown"
-              style={{ minWidth: "22rem" }}
+              style={{ minWidth: '22rem' }}
             >
-              {/* Card */}
+          
               <div className="card">
                 <div className="card-header card-header-content-between">
                   <h5 className="card-header-title">Filtrar usuarios</h5>
 
-                  {/* Toggle Button */}
+              
                   <button
                     type="button"
                     className="btn btn-ghost-secondary btn-icon btn-sm ms-2"
                   >
                     <i className="bi-x-lg"></i>
                   </button>
-                  {/* End Toggle Button */}
+              
                 </div>
 
                 <div className="card-body">
@@ -230,7 +242,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
                       <div className="col-12 mb-4">
                         <small className="text-cap text-body">Estado</small>
 
-                        {/* Select */}
+                     
                         <div className="tom-select-custom">
                           <select
                             className="js-select js-datatable-filter form-select form-select-sm"
@@ -261,16 +273,16 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
                             </option>
                           </select>
                         </div>
-                        {/* End Select */}
+                      
                       </div>
-                      {/* End Col */}
+                    
 
                       <div className="col-12 mb-4">
                         <small className="text-cap text-body">
                           Tipo Usuario
                         </small>
 
-                        {/* Select */}
+                      
                         <div className="tom-select-custom">
                           <select
                             className="js-select form-select"
@@ -285,12 +297,11 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
                             <option value="J">Juridico</option>
                           </select>
                         </div>
-                        {/* End Select */}
+                      
                       </div>
-                      {/* End Col */}
+                   
                     </div>
-                    {/* End Row */}
-
+                
                     <div className="d-grid">
                       <a className="btn btn-primary" href="javascript:;">
                         Aplicar
@@ -299,13 +310,11 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
                   </form>
                 </div>
               </div>
-              {/* End Card */}
+           
             </div>
-          </div>
-          {/* End Dropdown */}
+          </div> */}
         </div>
       </div>
-      {/* End Header */}
 
       {/* Table */}
       <div className=" datatable-custom">
@@ -341,9 +350,7 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
             </tr>
           </thead>
 
-          <tbody>
-           
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
       {/* End Table */}
@@ -398,5 +405,5 @@ export const UserTable = ({onUpdateUserId, isReload}: UserListProps) => {
       </div>
       {/* End Footer */}
     </div>
-  );
-};
+  )
+}

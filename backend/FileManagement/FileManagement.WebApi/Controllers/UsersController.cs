@@ -24,28 +24,28 @@ namespace FileManagement.WebApi.Controllers
             return Ok(await _userService.GetAllUsers());
         }
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetUserById(int Id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            return Ok(await _userService.GetUserByIdAsync(Id));
+            return Ok(await _userService.GetUserByIdAsync(id));
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> Update([FromRoute] int Id, [FromBody] UpdateUserRequest userRequest)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequest userRequest)
         {
-            userRequest.Id = Id;
+            userRequest.Id = id;
             await Mediator.Send(userRequest);
             return NoContent();
         }
-        [HttpPatch("status/{Id}")]
-        public async Task<IActionResult> UpateStatus([FromRoute] int Id)
+        [HttpPatch("status/{id}")]
+        public async Task<IActionResult> UpateStatus([FromRoute] int id)
         {
-            await _userService.UpdateStatusAsync(Id);
+            await _userService.UpdateStatusAsync(id);
             return NoContent();
         }
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete([FromRoute] int Id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _userService.DeleteUserAsync(Id);
+            await _userService.DeleteUserAsync(id);
             return NoContent();
         }
 
@@ -55,7 +55,12 @@ namespace FileManagement.WebApi.Controllers
             var newUser = await Mediator.Send(userRequest);
             return CreatedAtAction(nameof(GetUserById),new { id = newUser.Id }, newUser);
         }
-
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] int id)
+        {
+            await _userService.ResetPasswordAsync(id);
+            return Ok();
+        }
 
     }
 }

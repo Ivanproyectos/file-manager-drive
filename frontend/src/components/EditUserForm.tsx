@@ -1,22 +1,25 @@
-import { PersonType } from "@/types";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { updateUserSchema } from "@/schemas";
-import { UpdateUser, IUser, RoleId } from "@/types";
-import { useEffect, useRef, useState } from "react";
-import { RolList } from "@/components";
+import { PersonType } from '@/types'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { updateUserSchema } from '@/schemas'
+import { UpdateUser, IUser, RoleId } from '@/types'
+import { useEffect, useRef, useState } from 'react'
+import { RolList } from '@/components'
 
-declare const HSCore: any;
+declare const HSCore: any
 interface UpdateUserFormProps {
-  modalRef: React.RefObject<HTMLDivElement | null>;
-  user: IUser | null;
-  onSubmit: (user: UpdateUser) => Promise<boolean>;
-
+  modalRef: React.RefObject<HTMLDivElement | null>
+  user: IUser | null
+  onSubmit: (user: UpdateUser) => Promise<boolean>
 }
 
-export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) => {
-  const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([]);
-  const inputDateRef = useRef<HTMLInputElement | null>(null);
+export const EditUserForm = ({
+  modalRef,
+  user,
+  onSubmit,
+}: UpdateUserFormProps) => {
+  const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([])
+  const inputDateRef = useRef<HTMLInputElement | null>(null)
   const {
     register,
     handleSubmit,
@@ -29,59 +32,47 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
     resolver: yupResolver(updateUserSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-  });
+  })
 
-  const personType = watch("people.personType");
-  const isExpired = watch("isExpired");
-
-  debugger;
+  const personType = watch('people.personType')
+  const isExpired = watch('isExpired')
+  debugger
 
   const onUpdateSubmit = async (user: UpdateUser) => {
-
-   const result = await onSubmit(user);
-    if (!result) return;
+    const result = await onSubmit(user)
+    if (!result) return
     reset()
-  };
+  }
 
   useEffect(() => {
-    setValue("roles", selectedRoles);
-  }, [selectedRoles]);
+    setValue('roles', selectedRoles)
+  }, [selectedRoles])
 
   useEffect(() => {
-
-    const initialRoles = user?.roles?.map(role => role.id) ?? [];
-    const initialState = { ...user, roles: initialRoles };
-    reset(initialState);
-    setValue('id', user?.id ?? 0);
-    setSelectedRoles(initialRoles);
+    const initialRoles = user?.roles?.map((role) => role.id) ?? []
+    const initialState = { ...user, roles: initialRoles }
+    reset(initialState)
+    setValue('id', user?.id ?? 0)
+    setSelectedRoles(initialRoles)
 
     if (inputDateRef.current) {
-      debugger;
-      inputDateRef.current.value = user?.expirationDate ?? "";
+      inputDateRef.current.value = user?.expirationDate ?? ''
     }
-
-  }, [user, inputDateRef]);
+  }, [user])
 
   useEffect(() => {
-  /*   if (isExpired) {
-      setValue("expirationDate", user?.expirationDate ?? "");
-    }  */
-       HSCore.components.HSFlatpickr.init(inputDateRef.current, {
-        minDate: "today", 
-        onChange: function (
-          _selectedDates: Array<Date>,
-          dateStr: string,
-          _instance: any,
-        ) {
-          setValue("expirationDate", dateStr);
-          trigger("expirationDate");
-        },
-      });
-
-
-  }, [user, isExpired]);
-
-
+    HSCore.components.HSFlatpickr.init('#expirationDate-update', {
+      minDate: 'today',
+      onChange: function (
+        _selectedDates: Array<Date>,
+        dateStr: string,
+        _instance: any
+      ) {
+        setValue('expirationDate', dateStr)
+        trigger('expirationDate')
+      },
+    })
+  }, [user])
 
   return (
     <div
@@ -95,9 +86,7 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
       <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
-              Actualizar usuario
-            </h5>
+            <h5 className="modal-title">Actualizar usuario</h5>
             <button
               type="button"
               className="btn-close"
@@ -109,19 +98,21 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
             <form onSubmit={handleSubmit(onUpdateSubmit)} id="updateUserForm">
               <h4 className="text-muted mb-3">Informacion personal</h4>
               <div className="mb-4">
-                <label htmlFor="projectNameNewProjectLabel" className="form-label">
-                  Tipo persona{" "}
+                <label
+                  htmlFor="projectNameNewProjectLabel"
+                  className="form-label"
+                >
+                  Tipo persona{' '}
                 </label>
                 <div className="input-group input-group-sm-vertical">
                   <label className="form-control" htmlFor="userUpdateNatural">
                     <span className="form-check">
                       <input
-                        {...register("people.personType")}
+                        {...register('people.personType')}
                         type="radio"
                         className="form-check-input"
                         value={PersonType.Natural}
                         id="userUpdateNatural"
-                        defaultChecked
                       />
                       <span className="form-check-label">
                         <i className="bi-person me-1"></i> Natural
@@ -132,12 +123,11 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
                   <label className="form-control" htmlFor="userUpdateJuridico">
                     <span className="form-check">
                       <input
-                        {...register("people.personType")}
+                        {...register('people.personType')}
                         type="radio"
                         className="form-check-input"
                         id="userUpdateJuridico"
                         value={PersonType.Juridico}
-
                       />
                       <span className="form-check-label">
                         <i className="bi-briefcase me-1"></i> Juridico
@@ -148,17 +138,25 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
               </div>
               <div className="mb-4">
                 <label htmlFor="identification" className="form-label">
-                  {personType === PersonType.Natural ? "DNI" : "RUC"}
+                  {personType === PersonType.Natural ? 'DNI' : 'RUC'}
                 </label>
                 <input
-                  {...register("people.identification")}
+                  {...register('people.identification')}
                   type="text"
-                  className={`form-control ${errors.people?.identification ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.people?.identification ? 'is-invalid' : ''}`}
                   id="identification"
-                  placeholder={personType === PersonType.Natural ? "Ingrese DNI" : "Ingrese RUC"}
+                  placeholder={
+                    personType === PersonType.Natural
+                      ? 'Ingrese DNI'
+                      : 'Ingrese RUC'
+                  }
                   aria-label="Ingrese informacion"
                 />
-                {errors.people?.identification && <span className="invalid-feedback">{errors.people?.identification?.message}</span>}
+                {errors.people?.identification && (
+                  <span className="invalid-feedback">
+                    {errors.people?.identification?.message}
+                  </span>
+                )}
               </div>
               {personType === PersonType.Juridico && (
                 <div className="mb-4">
@@ -166,14 +164,18 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
                     Razon social
                   </label>
                   <input
-                    {...register("people.bussinessName")}
+                    {...register('people.bussinessName')}
                     type="text"
                     id="bussinessName"
                     placeholder="Ingrese razon social"
                     aria-label="Ingrese razon social"
-                    className={`form-control ${errors.people?.bussinessName ? "is-invalid" : ""}`}
+                    className={`form-control ${errors.people?.bussinessName ? 'is-invalid' : ''}`}
                   />
-                  {errors.people?.bussinessName && <span className="invalid-feedback">{errors.people?.bussinessName?.message}</span>}
+                  {errors.people?.bussinessName && (
+                    <span className="invalid-feedback">
+                      {errors.people?.bussinessName?.message}
+                    </span>
+                  )}
                 </div>
               )}
 
@@ -181,42 +183,44 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
                 <div className="row">
                   <div className="col-sm-6">
                     <div className="mb-4">
-                      <label
-                        htmlFor="firstName"
-                        className="form-label"
-                      >
+                      <label htmlFor="firstName" className="form-label">
                         Nombres
                       </label>
                       <input
-                        {...register("people.firstName")}
+                        {...register('people.firstName')}
                         type="text"
                         id="firstName"
                         placeholder="Ingrese nombres"
                         aria-label="IIngrese nombres"
-                        className={`form-control ${errors.people?.firstName ? "is-invalid" : ""}`}
+                        className={`form-control ${errors.people?.firstName ? 'is-invalid' : ''}`}
                       />
-                      {errors.people?.firstName && <span className="invalid-feedback">{errors.people?.firstName?.message}</span>}
+                      {errors.people?.firstName && (
+                        <span className="invalid-feedback">
+                          {errors.people?.firstName?.message}
+                        </span>
+                      )}
                     </div>
                   </div>
 
                   <div className="col-sm-6">
-                    <label
-                      htmlFor="lastName"
-                      className="form-label"
-                    >
+                    <label htmlFor="lastName" className="form-label">
                       Apellidos
                     </label>
 
                     <div className="mb-4">
                       <input
-                        {...register("people.lastName")}
+                        {...register('people.lastName')}
                         type="text"
                         id="lastName"
-                        className={`form-control ${errors.people?.lastName ? "is-invalid" : ""}`}
+                        className={`form-control ${errors.people?.lastName ? 'is-invalid' : ''}`}
                         placeholder="Ingrese el apellido"
                         aria-label="Ingrese el apellido"
                       />
-                      {errors.people?.lastName && <span className="invalid-feedback">{errors.people?.lastName?.message}</span>}
+                      {errors.people?.lastName && (
+                        <span className="invalid-feedback">
+                          {errors.people?.lastName?.message}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -225,9 +229,11 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
                 <div className="col-sm-6">
                   <div className="mb-4">
                     <label htmlFor="email" className="form-label">
-                      Correo{" "}
+                      Correo{' '}
                     </label>
-                    <div className={`input-group input-group-merge ${errors.people?.email ? "is-invalid" : ""}`}  >
+                    <div
+                      className={`input-group input-group-merge ${errors.people?.email ? 'is-invalid' : ''}`}
+                    >
                       <div className="input-group-prepend input-group-text">
                         <i className="bi-envelope"></i>
                       </div>
@@ -235,50 +241,54 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
                         type="text"
                         id="email"
                         className="form-control"
-                        {...register("people.email")}
+                        {...register('people.email')}
                         placeholder="Ingrese el correo"
                         aria-label="Ingrese el correo"
                       />
-
                     </div>
-                    {errors.people?.email && <span className="invalid-feedback">{errors.people?.email?.message}</span>}
+                    {errors.people?.email && (
+                      <span className="invalid-feedback">
+                        {errors.people?.email?.message}
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 <div className="col-sm-6">
-                  <label
-                    htmlFor="phone"
-                    className="form-label"
-                  >
+                  <label htmlFor="phone" className="form-label">
                     Telefono
                   </label>
 
                   <div className="mb-4">
                     <input
-                      {...register("people.phone")}
+                      {...register('people.phone')}
                       id="phone"
                       type="text"
-                      className={`form-control ${errors.people?.phone ? "is-invalid" : ""}`}
+                      className={`form-control ${errors.people?.phone ? 'is-invalid' : ''}`}
                       placeholder="Ingrese el telefono"
                       aria-label="Ingrese el telefono"
                     />
-                    {errors.people?.phone && <span className="invalid-feedback">{errors.people?.phone?.message}</span>}
+                    {errors.people?.phone && (
+                      <span className="invalid-feedback">
+                        {errors.people?.phone?.message}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
 
-
-
               <div className="mb-4">
                 <label htmlFor="address" className="form-label">
-                  Dirección{" "}
+                  Dirección{' '}
                 </label>
-                <div className={`input-group input-group-merge ${errors.people?.address ? "is-invalid" : ""}`}>
+                <div
+                  className={`input-group input-group-merge ${errors.people?.address ? 'is-invalid' : ''}`}
+                >
                   <div className="input-group-prepend input-group-text">
                     <i className="bi-geo-alt"></i>
                   </div>
                   <input
-                    {...register("people.address")}
+                    {...register('people.address')}
                     type="text"
                     id="address"
                     className="form-control"
@@ -286,26 +296,44 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
                     aria-label="EIngrese la dirección"
                   />
                 </div>
-                {errors.people?.address && <span className="invalid-feedback">{errors.people?.address?.message}</span>}
+                {errors.people?.address && (
+                  <span className="invalid-feedback">
+                    {errors.people?.address?.message}
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
-                <h4 className="text-muted mb-3">Agregue permisos para el usuario</h4>
-                <RolList onSelected={setSelectedRoles} selectedRoles={selectedRoles} />
-                {errors.roles && <span className="invalid-feedback">{errors.roles?.message}</span>}
+                <h4 className="text-muted mb-3">
+                  Agregue permisos para el usuario
+                </h4>
+                <RolList
+                  onSelected={setSelectedRoles}
+                  selectedRoles={selectedRoles}
+                />
+                {errors.roles && (
+                  <span className="invalid-feedback">
+                    {errors.roles?.message}
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
                 <div className="form-check form-switch d-flex justify-content-between p-0">
-                  <label className="form-check-label" htmlFor="input-isExpired"> ¿ El acceso expira ?</label>
+                  <label className="form-check-label" htmlFor="input-isExpired">
+                    {' '}
+                    ¿ El acceso expira ?
+                  </label>
                   <input
-                    {...register("isExpired")}
+                    {...register('isExpired')}
                     type="checkbox"
-                    className="form-check-input" id="input-isExpired" name="isExpired" />
-
+                    className="form-check-input"
+                    id="input-isExpired"
+                    name="isExpired"
+                  />
                 </div>
               </div>
-           {/*    <div className="mb-4">
+              {/*    <div className="mb-4">
                 <div className="form-check form-switch d-flex justify-content-between p-0">
                   <label className="l"> fecha</label>
                   <input
@@ -317,29 +345,32 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
               </div>  */}
               {isExpired && (
                 <div className="mb-4">
-                  <div className={`input-group input-group-merge ${errors.expirationDate ? "is-invalid" : ""}`}  >
+                  <div
+                    className={`input-group input-group-merge ${errors.expirationDate ? 'is-invalid' : ''}`}
+                  >
                     <div className="input-group-prepend input-group-text">
                       <i className="bi-calendar"></i>
                     </div>
                     <input
-
-                      {...register("expirationDate")}
-                       ref={inputDateRef} 
+                      {...register('expirationDate')}
+                      /*     ref={inputDateRef} */
                       id="expirationDate-update"
                       type="text"
-                      className={`form-control ${errors.expirationDate ? "is-invalid" : ""}`}
+                      className={`form-control ${errors.expirationDate ? 'is-invalid' : ''}`}
                       data-hs-flatpickr-options='{
                                           "dateFormat": "d/m/Y"
                                           }'
                       placeholder="Ingrese fecha de expiración"
                       aria-label="Ingrese fecha de expiración"
                     />
-
                   </div>
-                  {errors.expirationDate && <span className="invalid-feedback">{errors.expirationDate.message}</span>}
+                  {errors.expirationDate && (
+                    <span className="invalid-feedback">
+                      {errors.expirationDate.message}
+                    </span>
+                  )}
                 </div>
               )}
-
             </form>
           </div>
           <div className="modal-footer">
@@ -353,10 +384,9 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
             </button>
             <button
               type="submit"
-              className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
+              className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? 'text-transparent' : ''}`}
               form="updateUserForm"
               disabled={isSubmitting}
-
             >
               <div
                 className="spinner-border text-light status-spinner"
@@ -371,6 +401,5 @@ export const EditUserForm = ({ modalRef, user, onSubmit }: UpdateUserFormProps) 
         </div>
       </div>
     </div>
-
-  );
-};
+  )
+}

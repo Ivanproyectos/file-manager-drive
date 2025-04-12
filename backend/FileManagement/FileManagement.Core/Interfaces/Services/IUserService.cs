@@ -5,10 +5,11 @@ namespace FileManagement.Core.Interfaces.Services
 {
     public interface IUserService
     {
-        Task DeleteUserAsync(int Id);
+        Task DeleteUserAsync(int id);
         Task<List<UserDto>> GetAllUsers(); 
-         Task<UserDto> GetUserByIdAsync(int Id);
+         Task<UserDto> GetUserByIdAsync(int id);
         Task<List<UserSummaryResponse>> GetAllUserSummaryAsync();
-        Task UpdateStatusAsync(int Id);
+        Task UpdateStatusAsync(int id);
+        Task ResetPasswordAsync(int id);
     }
 }
