@@ -84,7 +84,7 @@ namespace FileManagement.Persistence.Configurations
                         Identification = "123456789",
                         Address = "123 Main St",
                         Phone = "1234567890",
-                        Email = "ivanperezt@gmail.com",
+                        Email = "ivansperezt@gmail.com",
                         CreatedAt = DateTime.Now
                     }
                 );

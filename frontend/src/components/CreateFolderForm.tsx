@@ -1,110 +1,113 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { FileDropZone, UserFolderPersmision, ButtonSubmit } from "@/components";
-import { IFolderPermission, CreateFolder, ICreateFile, CreateFolderPermission } from "@/types";
-import { useForm } from "react-hook-form";
-import { useFormStep } from "@/hooks";
-import { createFile } from "@/api/files";
-import { createFolder } from "@/services/folderService";
-import { showError } from "@/utils/alerts";
-
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { FileDropZone, UserFolderPersmision, ButtonSubmit } from '@/components'
+import {
+  IFolderPermission,
+  CreateFolder,
+  ICreateFile,
+  CreateFolderPermission,
+} from '@/types'
+import { useForm } from 'react-hook-form'
+import { useFormStep } from '@/hooks'
+import { createFile } from '@/api/files'
+import { createFolder } from '@/services/folderService'
+import { showError } from '@/utils/alerts'
 
 interface CreateFolderFormProps {
-  onCloseModal: () => void;                                                                                                            
-  onCreateComplete: () => void;
+  onCloseModal: () => void
+  onCreateComplete: () => void
   onUploadFiles: (files: string[]) => void
 }
 
-export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles }: CreateFolderFormProps) => {
-  const [users, setUsers] = useState<IFolderPermission[]>([]);
- /*  const [uploadId, setUploadId] = useState<string>(""); */
+export const CreateFolderForm = ({
+  onCloseModal,
+  onCreateComplete,
+  onUploadFiles,
+}: CreateFolderFormProps) => {
+  const [users, setUsers] = useState<IFolderPermission[]>([])
+  /*  const [uploadId, setUploadId] = useState<string>(""); */
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
     uploadId: null,
-  });
+  })
 
-  const { uploadId, dropzone } = dropzoneInstance;
+  const { uploadId, dropzone } = dropzoneInstance
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<CreateFolder>();
+  } = useForm<CreateFolder>()
 
-  const formFolerRef = useRef<HTMLFormElement>(null);
-  const messagaElementRef = useRef<HTMLDivElement>(null);
-  const uploadIdRef = useRef<string>("");
+  const formFolerRef = useRef<HTMLFormElement>(null)
+  const messagaElementRef = useRef<HTMLDivElement>(null)
+  const uploadIdRef = useRef<string>('')
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
-    setdropzoneInstance({ dropzone, uploadId });
-  };
+    setdropzoneInstance({ dropzone, uploadId })
+  }
   const preventNextStep = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       if (!uploadIdRef.current) {
-        reject(new Error("Please upload a file"));
+        reject(new Error('Please upload a file'))
       } else {
-        resolve(true);
+        resolve(true)
       }
-    });
-  };
+    })
+  }
 
   const finishCreate = () => {
-    if (!formFolerRef.current) return;
-    if (!messagaElementRef.current) return;
+    if (!formFolerRef.current) return
+    if (!messagaElementRef.current) return
 
-    formFolerRef.current.style.display = "none";
-    messagaElementRef.current.style.display = "block";
-    
-  };
+    formFolerRef.current.style.display = 'none'
+    messagaElementRef.current.style.display = 'block'
+  }
 
-  useFormStep({ formFolerRef, messagaElementRef, preventNextStep });
+  useFormStep({ formFolerRef, messagaElementRef, preventNextStep })
 
   const handleAddUser = useCallback((user: IFolderPermission[]) => {
-    setUsers(user);
-  }, []);
+    setUsers(user)
+  }, [])
 
   useEffect(() => {
-    uploadIdRef.current = uploadId;
-  }, [uploadId]);
+    uploadIdRef.current = uploadId
+  }, [uploadId])
 
   const onSubmit = async (folderData: CreateFolder) => {
-
-    let folderId = 0;
+    let folderId = 0
     try {
-
       const filePermissions: CreateFolderPermission[] = users.map((user) => ({
         userId: user.userId,
         canView: user.canView,
         canDownload: user.canDownload,
-        isDateExpired: user.isDateExpired, 
-        expirationDate: user.expirationDate
-      }));
+        isDateExpired: user.isDateExpired,
+        expirationDate: user.expirationDate,
+      }))
 
       const newFolder: CreateFolder = {
         ...folderData,
         folderPermissions: filePermissions,
-        asignedFolder: filePermissions.length > 0
-      };
-    
-      folderId = await createFolder(newFolder);
-      onCreateComplete();
+        asignedFolder: filePermissions.length > 0,
+      }
+
+      folderId = await createFolder(newFolder)
+      onCreateComplete()
     } catch (error) {
-      console.error(error);
-      showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
-      return;
+      console.error(error)
+      showError('Error al crear la carpeta, vuelva a intentalor mas tarde')
+      return
     }
 
     try {
-
-      const file: ICreateFile = { folderId, uploadId };
-      await createFile(file);
-      finishCreate();
-      onUploadFiles(dropzone.files.map((file: any) => file.name));
-    }catch (error) {
-      console.error(error);
-      showError("Error al cargar los archivos, vuelva a intentalor mas tarde");
+      const file: ICreateFile = { folderId, uploadId }
+      await createFile(file)
+      finishCreate()
+      onUploadFiles(dropzone.files.map((file: any) => file.name))
+    } catch (error) {
+      console.error(error)
+      showError('Error al cargar los archivos, vuelva a intentalor mas tarde')
     }
-
-  };
+  }
   return (
     <>
       <form
@@ -163,7 +166,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
                 htmlFor="projectNameNewProjectLabel"
                 className="form-label"
               >
-                Folder{" "}
+                Folder{' '}
                 <i
                   className="bi-question-circle text-body ms-1"
                   data-toggle="tooltip"
@@ -174,7 +177,7 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
 
               <div className="js-form-message">
                 <input
-                  {...register("name")}
+                  {...register('name')}
                   type="text"
                   className="form-control"
                   name="name"
@@ -194,12 +197,12 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
 
             <div className="mb-4">
               <label className="form-label">
-                Descripción{" "}
+                Descripción{' '}
                 <span className="form-label-secondary">(Opcional)</span>
               </label>
               <div className="js-form-message">
                 <textarea
-                  {...register("description")}
+                  {...register('description')}
                   className="form-control"
                   name="description"
                   placeholder="Ingrese una descripción"
@@ -209,10 +212,27 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
             </div>
 
             <div className="mb-4">
-              <label className="form-label">Adjuntar archivos {" "}
-              <span className="form-label-secondary">(Opcional)</span>
+              <div className="form-check form-switch d-flex justify-content-between p-0">
+                <label className="form-check-label" htmlFor="hasProcessState">
+                  {' '}
+                  ¿ El folder tiene un estado ?
+                </label>
+                <input
+                  {...register('hasProcessState')}
+                  type="checkbox"
+                  className="form-check-input"
+                  id="hasProcessState"
+                  name="isExpired"
+                />
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label">
+                Adjuntar archivos{' '}
+                <span className="form-label-secondary">(Opcional)</span>
               </label>
-              <FileDropZone onGetUploadId={handleDropzone} validate  />
+              <FileDropZone onGetUploadId={handleDropzone} validate />
             </div>
 
             {/*Footer */}
@@ -232,16 +252,15 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
             {/*End Footer */}
           </div>
 
-          <div id="createProjectStepMembers" style={{ display: "none" }}>
+          <div id="createProjectStepMembers" style={{ display: 'none' }}>
             {/*Form */}
-            <h4>Agregue los miembros para el folder 
-            {" "}
+            <h4>
+              Agregue los miembros para el folder{' '}
               <span className="form-label-secondary">(Opcional)</span>
             </h4>
             <p className="text-muted">
-              Agregue los usuarios que
-              tendran acceso a este folder y configure sus permisos para los
-              archivos
+              Agregue los usuarios que tendran acceso a este folder y configure
+              sus permisos para los archivos
             </p>
 
             <UserFolderPersmision onUpdateUsers={handleAddUser} />
@@ -277,21 +296,21 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
         {/*End Content Step Form */}
       </form>
 
-      <div ref={messagaElementRef} style={{ display: "none" }}>
+      <div ref={messagaElementRef} style={{ display: 'none' }}>
         <div className="text-center">
           <img
             className="img-fluid mb-3"
             src="../assets/svg/illustrations/oc-hi-five.svg"
             alt="Image Description"
             data-hs-theme-appearance="default"
-            style={{ maxWidth: "15rem" }}
+            style={{ maxWidth: '15rem' }}
           />
           <img
             className="img-fluid mb-3"
             src="../assets/svg/illustrations-light/oc-hi-five.svg"
             alt="Image Description"
             data-hs-theme-appearance="dark"
-            style={{ maxWidth: "15rem" }}
+            style={{ maxWidth: '15rem' }}
           />
 
           <div className="mb-4">
@@ -300,12 +319,16 @@ export const CreateFolderForm = ({ onCloseModal, onCreateComplete, onUploadFiles
           </div>
 
           <div className="d-flex justify-content-center gap-3">
-            <button data-bs-dismiss="modal" className="btn btn-white" onClick={() => onCloseModal()}>
+            <button
+              data-bs-dismiss="modal"
+              className="btn btn-white"
+              onClick={() => onCloseModal()}
+            >
               Cerrar
             </button>
           </div>
         </div>
       </div>
     </>
-  );
-};
+  )
+}

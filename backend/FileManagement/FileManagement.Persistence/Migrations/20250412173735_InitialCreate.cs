@@ -8,11 +8,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FileManagement.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InicitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "FolderProcessStates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FolderProcessStates", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Folders",
                 columns: table => new
@@ -23,6 +42,7 @@ namespace FileManagement.Persistence.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ParentFolderId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<bool>(type: "BIT", maxLength: 500, nullable: false, defaultValue: true),
+                    HasProcessState = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -129,6 +149,38 @@ namespace FileManagement.Persistence.Migrations
                     table.PrimaryKey("PK_Files", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Files_Folders_FolderId",
+                        column: x => x.FolderId,
+                        principalTable: "Folders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FolderProcessHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FolderId = table.Column<int>(type: "int", nullable: false),
+                    FolderProcessStateId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FolderProcessHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FolderProcessHistories_FolderProcessStates_FolderProcessStateId",
+                        column: x => x.FolderProcessStateId,
+                        principalTable: "FolderProcessStates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FolderProcessHistories_Folders_FolderId",
                         column: x => x.FolderId,
                         principalTable: "Folders",
                         principalColumn: "Id",
@@ -387,33 +439,42 @@ namespace FileManagement.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "FolderProcessStates",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "Name", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 4, 12, 12, 37, 35, 652, DateTimeKind.Local).AddTicks(3566), 1, null, "Pendiente", "Pendiente", null, null },
+                    { 3, new DateTime(2025, 4, 12, 12, 37, 35, 652, DateTimeKind.Local).AddTicks(3583), 1, null, "Atendido", "Atendido", null, null }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Peoples",
                 columns: new[] { "Id", "Address", "BussinessName", "CreatedAt", "CreatedBy", "DeletedAt", "Email", "FirstName", "Identification", "LastName", "PersonType", "Phone", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 11, 19, 4, 56, 934, DateTimeKind.Local).AddTicks(2422), null, null, "ivanperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
+                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(5124), null, null, "ivansperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "RoleName", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 11, 19, 4, 56, 934, DateTimeKind.Local).AddTicks(5141), 1, null, "Administrador", "Admin", null, null },
-                    { 2, new DateTime(2025, 4, 11, 19, 4, 56, 934, DateTimeKind.Local).AddTicks(5147), 1, null, "Usuario", "User", null, null }
+                    { 1, new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(8497), 1, null, "Administrador", "Admin", null, null },
+                    { 2, new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(8505), 1, null, "Usuario", "User", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "SourceProviders",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "ProviderName", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 12, 0, 4, 56, 935, DateTimeKind.Utc).AddTicks(2447), 1, null, "Google Drive Provider", "Google Drive", null, null });
+                values: new object[] { 1, new DateTime(2025, 4, 12, 17, 37, 35, 658, DateTimeKind.Utc).AddTicks(6712), 1, null, "Google Drive Provider", "Google Drive", null, null });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "ExpirationDate", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 11, 19, 4, 56, 936, DateTimeKind.Local).AddTicks(6536), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 11, 19, 4, 56, 936, DateTimeKind.Local).AddTicks(6540), null });
+                values: new object[] { 1, new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(995), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(999), null });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "RoleId", "UpdatedAt", "UpdatedBy", "UserId" },
-                values: new object[] { 1, new DateTime(2025, 4, 11, 19, 4, 56, 937, DateTimeKind.Local).AddTicks(4492), 1, null, 1, null, null, 1 });
+                values: new object[] { 1, new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(9241), 1, null, 1, null, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilePermissions_FileId",
@@ -451,6 +512,16 @@ namespace FileManagement.Persistence.Migrations
                 name: "IX_FolderPermissions_UserId",
                 table: "FolderPermissions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FolderProcessHistories_FolderId",
+                table: "FolderProcessHistories",
+                column: "FolderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FolderProcessHistories_FolderProcessStateId",
+                table: "FolderProcessHistories",
+                column: "FolderProcessStateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Folders_ParentFolderId",
@@ -599,6 +670,9 @@ namespace FileManagement.Persistence.Migrations
                 name: "FolderPermissions");
 
             migrationBuilder.DropTable(
+                name: "FolderProcessHistories");
+
+            migrationBuilder.DropTable(
                 name: "RoleModules");
 
             migrationBuilder.DropTable(
@@ -612,6 +686,9 @@ namespace FileManagement.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "SourceProviders");
+
+            migrationBuilder.DropTable(
+                name: "FolderProcessStates");
 
             migrationBuilder.DropTable(
                 name: "Modules");

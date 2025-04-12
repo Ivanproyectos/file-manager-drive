@@ -1,43 +1,44 @@
-import { CreateFolderPermission, IUserFolderPermission } from "./folderPermissionTypes";
+import {
+  CreateFolderPermission,
+  IUserFolderPermission,
+} from './folderPermissionTypes'
 export interface IFolder {
-    id: number;
-    name: string;
-    size: number;
-    status: boolean
-    createdDate: string;
-    description ?: string;
-    users: IUserFolder[];
+  id: number
+  name: string
+  size: number
+  status: boolean
+  createdDate: string
+  description?: string
+  hasProcessState: boolean
+  users: IUserFolder[]
 }
 export interface IFolderById {
-    id: number;
-    name: string;
-    description ?: string;
+  id: number
+  name: string
+  description?: string
 }
 export interface IUserFolder {
-    name: string;
-    email: string;
+  name: string
+  email: string
 }
 
 export interface ISubFolder {
-    id: number;
-    folderId: number;
-    name: string;
+  id: number
+  folderId: number
+  name: string
 }
-
-
 
 export type CreateFolder = Omit<IFolder, 'id' | 'parentId' | 'users'> & {
-    asignedFolder: boolean
-    folderPermissions: CreateFolderPermission[];
+  asignedFolder: boolean
+  folderPermissions: CreateFolderPermission[]
 }
 export type ICreateSubFolder = Omit<ISubFolder, 'id'> & {
-    description: string
+  description: string
 }
 export interface UpdateFolder {
-    id: number;
-    name: string;
-    description?: string;
-    deletedFileIds: number[];
-    folderPermissions: IUserFolderPermission[];
+  id: number
+  name: string
+  description?: string
+  deletedFileIds: number[]
+  folderPermissions: IUserFolderPermission[]
 }
-

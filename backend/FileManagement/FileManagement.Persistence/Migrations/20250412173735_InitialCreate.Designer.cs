@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250412000457_InicitalCreate")]
-    partial class InicitalCreate
+    [Migration("20250412173735_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,6 +206,9 @@ namespace FileManagement.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("HasProcessState")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -281,6 +284,108 @@ namespace FileManagement.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FolderPermissions", (string)null);
+                });
+
+            modelBuilder.Entity("FileManagement.Core.Entities.FolderProcessHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FolderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FolderProcessStateId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FolderId");
+
+                    b.HasIndex("FolderProcessStateId");
+
+                    b.ToTable("FolderProcessHistories", (string)null);
+                });
+
+            modelBuilder.Entity("FileManagement.Core.Entities.FolderProcessStates", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FolderProcessStates", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 652, DateTimeKind.Local).AddTicks(3566),
+                            CreatedBy = 1,
+                            Description = "Pendiente",
+                            Name = "Pendiente"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 652, DateTimeKind.Local).AddTicks(3583),
+                            CreatedBy = 1,
+                            Description = "Atendido",
+                            Name = "Atendido"
+                        });
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.Module", b =>
@@ -426,8 +531,8 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 4, 11, 19, 4, 56, 934, DateTimeKind.Local).AddTicks(2422),
-                            Email = "ivanperezt@gmail.com",
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(5124),
+                            Email = "ivansperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
                             LastName = "Doe",
@@ -482,7 +587,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 11, 19, 4, 56, 934, DateTimeKind.Local).AddTicks(5141),
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(8497),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -490,7 +595,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 4, 11, 19, 4, 56, 934, DateTimeKind.Local).AddTicks(5147),
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(8505),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -578,7 +683,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 12, 0, 4, 56, 935, DateTimeKind.Utc).AddTicks(2447),
+                            CreatedAt = new DateTime(2025, 4, 12, 17, 37, 35, 658, DateTimeKind.Utc).AddTicks(6712),
                             CreatedBy = 1,
                             Description = "Google Drive Provider",
                             ProviderName = "Google Drive"
@@ -651,13 +756,13 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 11, 19, 4, 56, 936, DateTimeKind.Local).AddTicks(6536),
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(995),
                             HasChangedPassword = false,
                             IsExpired = false,
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 4, 11, 19, 4, 56, 936, DateTimeKind.Local).AddTicks(6540)
+                            UpdatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(999)
                         });
                 });
 
@@ -745,7 +850,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 11, 19, 4, 56, 937, DateTimeKind.Local).AddTicks(4492),
+                            CreatedAt = new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(9241),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1
@@ -829,6 +934,25 @@ namespace FileManagement.Persistence.Migrations
                     b.Navigation("Folder");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FileManagement.Core.Entities.FolderProcessHistory", b =>
+                {
+                    b.HasOne("FileManagement.Core.Entities.Folder", "Folder")
+                        .WithMany("FolderProcessHistories")
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FileManagement.Core.Entities.FolderProcessStates", "FolderProcessStates")
+                        .WithMany()
+                        .HasForeignKey("FolderProcessStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Folder");
+
+                    b.Navigation("FolderProcessStates");
                 });
 
             modelBuilder.Entity("FileManagement.Core.Entities.Module", b =>
@@ -950,6 +1074,8 @@ namespace FileManagement.Persistence.Migrations
             modelBuilder.Entity("FileManagement.Core.Entities.Folder", b =>
                 {
                     b.Navigation("Files");
+
+                    b.Navigation("FolderProcessHistories");
 
                     b.Navigation("UserFolders");
                 });
