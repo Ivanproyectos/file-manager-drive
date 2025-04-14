@@ -88,6 +88,8 @@ export const FoldersPage = () => {
       await updateFolder(folder)
       showSuccess('Folder actualizada correctamente')
       setRefresh((prev) => !prev)
+      setfolderIdToEdit(null)
+      
       return
     } catch (error) {
       console.error(error)

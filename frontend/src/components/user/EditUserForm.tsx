@@ -2,21 +2,26 @@ import { PersonType } from '@/types'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { updateUserSchema } from '@/schemas'
-import { UpdateUser, IUser, RoleId } from '@/types'
+import { UpdateUser, RoleId } from '@/types'
 import { useEffect, useState } from 'react'
 import { RolList } from '@/components'
+import { showError } from '@/utils/alerts'
+import { getUserById } from '@/api/users'
+import { convertIsoDateToString } from '@/utils/dateFormat'
 
 declare const HSCore: any
 interface UpdateUserFormProps {
   modalRef: React.RefObject<HTMLDivElement | null>
-  user: IUser | null
+  userId: number
   onSubmit: (user: UpdateUser) => Promise<boolean>
+  onModalClose?: () => void
 }
 
 export const EditUserForm = ({
   modalRef,
-  user,
+  userId,
   onSubmit,
+  onModalClose,
 }: UpdateUserFormProps) => {
   const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([])
   const [refresh, setRefresh] = useState(false)
@@ -40,33 +45,12 @@ export const EditUserForm = ({
   const onUpdateSubmit = async (user: UpdateUser) => {
     const result = await onSubmit(user)
     if (!result) return
-    reset()
-    setValue('expirationDate', '')
-  }
 
-  const onCloseModal = () => {
-    reset()
   }
-
   useEffect(() => {
+
     setValue('roles', selectedRoles)
   }, [selectedRoles])
-
-  useEffect(() => {
-    reset()
-
-    const initialRoles = user?.roles?.map((role) => role.id) ?? []
-    const initialState = { ...user, roles: initialRoles }
-    reset(initialState)
-    setValue('id', user?.id ?? 0)
-    setSelectedRoles(initialRoles)
-    setValue('expirationDate', user?.expirationDate)
-    setRefresh((preve) => !preve)
-
-    /*    if (inputDateRef.current) {
-      inputDateRef.current.value = user?.expirationDate ?? ''
-    } */
-  }, [user])
 
   useEffect(() => {
     HSCore.components.HSFlatpickr.init('.dt-picker', {
@@ -80,7 +64,34 @@ export const EditUserForm = ({
         trigger('expirationDate')
       },
     })
-  }, [refresh])
+  }, [refresh, isExpired])
+
+    useEffect(() => {
+      if (!userId || userId === 0) return
+      const loadUser = async () => {
+        try {
+          const user = await getUserById(userId)
+          user.expirationDate = convertIsoDateToString(user.expirationDate ?? '')
+
+          const userUpdate: UpdateUser = {
+            id: user.id,
+            people: user.people, 
+            roles: user.roles?.map((role) => role.id) ?? [],
+            isExpired: user.isExpired, 
+            expirationDate: user.expirationDate
+          }
+          reset(userUpdate)
+          setSelectedRoles(userUpdate.roles ?? [])
+          setRefresh((preve) => !preve)
+        } catch (error) {
+          console.error('Error al actualizar el usuario:', error)
+          showError(
+            'Error al actualizar el usuario, vuelva a intentalor mas tarde'
+          )
+        }
+      }
+      loadUser()
+    }, [userId])
 
   return (
     <div
@@ -101,7 +112,7 @@ export const EditUserForm = ({
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={onCloseModal}
+              onClick={onModalClose}
             ></button>
           </div>
           <div className="modal-body">
@@ -389,7 +400,7 @@ export const EditUserForm = ({
               className="btn btn-white"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={onCloseModal}
+              onClick={onModalClose}
             >
               Cancelar
             </button>

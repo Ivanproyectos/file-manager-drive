@@ -6,11 +6,10 @@ import {
 } from '@/components'
 import { useState, useEffect, useRef } from 'react'
 import * as api from '@/api/users'
-import { showError } from '@/utils/alerts'
+import { showError, showSuccess } from '@/utils/alerts'
 import { CreateUser, UpdateUser, IUser } from '@/types'
 import {
   convertDateStringToIso,
-  convertIsoDateToString,
 } from '@/utils/dateFormat'
 
 declare const bootstrap: any
@@ -19,7 +18,7 @@ export const UsersPage = () => {
   const modalUpdateRef = useRef<HTMLDivElement | null>(null)
   const modalCreateRef = useRef<HTMLDivElement | null>(null)
   const [userId, setUserId] = useState(0)
-  const [userById, setUserById] = useState<IUser | null>(null)
+
   const [refresh, setRefresh] = useState(false)
   const [users, setUsers] = useState<IUser[]>([])
 
@@ -33,7 +32,7 @@ export const UsersPage = () => {
 
       await api.addUser(user)
       setRefresh((prev) => !prev)
-      closeModlal(modalCreateRef)
+      closeModal(modalCreateRef)
       return true
     } catch (error) {
       console.error('Error al crear el usuario:', error)
@@ -53,7 +52,10 @@ export const UsersPage = () => {
       user.expirationDate = convertDateStringToIso(user.expirationDate) || null
       await api.updateUser(user)
       setRefresh((prev) => !prev)
-      closeModlal(modalUpdateRef)
+      closeModal(modalUpdateRef)
+      setUserId(0)
+
+      showSuccess('Usuario actualizado correctamente')
       return true
     } catch (error) {
       console.error('Error al actualizar el usuario:', error)
@@ -63,7 +65,7 @@ export const UsersPage = () => {
       return false
     }
   }
-  const closeModlal = (ref: React.RefObject<HTMLDivElement | null>) => {
+  const closeModal = (ref: React.RefObject<HTMLDivElement | null>) => {
     const modal = bootstrap.Modal.getInstance(ref.current)
     modal.hide()
   }
@@ -72,21 +74,15 @@ export const UsersPage = () => {
     setUserId(id)
   }
 
+  const handleCloseEditModal = () => {
+    setUserId(0)
+  }
+
   useEffect(() => {
-    if (!userId || userId === 0) return
-    const loadUser = async () => {
-      try {
-        const user = await api.getUserById(userId)
-        user.expirationDate = convertIsoDateToString(user.expirationDate ?? '')
-        setUserById(user)
-      } catch (error) {
-        console.error('Error al actualizar el usuario:', error)
-        showError(
-          'Error al actualizar el usuario, vuelva a intentalor mas tarde'
-        )
-      }
-    }
-    loadUser()
+
+    if (!userId || userId === 0 ) return
+     const modal = bootstrap.Modal.getOrCreateInstance(modalUpdateRef.current)
+     modal.show()
   }, [userId])
 
   useEffect(() => {
@@ -155,10 +151,13 @@ export const UsersPage = () => {
       </div>
 
       <CreateUserForm modalRef={modalCreateRef} onSubmit={handleCreateUser} />
+
       <EditUserForm
-        user={userById}
+        key={userId}
+        userId={userId}
         modalRef={modalUpdateRef}
         onSubmit={handleUpdateUser}
+        onModalClose={handleCloseEditModal}
       />
     </>
   )

@@ -19,6 +19,7 @@ secrets.json
 
 
 # Dependencias react 
+pnpm-lock.yaml
 node_modules/
 npm-debug.log
 yarn.lock
@@ -26,3 +27,4 @@ yarn.lock
 .env.local
 build/
 dist/
+eslint.config.js

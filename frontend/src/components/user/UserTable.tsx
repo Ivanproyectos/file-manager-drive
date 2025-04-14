@@ -86,8 +86,8 @@ export const UserTable = ({
         </div>
 
       <div class="btn-group" role="group">
-          <a class="btn btn-white btn-sm" href="javascript:void(0);" data-action="edit" data-bs-toggle="modal" 
-          data-id="${user.id}" data-bs-target="#editUserModal">
+          <a class="btn btn-white btn-sm" href="javascript:void(0);" data-action="edit"
+          data-id="${user.id}" >
             <i class="bi-pencil-fill me-1"></i> Editar
           </a>
           <div class="btn-group">
