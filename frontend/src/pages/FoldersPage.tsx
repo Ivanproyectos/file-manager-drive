@@ -1,5 +1,4 @@
 import * as folderApi from '@/api/folderApi'
-import { getFolderPermission } from '@/api/folderPermission'
 import {
   CreateFolderForm,
   EditFolderForm,
@@ -9,8 +8,6 @@ import {
 } from '@/components'
 import {
   IFolder,
-  IFolderById,
-  IFolderPermission,
   StatusUploadFile,
   StatusUploadedFile,
   UpdateFolder,
@@ -22,9 +19,10 @@ import { useSignalr } from '@/context/SignalrContext'
 import { useInitTomSelect } from '@/hooks'
 import { updateFolder } from '@/services/folderService'
 
+declare const bootstrap : any
+
 export const FoldersPage = () => {
   const [folders, setFolders] = useState<IFolder[]>([])
-  const [folder, setFolder] = useState<IFolderById | null>(null)
   const [folderStatusHistories, setFolderStatusHistories] = useState<
     IFolderProcessHistories[] | null
   >(null)
@@ -32,20 +30,18 @@ export const FoldersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
   const [refresh, setRefresh] = useState(false)
-  const [folderPermissions, setFolderPermissions] = useState<
-    IFolderPermission[]
-  >([])
 
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [statusUploaded, setStatusUploaded] = useState<StatusUploadFile | null>(
     null
   )
   const foldersRef = useRef<IFolder[]>([])
+  const modalRefEdit = useRef<HTMLDivElement>(null)
+  
+  useInitTomSelect()
 
   const { signalr } = useSignalr()
-  useInitTomSelect()
-  /*   const signalr = useConnectSignalr();
-   */
+
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -111,9 +107,10 @@ export const FoldersPage = () => {
   }
 
   const handleCloseEditModal = () => {
-    setTimeout(() => {
+    
       setIsModalEditOpen(false)
-    }, 100)
+      setfolderIdToEdit(null)
+   
   }
 
   const handleUploadFiles = (filesNames: string[]) => {
@@ -144,19 +141,10 @@ export const FoldersPage = () => {
   }, [refresh])
 
   useEffect(() => {
-    if (!folderIdToEdit) return
 
-    const loadFolder = async () => {
-      try {
-        const folder = await folderApi.getFolderByIdAsync(folderIdToEdit)
-        const folderPermission = await getFolderPermission(folderIdToEdit)
-        setFolder(folder)
-        setFolderPermissions(folderPermission)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
-    loadFolder()
+    if (!folderIdToEdit) return
+     const modal = bootstrap.Modal.getOrCreateInstance(modalRefEdit.current)
+     modal.show()
   }, [folderIdToEdit])
 
   useEffect(() => {
@@ -317,8 +305,9 @@ export const FoldersPage = () => {
         </div>
       </div>
       <EditFolderForm
-        folderPermissions={folderPermissions}
-        folder={folder}
+        key={folderIdToEdit}
+        modalRefEdit={modalRefEdit}
+        folderId={folderIdToEdit}
         isModalOpen={isModalEditOpen}
         onCloseModal={handleCloseEditModal}
         onSubmit={hanldeUpdateFolder}

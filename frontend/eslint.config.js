@@ -5,32 +5,22 @@ import tseslint from 'typescript-eslint'
 import pluginReact from 'eslint-plugin-react'
 
 export default defineConfig([
+  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
-    ignores: ['dist/**/*'],
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    languageOptions: { globals: globals.browser },
+  },
+  {
+       ignores: ["dist/**/*"],
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: { js },
-    extends: ['js/recommended'],
-    settings: {
-      "react": {
-        "version": "detect"
-      }
-    },
-    rules: {
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
-    },
-  
-    extends: [
-      'js/recommended',
-      'plugin:prettier/recommended',
-      'eslint:recommended',
-    ],
     settings: {
       react: { version: 'detect' },
     },
-  },
-  {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
-    languageOptions: { globals: globals.browser },
+    extends: [
+      "js/recommended",
+      "plugin:prettier/recommended",
+    ],
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,

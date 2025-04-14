@@ -1,33 +1,33 @@
-import { ButtonSubmit, FileDropZone, UserFolderPersmision } from "@/components";
+import { ButtonSubmit, UserFolderPersmision } from "@/components";
 import { IFolderById, IFolderPermission, UpdateFolder } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import * as folderApi from '@/api/folderApi'
+import { getFolderPermission } from '@/api/folderPermission'
 
 interface Props {
-  folder: IFolderById | null;
-  folderPermissions: IFolderPermission[];
+  folderId: number | null;
+  modalRefEdit: React.RefObject<HTMLDivElement | null >;
   isModalOpen: boolean;
   onSubmit: (data: UpdateFolder) => void;
   onCloseModal?: () => void;
 }
 
 export const EditFolderForm = ({
-  folder,
+  modalRefEdit, 
+  folderId,
   isModalOpen,
-  folderPermissions,
   onCloseModal,
   onSubmit,
 }: Props) => {
-
+  const [folderPermissions, setFolderPermissions] = useState<
+  IFolderPermission[]
+>([])
+  const [folder, setFolder] = useState<IFolderById | null>(null)
   const [users, setUsers] = useState<IFolderPermission[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeModalButtonRef = useRef<HTMLButtonElement>(null);
-  const [_dropzoneInstance, setdropzoneInstance] = useState<any>({
-    dropzone: null,
-    uploadId: null,
-  });
-
+ 
   const {
     register,
     handleSubmit,
@@ -35,10 +35,6 @@ export const EditFolderForm = ({
     formState: { errors, isSubmitting },
   } = useForm<IFolderById>();
 
- /*  const handleDropzone = (uploadId: string, dropzone?: any) => {
-    setdropzoneInstance({ dropzone, uploadId });
-  };
- */
   const handleAddUser = (user: IFolderPermission[]) => {
     setUsers(user);
   }
@@ -55,19 +51,31 @@ export const EditFolderForm = ({
     closeModalButtonRef.current?.click();
   }
 
+
   useEffect(() => {
-    if (folder) {
-      reset(folder);
+    if (!folderId) return
+
+    const loadFolder = async () => {
+      try {
+        const folder = await folderApi.getFolderByIdAsync(folderId)
+        const folderPermission = await getFolderPermission(folderId)
+        reset(folder);
+        debugger;
+        setFolderPermissions(folderPermission) 
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
     }
-  }, [folder]);
+    loadFolder()
+  }, [folderId])
 
   return (
     <div
-      ref={modalRef}
+      ref={modalRefEdit}
       className="modal fade"
       id="editFolderModal"
       tabIndex={-1}
-      aria-labelledby="newFolderModalLabel"
+      aria-labelledby="editFolderModalLabel"
       aria-hidden="true"
       data-bs-backdrop="static"
     >
@@ -151,8 +159,9 @@ export const EditFolderForm = ({
                   Miembros del folder
                 </h4>
                 <UserFolderPersmision
+                 key={folder?.id}
                  onUpdateUsers={handleAddUser} 
-                 initialUsers={{ users: folderPermissions }} />
+                 initialUsers={folderPermissions} />
               </div>
             </form>
           </div>

@@ -54,8 +54,8 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
      
           
           <div class="btn-group" role="group">
-          <a class="btn btn-white btn-sm" href="javascript:void(0);" data-action="edit" data-bs-toggle="modal" 
-          data-id="${folder.id}" data-bs-target="#editFolderModal">
+          <a class="btn btn-white btn-sm" href="javascript:void(0);" data-action="edit" 
+          data-id="${folder.id}" >
             <i class="bi-pencil-fill me-1"></i> Editar
           </a>
           <div class="btn-group">

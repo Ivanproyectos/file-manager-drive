@@ -1,7 +1,7 @@
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-
-export const FileItemSkeleton = () => {
+import Skeleton from "react-loading-skeleton"
+import "react-loading-skeleton/dist/skeleton.css"
+ 
+export  const FileItemSkeleton = () => {
   return (
     <>
       {[...Array(5)].map((_, index) => (

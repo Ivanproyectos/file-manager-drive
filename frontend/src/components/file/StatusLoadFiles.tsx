@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { StatusUploadFile } from "@/types";
+
+import { useEffect, useRef, useState } from "react"; 
+import { StatusUploadFile } from "@/types"
 
 declare const bootstrap: any;
 interface Props {
@@ -62,7 +63,7 @@ export const StatusLoadFiles = ({ filesNames, status }: Props) => {
                 {StatusUploadFile.SUCCESS == status && (
                   <i className="bi bi-check-circle-fill text-success me-2"></i>
                 )}
-                    {StatusUploadFile.ERROR == status && (
+                {StatusUploadFile.ERROR == status && (
                   <i className="bi bi-x-circle-fill text-danger me-2"></i>
                 )}
 

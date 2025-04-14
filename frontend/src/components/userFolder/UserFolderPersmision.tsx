@@ -4,24 +4,22 @@ import { useInitTooltip } from '@/hooks'
 import { userFilePermissionReducer } from '@/reducers'
 import { IFolderPermission, IUserSummary } from '@/types'
 import { format } from 'date-fns'
-import React, { useEffect, useReducer, useRef } from 'react'
+import { useEffect, useReducer, useRef, memo } from 'react'
 
 declare const HSCore: any
 
-const initialState = {
-  users: [],
-}
+const initialState : IFolderPermission[] = []
 interface userFolderPermissionProps {
   onUpdateUsers: (users: IFolderPermission[]) => void
-  initialUsers?: { users: IFolderPermission[] | [] }
+  initialUsers?:  IFolderPermission[]
 }
 
-export const UserFolderPersmision = React.memo(
+export const UserFolderPersmision = memo(
   ({
-    initialUsers = { users: [] },
+    initialUsers = [],
     onUpdateUsers,
   }: userFolderPermissionProps) => {
-    const [state, dispatch] = useReducer(
+    const [users, dispatch] = useReducer(
       userFilePermissionReducer,
       initialState
     )
@@ -31,7 +29,7 @@ export const UserFolderPersmision = React.memo(
 
     const handleSelectedUser = (userSummary: IUserSummary) => {
       if (
-        state?.users?.find(
+        users?.find(
           (user: IFolderPermission) => user.userId === userSummary.id
         )
       )
@@ -51,7 +49,7 @@ export const UserFolderPersmision = React.memo(
     }
 
     useEffect(() => {
-      if (state.users.length == 0) return
+      if (users.length == 0) return
 
       HSCore.components.HSFlatpickr.init(inputDateRef.current, {
         onChange: function (
@@ -63,15 +61,14 @@ export const UserFolderPersmision = React.memo(
           handleExpirationDate(userId, dateStr, true)
         },
       })
-      onUpdateUsers(state?.users)
-    }, [state.users])
+      onUpdateUsers(users)
+    }, [users, onUpdateUsers])
 
     useEffect(() => {
-      if (initialUsers.users.length == 0) {
-        return
-      }
 
-      const users = initialUsers.users.map((user: IFolderPermission) => {
+      if (!initialUsers || initialUsers.length==0) return;
+
+      const users = initialUsers?.map((user: IFolderPermission) => {
         const expirationDate = user.expirationDate
           ? format(new Date(user.expirationDate), 'dd/MM/yyyy')
           : ''
@@ -80,8 +77,11 @@ export const UserFolderPersmision = React.memo(
           expirationDate,
         }
       })
+      if (!users) return
+
       dispatch(addUsers(users))
-    }, [initialUsers.users])
+
+    }, [initialUsers])
 
     /*   const handleCanview = (id: number) => {
 			const user = state?.users?.find(
@@ -92,7 +92,7 @@ export const UserFolderPersmision = React.memo(
 			};
 		*/
     const handleCandownload = (id: number) => {
-      const user = state?.users?.find(
+      const user = users?.find(
         (user: IFolderPermission) => user.userId === id
       )
       if (!user) return
@@ -104,7 +104,7 @@ export const UserFolderPersmision = React.memo(
       expirationDate: string,
       isDateExpired: boolean
     ) => {
-      const user = state?.users?.find(
+      const user = users?.find(
         (user: IFolderPermission) => user.userId === id
       )
 
@@ -119,7 +119,7 @@ export const UserFolderPersmision = React.memo(
     return (
       <>
         <SearchUser onSelectedUser={handleSelectedUser} />
-        {state?.users?.length > 0 && (
+        {users?.length > 0 && (
           <table className="table">
             <thead>
               <tr>
@@ -139,7 +139,7 @@ export const UserFolderPersmision = React.memo(
               </tr>
             </thead>
             <tbody>
-              {state?.users?.map((user: IFolderPermission) => (
+              {users?.map((user: IFolderPermission) => (
                 <tr key={user.userId}>
                   <td>
                     <div className="d-flex align-items-center">
@@ -249,7 +249,7 @@ export const UserFolderPersmision = React.memo(
           </table>
         )}
 
-        {state?.users?.length === 0 && (
+        {users?.length === 0 && (
           <div
             className="d-flex flex-column align-items-center justify-content-center"
             aria-live="polite"

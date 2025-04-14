@@ -1,6 +1,6 @@
 
 interface Props {
-   onSearch: (value: string) => void
+   onSearch: (value: string) => void 
 }
 export const SearchFilterFiles = ({ onSearch }: Props) => {
 
