@@ -38,6 +38,7 @@ interface FileActionsProps {
 };
  */
 const FileActions = ({ fileId, canDownload, expirationDate, isDateExpired }: FileActionsProps) => {
+  debugger; 
   return (
     <div className="dropdown">
       <button
@@ -57,11 +58,14 @@ const FileActions = ({ fileId, canDownload, expirationDate, isDateExpired }: Fil
         style={{ minWidth: "13rem" }}
       >
         <span className="dropdown-header">Opciones</span>
-        {canDownload && !isDateExpired && (
+    {/*     {canDownload && !isDateExpired && (
           <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
             <i className="bi-download dropdown-item-icon"></i> Descargar
           </a>
-        )}
+        )} */}
+          <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
+            <i className="bi-download dropdown-item-icon"></i> Descargar
+          </a>
       </div>
     </div>
   );

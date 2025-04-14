@@ -3,12 +3,15 @@ import { useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 export const LoginPage = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated} = useAuth();
   
   useEffect(() => {
+
+
     if (isAuthenticated) {
       navigate("/dashboard");
     }

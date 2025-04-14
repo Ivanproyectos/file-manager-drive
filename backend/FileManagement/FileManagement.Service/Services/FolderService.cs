@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Contracts.Request;
+using FileManagement.Core.Entities;
 using FileManagement.Core.Exceptions;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
@@ -11,6 +12,7 @@ namespace FileManagement.Service.Services
     public class FolderService : IFolderService
     {
         private readonly IFolderRepository _folderRepository;
+        private readonly IFolderProcessHistoryRepository _folderProcessHistoryRepository;
         private readonly IUserFolderRepository _userFolderRepository;
         private readonly IFileRepository _fileRepository;
         private readonly IMapper _mapper;
@@ -22,7 +24,8 @@ namespace FileManagement.Service.Services
             IFileRepository fileRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            IGoogleDriveService googleDriveService)
+            IGoogleDriveService googleDriveService,
+            IFolderProcessHistoryRepository folderProcessHistoryRepository)
         {
             _folderRepository = folderRepository;
             _userFolderRepository = userFolderRepository;
@@ -30,26 +33,15 @@ namespace FileManagement.Service.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _googleDriveService = googleDriveService;
+            _folderProcessHistoryRepository = folderProcessHistoryRepository;
         }
         public async Task<List<FolderDto>> GetAllFoldersAsync()
         {
             var folders = await _folderRepository.GetFoldersAsync();
 
-            var folderDtos = folders.Select(folder => new FolderDto
-            {
-                Id = folder.Id,
-                Name = folder.Name,
-                CreatedDate = folder.CreatedAt,
-                Status = folder.Status,
-                Users = folder.UserFolders.Select(userFolder => new UserFolderDto
-                {
-                    Name = FormatPeopleName.FormatPeopleType(userFolder.User.People),
-                    Email = userFolder.User.People.Email
-                }).ToList(),
-                Size = folder.Files.Select(file => file.SizeBytes).Distinct().Sum()
-            }).ToList();
+            var foldersDto = _mapper.Map<List<FolderDto>>(folders);
 
-            return folderDtos;
+            return foldersDto;
         }
 
         public async Task<List<FileDto>> GetFolderFiles(int folderId)
@@ -101,6 +93,45 @@ namespace FileManagement.Service.Services
 
             await _folderRepository.UpdateStatusAsync(folder);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task ChangeProcessStatus(int folderId, int statusId )
+        {
+            var folderHistories = await _folderProcessHistoryRepository.GetHistoriesAsync(folderId);
+            if (folderHistories.Count == 0)
+            {
+                throw new KeyNotFoundException($"El folder con el id {folderId} no existe");
+            }
+
+            var updatedFolderHistory = folderHistories
+                .Select(x =>
+                {
+                    x.IsActive = false;
+                    return x;
+                }).ToList();
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                await _folderProcessHistoryRepository.UpdateStatusActiveAsync(updatedFolderHistory);
+
+                var folderHistory = new FolderProcessHistory
+                {
+                    FolderId = folderId,
+                    FolderProcessStateId = statusId,
+                    IsActive = true
+                };
+                await _folderProcessHistoryRepository.CreateAsync(folderHistory);
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await  _unitOfWork.RollbackAsync();
+                throw ex;
+            }
+            
         }
 
         public async Task<GetFolderByIdRequest> GetFolderByIdAsync(int folderId)

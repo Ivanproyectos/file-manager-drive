@@ -31,6 +31,12 @@ namespace FileManagement.Persistence.Repositories
             return _context.Peoples.ToListAsync();
         }
 
+        public async Task<People> GetPeopleByIdentificationAsync(string identification)
+        { 
+            return await _context.Peoples.Include(p => p.User)
+                .FirstOrDefaultAsync(x => x.Identification == identification);
+        }
+
         public Task<People> GetPeopleByIdAsync(int id)
         {
             return _context.Peoples.FirstOrDefaultAsync(p => p.Id == id);

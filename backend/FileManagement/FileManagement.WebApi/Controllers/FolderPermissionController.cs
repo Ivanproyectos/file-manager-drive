@@ -1,8 +1,11 @@
-﻿using FileManagement.Core.Interfaces.Services;
+﻿using FileManagement.Core.Constants;
+using FileManagement.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
+    [Authorize(Roles = $"{RoleConstants.Admin}")]
     [ApiController]
     [Route("api/folder-permissions")]
     public class FolderPermissionController : BaseApiController

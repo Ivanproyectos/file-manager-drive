@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FileManagement.Core.Constants;
 using FileManagement.Core.Interfaces.Services;
 using FileManagement.Service.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = $"{RoleConstants.Admin},{RoleConstants.User}")]
     [ApiController]
     [Route("api/users/folders")]
     public class UserFoldersController : BaseApiController

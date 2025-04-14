@@ -13,7 +13,7 @@ namespace FileManagement.Core.Entities
         public string Phone { get; set; }
         public string Email { get; set; } // Unique
 
-        //public User User { get; set; }
+        public User User { get; set; }
         public User CreatedByUser { get; set; }
         public User UpdatedByUser { get; set; }
     }

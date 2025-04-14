@@ -50,11 +50,6 @@ namespace FileManagement.Service.Services
                     var request = await _channel.DequeueAsync(stoppingToken);
 
                     filesNames?.RemoveRange(0, filesNames.Count);
-                    //if (request == null)
-                    //{
-                    //    await Task.Delay(1000, stoppingToken); // Retraso cuando no hay tareas que procesar
-                    //    continue;
-                    //}
 
                     _logger.LogInformation("Procesando carga de archivos desde {Path}", request.UploadId);
                     var uploadPath = Path.Combine(Path.GetTempPath(), "uploads", request.UploadId.ToString());
@@ -95,6 +90,7 @@ namespace FileManagement.Service.Services
                     //    .SendAsync("FileUploaded", new UploadedFileRequest(StatusUploadFileEnum.Success, filesNames));
 
                     NotifyUpload(request.UserId, StatusUploadFileEnum.Success, filesNames);
+                    Directory.Delete(uploadPath, true);
 
                 }
                 catch (OperationCanceledException ex)

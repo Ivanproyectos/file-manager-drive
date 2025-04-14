@@ -19,6 +19,7 @@ export const EditFolderForm = ({
   onCloseModal,
   onSubmit,
 }: Props) => {
+
   const [users, setUsers] = useState<IFolderPermission[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeModalButtonRef = useRef<HTMLButtonElement>(null);
@@ -34,10 +35,10 @@ export const EditFolderForm = ({
     formState: { errors, isSubmitting },
   } = useForm<IFolderById>();
 
-  const handleDropzone = (uploadId: string, dropzone?: any) => {
+ /*  const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId });
   };
-
+ */
   const handleAddUser = (user: IFolderPermission[]) => {
     setUsers(user);
   }
@@ -136,7 +137,7 @@ export const EditFolderForm = ({
                   ></textarea>
                 </div>
               </div>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="form-label">Adjuntar archivos</label>
                 {isModalOpen && (
                   <FileDropZone
@@ -144,12 +145,14 @@ export const EditFolderForm = ({
                     onGetUploadId={handleDropzone}
                   />
                 )}
-              </div>
+              </div> */}
               <div className="mb-4">
                 <h4 className="mb-3">
                   Miembros del folder
                 </h4>
-                <UserFolderPersmision onUpdateUsers={handleAddUser} initialState={{ users: folderPermissions }} />
+                <UserFolderPersmision
+                 onUpdateUsers={handleAddUser} 
+                 initialUsers={{ users: folderPermissions }} />
               </div>
             </form>
           </div>

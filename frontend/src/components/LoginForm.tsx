@@ -13,6 +13,8 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -57,12 +59,12 @@ export const LoginForm = () => {
       <div className="text-center">
         <div className="mb-5">
           <h1 className="display-5">Iniciar sesión </h1>
-          <p>
+        {/*   <p>
             ¿ Aun no tienes una cuenta ?{" "}
             <a className="link" href="./authentication-signup-basic.html">
               Registrate aqui
             </a>
-          </p>
+          </p> */}
         </div>
 
         <div className="d-grid mb-4" style ={{placeContent: "center"}}>
@@ -80,18 +82,18 @@ export const LoginForm = () => {
 
       {/* htmlForm */}
       <div className="mb-4">
-        <label className="form-label" htmlFor="signinSrEmail">
-          Correo
+        <label className="form-label" htmlFor="email">
+          Indetificación (DNI o RUC)
         </label>
         <input
           {...register("email")}
           type="email"
           className = {`form-control form-control-lg ${errors.email ? "is-invalid" : ""}`} 
           name="email"
-          id="signinSrEmail"
+          id="email"
           tabIndex={1}
-          placeholder="email@address.com"
-          aria-label="email@address.com"
+          placeholder="12345678"
+          aria-label="12345678"
           required
         />
 
@@ -101,53 +103,51 @@ export const LoginForm = () => {
       <div className="mb-4">
         <label
           className="form-label w-100"
-          htmlFor="signupSrPassword"
+          htmlFor="password"
           tabIndex={0}
         >
           <span className="d-flex justify-content-between align-items-center">
             <span>Contraseña</span>
-            <a
+        {/*     <a
               className="form-label-link mb-0"
               href="./authentication-reset-password-basic.html"
             >
               Olvidaste tu contraseña?
-            </a>
+            </a> */}
           </span>
         </label>
 
         <div
-          className= {`input-group input-group-merge ${errors.password ? "is-invalid" : ""}`} 
-        >
+          className= {`input-group input-group-merge ${errors.password ? "is-invalid" : ""}`} >
           <input
             {...register("password")}
-            type="password"
+            type={showPassword ? "text" : "password"}
             className = "js-toggle-password form-control form-control-lg"
             name="password"
-            id="signupSrPassword"
-            placeholder="8+ characters required"
-            aria-label="8+ characters required"
+            id="password"
+            placeholder="Se requieren más de 6 caracteres"
+            aria-label="Se requieren más de 6 caracteres"
             required
-            minLength={8}
-            data-hs-toggle-password-options='{
-                 "target": "#changePassTarget",
-                 "defaultclassName": "bi-eye-slash",
-                 "showclassName": "bi-eye",
-                 "classNameChangeTarget": "#changePassIcon"
-               }'
-          />
+            minLength={6} />
           <a
-            id="changePassTarget"
+          onClick={() => setShowPassword(!showPassword)}
             className="input-group-append input-group-text"
             href="javascript:;"
           >
-            <i id="changePassIcon" className="bi-eye"></i>
+            {showPassword && (
+                <i id="changePassIcon" className="bi-eye"></i>
+            )}
+            {!showPassword && (
+                <i id="changePassIcon" className="bi-eye-slash"></i>
+            )}
+          
           </a>
         </div>
 
         {errors.password && <span className="invalid-feedback">{errors?.password?.message}</span>}
       </div>
 
-      <div className="form-check mb-4">
+      {/* <div className="form-check mb-4">
         <input
           className="form-check-input"
           type="checkbox"
@@ -157,7 +157,7 @@ export const LoginForm = () => {
         <label className="form-check-label" htmlFor="termsCheckbox">
           Recuerdame
         </label>
-      </div>
+      </div> */}
 
       <div className="d-grid">
         <button

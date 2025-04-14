@@ -63,21 +63,21 @@ namespace FileManagement.Persistence.Configurations
               .IsRequired(false);
 
             builder.HasOne(u => u.People)
-                 .WithOne()
+                 .WithOne(u => u.User)
                  .HasForeignKey<User>(u => u.PeopleId)
                  .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(u => u.CreatedByUser)
-                .WithMany()
-                .HasForeignKey(u => u.CreatedBy)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasPrincipalKey(u => u.Id);
+            //builder.HasOne(u => u.CreatedByUser)
+            //    .WithMany()
+            //    .HasForeignKey(u => u.CreatedBy)
+            //    .OnDelete(DeleteBehavior.Restrict)
+            //    .HasPrincipalKey(u => u.Id);
 
-            builder.HasOne(u => u.UpdatedByUser)
-                .WithMany()
-                .HasForeignKey(u => u.UpdatedBy)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasPrincipalKey(u => u.Id);
+            //builder.HasOne(u => u.UpdatedByUser)
+            //    .WithMany()
+            //    .HasForeignKey(u => u.UpdatedBy)
+            //    .OnDelete(DeleteBehavior.Restrict)
+            //    .HasPrincipalKey(u => u.Id);
 
             builder.HasQueryFilter(x => x.DeletedAt == null);
 

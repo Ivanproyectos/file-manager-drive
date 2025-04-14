@@ -47,6 +47,7 @@ namespace FileManagement.Service.UseCases
                 Name = request.Name,
                 Description = request.Description,
                 ParentFolderId = request.ParentId == 0 ? null : request.ParentId,
+                HasProcessState = request.HasProcessState,
             };
 
             try

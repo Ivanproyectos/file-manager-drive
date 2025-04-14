@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Contracts.Dtos
 {
-    public record struct SubFolderDto(int Id, string Name, int? ParentId);
+    public record struct SubFolderDto(
+        int Id, 
+        string Name, 
+        int? ParentId,
+        bool CanDownload,
+        bool IsDateExpired,
+        DateTime? ExpirationDate
+        );
 
 }

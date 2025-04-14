@@ -8,5 +8,6 @@ namespace FileManagement.Core.Interfaces.Repositories
         Task RemoveFolderPermissionRangeAsync(List<FolderPermission> folderPermissions);
         Task UpdateFolderPermissionRangeAsync(List<FolderPermission> folderPermissions);
         Task<List<FolderPermission>> GetFolderPermissionsByFolderIdAsync(int folderId);
+        Task<FolderPermission> GetFolderPermissionsByUserIdAsync(int folderId, int userId);
     }
 }

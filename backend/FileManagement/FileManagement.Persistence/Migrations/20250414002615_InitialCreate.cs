@@ -362,18 +362,6 @@ namespace FileManagement.Persistence.Migrations
                         principalTable: "Peoples",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Users_Users_CreatedBy",
-                        column: x => x.CreatedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Users_Users_UpdatedBy",
-                        column: x => x.UpdatedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -443,38 +431,39 @@ namespace FileManagement.Persistence.Migrations
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "Name", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 12, 12, 37, 35, 652, DateTimeKind.Local).AddTicks(3566), 1, null, "Pendiente", "Pendiente", null, null },
-                    { 3, new DateTime(2025, 4, 12, 12, 37, 35, 652, DateTimeKind.Local).AddTicks(3583), 1, null, "Atendido", "Atendido", null, null }
+                    { 1, new DateTime(2025, 4, 13, 19, 26, 15, 668, DateTimeKind.Local).AddTicks(8030), 1, null, "Pendiente", "Pendiente", null, null },
+                    { 2, new DateTime(2025, 4, 13, 19, 26, 15, 668, DateTimeKind.Local).AddTicks(8053), 1, null, "En proceso", "En proceso", null, null },
+                    { 3, new DateTime(2025, 4, 13, 19, 26, 15, 668, DateTimeKind.Local).AddTicks(8055), 1, null, "Atendido", "Atendido", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Peoples",
                 columns: new[] { "Id", "Address", "BussinessName", "CreatedAt", "CreatedBy", "DeletedAt", "Email", "FirstName", "Identification", "LastName", "PersonType", "Phone", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(5124), null, null, "ivansperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
+                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 13, 19, 26, 15, 679, DateTimeKind.Local).AddTicks(9745), null, null, "ivansperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "RoleName", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(8497), 1, null, "Administrador", "Admin", null, null },
-                    { 2, new DateTime(2025, 4, 12, 12, 37, 35, 657, DateTimeKind.Local).AddTicks(8505), 1, null, "Usuario", "User", null, null }
+                    { 1, new DateTime(2025, 4, 13, 19, 26, 15, 681, DateTimeKind.Local).AddTicks(7006), 1, null, "Administrador", "Admin", null, null },
+                    { 2, new DateTime(2025, 4, 13, 19, 26, 15, 681, DateTimeKind.Local).AddTicks(7038), 1, null, "Usuario", "User", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "SourceProviders",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "ProviderName", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 12, 17, 37, 35, 658, DateTimeKind.Utc).AddTicks(6712), 1, null, "Google Drive Provider", "Google Drive", null, null });
+                values: new object[] { 1, new DateTime(2025, 4, 14, 0, 26, 15, 683, DateTimeKind.Utc).AddTicks(9598), 1, null, "Google Drive Provider", "Google Drive", null, null });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "ExpirationDate", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(995), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(999), null });
+                values: new object[] { 1, new DateTime(2025, 4, 13, 19, 26, 15, 684, DateTimeKind.Local).AddTicks(6951), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 13, 19, 26, 15, 684, DateTimeKind.Local).AddTicks(6967), null });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "RoleId", "UpdatedAt", "UpdatedBy", "UserId" },
-                values: new object[] { 1, new DateTime(2025, 4, 12, 12, 37, 35, 660, DateTimeKind.Local).AddTicks(9241), 1, null, 1, null, null, 1 });
+                values: new object[] { 1, new DateTime(2025, 4, 13, 19, 26, 15, 686, DateTimeKind.Local).AddTicks(1081), 1, null, 1, null, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilePermissions_FileId",
@@ -601,20 +590,10 @@ namespace FileManagement.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CreatedBy",
-                table: "Users",
-                column: "CreatedBy");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_PeopleId",
                 table: "Users",
                 column: "PeopleId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UpdatedBy",
-                table: "Users",
-                column: "UpdatedBy");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_FilePermissions_Users_UserId",

@@ -9,15 +9,18 @@ namespace FileManagement.Service.Services
     public class UserFolderService : IUserFolderService
     {
         private readonly IUserFolderRepository _userFolderRepository;
+        private readonly IFolderPermissionRepository _folderPermissionRepository;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
         public UserFolderService(IUserFolderRepository userFolderRepository, 
-            ITokenService tokenService, IMapper mapper)
+            ITokenService tokenService, IMapper mapper,
+            IFolderPermissionRepository folderPermissionRepository)
         {
             _userFolderRepository = userFolderRepository;
             _tokenService = tokenService;
             _mapper = mapper;
+            _folderPermissionRepository = folderPermissionRepository;
         }
         public async Task<List<SubFolderDto>> GetUserSubFolderAsync(int FolderId)
         {
@@ -32,6 +35,7 @@ namespace FileManagement.Service.Services
         {
             var decodedToken =  _tokenService.DecodeToken();
             var userFolders = await _userFolderRepository.GerUserFolderByUserIdAsync(decodedToken.UserId);
+            //var userFolderPermisions = await _folderPermissionRepository.GetFolderPermissionsByUserIdAsync(decodedToken.UserId);
             var folders = userFolders.Select(x => x.Folder).ToList();
             return _mapper.Map<List<UserFolderResponse>>(folders);
         }

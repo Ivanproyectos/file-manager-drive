@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FileManagement.Core.Contracts.Dtos;
+using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
 
@@ -28,22 +29,11 @@ namespace FileManagement.Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Stream> DownloadFile(string FileId)
+        public async Task<DownloadResponse> DownloadFileAsync(int fileId)
         {
-            var stream = await _googleDriveService.DownloadFileAsync(FileId); 
-            return stream;
-            //string directory = Path.Combine(Path.GetTempPath(), "donwloads");
-            //string path = Path.Combine(directory, $"{file.FileName}");
-
-            //if (!Directory.Exists(directory))
-            //{
-            //    Directory.CreateDirectory(directory);
-            //}
-
-            //using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
-            //{
-            //    await stream.CopyToAsync(fileStream);
-            //}
+            var file = await _fileRepository.GetFileByIdAsync(fileId);
+            var stream = await _googleDriveService.DownloadFileAsync(file.FileStorage.StorageIdentifier); 
+            return new DownloadResponse(stream, file.MimeType, file.FileName);
         }
 
         public async Task<List<UserFileDto>> GetFilesByFolderIdAsync(int FolderId)

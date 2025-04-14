@@ -4,6 +4,7 @@ namespace FileManagement.Core.Interfaces.Repositories
 {
     public interface IPeopleRepository
     {
+        Task<People> GetPeopleByIdentificationAsync(string identification);
         Task<People> GetPeopleByIdAsync(int id);
         Task<List<People>> GetAllPeopleAsync();
         Task AddPeopleAsync(People people);

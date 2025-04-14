@@ -275,7 +275,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                 </div>
                 {errors.people?.address && <span className="invalid-feedback">{errors.people?.address?.message}</span>}
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <h4 className="text-muted mb-3">Agregue permisos para el usuario</h4>
                 <RolList onSelected={setSelectedRoles} />
                 {errors.roles && <span className="invalid-feedback">{errors.roles?.message}</span>}
@@ -323,49 +323,6 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                   </div>
                 </>
               )}
-
-              {/*     <hr />
-              <h4 className="text-muted mb-3">Credenciales de acceso</h4>
-              <div className="mb-4">
-                <label htmlFor="password" className="form-label">
-                  Contrasena{" "}
-                </label>
-                <div className={`input-group input-group-merge ${errors.password ? "is-invalid" : ""}`}>
-                  <div className="input-group-prepend input-group-text">
-                    <i className="bi-lock"></i>
-                  </div>
-                  <input
-                    {...register("password")}
-                    id="password"
-                    type="text"
-                    className="form-control"
-                    placeholder="Ingrese una contraseña"
-                    aria-label="Ingrese una contraseña"
-                  />
-
-                </div>
-                {errors.password && <span className="invalid-feedback">{errors.password.message}</span>}
-              </div>
-              <div className="mb-4">
-                <label htmlFor="confirmPassword" className="form-label">
-                  Repita la contrasena{" "}
-                </label>
-                <div className={`input-group input-group-merge ${errors.confirmPassword ? "is-invalid" : ""}`}>
-                  <div className="input-group-prepend input-group-text">
-                    <i className="bi-lock"></i>
-                  </div>
-                  <input
-                    {...register("confirmPassword")}
-                    type="text"
-                    id="confirmPassword"
-                    className="form-control"
-                    placeholder="Repita la contraseña"
-                    aria-label="Repita la contraseña"
-                  />
-                </div>
-                {errors.confirmPassword && <span className="invalid-feedback">{errors.confirmPassword.message}</span>}
-              </div> */}
-
             </form>
           </div>
           <div className="modal-footer">

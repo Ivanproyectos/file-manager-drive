@@ -45,3 +45,7 @@ export const updateStatusFolder = async (folderId: number): Promise<void> => {
 export const updateFolder = async (folder: UpdateFolder): Promise<void> => {
     await axiosInstance.put(`/folders/${folder.id}`,folder);
 }
+
+export const changeStatus = async (folderId: number, statusId: number): Promise<void> => {
+    await axiosInstance.post(`folders/${folderId}/status/${statusId}`,{});
+}

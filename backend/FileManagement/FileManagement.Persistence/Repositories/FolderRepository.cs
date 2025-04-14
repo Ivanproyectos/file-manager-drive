@@ -76,6 +76,8 @@ namespace FileManagement.Persistence.Repositories
                             .ThenInclude(u => u.People)
                             .Include(f => f.UserFolders)
                             .Include(f => f.Files)
+                            .Include(f => f.FolderProcessHistories)
+                            .ThenInclude(fh => fh.FolderProcessStates)
                             .OrderByDescending(f => f.Id)
                             .ToListAsync();
                             

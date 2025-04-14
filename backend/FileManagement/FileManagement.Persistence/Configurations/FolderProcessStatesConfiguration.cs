@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FileManagement.Persistence.Configurations
 {
-    public class FolderProcessStatesConfiguration : IEntityTypeConfiguration<FolderProcessStates>
+    public class FolderProcessStatesConfiguration : IEntityTypeConfiguration<FolderProcessState>
     {
-        public void Configure(EntityTypeBuilder<FolderProcessStates> builder)
+        public void Configure(EntityTypeBuilder<FolderProcessState> builder)
         {
             builder.ToTable("FolderProcessStates");
             builder.HasKey(x => x.Id);
@@ -28,9 +28,9 @@ namespace FileManagement.Persistence.Configurations
             builder.HasQueryFilter(x => x.DeletedAt == null);
 
             builder.HasData(
-                new FolderProcessStates[]
+                new FolderProcessState[]
                 {
-                    new FolderProcessStates
+                    new FolderProcessState
                     {
                         Id = 1,
                         Name = "Pendiente",
@@ -38,7 +38,15 @@ namespace FileManagement.Persistence.Configurations
                         CreatedAt = DateTime.Now,
                         CreatedBy = 1,
                     },
-                    new FolderProcessStates
+                    new FolderProcessState
+                    {
+                        Id = 2,
+                        Name = "En proceso",
+                        Description = "En proceso",
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = 1,
+                    },
+                    new FolderProcessState
                     {
                         Id = 3,
                         Name = "Atendido",

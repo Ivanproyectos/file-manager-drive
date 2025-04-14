@@ -19,7 +19,6 @@ export const updateFolder = async (folder: UpdateFolder): Promise<void> => {
     ...permission,
     expirationDate: permission.expirationDate ? formatISO(parse(permission.expirationDate, 'dd/MM/yyyy', new Date())) : null
   }));
-  debugger;
    await updateFolderApi(folder);
 }
 

@@ -28,6 +28,11 @@ namespace FileManagement.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<FolderPermission> GetFolderPermissionsByUserIdAsync(int folderId, int userId)
+        {
+            return await _context.FolderPermissions.FirstOrDefaultAsync(fp => fp.FolderId == folderId && fp.UserId == userId);
+        }
+
         public Task RemoveFolderPermissionRangeAsync(List<FolderPermission> folderPermissions)
         {
             var permissions = folderPermissions

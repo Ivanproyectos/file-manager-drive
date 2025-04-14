@@ -41,6 +41,8 @@ namespace FileManagement.Persistence.Repositories
         public async Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId)
         {
             return await _context.UserFolders.Include(uf => uf.Folder)
+                .ThenInclude(f => f.FolderProcessHistories)
+                .ThenInclude(fh => fh.FolderProcessStates)
                 .Where(uf => uf.UserId == UserId && uf.Folder.ParentFolderId == null).ToListAsync();
         }
 

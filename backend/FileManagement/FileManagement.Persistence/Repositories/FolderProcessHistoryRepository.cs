@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FileManagement.Core.Entities;
 using FileManagement.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileManagement.Persistence.Repositories
 {
@@ -16,6 +17,12 @@ namespace FileManagement.Persistence.Repositories
         {
             _context = dbContext;
         }
+
+        public Task<List<FolderProcessHistory>> GetHistoriesAsync(int folderId)
+        {
+           return _context.FolderProcessHistories.Where(x => x.FolderId == folderId).ToListAsync();
+        }
+
         public async Task CreateAsync(FolderProcessHistory folderProcessHistory)
         {
             await _context.FolderProcessHistories.AddAsync(folderProcessHistory);

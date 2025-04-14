@@ -6,7 +6,9 @@
         public string Name { get; set; }
         public long Size { get; set; }
         public bool Status { get; set; }
+        public bool HasProcessState { get; set; }
         public List<UserFolderDto> Users { get; set; }
+        public List<FolderProcessHistoryDto> FolderProcessHistories { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
 

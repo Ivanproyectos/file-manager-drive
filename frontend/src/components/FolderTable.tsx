@@ -1,7 +1,7 @@
 import { useClientDataTable, useInitTomSelect } from "@/hooks";
-import { IFolder } from "@/types";
+import { IFolder, IFolderProcessHistories, IFolderProcessStatus } from "@/types";
 import { useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { convertDateToLocaleString } from "@/utils/dateFormat";
 import { convertBytes } from "@/utils/formatBytes";
@@ -12,14 +12,71 @@ interface Props {
   onEdit: (folderId: number) => void;
   onUpdateStatus: (folderId: number) => void;
   onRemove: (userId: number) => void;
+  onChangeStatus: (folderId: number) => void;
   isReload: boolean;
 }
 
-export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload }: Props) => {
-  useInitTomSelect();
+export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRemove }: Props) => {
+
   const navigate = useNavigate();
 
   const tableRef = useRef<HTMLTableElement>(null);
+
+  const getBabgeFolderStatus = (histories: IFolderProcessHistories[]) => {
+    if(histories?.length == 0 || histories === null ) 
+      return `<span class="badge bg-soft-dark text-dark">sin estado</span>`;
+
+        const historie = histories?.find(({isActive}) => isActive);
+        if(historie?.state.id == IFolderProcessStatus.PENDING) 
+          return `<span class="badge bg-soft-warning text-warning">${historie?.state.name}</span>`;
+
+        if(historie?.state.id == IFolderProcessStatus.PROCESS) 
+          return `<span class="badge bg-soft-info text-info">${historie?.state.name}</span>`;
+
+        if(historie?.state.id == IFolderProcessStatus.FINISHED) 
+          return `<span class="badge bg-soft-success text-success">${historie?.state.name}</span>`;
+    
+  }
+
+  const renderActions = (folder: IFolder) : string => {
+
+    return ` <div class="d-flex align-items-center gap-2">
+          <div class="form-check form-switch">
+              <input type="checkbox" class="form-check-input" id="formSwitch${
+                folder.id
+              }" data-action="status" data-id="${folder.id}" ${
+                  folder.status ? "checked" : ""
+                }>
+              <label class="form-check-label" for="formSwitch${
+                folder.id
+              }"></label>
+          </div>
+     
+          
+          <div class="btn-group" role="group">
+          <a class="btn btn-white btn-sm" href="javascript:void(0);" data-action="edit" data-bs-toggle="modal" 
+          data-id="${folder.id}" data-bs-target="#editFolderModal">
+            <i class="bi-pencil-fill me-1"></i> Editar
+          </a>
+          <div class="btn-group">
+            <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" 
+              id="optionsUser" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="optionsUser" style="">
+              <a class="dropdown-item" href="#"  data-action="delete" data-id="${folder.id}" >
+                <i class="bi-trash dropdown-item-icon"></i> Eliminar
+              </a>
+              ${folder.hasProcessState ? `
+              <a class="dropdown-item" href="#" data-bs-toggle="modal"  
+               data-bs-target="#changeFolderStatusModal" data-action="change-status" data-id="${folder.id}">
+                <i class="bi-collection dropdown-item-icon"></i> Cambiar estado
+              </a> ` : ""}
+
+            </div>
+          </div>
+        </div> 
+        </div>
+      `
+  };
 
   const columns = [
     {
@@ -34,8 +91,10 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
     {
       data: "users",
       render: (users: Array<any>) => {
-        if(users?.length == 0 ) return "sin usuarios";
-        return generateAvatar(users.map((user) => user.name))
+        if(users?.length == 0 || users === null ) 
+          return `<span class="badge bg-soft-dark text-dark">sin usuarios</span>`;
+
+        return generateAvatar(users?.map((user) => user.name))
       }
        ,
     },
@@ -45,31 +104,14 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
       render: (date: string) => convertDateToLocaleString(date),
     },
     {
+      data:"folderProcessHistories",
+      render: getBabgeFolderStatus
+    },
+    {
       data: null,
       label: "Acciones",
       orderable: false,
-      render: (folder: any) => `
-        <div class="d-flex align-items-center gap-2">
-          <div class="form-check form-switch">
-              <input type="checkbox" class="form-check-input" id="formSwitch${
-                folder.id
-              }" data-action="status" data-id="${folder.id}" ${
-        folder.status ? "checked" : ""
-      }>
-              <label class="form-check-label" for="formSwitch${
-                folder.id
-              }"></label>
-          </div>
-          <button type="button" class="btn btn-white btn-sm" data-action="edit" data-bs-toggle="modal" 
-          data-id="${folder.id}" data-bs-target="#editFolderModal">
-                <i class="bi-pencil-fill me-1"></i> Editar
-          </button>
-            <button type="button" class="btn btn-white btn-sm" data-action="delete" 
-            data-bs-toggle="modal" data-id="${folder.id}" >
-            <i class="bi-trash me-1"></i> Eliminar
-          </button>
-        </div>
-      `,
+      render: renderActions,
     },
   ];
 
@@ -80,13 +122,15 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
       const target = event.target as HTMLElement;
       const action = target.dataset.action;
       const folderId = target.dataset.id;
-
+      
       if (action === "edit") {
         onEdit(Number(folderId));
       } else if (action === "delete") {
         onRemove(Number(folderId));
       } else if (action === "status") {
         onUpdateStatus(Number(folderId));
+      } else if(action === "change-status") {
+        onChangeStatus(Number(folderId));
       } else if (action === "navigate") {
         const folderId = target.dataset.folderId;
         const folderName = target.dataset.folderName;
@@ -110,7 +154,6 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
       }
     };
   }, []);
-
 
 
   return (
@@ -149,301 +192,7 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
               </a>
             </div>
           </div>
-          {/* End Datatable Info */}
-
-          {/* Dropdown */}
-      {/*     <div className="dropdown">
-            <button
-              type="button"
-              className="btn btn-white btn-sm dropdown-toggle w-100"
-              id="usersExportDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="bi-download me-2"></i> Export
-            </button>
-
-            <div
-              className="dropdown-menu dropdown-menu-sm-end"
-              aria-labelledby="usersExportDropdown"
-            >
-              <span className="dropdown-header">Options</span>
-              <a id="export-copy" className="dropdown-item" href="javascript:;">
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/illustrations/copy-icon.svg"
-                  alt="Image Description"
-                />
-                Copy
-              </a>
-              <a
-                id="export-print"
-                className="dropdown-item"
-                href="javascript:;"
-              >
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/illustrations/print-icon.svg"
-                  alt="Image Description"
-                />
-                Print
-              </a>
-              <div className="dropdown-divider"></div>
-              <span className="dropdown-header">Download options</span>
-              <a
-                id="export-excel"
-                className="dropdown-item"
-                href="javascript:;"
-              >
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/brands/excel-icon.svg"
-                  alt="Image Description"
-                />
-                Excel
-              </a>
-              <a id="export-csv" className="dropdown-item" href="javascript:;">
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/components/placeholder-csv-format.svg"
-                  alt="Image Description"
-                />
-                .CSV
-              </a>
-              <a id="export-pdf" className="dropdown-item" href="javascript:;">
-                <img
-                  className="avatar avatar-xss avatar-4x3 me-2"
-                  src="./assets/svg/brands/pdf-icon.svg"
-                  alt="Image Description"
-                />
-                PDF
-              </a>
-            </div>
-          </div> */}
-          {/* End Dropdown */}
-
-          {/* Dropdown */}
-          <div className="dropdown">
-            <button
-              type="button"
-              className="btn btn-white btn-sm w-100"
-              id="usersFilterDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="bi-filter me-1"></i> Filter{" "}
-              <span className="badge bg-soft-dark text-dark rounded-circle ms-1">
-                2
-              </span>
-            </button>
-
-            <div
-              className="dropdown-menu dropdown-menu-sm-end dropdown-card card-dropdown-filter-centered"
-              aria-labelledby="usersFilterDropdown"
-              style={{ minWidth: "22rem" }}
-            >
-              {/* Card */}
-              <div className="card">
-                <div className="card-header card-header-content-between">
-                  <h5 className="card-header-title">Filter users</h5>
-
-                  {/* Toggle Button */}
-                  <button
-                    type="button"
-                    className="btn btn-ghost-secondary btn-icon btn-sm ms-2"
-                  >
-                    <i className="bi-x-lg"></i>
-                  </button>
-                  {/* End Toggle Button */}
-                </div>
-
-                <div className="card-body">
-                  <form>
-                    <div className="mb-4">
-                      <small className="text-cap text-body">Role</small>
-
-                      <div className="row">
-                        <div className="col">
-                          {/* Check */}
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="usersFilterCheckAll"
-                              defaultChecked
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="usersFilterCheckAll"
-                            >
-                              All
-                            </label>
-                          </div>
-                          {/* End Check */}
-                        </div>
-                        {/* End Col */}
-
-                        <div className="col">
-                          {/* Check */}
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="usersFilterCheckEmployee"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="usersFilterCheckEmployee"
-                            >
-                              Employee
-                            </label>
-                          </div>
-                          {/* End Check */}
-                        </div>
-                        {/* End Col */}
-                      </div>
-                      {/* End Row */}
-                    </div>
-
-                    <div className="row">
-                      <div className="col-sm mb-4">
-                        <small className="text-cap text-body">Position</small>
-
-                        {/* Select */}
-                        <div className="tom-select-custom">
-                          <select
-                            className="js-select js-datatable-filter form-select form-select-sm"
-                            data-target-column-index="2"
-                            data-hs-tom-select-options='{
-                                      "placeholder": "Any",
-                                      "searchInDropdown": false,
-                                      "hideSearch": true,
-                                      "dropdownWidth": "10rem"
-                                    }'
-                          >
-                            <option value="">Any</option>
-                            <option value="Accountant">Accountant</option>
-                            <option value="Co-founder">Co-founder</option>
-                            <option value="Designer">Designer</option>
-                            <option value="Developer">Developer</option>
-                            <option value="Director">Director</option>
-                          </select>
-                          {/* End Select */}
-                        </div>
-                      </div>
-                      {/* End Col */}
-
-                      <div className="col-sm mb-4">
-                        <small className="text-cap text-body">Status</small>
-
-                        {/* Select */}
-                        <div className="tom-select-custom">
-                          <select
-                            className="js-select js-datatable-filter form-select form-select-sm"
-                            data-target-column-index="4"
-                            data-hs-tom-select-options='{
-                                      "placeholder": "Any status",
-                                      "searchInDropdown": false,
-                                      "hideSearch": true,
-                                      "dropdownWidth": "10rem"
-                                    }'
-                          >
-                            <option value="">Any status</option>
-                            <option
-                              value="Completed"
-                              data-option-template='<span className="d-flex align-items-center"><span className="legend-indicator bg-success"></span>Completed</span>'
-                            >
-                              Completed
-                            </option>
-                            <option
-                              value="In progress"
-                              data-option-template='<span className="d-flex align-items-center"><span className="legend-indicator bg-warning"></span>In progress</span>'
-                            >
-                              In progress
-                            </option>
-                            <option
-                              value="To do"
-                              data-option-template='<span className="d-flex align-items-center"><span className="legend-indicator bg-danger"></span>To do</span>'
-                            >
-                              To do
-                            </option>
-                          </select>
-                        </div>
-                        {/* End Select */}
-                      </div>
-                      {/* End Col */}
-
-                      <div className="col-12 mb-4">
-                        <small className="text-cap text-body">Members</small>
-
-                        {/* Select */}
-                        <div className="tom-select-custom">
-                          <select
-                            className="js-select form-select"
-                            autoComplete="off"
-                            multiple
-                            data-hs-tom-select-options='{
-                                      "singleMultiple": true,
-                                      "hideSelected": false,
-                                      "placeholder": "Select member"
-                                    }'
-                          >
-                            <option label="empty"></option>
-                            <option
-                              value="AH"
-                              defaultValue={0}
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img10.jpg" alt="Image Description" /><span className="text-truncate">Amanda Harvey</span></span>'
-                            >
-                              Amanda Harvey
-                            </option>
-                            <option
-                              value="DH"
-                              defaultValue={0}
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img3.jpg" alt="Image Description" /><span className="text-truncate">David Harrison</span></span>'
-                            >
-                              David Harrison
-                            </option>
-                            <option
-                              value="SK"
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img4.jpg" alt="Image Description" /><span className="text-truncate">Sam Kart</span></span>'
-                            >
-                              Sam Kart
-                            </option>
-                            <option
-                              value="FH"
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img5.jpg" alt="Image Description" /><span className="text-truncate">Finch Hoot</span></span>'
-                            >
-                              Finch Hoot
-                            </option>
-                            <option
-                              value="CQ"
-                              defaultValue={0}
-                              data-option-template='<span className="d-flex align-items-center"><img className="avatar avatar-xss avatar-circle me-2" src="./assets/img/160x160/img6.jpg" alt="Image Description" /><span className="text-truncate">Costa Quinn</span></span>'
-                            >
-                              Costa Quinn
-                            </option>
-                          </select>
-                        </div>
-                        {/* End Select */}
-                      </div>
-                      {/* End Col */}
-                    </div>
-                    {/* End Row */}
-
-                    <div className="d-grid">
-                      <a className="btn btn-primary" href="javascript:;">
-                        Apply
-                      </a>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              {/* End Card */}
-            </div>
-          </div>
-          {/* End Dropdown */}
+        
         </div>
       </div>
       {/* End Header */}
@@ -473,644 +222,17 @@ export const FolderTable = ({ folders, onEdit,onUpdateStatus,onRemove, isReload 
         >
           <thead className="thead-light">
             <tr>
-              <th>Name</th>
+              <th>Nombre</th>
               <th>Miembros</th>
               <th>Tamaño</th>
               <th>Fecha Creado</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <Link
-                  className="d-flex align-items-center"
-                  to="/dashboard/folders/1"
-                >
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </Link>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Folder 2</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="./user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Amanda Harvey"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="./assets/img/160x160/img10.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="./user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="./assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="./user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Lisa Iston"
-                  >
-                    <span className="avatar-initials">L</span>
-                  </a>
-                  <a
-                    className="avatar avatar-light avatar-circle"
-                    href="./user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Lewis Clarke, Chris Mathew and 3 more"
-                  >
-                    <span className="avatar-initials">+5</span>
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
-            <tr>
-              <td>
-                <a className="d-flex align-items-center" href="javascript:;">
-                  <i className="bi-folder me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </td>
-              <td>
-                <div className="avatar-group avatar-group-xs avatar-circle">
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Ella Lauda"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img9.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="David Harrison"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img3.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                  <a
-                    className="avatar avatar-soft-dark"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Antony Taylor"
-                  >
-                    <span className="avatar-initials">A</span>
-                  </a>
-                  <a
-                    className="avatar avatar-soft-info"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Sara Iwens"
-                  >
-                    <span className="avatar-initials">S</span>
-                  </a>
-                  <a
-                    className="avatar"
-                    href="../user-profile.html"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Finch Hoot"
-                  >
-                    <img
-                      className="avatar-img"
-                      src="../assets/img/160x160/img5.jpg"
-                      alt="Image Description"
-                    />
-                  </a>
-                </div>
-              </td>
-              <td> 45 MB </td>
-              <td> 01 Jun 2021 </td>
-            </tr>
+
           </tbody>
         </table>
       </div>

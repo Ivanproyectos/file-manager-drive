@@ -1,10 +1,13 @@
-﻿using FileManagement.Core.Contracts.Request;
+﻿using FileManagement.Core.Constants;
+using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
+    [Authorize(Roles = $"{RoleConstants.Admin},{RoleConstants.User}")]
     [ApiController]
     public class UsersController : BaseApiController
     {

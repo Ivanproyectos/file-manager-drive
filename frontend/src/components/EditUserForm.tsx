@@ -19,6 +19,7 @@ export const EditUserForm = ({
   onSubmit,
 }: UpdateUserFormProps) => {
   const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([])
+  const [refresh, setRefresh] = useState(false)
   const inputDateRef = useRef<HTMLInputElement | null>(null)
   const {
     register,
@@ -36,11 +37,15 @@ export const EditUserForm = ({
 
   const personType = watch('people.personType')
   const isExpired = watch('isExpired')
-  debugger
 
   const onUpdateSubmit = async (user: UpdateUser) => {
     const result = await onSubmit(user)
     if (!result) return
+    reset()
+    setValue('expirationDate', '')
+  }
+
+  const onCloseModal = () => {
     reset()
   }
 
@@ -49,19 +54,23 @@ export const EditUserForm = ({
   }, [selectedRoles])
 
   useEffect(() => {
+    reset();
+
     const initialRoles = user?.roles?.map((role) => role.id) ?? []
     const initialState = { ...user, roles: initialRoles }
     reset(initialState)
     setValue('id', user?.id ?? 0)
     setSelectedRoles(initialRoles)
+    setValue('expirationDate', user?.expirationDate )
+    setRefresh(preve => !preve)
 
-    if (inputDateRef.current) {
+ /*    if (inputDateRef.current) {
       inputDateRef.current.value = user?.expirationDate ?? ''
-    }
+    } */
   }, [user])
 
   useEffect(() => {
-    HSCore.components.HSFlatpickr.init('#expirationDate-update', {
+    HSCore.components.HSFlatpickr.init('.dt-picker', {
       minDate: 'today',
       onChange: function (
         _selectedDates: Array<Date>,
@@ -72,7 +81,7 @@ export const EditUserForm = ({
         trigger('expirationDate')
       },
     })
-  }, [user])
+  }, [refresh])
 
   return (
     <div
@@ -82,6 +91,7 @@ export const EditUserForm = ({
       tabIndex={-1}
       aria-labelledby="editUserModal"
       aria-hidden="true"
+      data-bs-backdrop="static"
     >
       <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
@@ -92,6 +102,7 @@ export const EditUserForm = ({
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={onCloseModal}
             ></button>
           </div>
           <div className="modal-body">
@@ -356,7 +367,7 @@ export const EditUserForm = ({
                       /*     ref={inputDateRef} */
                       id="expirationDate-update"
                       type="text"
-                      className={`form-control ${errors.expirationDate ? 'is-invalid' : ''}`}
+                      className={`form-control dt-picker ${errors.expirationDate ? 'is-invalid' : ''}`}
                       data-hs-flatpickr-options='{
                                           "dateFormat": "d/m/Y"
                                           }'
@@ -379,6 +390,7 @@ export const EditUserForm = ({
               className="btn btn-white"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={onCloseModal}
             >
               Cancelar
             </button>

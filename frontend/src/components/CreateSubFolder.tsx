@@ -52,7 +52,7 @@ export const CreateSubFolder = ({
       };
       subFolderId = await createSubFolder(folder);
 
-      const file: ICreateFile = { folderId, uploadId };
+      const file: ICreateFile = { folderId: subFolderId, uploadId };
       await createFile(file);
       handleCloseModal();
       reset();

@@ -35,12 +35,15 @@ export const CreateFolderForm = ({
   const {
     register,
     handleSubmit,
+    watch,
     formState: { isSubmitting },
   } = useForm<CreateFolder>()
 
   const formFolerRef = useRef<HTMLFormElement>(null)
   const messagaElementRef = useRef<HTMLDivElement>(null)
   const uploadIdRef = useRef<string>('')
+
+  const hasProcessState = watch('hasProcessState');
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId })
@@ -215,17 +218,24 @@ export const CreateFolderForm = ({
               <div className="form-check form-switch d-flex justify-content-between p-0">
                 <label className="form-check-label" htmlFor="hasProcessState">
                   {' '}
-                  ¿ El folder tiene un estado ?
+                  ¿ El folder tendra estado para su seguimiento ?
                 </label>
                 <input
                   {...register('hasProcessState')}
                   type="checkbox"
                   className="form-check-input"
                   id="hasProcessState"
-                  name="isExpired"
                 />
               </div>
             </div>
+
+            {hasProcessState && (
+                <>
+                  <div className="alert alert-soft-primary" role="alert">
+                    <i className="bi-info-circle me-2"></i> Este folder tendra estados para su seguimiento, el estado inicial es: <strong>pendiente</strong>
+                  </div>
+                </>
+              )}
 
             <div className="mb-4">
               <label className="form-label">
@@ -280,7 +290,7 @@ export const CreateFolderForm = ({
               </button>
 
               <div className="d-flex justify-content-end gap-3 ms-auto">
-                <button type="button" className="btn btn-white">
+                <button type="button" className="btn btn-white"   data-bs-dismiss="modal">
                   Cancelar
                 </button>
                 {/*  <button  type="submit" className="btn btn-primary">Create Folder</button> */}

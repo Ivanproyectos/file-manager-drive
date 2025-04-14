@@ -8,6 +8,6 @@ namespace FileManagement.Core.Entities
         public int FolderProcessStateId { get; set; }
         public bool IsActive { get; set; }
         public Folder Folder { get; set; }
-        public FolderProcessStates FolderProcessStates { get; set; }
+        public FolderProcessState FolderProcessStates { get; set; }
     }
 }

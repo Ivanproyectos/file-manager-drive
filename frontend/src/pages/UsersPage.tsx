@@ -68,11 +68,15 @@ export const UsersPage = () => {
     modal.hide()
   }
 
+  const handleUpdateUserById = (id: number) => {
+    setUserId(id)
+  }
+
   useEffect(() => {
     if (!userId || userId === 0) return
     const loadUser = async () => {
       try {
-        debugger
+    
         const user = await api.getUserById(userId)
         user.expirationDate = convertIsoDateToString(user.expirationDate ?? '')
         setUserById(user)
@@ -143,7 +147,7 @@ export const UsersPage = () => {
         </div>
 
         <UserTable
-          onUpdateUserId={setUserId}
+          onUpdateUserId={handleUpdateUserById}
           users={users}
           onReload={setRefresh}
         />

@@ -7,20 +7,21 @@ import { format } from "date-fns";
 import React, { useEffect, useReducer, useRef } from "react";
 
 declare const HSCore: any;
+
+const initialState = {
+	users: []
+}
 interface userFolderPermissionProps {
 	onUpdateUsers: (users: IFolderPermission[]) => void;
-	initialState?: { users: IFolderPermission[] | [] };
+	initialUsers?: { users: IFolderPermission[] | [] };
 }
 
 export const UserFolderPersmision = React.memo(
 	({
-		initialState = { users: [] },
+		initialUsers = { users: [] },
 			onUpdateUsers,
 	}: userFolderPermissionProps) => {
-		const [state, dispatch] = useReducer(
-			userFilePermissionReducer,
-			initialState,
-		);
+		const [state, dispatch] = useReducer(userFilePermissionReducer, initialState);
 		const inputDateRef = useRef<HTMLInputElement>(null);
 
 		useInitTooltip();
@@ -32,6 +33,7 @@ export const UserFolderPersmision = React.memo(
 				)
 			)
 				return;
+			
 			const user: IFolderPermission = {
 				userId: userSummary.id,
 				name: userSummary.name,
@@ -60,8 +62,13 @@ export const UserFolderPersmision = React.memo(
 		}, [state.users]);
 
 		useEffect(() => {
-			if (initialState.users.length > 0) {
-				const users = initialState.users.map((user: IFolderPermission) => {
+			debugger;
+			if (initialUsers.users.length == 0) {
+				dispatch(addUsers([]));
+				return;
+			}
+
+				const users = initialUsers.users.map((user: IFolderPermission) => {
 					const expirationDate = user.expirationDate
 						? format(new Date(user.expirationDate), "dd/MM/yyyy")
 						: "";
@@ -71,8 +78,8 @@ export const UserFolderPersmision = React.memo(
 					};
 				});
 				dispatch(addUsers(users));
-			}
-		}, [initialState.users]);
+			debugger;
+		}, [initialUsers.users]);
 
 				/*   const handleCanview = (id: number) => {
 			const user = state?.users?.find(

@@ -14,8 +14,8 @@ namespace FileManagement.Core.Entities
         public People? People { get; set; }
         public ICollection<UserRole> Roles { get; set; }
         //public ICollection<UserFolder> UserFolders { get; set; }
-        public User? CreatedByUser { get; set; }
-        public User? UpdatedByUser { get; set; }
+        //public User? CreatedByUser { get; set; }
+        //public User? UpdatedByUser { get; set; }
 
         //public IEnumerable<FolderPermission> FolderPermissions { get; set; }
         //public IEnumerable<FilePermission> FilePermissions { get; set; }

@@ -1,18 +1,19 @@
-﻿using FileManagement.Core.Contracts.Request;
+﻿using FileManagement.Core.Constants;
+using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
+    //[Authorize(Roles = $"{RoleConstants.Admin}")]
     public class FilesController : BaseApiController
     {
         private readonly IFileService _fileService;
-        private readonly IFileRepository _fileRepository;
-        public FilesController(IFileService fileService, IFileRepository fileRepository)
+        public FilesController(IFileService fileService)
         {
             _fileService = fileService;
-            _fileRepository = fileRepository;
         }
 
         [HttpPost()]
@@ -32,9 +33,8 @@ namespace FileManagement.WebApi.Controllers
         [HttpGet("{fileId}/download")]
         public async Task<IActionResult> Download(int fileId)
         {
-            var file = await _fileRepository.GetFileByIdAsync(fileId);
-            var stream = await _fileService.DownloadFile(file.FileStorage.StorageIdentifier);
-            return File(stream, file.MimeType, file.FileName);
+            var file = await _fileService.DownloadFileAsync(fileId);
+            return File(file.File, file.MimeType, file.FileName);
         }
     }
 }

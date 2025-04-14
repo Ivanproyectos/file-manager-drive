@@ -14,34 +14,38 @@ namespace FileManagement.Service.UseCases
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
         private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IPeopleRepository _peopleRepository;
         public LoginUseCase(IUserRepository userRepository,
             IPasswordService passwordService,
             ITokenService tokenService,
-            IUserRoleRepository userRoleRepository)
+            IUserRoleRepository userRoleRepository,
+            IPeopleRepository peopleRepository)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
             _tokenService = tokenService;
             _userRoleRepository = userRoleRepository;
+            _peopleRepository = peopleRepository;
         }
         public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetUserByEmailAsync(request.Email);
+            var people = await _peopleRepository.GetPeopleByIdentificationAsync(request.Email);
 
-            if (user == null) {
-                throw new UnauthorizedException($"El usuario con el email {request.Email} no existe");
+            if (people == null) {
+                throw new UnauthorizedException($"El usuario con la identificacion {request.Email} no existe");
             }
 
-            if (!_passwordService.VerifyPassword(user.PasswordHash, request.Password))
+            if (!_passwordService.VerifyPassword(people.User.PasswordHash, request.Password))
             {
                 throw new UnauthorizedException("Contraseña incorrecta");
             }
 
-            var userInfo = await _userRepository.GetUserByIdAsync(user.Id);
+            var userInfo = await _userRepository.GetUserByIdAsync(people.User.Id);
 
-            var roles = await _userRoleRepository.GetUserRolesAsync(user.Id);
+            var roles = await _userRoleRepository.GetUserRolesAsync(people.User.Id);
 
-            var roleNames = roles.Select(x => x.Role.RoleName).ToList();
+            var roleNames = roles.Select(x => x.Role.RoleName)
+                .ToList();
 
             var userDto = new GeneratTokenDto
             {
@@ -50,10 +54,10 @@ namespace FileManagement.Service.UseCases
                 Roles = roleNames
             };
 
-            var tokenDto = await _tokenService.GenerateToken(user.Id, userDto);
+            var tokenDto = await _tokenService.GenerateToken(people.User.Id, userDto);
             
             return new LoginResponse { 
-                UserId = user.Id,
+                UserId = people.User.Id,
                 Token = tokenDto.Token,
                 ExpiresIn = tokenDto.ExpiresIn 
             };

@@ -14,7 +14,9 @@ namespace FileManagement.Service.Mappers
         {
             #region entity to dto
             CreateMap<Folder, CreateFolderResponse>();
-            CreateMap<Folder, FolderDto>();
+
+            //CreateMap<Folder, FolderDto>();
+
             CreateMap<Core.Entities.File, UserFileDto>()
                 .ForMember(dest => dest.CanView, opt => opt.MapFrom(src => src.Permission.CanView))
                 .ForMember(dest => dest.CanDownload, opt => opt.MapFrom(src => src.Permission.CanDownload))
