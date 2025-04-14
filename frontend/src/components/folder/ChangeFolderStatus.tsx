@@ -1,24 +1,23 @@
 import { IFolderProcessHistories, IFolderProcessStatus } from "@/types";
-import { useState, useRef, Dispatch } from "react";
-import { changeStatus } from "@/api/folderApi";
-import { showError, showSuccess } from "@/utils/alerts";
+import { useState } from "react";
 
 declare const bootstrap: any;
 
 interface Props {
+    modalRef: React.RefObject<HTMLDivElement | null>;
     folderStatusHistories: IFolderProcessHistories[] | null;
-    folderId: number  | null ;
-    onRefresh: Dispatch<React.SetStateAction<boolean>>
+    onSubmit: (statusId: number) => Promise<boolean>;
+    onCloseModal?: () => void
 }
 
-export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh }: Props) => {
+export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderStatusHistories }: Props) => {
     const [statusId, setStatusId] = useState(0);
     const [isValid, setValid] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const modalRef = useRef<HTMLDivElement>(null);
+    /* const modalRef = useRef<HTMLDivElement>(null); */
 
     const handleSelectedStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        if(parseInt(e.target.value) === 0) {
+        if (parseInt(e.target.value) === 0) {
             setValid(false);
             return;
         }
@@ -27,22 +26,16 @@ export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh 
     }
 
     const handleSubmit = async () => {
-        if(statusId === 0) {
-            
+        if (statusId === 0) {
             setValid(false);
             return;
         }
-        try {
-            setIsLoading(true)
-            await changeStatus(folderId || 0, statusId);
-            showSuccess("Cambio de estado exitoso");
-            setIsLoading(false)
+        setIsLoading(true);
+        const result = await onSubmit(statusId);
+        if (result) {
             closeModal();
-            onRefresh((preve) => !preve);
-        } catch (error) {
-            console.error("Error changing status:", error);
-            showError("Error al cambiar el estado, vuelva a intentalor mas tarde");
         }
+        setIsLoading(false);
     }
 
     const closeModal = () => {
@@ -53,11 +46,11 @@ export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh 
     const getStatusClassName = (statusId: number): string => {
         switch (statusId) {
             case IFolderProcessStatus.PENDING:
-                return "avatar avatar-xs avatar-soft-warning avatar-circle";
+                return "avatar avatar-xs avatar-warning avatar-circle";
             case IFolderProcessStatus.PROCESS:
-                return "avatar avatar-xs avatar-soft-info avatar-circle";
+                return "avatar avatar-xs avatar-info avatar-circle";
             case IFolderProcessStatus.FINISHED:
-                return "avatar avatar-xs avatar-soft-success avatar-circle";
+                return "avatar avatar-xs avatar-success avatar-circle";
             default:
                 return "";
         }
@@ -72,6 +65,7 @@ export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh 
             tabIndex={-1}
             aria-labelledby="changeFolderStatusModallabel"
             aria-hidden="true"
+            data-bs-backdrop="static"
         >
             <div className="modal-dialog modal-dialog-centered modal-lg">
                 <div className="modal-content">
@@ -80,6 +74,7 @@ export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh 
                             Estados del folder
                         </h5>
                         <button
+                            onClick={onCloseModal}
                             type="button"
                             className="btn-close"
                             data-bs-dismiss="modal"
@@ -123,6 +118,7 @@ export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh 
                     </div>
                     <div className="modal-footer">
                         <button
+                            onClick={onCloseModal}
                             type="button"
                             className="btn btn-white"
                             data-bs-dismiss="modal"
@@ -135,7 +131,7 @@ export const ChangeFolderStatus = ({ folderId, folderStatusHistories, onRefresh 
                             className={`btn btn-primary d-flex justify-content-center align-items-center `}
                             onClick={handleSubmit}
                             disabled={isLoading}>
-                            
+
                             Guardar cambios
                         </button>
                     </div>

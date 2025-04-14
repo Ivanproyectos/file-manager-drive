@@ -19,7 +19,7 @@ import { useSignalr } from '@/context/SignalrContext'
 import { useInitTomSelect } from '@/hooks'
 import { updateFolder } from '@/services/folderService'
 
-declare const bootstrap : any
+declare const bootstrap: any
 
 export const FoldersPage = () => {
   const [folders, setFolders] = useState<IFolder[]>([])
@@ -27,6 +27,7 @@ export const FoldersPage = () => {
     IFolderProcessHistories[] | null
   >(null)
   const [folderIdToEdit, setfolderIdToEdit] = useState<number | null>(null)
+  const [folderIdToStatus, setfolderIdToStatus] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
   const [refresh, setRefresh] = useState(false)
@@ -37,7 +38,8 @@ export const FoldersPage = () => {
   )
   const foldersRef = useRef<IFolder[]>([])
   const modalRefEdit = useRef<HTMLDivElement>(null)
-  
+  const modalRefStatus = useRef<HTMLDivElement>(null)
+
   useInitTomSelect()
 
   const { signalr } = useSignalr()
@@ -77,7 +79,7 @@ export const FoldersPage = () => {
     }
   }
 
-  const hanldeUpdateFolder = async (folder: UpdateFolder) => {
+  const handleUpdateFolder = async (folder: UpdateFolder) => {
     try {
       const isAccepted = await showConfirm(
         '¿Está seguro de actualizar la carpeta?'
@@ -89,12 +91,31 @@ export const FoldersPage = () => {
       showSuccess('Folder actualizada correctamente')
       setRefresh((prev) => !prev)
       setfolderIdToEdit(null)
-      
+
       return
     } catch (error) {
       console.error(error)
       showError('Error al actualizar la carpeta.')
     }
+  }
+
+  const hanldeChangeProcessStatus = async (statusId: number) => {
+
+    try {
+
+      await folderApi.changeStatus(folderIdToStatus || 0, statusId);
+      showSuccess("Cambio de estado exitoso");
+      setfolderIdToStatus(null)
+      setRefresh((prev) => !prev)
+      
+      return true
+
+    } catch (error) {
+      console.error("Error changing status:", error);
+      showError("Error al cambiar el estado, vuelva a intentalor mas tarde");
+      return false;
+    }
+
   }
 
   const hanldeEditFolder = (folderId: number) => {
@@ -109,10 +130,8 @@ export const FoldersPage = () => {
   }
 
   const handleCloseEditModal = () => {
-    
-      setIsModalEditOpen(false)
-      setfolderIdToEdit(null)
-   
+    setIsModalEditOpen(false)
+    setfolderIdToEdit(null)
   }
 
   const handleUploadFiles = (filesNames: string[]) => {
@@ -125,8 +144,9 @@ export const FoldersPage = () => {
     const folderHistories =
       foldersRef?.current.find((folder) => folder.id === folderId)
         ?.folderProcessHistories || null
+
     setFolderStatusHistories(folderHistories)
-    setfolderIdToEdit(folderId)
+    setfolderIdToStatus(folderId)
   }
 
   useEffect(() => {
@@ -145,9 +165,16 @@ export const FoldersPage = () => {
   useEffect(() => {
 
     if (!folderIdToEdit) return
-     const modal = bootstrap.Modal.getOrCreateInstance(modalRefEdit.current)
-     modal.show()
+    const modal = bootstrap.Modal.getOrCreateInstance(modalRefEdit.current)
+    modal.show()
   }, [folderIdToEdit])
+
+  useEffect(() => {
+
+    if (!folderIdToStatus) return
+    const modal = bootstrap.Modal.getOrCreateInstance(modalRefStatus.current)
+    modal.show()
+  }, [folderIdToStatus])
 
   useEffect(() => {
     if (signalr) {
@@ -312,12 +339,14 @@ export const FoldersPage = () => {
         folderId={folderIdToEdit}
         isModalOpen={isModalEditOpen}
         onCloseModal={handleCloseEditModal}
-        onSubmit={hanldeUpdateFolder}
+        onSubmit={handleUpdateFolder}
       />
       <ChangeFolderStatus
-        onRefresh={setRefresh}
+        key={folderIdToStatus}
+        modalRef={modalRefStatus}
+        onSubmit={hanldeChangeProcessStatus}
         folderStatusHistories={folderStatusHistories}
-        folderId={folderIdToEdit}
+        onCloseModal={() => setfolderIdToStatus(null)}
       />
 
       <StatusLoadFiles filesNames={uploadedFiles} status={statusUploaded} />

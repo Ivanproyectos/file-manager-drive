@@ -66,8 +66,7 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
                 <i class="bi-trash dropdown-item-icon"></i> Eliminar
               </a>
               ${folder.hasProcessState ? `
-              <a class="dropdown-item" href="#" data-bs-toggle="modal"  
-               data-bs-target="#changeFolderStatusModal" data-action="change-status" data-id="${folder.id}">
+              <a class="dropdown-item" href="#"  data-action="change-status" data-id="${folder.id}">
                 <i class="bi-collection dropdown-item-icon"></i> Cambiar estado
               </a> ` : ""}
 
