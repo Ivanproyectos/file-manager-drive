@@ -8,21 +8,14 @@ import {
   LoginPage,
   UserFoldersPage,
   UsersPage,
-} from "@/pages";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { PrivateRoute } from "./PrivateRoute";
-
-//import Login from '../pages/Login';
-//import ErrorPage from '../pages/ErrorPage';
-//import PrivateRoute from './PrivateRoute'; // Componente para proteger rutas
+} from '@/pages'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { PrivateRoute } from './PrivateRoute'
 
 export const AppRoutes = () => {
-
   return (
     <Routes>
-      <Route
-        path="/" element={<Navigate to="/dashboard" />}
-      />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<PrivateRoute />}>
@@ -31,7 +24,10 @@ export const AppRoutes = () => {
           <Route path="/dashboard/users" element={<UsersPage />} />
           <Route path="/dashboard/user-folders" element={<UserFoldersPage />} />
           <Route path="/dashboard/folders" element={<FoldersPage />} />
-          <Route path="/dashboard/folders/:id" element={<FolderManagerPage />} />
+          <Route
+            path="/dashboard/folders/:id"
+            element={<FolderManagerPage />}
+          />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Route>
@@ -39,7 +35,7 @@ export const AppRoutes = () => {
       {/* Ruta para manejo de errores */}
       <Route path="*" element={<ErrorPage />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes

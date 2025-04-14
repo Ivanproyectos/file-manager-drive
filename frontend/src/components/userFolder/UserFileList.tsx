@@ -1,6 +1,6 @@
 
 import { IUserFile } from "@/types";
-import { FileItemSkeleton } from "../skeletons/FileItemSkeleton";
+import { FileItemSkeleton } from "@/components/skeletons/FileItemSkeleton";
 import { getFileIcon } from "@/utils/fileIconMapping";
 import { convertDateToLocaleString } from "@/utils/dateFormat";
 import { convertBytes } from "@/utils/formatBytes";
@@ -8,15 +8,15 @@ import { validateExpirationDate } from "@/services/fileService";
 import { downloadFile } from "@/api/files";
 
 interface userFileListProps {
-    files: IUserFile[];
-  loading: boolean;
+  files: IUserFile[]
+  loading: boolean
 }
 
 interface FileActionsProps {
-  fileId: number;
-  canDownload: boolean;
-  expirationDate: string;
-  isDateExpired: boolean;
+  fileId: number
+  canDownload: boolean
+  expirationDate: string
+  isDateExpired: boolean
 }
 
 /* const handleDownload = async (fileId: number) => {
@@ -37,8 +37,13 @@ interface FileActionsProps {
   }
 };
  */
-const FileActions = ({ fileId, canDownload, expirationDate, isDateExpired }: FileActionsProps) => {
-  debugger; 
+const FileActions = ({
+  fileId,
+  canDownload,
+  expirationDate,
+  isDateExpired,
+}: FileActionsProps) => {
+  debugger
   return (
     <div className="dropdown">
       <button
@@ -55,23 +60,25 @@ const FileActions = ({ fileId, canDownload, expirationDate, isDateExpired }: Fil
       <div
         className="dropdown-menu dropdown-menu-end"
         aria-labelledby="filesListDropdown1"
-        style={{ minWidth: "13rem" }}
+        style={{ minWidth: '13rem' }}
       >
         <span className="dropdown-header">Opciones</span>
-    {/*     {canDownload && !isDateExpired && (
+        {/*     {canDownload && !isDateExpired && (
           <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
             <i className="bi-download dropdown-item-icon"></i> Descargar
           </a>
         )} */}
-          <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
-            <i className="bi-download dropdown-item-icon"></i> Descargar
-          </a>
+        <a
+          className="dropdown-item"
+          href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`}
+        >
+          <i className="bi-download dropdown-item-icon"></i> Descargar
+        </a>
       </div>
     </div>
-  );
-};
+  )
+}
 export const UserFileList = ({ files, loading }: userFileListProps) => {
-
   return (
     <ul className="list-group">
       {loading ? (
@@ -87,7 +94,7 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
             canView,
             canDownload,
             expirationDate,
-            isDateExpired
+            isDateExpired,
           }) => (
             <li className="list-group-item" key={id}>
               <div className="row align-items-center">
@@ -129,5 +136,5 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
         )
       )}
     </ul>
-  );
-};
+  )
+}

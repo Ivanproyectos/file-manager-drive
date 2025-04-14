@@ -1,7 +1,6 @@
 import Swal from 'sweetalert2'
 import Cookies from 'js-cookie'
 
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 const theme = Cookies.get('theme')
 
 const defualtSettigs = {

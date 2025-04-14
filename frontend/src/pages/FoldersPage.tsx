@@ -1,6 +1,12 @@
-import  * as folderApi from "@/api/folderApi";
-import { getFolderPermission } from "@/api/folderPermission";
-import { CreateFolderForm, EditFolderForm, FolderTable, StatusLoadFiles, ChangeFolderStatus } from "@/components";
+import * as folderApi from '@/api/folderApi'
+import { getFolderPermission } from '@/api/folderPermission'
+import {
+  CreateFolderForm,
+  EditFolderForm,
+  FolderTable,
+  StatusLoadFiles,
+  ChangeFolderStatus,
+} from '@/components'
 import {
   IFolder,
   IFolderById,
@@ -8,169 +14,165 @@ import {
   StatusUploadFile,
   StatusUploadedFile,
   UpdateFolder,
-  IFolderProcessHistories
-} from "@/types";
-import { showConfirm, showError, showSuccess } from "@/utils/alerts";
-import { useEffect, useRef, useState } from "react";
-import { useSignalr } from "@/context/SignalrContext";
-import { useInitTomSelect } from "@/hooks";
-import { updateFolder } from "@/services/folderService";
-
-declare const bootstrap: any;
+  IFolderProcessHistories,
+} from '@/types'
+import { showConfirm, showError, showSuccess } from '@/utils/alerts'
+import { useEffect, useRef, useState } from 'react'
+import { useSignalr } from '@/context/SignalrContext'
+import { useInitTomSelect } from '@/hooks'
+import { updateFolder } from '@/services/folderService'
 
 export const FoldersPage = () => {
-  const [folders, setFolders] = useState<IFolder[]>([]);
-  const [folder, setFolder] = useState<IFolderById | null>(null);
-  const [folderStatusHistories, setFolderStatusHistories] = useState<IFolderProcessHistories[] | null>(null);
-  const [folderIdToEdit, setfolderIdToEdit] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [folderPermissions, setFolderPermissions] = useState<IFolderPermission[]>([]);
+  const [folders, setFolders] = useState<IFolder[]>([])
+  const [folder, setFolder] = useState<IFolderById | null>(null)
+  const [folderStatusHistories, setFolderStatusHistories] = useState<
+    IFolderProcessHistories[] | null
+  >(null)
+  const [folderIdToEdit, setfolderIdToEdit] = useState<number | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false)
+  const [refresh, setRefresh] = useState(false)
+  const [folderPermissions, setFolderPermissions] = useState<
+    IFolderPermission[]
+  >([])
 
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  const [statusUploaded, setStatusUploaded] = useState<StatusUploadFile | null>(null);
-  const foldersRef = useRef<IFolder[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
+  const [statusUploaded, setStatusUploaded] = useState<StatusUploadFile | null>(
+    null
+  )
+  const foldersRef = useRef<IFolder[]>([])
 
-  const { signalr } = useSignalr();
-  useInitTomSelect();
+  const { signalr } = useSignalr()
+  useInitTomSelect()
   /*   const signalr = useConnectSignalr();
    */
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null)
 
   const handleCreateComplete = () => {
-    setRefresh((prev) => !prev);
-  };
+    setRefresh((prev) => !prev)
+  }
 
   const handleUpdateStatus = async (id: number) => {
     try {
-      await folderApi.updateStatusFolder(id);
+      await folderApi.updateStatusFolder(id)
       setTimeout(() => {
-        setRefresh((prev) => !prev);
-      }, 500);
+        setRefresh((prev) => !prev)
+      }, 500)
     } catch (error) {
-      console.error("Error updating status:", error);
-      showError("Error al actualizar el estado del folder.");
+      console.error('Error updating status:', error)
+      showError('Error al actualizar el estado del folder.')
     }
-  };
+  }
 
   const handleRemoveFolder = async (id: number) => {
     try {
       const isAccepted = await showConfirm(
-        "¿Está seguro de eliminar el folder?"
-      );
-      if (!isAccepted) return;
+        '¿Está seguro de eliminar el folder?'
+      )
+      if (!isAccepted) return
 
-      await folderApi.deleteFolder(id);
-      showSuccess("Folder eliminado correctamente");
-      setRefresh((prev) => !prev);
+      await folderApi.deleteFolder(id)
+      showSuccess('Folder eliminado correctamente')
+      setRefresh((prev) => !prev)
     } catch (error) {
-      console.error(error);
-      showError("Error al eliminar el folder.");
+      console.error(error)
+      showError('Error al eliminar el folder.')
     }
-  };
+  }
 
   const hanldeUpdateFolder = async (folder: UpdateFolder) => {
     try {
-      const isAccepted = await showConfirm("¿Está seguro de actualizar la carpeta?");
-      if (!isAccepted) return;
+      const isAccepted = await showConfirm(
+        '¿Está seguro de actualizar la carpeta?'
+      )
+      if (!isAccepted) return
       folder.folderPermissions.map
-      
-        await updateFolder(folder); 
-        showSuccess("Folder actualizada correctamente");
-        setRefresh((prev) => !prev);
-        return;
-      
+
+      await updateFolder(folder)
+      showSuccess('Folder actualizada correctamente')
+      setRefresh((prev) => !prev)
+      return
     } catch (error) {
-      console.error(error);
-      showError("Error al actualizar la carpeta.");
+      console.error(error)
+      showError('Error al actualizar la carpeta.')
     }
-  };
-
-
+  }
 
   const hanldeEditFolder = (folderId: number) => {
-    setIsModalEditOpen(true);
-    setfolderIdToEdit(folderId);
-  };
+    setIsModalEditOpen(true)
+    setfolderIdToEdit(folderId)
+  }
 
   const handleModalOpen = () => {
     setTimeout(() => {
-      setIsModalOpen(false);
-    }, 100);
-  };
+      setIsModalOpen(false)
+    }, 100)
+  }
 
   const handleCloseEditModal = () => {
     setTimeout(() => {
-      setIsModalEditOpen(false);
-    }, 100);
-  };
+      setIsModalEditOpen(false)
+    }, 100)
+  }
 
   const handleUploadFiles = (filesNames: string[]) => {
     if (!filesNames || filesNames.length === 0) return
-    setUploadedFiles(filesNames);
-    setStatusUploaded(StatusUploadFile.LOADING);
+    setUploadedFiles(filesNames)
+    setStatusUploaded(StatusUploadFile.LOADING)
   }
-
 
   const handleChangeFolderStatus = (folderId: number) => {
-    const folderHistories = foldersRef?.current.find((folder) => folder.id === folderId)?.folderProcessHistories || null;
-    setFolderStatusHistories(folderHistories);
-    setfolderIdToEdit(folderId);
+    const folderHistories =
+      foldersRef?.current.find((folder) => folder.id === folderId)
+        ?.folderProcessHistories || null
+    setFolderStatusHistories(folderHistories)
+    setfolderIdToEdit(folderId)
   }
 
-
   useEffect(() => {
-
     const loadUsers = async () => {
       try {
-        const folders = await folderApi.getFoldersAsync();
-        setFolders(folders);
-        foldersRef.current = folders;
+        const folders = await folderApi.getFoldersAsync()
+        setFolders(folders)
+        foldersRef.current = folders
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error)
       }
-    };
-    loadUsers();
-  }, [refresh]);
+    }
+    loadUsers()
+  }, [refresh])
 
   useEffect(() => {
-
     if (!folderIdToEdit) return
 
     const loadFolder = async () => {
       try {
-
-        const folder = await folderApi.getFolderByIdAsync(folderIdToEdit);
-        const folderPermission = await getFolderPermission(folderIdToEdit);
-        setFolder(folder);
-        setFolderPermissions(folderPermission);
-      }
-      catch (error) {
-        console.error("Error fetching data:", error);
+        const folder = await folderApi.getFolderByIdAsync(folderIdToEdit)
+        const folderPermission = await getFolderPermission(folderIdToEdit)
+        setFolder(folder)
+        setFolderPermissions(folderPermission)
+      } catch (error) {
+        console.error('Error fetching data:', error)
       }
     }
-    loadFolder();
-
-  }, [folderIdToEdit]);
+    loadFolder()
+  }, [folderIdToEdit])
 
   useEffect(() => {
     if (signalr) {
-      signalr?.on("FileUploaded", (response: StatusUploadedFile) => {
-      
-        setUploadedFiles(response.files);
-        setStatusUploaded(response.status);
-        setRefresh((prev) => !prev);
-      });
+      signalr?.on('FileUploaded', (response: StatusUploadedFile) => {
+        setUploadedFiles(response.files)
+        setStatusUploaded(response.status)
+        setRefresh((prev) => !prev)
+      })
     }
     return () => {
-
       if (signalr) {
-        signalr.off("FileUploaded");
+        signalr.off('FileUploaded')
       }
-    };
-  }, [signalr]);
+    }
+  }, [signalr])
   return (
     <>
       <div className="content container-fluid">
@@ -226,7 +228,7 @@ export const FoldersPage = () => {
                 <div className="row mx-md-n3">
                   <div className="col-md px-md-4">
                     <span className="d-block">Total folders</span>
-              {/*       <span className="badge bg-soft-success text-success rounded-pill p-1">
+                    {/*       <span className="badge bg-soft-success text-success rounded-pill p-1">
                       <i className="bi-graph-up"></i> +2 files
                     </span> */}
                   </div>
@@ -236,7 +238,7 @@ export const FoldersPage = () => {
                     <div className="row justify-content-start mb-2">
                       <div className="col-auto">
                         <span className="legend-indicator bg-primary"></span>
-                        <strong>65 GB</strong>{" "}
+                        <strong>65 GB</strong>{' '}
                         <span className="text-muted">
                           de 100 GB utilizados.
                         </span>
@@ -249,7 +251,7 @@ export const FoldersPage = () => {
                       <div
                         className="progress-bar"
                         role="progressbar"
-                        style={{ width: "60%" }}
+                        style={{ width: '60%' }}
                         aria-valuenow={40}
                         aria-valuemin={0}
                         aria-valuemax={100}
@@ -321,12 +323,13 @@ export const FoldersPage = () => {
         onCloseModal={handleCloseEditModal}
         onSubmit={hanldeUpdateFolder}
       />
-      <ChangeFolderStatus 
-      onRefresh={setRefresh}
-      folderStatusHistories={folderStatusHistories} 
-      folderId={folderIdToEdit} />
+      <ChangeFolderStatus
+        onRefresh={setRefresh}
+        folderStatusHistories={folderStatusHistories}
+        folderId={folderIdToEdit}
+      />
 
       <StatusLoadFiles filesNames={uploadedFiles} status={statusUploaded} />
     </>
-  );
-};
+  )
+}
