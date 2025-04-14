@@ -29,7 +29,7 @@ export default function(this:TomSelect, userOptions:CBOptions) {
 	}, userOptions);
 
 	self.on('initialize',()=>{
-		var button = getDom(options.html(options));
+		const button = getDom(options.html(options));
 		button.addEventListener('click',(evt)=>{
 
 			if( self.isDisabled ){

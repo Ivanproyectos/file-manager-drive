@@ -113,7 +113,7 @@ var FullCalendar = (function (exports) {
         ContextType.Provider = function () {
             var _this = this;
             var isNew = !this.getChildContext;
-            var children = origProvider.apply(this, arguments); // eslint-disable-line prefer-rest-params
+            var children = origProvider.apply(this, arguments);  
             if (isNew) {
                 var subs_1 = [];
                 this.shouldComponentUpdate = function (_props) {
@@ -4803,14 +4803,14 @@ var FullCalendar = (function (exports) {
         var wrappedSuccess = function () {
             if (!isResolved) {
                 isResolved = true;
-                success.apply(this, arguments); // eslint-disable-line prefer-rest-params
+                success.apply(this, arguments);  
             }
         };
         var wrappedFailure = function () {
             if (!isResolved) {
                 isResolved = true;
                 if (failure) {
-                    failure.apply(this, arguments); // eslint-disable-line prefer-rest-params
+                    failure.apply(this, arguments);  
                 }
             }
         };
@@ -5123,7 +5123,7 @@ var FullCalendar = (function (exports) {
     var createPortal = FullCalendarVDom.createPortal;
     var flushSync = FullCalendarVDom.flushSync;
     var unmountComponentAtNode = FullCalendarVDom.unmountComponentAtNode;
-    /* eslint-enable */
+     
 
     var ScrollResponder = /** @class */ (function () {
         function ScrollResponder(execFunc, emitter, scrollTime, scrollTimeReset) {
@@ -5200,7 +5200,7 @@ var FullCalendar = (function (exports) {
         }
         PureComponent.prototype.shouldComponentUpdate = function (nextProps, nextState) {
             if (this.debug) {
-                // eslint-disable-next-line no-console
+                 
                 console.log(getUnequalProps(nextProps, this.props), getUnequalProps(nextState, this.state));
             }
             return !compareObjs(this.props, nextProps, this.propEquality) ||
@@ -7524,7 +7524,7 @@ var FullCalendar = (function (exports) {
             var _this = _super.call(this, props) || this;
             _this.handleData = function (data) {
                 if (!_this.dataManager) { // still within initial run, before assignment in constructor
-                    // eslint-disable-next-line react/no-direct-mutation-state
+                     
                     _this.state = data; // can't use setState yet
                 }
                 else {
@@ -8128,7 +8128,7 @@ var FullCalendar = (function (exports) {
             _this.headerRef = createRef();
             _this.footerRef = createRef();
             _this.interactionsStore = {};
-            // eslint-disable-next-line
+             
             _this.state = {
                 viewLabelId: getUniqueDomId(),
             };
@@ -11961,7 +11961,7 @@ var FullCalendar = (function (exports) {
             }
             dragging.emitter.on('pointerdown', this.handlePointerDown);
             dragging.emitter.on('dragstart', this.handleDragStart);
-            new ExternalElementDragging(dragging, settings.eventData); // eslint-disable-line no-new
+            new ExternalElementDragging(dragging, settings.eventData);  
         }
         ExternalDraggable.prototype.destroy = function () {
             this.dragging.destroy();
@@ -12063,7 +12063,7 @@ var FullCalendar = (function (exports) {
             if (typeof settings.mirrorSelector === 'string') {
                 dragging.mirrorSelector = settings.mirrorSelector;
             }
-            new ExternalElementDragging(dragging, settings.eventData); // eslint-disable-line no-new
+            new ExternalElementDragging(dragging, settings.eventData);  
         }
         ThirdPartyDraggable.prototype.destroy = function () {
             this.dragging.destroy();

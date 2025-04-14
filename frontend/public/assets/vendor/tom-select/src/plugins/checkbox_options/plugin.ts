@@ -19,16 +19,16 @@ import { getDom } from '../../vanilla';
 
 
 export default function(this:TomSelect) {
-	var self = this;
-	var orig_onOptionSelect = self.onOptionSelect;
+	const self = this;
+	const orig_onOptionSelect = self.onOptionSelect;
 
 	self.settings.hideSelected = false;
 
 
 	// update the checkbox for an option
-	var UpdateCheckbox = function(option:HTMLElement){
+	const UpdateCheckbox = function(option:HTMLElement){
 		setTimeout(()=>{
-			var checkbox = option.querySelector('input');
+			const checkbox = option.querySelector('input');
 			if( checkbox instanceof HTMLInputElement ){
 				if( option.classList.contains('selected') ){
 					checkbox.checked = true;
@@ -42,11 +42,11 @@ export default function(this:TomSelect) {
 	// add checkbox to option template
 	self.hook('after','setupTemplates',() => {
 
-		var orig_render_option = self.settings.render.option;
+		const orig_render_option = self.settings.render.option;
 
 		self.settings.render.option = (data, escape_html) => {
-			var rendered = getDom(orig_render_option.call(self, data, escape_html));
-			var checkbox = document.createElement('input');
+			const rendered = getDom(orig_render_option.call(self, data, escape_html));
+			const checkbox = document.createElement('input');
 			checkbox.addEventListener('click',function(evt){
 				preventDefault(evt);
 			});
@@ -66,7 +66,7 @@ export default function(this:TomSelect) {
 
 	// uncheck when item removed
 	self.on('item_remove',(value:string) => {
-		var option = self.getOption(value);
+		const option = self.getOption(value);
 
 		if( option ){ // if dropdown hasn't been opened yet, the option won't exist
 			option.classList.remove('selected'); // selected class won't be removed yet
@@ -76,7 +76,7 @@ export default function(this:TomSelect) {
 
 	// check when item added
 	self.on('item_add',(value:string) => {
-		var option = self.getOption(value);
+		const option = self.getOption(value);
 
 		if( option ){ // if dropdown hasn't been opened yet, the option won't exist
 			UpdateCheckbox(option);

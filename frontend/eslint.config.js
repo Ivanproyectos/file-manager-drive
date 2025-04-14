@@ -8,7 +8,15 @@ export default defineConfig([
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     plugins: { js },
-    extends: ['js/recommended', 'plugin:prettier/recommended'],
+    extends: ['js/recommended'],
+    settings: {
+      "react": {
+        "version": "detect"
+      }
+    },
+    rules: {
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
+    }
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],

@@ -45,9 +45,9 @@ export const escape_html = (str:string):string => {
  *
  */
 export const loadDebounce = (fn:(value:string,callback:TomLoadCallback) => void,delay:number) => {
-	var timeout: null|ReturnType<typeof setTimeout>;
+	let timeout: null|ReturnType<typeof setTimeout>;
 	return function(this:TomSelect, value:string,callback:TomLoadCallback) {
-		var self = this;
+		const self = this;
 
 		if( timeout ){
 			self.loading = Math.max(self.loading - 1, 0);
@@ -69,13 +69,13 @@ export const loadDebounce = (fn:(value:string,callback:TomLoadCallback) => void,
  *
  */
 export const debounce_events = ( self:TomSelect, types:string[], fn:() => void ) => {
-	var type:string;
-	var trigger = self.trigger;
-	var event_args:{ [key: string]: any } = {};
+	let type:string;
+	const trigger = self.trigger;
+	const event_args:{ [key: string]: any } = {};
 
 	// override trigger method
 	self.trigger = function(){
-		var type = arguments[0];
+		const type = arguments[0];
 		if (types.indexOf(type) !== -1) {
 			event_args[type] = arguments;
 		} else {
@@ -150,7 +150,7 @@ export const isKeyDown = ( key_name:keyof (KeyboardEvent|MouseEvent), evt?:Keybo
 		return false;
 	}
 
-	var count = (evt.altKey?1:0) + (evt.ctrlKey?1:0) + (evt.shiftKey?1:0) + (evt.metaKey?1:0);
+	const count = (evt.altKey?1:0) + (evt.ctrlKey?1:0) + (evt.shiftKey?1:0) + (evt.metaKey?1:0);
 
 	if( count === 1 ){
 		return true;

@@ -6,28 +6,28 @@ import { TomInput } from './types/index';
 
 
 export default function getSettings( input:TomInput, settings_user:Partial<TomSettings>):TomSettings{
-	var settings:TomSettings	= Object.assign({}, defaults, settings_user);
+	const settings:TomSettings	= Object.assign({}, defaults, settings_user);
 
-	var attr_data				= settings.dataAttr;
-	var field_label				= settings.labelField;
-	var field_value				= settings.valueField;
-	var field_disabled			= settings.disabledField;
-	var field_optgroup			= settings.optgroupField;
-	var field_optgroup_label	= settings.optgroupLabelField;
-	var field_optgroup_value	= settings.optgroupValueField;
+	const attr_data				= settings.dataAttr;
+	const field_label				= settings.labelField;
+	const field_value				= settings.valueField;
+	const field_disabled			= settings.disabledField;
+	const field_optgroup			= settings.optgroupField;
+	const field_optgroup_label	= settings.optgroupLabelField;
+	const field_optgroup_value	= settings.optgroupValueField;
 
-	var tag_name				= input.tagName.toLowerCase();
-	var placeholder				= input.getAttribute('placeholder') || input.getAttribute('data-placeholder');
+	const tag_name				= input.tagName.toLowerCase();
+	let placeholder				= input.getAttribute('placeholder') || input.getAttribute('data-placeholder');
 
 	if (!placeholder && !settings.allowEmptyOption) {
-		let option		= input.querySelector('option[value=""]');
+		const option		= input.querySelector('option[value=""]');
 		if( option ){
 			placeholder = option.textContent;
 		}
 
 	}
 
-	var settings_element:{
+	const settings_element:{
 		placeholder	: null|string,
 		options		: TomOption[],
 		optgroups	: TomOption[],
@@ -46,16 +46,16 @@ export default function getSettings( input:TomInput, settings_user:Partial<TomSe
 	 * Initialize from a <select> element.
 	 *
 	 */
-	var init_select = () => {
-		var tagName;
-		var options = settings_element.options;
-		var optionsMap:{[key:string]:any} = {};
-		var group_count = 1;
+	const init_select = () => {
+		let tagName;
+		const options = settings_element.options;
+		const optionsMap:{[key:string]:any} = {};
+		let group_count = 1;
 
-		var readData = (el:HTMLElement):TomOption => {
+		const readData = (el:HTMLElement):TomOption => {
 
-			var data	= Object.assign({},el.dataset); // get plain object from DOMStringMap
-			var json	= attr_data && data[attr_data];
+			let data	= Object.assign({},el.dataset); // get plain object from DOMStringMap
+			const json	= attr_data && data[attr_data];
 
 			if( typeof json === 'string' && json.length ){
 				data = Object.assign(data,JSON.parse(json));
@@ -64,9 +64,9 @@ export default function getSettings( input:TomInput, settings_user:Partial<TomSe
 			return data;
 		};
 
-		var addOption = (option:HTMLOptionElement, group?:string) => {
+		const addOption = (option:HTMLOptionElement, group?:string) => {
 
-			var value = hash_key(option.value);
+			const value = hash_key(option.value);
 			if ( value == null ) return;
 			if ( !value && !settings.allowEmptyOption) return;
 
@@ -76,7 +76,7 @@ export default function getSettings( input:TomInput, settings_user:Partial<TomSe
 			// existing option so that it's rendered in both places.
 			if (optionsMap.hasOwnProperty(value)) {
 				if (group) {
-					var arr = optionsMap[value][field_optgroup];
+					const arr = optionsMap[value][field_optgroup];
 					if (!arr) {
 						optionsMap[value][field_optgroup] = group;
 					} else if (!Array.isArray(arr)) {
@@ -88,7 +88,7 @@ export default function getSettings( input:TomInput, settings_user:Partial<TomSe
 
 			}else{
 
-				var option_data             = readData(option);
+				const option_data             = readData(option);
 				option_data[field_label]    = option_data[field_label] || option.textContent;
 				option_data[field_value]    = option_data[field_value] || value;
 				option_data[field_disabled] = option_data[field_disabled] || option.disabled;
@@ -104,8 +104,8 @@ export default function getSettings( input:TomInput, settings_user:Partial<TomSe
 			}
 		};
 
-		var addGroup = ( optgroup:HTMLOptGroupElement ) => {
-			var id:string, optgroup_data
+		const addGroup = ( optgroup:HTMLOptGroupElement ) => {
+			let id:string, optgroup_data
 
 			optgroup_data							= readData(optgroup);
 			optgroup_data[field_optgroup_label]		= optgroup_data[field_optgroup_label] || optgroup.getAttribute('label') || '';
@@ -139,11 +139,11 @@ export default function getSettings( input:TomInput, settings_user:Partial<TomSe
 	 * Initialize from a <input type="text"> element.
 	 *
 	 */
-	var init_textbox = () => {
+	const init_textbox = () => {
 		const data_raw = input.getAttribute(attr_data);
 
 		if (!data_raw) {
-			var value = input.value.trim() || '';
+			const value = input.value.trim() || '';
 			if (!settings.allowEmptyOption && !value.length) return;
 			const values = value.split(settings.delimiter);
 

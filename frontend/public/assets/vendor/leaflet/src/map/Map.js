@@ -750,9 +750,9 @@ export var Map = Evented.extend({
 			delete this._container._leaflet_id;
 			delete this._containerId;
 		} catch (e) {
-			/*eslint-disable */
+			 
 			this._container._leaflet_id = undefined;
-			/* eslint-enable */
+			 
 			this._containerId = undefined;
 		}
 

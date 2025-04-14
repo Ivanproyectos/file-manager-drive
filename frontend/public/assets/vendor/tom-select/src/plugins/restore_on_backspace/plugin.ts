@@ -34,7 +34,7 @@ export default function(this:TomSelect, userOptions:TPluginOptions) {
 		}
 
 		if( self.control_input.value.trim() === '' ){
-			var option = self.options[value];
+			const option = self.options[value];
 			if( option ){
 				self.setTextboxValue(options.text.call(self, option));
 			}

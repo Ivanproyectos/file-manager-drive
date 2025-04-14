@@ -335,7 +335,7 @@ function matchText(node, delta) {
     return delta;
   }
   if (!computeStyle(node.parentNode).whiteSpace.startsWith('pre')) {
-    // eslint-disable-next-line func-style
+     
     let replacer = function(collapse, match) {
       match = match.replace(/[^\u00a0]/g, '');    // \u00a0 is nbsp;
       return match.length < 1 && collapse ? ' ' : match;

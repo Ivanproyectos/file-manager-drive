@@ -206,7 +206,7 @@ var InputMask = /*#__PURE__*/function () {
       /* ev */
     _saveSelection() {
       if (this.value !== this.el.value) {
-        console.warn('Element value was changed outside of mask. Syncronize mask using `mask.updateValue()` to work properly.'); // eslint-disable-line no-console
+        console.warn('Element value was changed outside of mask. Syncronize mask using `mask.updateValue()` to work properly.');  
       }
 
       this._selection = {

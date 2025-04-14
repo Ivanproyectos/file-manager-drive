@@ -189,7 +189,7 @@ HSCore.components.HSClipboard = {
           windowWidth: window.outerWidth,
           defaultText: item.lastChild.nodeValue,
           title: item.getAttribute('data-bs-original-title'),
-          container: !!this.defaults.container ? document.querySelector(this.defaults.container) : false,
+          container: this.defaults.container ? document.querySelector(this.defaults.container) : false,
           text: (button) => {
             var dataSettings = JSON.parse(button.getAttribute('data-hs-clipboard-options'));
             if (dataSettings.contentTarget) this.setShortcodes(item, options)

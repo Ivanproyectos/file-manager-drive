@@ -226,9 +226,9 @@ export function setTransform(el, offset, scale) {
 // (used by Leaflet internally to position its layers).
 export function setPosition(el, point) {
 
-	/*eslint-disable */
+	 
 	el._leaflet_pos = point;
-	/* eslint-enable */
+	 
 
 	if (Browser.any3d) {
 		setTransform(el, point);

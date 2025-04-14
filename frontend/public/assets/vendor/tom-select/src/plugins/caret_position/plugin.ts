@@ -18,7 +18,7 @@ import { nodeIndex, removeClasses } from '../../vanilla';
 
 
 export default function(this:TomSelect) {
-	var self = this;
+	const self = this;
 
 	/**
 	 * Moves the caret to the specified index.

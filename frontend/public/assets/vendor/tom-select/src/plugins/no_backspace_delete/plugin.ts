@@ -15,8 +15,8 @@
 import TomSelect from '../../tom-select';
 
 export default function(this:TomSelect) {
-	var self = this;
-	var orig_deleteSelection = self.deleteSelection;
+	const self = this;
+	const orig_deleteSelection = self.deleteSelection;
 
 	this.hook('instead','deleteSelection',(evt:KeyboardEvent) => {
 
