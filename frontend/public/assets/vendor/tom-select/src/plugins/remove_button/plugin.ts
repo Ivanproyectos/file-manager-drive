@@ -30,24 +30,24 @@ export default function(this:TomSelect, userOptions:RBOptions) {
 
 
 	//options.className = 'remove-single';
-	var self			= this;
+	const self			= this;
 
 	// override the render method to add remove button to each item
 	if( !options.append ){
 		return;
 	}
 
-	var html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
+	const html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
 
 	self.hook('after','setupTemplates',() => {
 
-		var orig_render_item = self.settings.render.item;
+		const orig_render_item = self.settings.render.item;
 
 		self.settings.render.item = (data:TomOption, escape:typeof escape_html) => {
 
-			var item = getDom(orig_render_item.call(self, data, escape)) as TomItem;
+			const item = getDom(orig_render_item.call(self, data, escape)) as TomItem;
 
-			var close_button = getDom(html);
+			const close_button = getDom(html);
 			item.appendChild(close_button);
 
 			addEvent(close_button,'mousedown',(evt) => {

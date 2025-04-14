@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { updateUserSchema } from '@/schemas'
 import { UpdateUser, IUser, RoleId } from '@/types'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RolList } from '@/components'
 
 declare const HSCore: any
@@ -20,7 +20,6 @@ export const EditUserForm = ({
 }: UpdateUserFormProps) => {
   const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([])
   const [refresh, setRefresh] = useState(false)
-  const inputDateRef = useRef<HTMLInputElement | null>(null)
   const {
     register,
     handleSubmit,
@@ -54,17 +53,17 @@ export const EditUserForm = ({
   }, [selectedRoles])
 
   useEffect(() => {
-    reset();
+    reset()
 
     const initialRoles = user?.roles?.map((role) => role.id) ?? []
     const initialState = { ...user, roles: initialRoles }
     reset(initialState)
     setValue('id', user?.id ?? 0)
     setSelectedRoles(initialRoles)
-    setValue('expirationDate', user?.expirationDate )
-    setRefresh(preve => !preve)
+    setValue('expirationDate', user?.expirationDate)
+    setRefresh((preve) => !preve)
 
- /*    if (inputDateRef.current) {
+    /*    if (inputDateRef.current) {
       inputDateRef.current.value = user?.expirationDate ?? ''
     } */
   }, [user])

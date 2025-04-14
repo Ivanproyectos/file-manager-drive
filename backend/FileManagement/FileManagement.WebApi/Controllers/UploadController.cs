@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
-    [Authorize]
     public class UploadController : BaseApiController
     {
         private readonly IGoogleDriveService _googleDriveService;

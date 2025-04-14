@@ -23,11 +23,11 @@ export default function(this:TomSelect) {
 	const orig_clearActiveOption		= self.clearActiveOption;
 	const orig_loadCallback				= self.loadCallback;
 
-	var pagination:{[key:string]:any}	= {};
-	var dropdown_content:HTMLElement;
-	var loading_more					= false;
-	var load_more_opt:HTMLElement;
-	var default_values: string[]		= [];
+	let pagination:{[key:string]:any}	= {};
+	let dropdown_content:HTMLElement;
+	let loading_more					= false;
+	let load_more_opt:HTMLElement;
+	let default_values: string[]		= [];
 
 	if( !self.settings.shouldLoadMore ){
 
@@ -40,8 +40,8 @@ export default function(this:TomSelect) {
 			}
 
 			if( self.activeOption ){
-				var selectable	= self.selectable();
-				var index		= [...selectable].indexOf(self.activeOption);
+				const selectable	= self.selectable();
+				const index		= [...selectable].indexOf(self.activeOption);
 				if( index >= (selectable.length-2) ){
 					return true;
 				}
@@ -151,7 +151,7 @@ export default function(this:TomSelect) {
 	self.hook('after','refreshOptions',()=>{
 
 		const query		= self.lastValue;
-		var option;
+		let option;
 
 		if( canLoadMore(query) ){
 

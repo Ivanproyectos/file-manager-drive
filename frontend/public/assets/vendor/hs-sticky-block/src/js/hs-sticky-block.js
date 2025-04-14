@@ -103,7 +103,7 @@ export default class HSStickyBlock {
       _$el = that.collection[i].$el;
       _options = that.collection[i].options
 
-      Array('resize', 'scroll').forEach(evt =>
+      ['resize', 'scroll'].forEach(evt =>
         window.addEventListener(evt, () => this.update(_$el, _options), false)
       )
 

@@ -69,6 +69,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 
+
 /*builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -80,6 +81,7 @@ builder.Services.AddSignalR();
 }); */
 
 var app = builder.Build();
+
 app.MapHub<FileUploadHub>("/fileUploadHub");
 
 // Configure the HTTP request pipeline.

@@ -35,9 +35,9 @@ QUnit[ ( jQueryVersionSince( "3.4.0" ) && typeof Proxy !== "undefined" ) ? "test
 	} );
 
 	expectNoWarning( assert, "Read from cssProps", function() {
-		// eslint-disable-next-line no-unused-expressions
+		 
 		jQuery.cssProps.devoHat;
-		// eslint-disable-next-line no-unused-expressions
+		 
 		jQuery.cssProps.unknownProp;
 	} );
 

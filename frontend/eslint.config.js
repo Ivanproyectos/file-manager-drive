@@ -7,8 +7,16 @@ import pluginReact from 'eslint-plugin-react'
 export default defineConfig([
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    ignores: ['dist/**/*'],
     plugins: { js },
-    extends: ['js/recommended', 'plugin:prettier/recommended'],
+    extends: [
+      'js/recommended',
+      'plugin:prettier/recommended',
+      'eslint:recommended',
+    ],
+    settings: {
+      react: { version: 'detect' },
+    },
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],

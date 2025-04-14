@@ -32,6 +32,8 @@ export const CreateFolderForm = ({
 
   const { uploadId, dropzone } = dropzoneInstance
 
+  debugger
+
   const {
     register,
     handleSubmit,
@@ -43,7 +45,7 @@ export const CreateFolderForm = ({
   const messagaElementRef = useRef<HTMLDivElement>(null)
   const uploadIdRef = useRef<string>('')
 
-  const hasProcessState = watch('hasProcessState');
+  const hasProcessState = watch('hasProcessState')
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId })
@@ -230,12 +232,14 @@ export const CreateFolderForm = ({
             </div>
 
             {hasProcessState && (
-                <>
-                  <div className="alert alert-soft-primary" role="alert">
-                    <i className="bi-info-circle me-2"></i> Este folder tendra estados para su seguimiento, el estado inicial es: <strong>pendiente</strong>
-                  </div>
-                </>
-              )}
+              <>
+                <div className="alert alert-soft-primary" role="alert">
+                  <i className="bi-info-circle me-2"></i> Este folder tendra
+                  estados para su seguimiento, el estado inicial es:{' '}
+                  <strong>pendiente</strong>
+                </div>
+              </>
+            )}
 
             <div className="mb-4">
               <label className="form-label">
@@ -290,7 +294,11 @@ export const CreateFolderForm = ({
               </button>
 
               <div className="d-flex justify-content-end gap-3 ms-auto">
-                <button type="button" className="btn btn-white"   data-bs-dismiss="modal">
+                <button
+                  type="button"
+                  className="btn btn-white"
+                  data-bs-dismiss="modal"
+                >
                   Cancelar
                 </button>
                 {/*  <button  type="submit" className="btn btn-primary">Create Folder</button> */}

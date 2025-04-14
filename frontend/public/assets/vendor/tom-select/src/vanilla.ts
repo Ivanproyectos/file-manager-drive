@@ -18,7 +18,7 @@ export const getDom = ( query:any ):HTMLElement => {
 	}
 
 	if( isHtmlString(query) ){
-		let div = document.createElement('div');
+		const div = document.createElement('div');
 		div.innerHTML = query.trim(); // Never return a text node of whitespace as the result
 		return div.firstChild as HTMLElement;
 	}
@@ -42,7 +42,7 @@ export const escapeQuery = (query:string):string => {
  *
  */
 export const triggerEvent = ( dom_el:HTMLElement, event_name:string ):void => {
-	var event = document.createEvent('HTMLEvents');
+	const event = document.createEvent('HTMLEvents');
 	event.initEvent(event_name, true, false);
 	dom_el.dispatchEvent(event)
 };
@@ -62,7 +62,7 @@ export const applyCSS = ( dom_el:HTMLElement, css:{ [key: string]: string|number
  */
 export const addClasses = ( elmts:HTMLElement|HTMLElement[], ...classes:string[]|string[][] ) => {
 
-	var norm_classes 	= classesArray(classes);
+	const norm_classes 	= classesArray(classes);
 	elmts				= castAsArray(elmts);
 
 	elmts.map( el => {
@@ -78,7 +78,7 @@ export const addClasses = ( elmts:HTMLElement|HTMLElement[], ...classes:string[]
  */
  export const removeClasses = ( elmts:HTMLElement|HTMLElement[], ...classes:string[]|string[][] ) => {
 
- 	var norm_classes 	= classesArray(classes);
+ 	const norm_classes 	= classesArray(classes);
 	elmts				= castAsArray(elmts);
 
 	elmts.map( el => {
@@ -94,7 +94,7 @@ export const addClasses = ( elmts:HTMLElement|HTMLElement[], ...classes:string[]
  *
  */
 export const classesArray = (args:string[]|string[][]):string[] => {
-	var classes:string[] = [];
+	let classes:string[] = [];
 	iterate( args, (_classes) =>{
 		if( typeof _classes === 'string' ){
 			_classes = _classes.trim().split(/[\11\12\14\15\40]/);
@@ -176,7 +176,7 @@ export const nodeIndex = ( el:null|Element, amongst?:string ):number => {
 
 	amongst = amongst || el.nodeName;
 
-	var i = 0;
+	let i = 0;
 	while( el = el.previousElementSibling ){
 
 		if( el.matches(amongst) ){

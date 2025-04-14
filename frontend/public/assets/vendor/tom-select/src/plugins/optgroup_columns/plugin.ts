@@ -18,12 +18,12 @@ import * as constants from '../../constants';
 import { parentMatch, nodeIndex } from '../../vanilla';
 
 export default function(this:TomSelect) {
-	var self = this;
+	const self = this;
 
-	var orig_keydown = self.onKeyDown;
+	const orig_keydown = self.onKeyDown;
 
 	self.hook('instead','onKeyDown',(evt:KeyboardEvent)=>{
-		var index, option, options, optgroup;
+		let index, option, options, optgroup;
 
 		if( !self.isOpen || !(evt.keyCode === constants.KEY_LEFT || evt.keyCode === constants.KEY_RIGHT)) {
 			return orig_keydown.call(self,evt);

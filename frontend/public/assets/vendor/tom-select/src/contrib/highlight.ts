@@ -25,14 +25,14 @@ export const highlight = (element:HTMLElement, regex:string|RegExp) => {
 	// Soccer  ->  <span class="highlight">Soc</span>cer  for regex = /soc/i
 	const highlightText = ( node:Text ):number => {
 
-		var match = node.data.match(regex);
+		const match = node.data.match(regex);
 		if( match && node.data.length > 0 ){
-			var spannode		= document.createElement('span');
+			const spannode		= document.createElement('span');
 			spannode.className	= 'highlight';
-			var middlebit		= node.splitText(match.index as number);
+			const middlebit		= node.splitText(match.index as number);
 
 			middlebit.splitText(match[0].length);
-			var middleclone		= middlebit.cloneNode(true);
+			const middleclone		= middlebit.cloneNode(true);
 
 			spannode.appendChild(middleclone);
 			replaceNode(middlebit, spannode);
@@ -46,7 +46,7 @@ export const highlight = (element:HTMLElement, regex:string|RegExp) => {
 	// is childless, <script>, <style>, or already highlighted: <span class="hightlight">
 	const highlightChildren = ( node:Element ):void => {
 		if( node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName) && ( node.className !== 'highlight' || node.tagName !== 'SPAN' ) ){
-			for (var i = 0; i < node.childNodes.length; ++i) {
+			for (let i = 0; i < node.childNodes.length; ++i) {
 				i += highlightRecursive(node.childNodes[i]);
 			}
 		}
@@ -72,9 +72,9 @@ export const highlight = (element:HTMLElement, regex:string|RegExp) => {
  * edited to remove with(), pass js strict mode, and use without jquery
  */
 export const removeHighlight = (el:HTMLElement) => {
-	var elements = el.querySelectorAll("span.highlight");
+	const elements = el.querySelectorAll("span.highlight");
 	Array.prototype.forEach.call(elements, function(el:HTMLElement){
-		var parent = el.parentNode as Node;
+		const parent = el.parentNode as Node;
 		parent.replaceChild(el.firstChild as Node, el);
 		parent.normalize();
 	});

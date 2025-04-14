@@ -30,7 +30,7 @@ export const UsersPage = () => {
       user.people.phone = user.people.phone.toString()
       user.people.bussinessName = bussinessName ? bussinessName : ''
       user.expirationDate = convertDateStringToIso(user.expirationDate) || null
-      debugger
+
       await api.addUser(user)
       setRefresh((prev) => !prev)
       closeModlal(modalCreateRef)
@@ -76,7 +76,6 @@ export const UsersPage = () => {
     if (!userId || userId === 0) return
     const loadUser = async () => {
       try {
-    
         const user = await api.getUserById(userId)
         user.expirationDate = convertIsoDateToString(user.expirationDate ?? '')
         setUserById(user)

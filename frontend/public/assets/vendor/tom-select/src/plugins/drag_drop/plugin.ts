@@ -16,21 +16,21 @@
 import TomSelect from '../../tom-select';
 
 export default function(this:TomSelect) {
-	var self = this;
+	const self = this;
 	if (!$.fn.sortable) throw new Error('The "drag_drop" plugin requires jQuery UI "sortable".');
 	if (self.settings.mode !== 'multi') return;
 
-	var orig_lock		= self.lock;
-	var orig_unlock		= self.unlock;
+	const orig_lock		= self.lock;
+	const orig_unlock		= self.unlock;
 
 	self.hook('instead','lock',()=>{
-		var sortable = $(self.control).data('sortable');
+		const sortable = $(self.control).data('sortable');
 		if (sortable) sortable.disable();
 		return orig_lock.call(self);
 	});
 
 	self.hook('instead','unlock',()=>{
-		var sortable = $(self.control).data('sortable');
+		const sortable = $(self.control).data('sortable');
 		if (sortable) sortable.enable();
 		return orig_unlock.call(self);
 	});
@@ -47,7 +47,7 @@ export default function(this:TomSelect) {
 			stop: ()=>{
 				$control.css({overflow: 'hidden'});
 
-				var values:string[] = [];
+				const values:string[] = [];
 				$control.children('[data-value]').each(function(this:HTMLElement){
 					if( this.dataset.value ) values.push(this.dataset.value);
 				});

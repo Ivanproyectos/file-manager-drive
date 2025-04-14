@@ -41,9 +41,9 @@ export default function(this:TomSelect, userOptions:DHOptions) {
 	}, userOptions);
 
 	self.on('initialize',()=>{
-		var header = getDom(options.html(options));
+		const header = getDom(options.html(options));
 
-		var close_link = header.querySelector('.'+options.closeClass);
+		const close_link = header.querySelector('.'+options.closeClass);
 		if( close_link ){
 			close_link.addEventListener('click',(evt)=>{
 				preventDefault(evt,true);

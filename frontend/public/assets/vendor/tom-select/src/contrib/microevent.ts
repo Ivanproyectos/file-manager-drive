@@ -36,7 +36,7 @@ export default class MicroEvent{
 	}
 
 	off(events:string, fct:TCallback){
-		var n = arguments.length;
+		const n = arguments.length;
 		if( n === 0 ){
 			this._events = {};
 			return;
@@ -52,11 +52,11 @@ export default class MicroEvent{
 	}
 
 	trigger(events:string, ...args:any){
-		var self = this;
+		const self = this;
 
 		forEvents(events,(event) => {
 			if(event in self._events === false) return;
-			for( let fct of self._events[event] ){
+			for( const fct of self._events[event] ){
 				fct.apply(self, args );
 			}
 		});

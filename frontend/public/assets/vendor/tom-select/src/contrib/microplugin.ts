@@ -73,7 +73,7 @@ export default function MicroPlugin(Interface: any ){
 		 * @param {array|object} plugins
 		 */
 		initializePlugins(plugins:string[]|TPluginItem[]|TPluginHash) {
-			var key, name;
+			let key, name;
 			const self  = this;
 			const queue:string[] = [];
 
@@ -101,9 +101,9 @@ export default function MicroPlugin(Interface: any ){
 		}
 
 		loadPlugin(name:string) {
-			var self    = this;
-			var plugins = self.plugins;
-			var plugin  = Interface.plugins[name];
+			const self    = this;
+			const plugins = self.plugins;
+			const plugin  = Interface.plugins[name];
 
 			if (!Interface.plugins.hasOwnProperty(name)) {
 				throw new Error('Unable to find "' +  name + '" plugin');
@@ -119,8 +119,8 @@ export default function MicroPlugin(Interface: any ){
 		 *
 		 */
 		require(name:string) {
-			var self = this;
-			var plugins = self.plugins;
+			const self = this;
+			const plugins = self.plugins;
 
 			if (!self.plugins.loaded.hasOwnProperty(name)) {
 				if (plugins.requested[name]) {

@@ -16,19 +16,19 @@ import TomSelect from '../../tom-select';
 import { addEvent } from '../../utils';
 
 export default function(this:TomSelect) {
-	var self					= this;
+	const self					= this;
 
 	self.on('initialize',()=>{
 
 
-		var test_input				= document.createElement('span');
-		var control					= self.control_input;
+		const test_input				= document.createElement('span');
+		const control					= self.control_input;
 		test_input.style.cssText	= 'position:absolute; top:-99999px; left:-99999px; width:auto; padding:0; white-space:pre; ';
 
 		self.wrapper.appendChild(test_input);
 
 
-		var transfer_styles			= [ 'letterSpacing', 'fontSize', 'fontFamily', 'fontWeight', 'textTransform' ];
+		const transfer_styles			= [ 'letterSpacing', 'fontSize', 'fontFamily', 'fontWeight', 'textTransform' ];
 
 		for( const style_name of transfer_styles ){
 			// @ts-ignore TS7015 https://stackoverflow.com/a/50506154/697576
@@ -40,7 +40,7 @@ export default function(this:TomSelect) {
 		 * Set the control width
 		 *
 		 */
-		var resize = ()=>{
+		const resize = ()=>{
 			test_input.textContent	= control.value;
 			control.style.width		= test_input.clientWidth+'px';
 		};
