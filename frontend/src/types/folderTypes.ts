@@ -9,15 +9,14 @@ export interface IFolder {
   status: boolean
   createdDate: string
   description?: string
-  hasProcessState: boolean,
+  hasProcessState: boolean
   folderProcessHistories: IFolderProcessHistories[]
   users: IUserFolder[]
 }
 export interface IFolderProcessHistories {
-  id: number, 
-  isActive : boolean,
+  id: number
+  isActive: boolean
   state: IFolderProcessState
-
 }
 
 export interface IFolderProcessState {
@@ -29,7 +28,7 @@ export interface IFolderProcessState {
 export enum IFolderProcessStatus {
   PENDING = 1,
   PROCESS = 2,
-  FINISHED = 3
+  FINISHED = 3,
 }
 
 export interface IFolderById {
@@ -47,14 +46,17 @@ export interface ISubFolder {
   folderId: number
   name: string
   folderProcessHistories: IFolderProcessHistories[]
-
+  folderPermissions: IUserFolderPermission
 }
 
 export type CreateFolder = Omit<IFolder, 'id' | 'parentId' | 'users'> & {
   asignedFolder: boolean
   folderPermissions: CreateFolderPermission[]
 }
-export type ICreateSubFolder = Omit<ISubFolder, 'id' | 'folderProcessHistories'> & {
+export type ICreateSubFolder = Omit<
+  ISubFolder,
+  'id' | 'folderProcessHistories' | 'folderPermissions'
+> & {
   description: string
 }
 export interface UpdateFolder {
@@ -62,5 +64,5 @@ export interface UpdateFolder {
   name: string
   description?: string
   deletedFileIds: number[]
-  folderPermissions: IUserFolderPermission[]
+  folderPermissions?: IUserFolderPermission[]
 }

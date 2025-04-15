@@ -1,11 +1,8 @@
-
-import { IUserFile } from "@/types";
-import { FileItemSkeleton } from "@/components/skeletons/FileItemSkeleton";
-import { getFileIcon } from "@/utils/fileIconMapping";
-import { convertDateToLocaleString } from "@/utils/dateFormat";
-import { convertBytes } from "@/utils/formatBytes";
-import { validateExpirationDate } from "@/services/fileService";
-import { downloadFile } from "@/api/files";
+import { FileItemSkeleton } from '@/components/skeletons/FileItemSkeleton'
+import { IUserFile } from '@/types'
+import { convertDateToLocaleString } from '@/utils/dateFormat'
+import { getFileIcon } from '@/utils/fileIconMapping'
+import { convertBytes } from '@/utils/formatBytes'
 
 interface userFileListProps {
   files: IUserFile[]
@@ -43,7 +40,6 @@ const FileActions = ({
   expirationDate,
   isDateExpired,
 }: FileActionsProps) => {
-  debugger
   return (
     <div className="dropdown">
       <button

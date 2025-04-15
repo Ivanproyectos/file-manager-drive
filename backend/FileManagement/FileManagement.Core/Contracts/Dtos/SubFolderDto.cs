@@ -9,10 +9,10 @@ namespace FileManagement.Core.Contracts.Dtos
     public record struct SubFolderDto(
         int Id, 
         string Name, 
-        int? ParentId,
-        bool CanDownload,
-        bool IsDateExpired,
-        DateTime? ExpirationDate
+        int? ParentId
+        //bool CanDownload,
+        //bool IsDateExpired,
+        //DateTime? ExpirationDate
         );
 
 }

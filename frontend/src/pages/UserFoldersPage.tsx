@@ -1,48 +1,72 @@
+import { SearchFilterFiles, UserFileList, UserFoderList } from '@/components'
+import { useUserFolder } from '@/hooks'
+import { ISubFolder } from '@/types'
+import { useEffect, useState } from 'react'
 
-import { UserFileList, UserFoderList, SearchFilterFiles } from "@/components";
-import { useEffect, useState } from "react";
-import { useUserFolder } from "@/hooks";
-
-declare const HSBsDropdown: any;
-declare const HSCore: any;
+declare const HSBsDropdown: any
+declare const HSCore: any
 
 interface Breadcrumbs {
-  id: number;
-  name: string;
-  class?: string;
+  id: number
+  name: string
+  class?: string
 }
 
 export const UserFoldersPage = () => {
-  const [folderId, setFolderId] = useState<number>(0);
-  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([]);
-  const [filter, setFilter] = useState("");
+  const [folderId, setFolderId] = useState<number>(0)
+  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([])
+  const [foldersFiltered, setFoldersFiltered] = useState<ISubFolder[]>([])
+  const [filter, setFilter] = useState('')
 
-  const { files, folders, loadingFiles, loadingFolders } = useUserFolder({ folderId });
+  const { files, folders, subFolders, loadingFiles, loadingFolders } =
+    useUserFolder({ folderId })
 
-  const foldersFiltered = folders.filter((folder) => folder.name.toLowerCase().includes(filter.toLowerCase()));
-  const FilesFiltered = files.filter((file) => file.fileName.toLowerCase().includes(filter.toLowerCase()));
-
+  /*   const foldersFiltered = subFolders.filter((folder) =>
+    folder.name.toLowerCase().includes(filter.toLowerCase())
+  ) */
+  const FilesFiltered = files.filter((file) =>
+    file.fileName.toLowerCase().includes(filter.toLowerCase())
+  )
 
   const handleNavigateToSubfolder = (
     newFolderId: number,
     newFolderName: string
   ) => {
-    const newSubFolder = { id: newFolderId, name: newFolderName };
-    setFolderId(newFolderId);
-    setBreadcrumbs((prevState) => [...prevState, newSubFolder]);
-  };
+    const newSubFolder = { id: newFolderId, name: newFolderName }
+    setFolderId(newFolderId)
+    setBreadcrumbs((prevState) => [...prevState, newSubFolder])
+  }
 
   const handleGoBackToFolder = (folderId: number) => {
-    setFolderId(folderId);
+    setFolderId(folderId)
     setBreadcrumbs((prevState) =>
       prevState.slice(0, prevState.findIndex((x) => x.id === folderId) + 1)
-    );
-  };
+    )
+  }
 
   useEffect(() => {
-    HSBsDropdown.init();
-    HSCore.components.HSTomSelect.init(".js-select");
-  }, []);
+    if (folderId === 0) {
+      const foldersFiltered = folders.filter((folder) =>
+        folder.name.toLowerCase().includes(filter.toLowerCase())
+      )
+
+      setFoldersFiltered(foldersFiltered)
+    }
+    if (folderId !== 0) {
+      {
+        const foldersFiltered = subFolders.filter((folder) =>
+          folder.name.toLowerCase().includes(filter.toLowerCase())
+        )
+
+        setFoldersFiltered(foldersFiltered)
+      }
+    }
+  }, [filter, folders, subFolders, folderId])
+
+  useEffect(() => {
+    HSBsDropdown.init()
+    HSCore.components.HSTomSelect.init('.js-select')
+  }, [])
   return (
     <div className="content container-fluid">
       <div className="page-header">
@@ -89,7 +113,6 @@ export const UserFoldersPage = () => {
               </div>
             </div>
           </div>
-
 
           {/*End Col */}
         </div>
@@ -142,5 +165,5 @@ export const UserFoldersPage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

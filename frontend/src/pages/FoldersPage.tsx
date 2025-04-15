@@ -1,23 +1,23 @@
 import * as folderApi from '@/api/folderApi'
 import {
+  ChangeFolderStatus,
   CreateFolderForm,
   EditFolderForm,
   FolderTable,
   StatusLoadFiles,
-  ChangeFolderStatus,
 } from '@/components'
-import {
-  IFolder,
-  StatusUploadFile,
-  StatusUploadedFile,
-  UpdateFolder,
-  IFolderProcessHistories,
-} from '@/types'
-import { showConfirm, showError, showSuccess } from '@/utils/alerts'
-import { useEffect, useRef, useState } from 'react'
 import { useSignalr } from '@/context/SignalrContext'
 import { useInitTomSelect } from '@/hooks'
 import { updateFolder } from '@/services/folderService'
+import {
+  IFolder,
+  IFolderProcessHistories,
+  StatusUploadFile,
+  StatusUploadedFile,
+  UpdateFolder,
+} from '@/types'
+import { showConfirm, showError, showSuccess } from '@/utils/alerts'
+import { useEffect, useRef, useState } from 'react'
 
 declare const bootstrap: any
 
@@ -43,7 +43,6 @@ export const FoldersPage = () => {
   useInitTomSelect()
 
   const { signalr } = useSignalr()
-
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -85,7 +84,7 @@ export const FoldersPage = () => {
         '¿Está seguro de actualizar la carpeta?'
       )
       if (!isAccepted) return
-      folder.folderPermissions.map
+      /* folder?.folderPermissions?.map */
 
       await updateFolder(folder)
       showSuccess('Folder actualizada correctamente')
@@ -100,22 +99,18 @@ export const FoldersPage = () => {
   }
 
   const hanldeChangeProcessStatus = async (statusId: number) => {
-
     try {
-
-      await folderApi.changeStatus(folderIdToStatus || 0, statusId);
-      showSuccess("Cambio de estado exitoso");
+      await folderApi.changeStatus(folderIdToStatus || 0, statusId)
+      showSuccess('Cambio de estado exitoso')
       setfolderIdToStatus(null)
       setRefresh((prev) => !prev)
-      
+
       return true
-
     } catch (error) {
-      console.error("Error changing status:", error);
-      showError("Error al cambiar el estado, vuelva a intentalor mas tarde");
-      return false;
+      console.error('Error changing status:', error)
+      showError('Error al cambiar el estado, vuelva a intentalor mas tarde')
+      return false
     }
-
   }
 
   const hanldeEditFolder = (folderId: number) => {
@@ -163,14 +158,12 @@ export const FoldersPage = () => {
   }, [refresh])
 
   useEffect(() => {
-
     if (!folderIdToEdit) return
     const modal = bootstrap.Modal.getOrCreateInstance(modalRefEdit.current)
     modal.show()
   }, [folderIdToEdit])
 
   useEffect(() => {
-
     if (!folderIdToStatus) return
     const modal = bootstrap.Modal.getOrCreateInstance(modalRefStatus.current)
     modal.show()

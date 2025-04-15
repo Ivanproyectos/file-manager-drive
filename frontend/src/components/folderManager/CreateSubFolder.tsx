@@ -1,20 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import { FileDropZone, ButtonSubmit, StatusLoadFiles } from "@/components";
-import { ICreateSubFolder, ICreateFile, StatusUploadFile, StatusUploadedFile } from "@/types";
-import { useForm } from "react-hook-form";
-import { createSubFolder } from "@/api/folderApi";
-import { createFile } from "@/api/files";
-import { showError } from "@/utils/alerts";
-/* import { useSignalr } from "@/context/SignalrContext";  */
-/* import { useConnectSignalr } from "@/hooks"; */
+import { createFile } from '@/api/files'
+import { createSubFolder } from '@/api/folderApi'
+import { ButtonSubmit, FileDropZone } from '@/components'
+import { ICreateFile, ICreateSubFolder } from '@/types'
+import { showError } from '@/utils/alerts'
+import { useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-declare const bootstrap: any;
+declare const bootstrap: any
 interface Props {
-  folderId: number;
-  isModalOpen: boolean;
-  onModalOpen: (isOpen: boolean) => void;
-  onCreated: React.Dispatch<React.SetStateAction<boolean>>;
-  onUploadedFiles: (filesNames: string[]) => void;
+  folderId: number
+  isModalOpen: boolean
+  onModalOpen: (isOpen: boolean) => void
+  onCreated: React.Dispatch<React.SetStateAction<boolean>>
+  onUploadedFiles: (filesNames: string[]) => void
 }
 
 export const CreateSubFolder = ({
@@ -22,66 +20,66 @@ export const CreateSubFolder = ({
   isModalOpen,
   onModalOpen,
   onCreated,
-  onUploadedFiles
+  onUploadedFiles,
 }: Props) => {
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null)
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm()
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
     uploadId: null,
-  });
+  })
   /*   const signalr = useConnectSignalr();
    */
   const handleDropzone = (uploadId: string, dropzone?: any) => {
-    setdropzoneInstance({ dropzone, uploadId });
-  };
+    setdropzoneInstance({ dropzone, uploadId })
+  }
   const handleCreateSubFolder = async (data: any) => {
-    let subFolderId: number;
+    let subFolderId: number
 
     try {
-      const { uploadId } = dropzoneInstance;
+      const { uploadId } = dropzoneInstance
       const folder: ICreateSubFolder = {
         folderId,
         name: data.name,
         description: data.description,
-      };
-      subFolderId = await createSubFolder(folder);
+      }
+      subFolderId = await createSubFolder(folder)
 
-      const file: ICreateFile = { folderId: subFolderId, uploadId };
-      await createFile(file);
-      handleCloseModal();
-      reset();
-      onCreated((preve: boolean) => !preve);
+      const file: ICreateFile = { folderId: subFolderId, uploadId }
+      await createFile(file)
+      handleCloseModal()
+      reset()
+      onCreated((preve: boolean) => !preve)
     } catch (error) {
-      showError("Error al crear la carpeta, vuelva a intentalor mas tarde");
+      showError('Error al crear la carpeta, vuelva a intentalor mas tarde')
     }
 
     try {
-      const { uploadId, dropzone } = dropzoneInstance;
+      const { uploadId, dropzone } = dropzoneInstance
 
       if (dropzone.files.length === 0) return
 
-      const file: ICreateFile = { folderId: subFolderId!, uploadId };
-      await createFile(file);
-      handleCloseModal();
-      onUploadedFiles(dropzone.files.map((file: any) => file.name));
+      const file: ICreateFile = { folderId: subFolderId!, uploadId }
+      await createFile(file)
+      handleCloseModal()
+      onUploadedFiles(dropzone.files.map((file: any) => file.name))
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const handleCloseModal = () => {
     setTimeout(() => {
-      onModalOpen(false);
-    }, 500);
-    const modal = bootstrap.Modal.getInstance(modalRef.current);
-    modal.hide();
-  };
+      onModalOpen(false)
+    }, 500)
+    const modal = bootstrap.Modal.getInstance(modalRef.current)
+    modal.hide()
+  }
 
   /*   useEffect(() => {
       if (signalr) {
@@ -129,7 +127,7 @@ export const CreateSubFolder = ({
               >
                 <div className="mb-4">
                   <label htmlFor="nameSubfolder" className="form-label">
-                    Folder{" "}
+                    Folder{' '}
                     <i
                       className="bi-question-circle text-body ms-1"
                       data-toggle="tooltip"
@@ -140,10 +138,11 @@ export const CreateSubFolder = ({
 
                   <div className="js-form-message">
                     <input
-                      {...register("name", { required: true })}
+                      {...register('name', { required: true })}
                       type="text"
-                      className={`form-control ${errors.name ? "is-invalid" : ""
-                        }`}
+                      className={`form-control ${
+                        errors.name ? 'is-invalid' : ''
+                      }`}
                       name="name"
                       id="nameSubfolder"
                       placeholder="Ingrese el nombre del folder"
@@ -163,12 +162,12 @@ export const CreateSubFolder = ({
 
                 <div className="mb-4">
                   <label className="form-label">
-                    Descripción{" "}
+                    Descripción{' '}
                     <span className="form-label-secondary">(Optional)</span>
                   </label>
                   <div className="js-form-message">
                     <textarea
-                      {...register("description")}
+                      {...register('description')}
                       className="form-control"
                       name="description"
                       placeholder="Ingrese una descripción"
@@ -205,11 +204,15 @@ export const CreateSubFolder = ({
             >
               Crear folder 
             </button> */}
-              <ButtonSubmit title="Crear folder" formName="newSubFolder" isSubmitting={isSubmitting} />
+              <ButtonSubmit
+                title="Crear folder"
+                formName="newSubFolder"
+                isSubmitting={isSubmitting}
+              />
             </div>
           </div>
         </div>
       </div>
     </>
-  );
-};
+  )
+}

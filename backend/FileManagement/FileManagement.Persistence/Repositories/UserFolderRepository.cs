@@ -32,10 +32,10 @@ namespace FileManagement.Persistence.Repositories
                    .Where(uf => uf.FolderId == FolderId).ToListAsync();
         }
 
-        public async Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int UserId, int FolderId)
+        public async Task<List<UserFolder>> GerUserFolderByFolderIdAsync(int FolderId)
         {
             return await _context.UserFolders.Include(uf => uf.Folder)
-                 .Where(uf => uf.Folder.ParentFolderId == FolderId && uf.UserId == UserId).ToListAsync();
+                 .Where(uf => uf.Folder.ParentFolderId == FolderId).ToListAsync();
         }
 
         public async Task<List<UserFolder>> GerUserFolderByUserIdAsync(int UserId)

@@ -1,40 +1,77 @@
-import { useAuth } from "@/context/AuthContext";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '@/context/AuthContext'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-declare const HSSideNav : any
+declare const HSSideNav: any
 
 export const HeaderTop = () => {
-  const navigate = useNavigate();
-  const { logout, user } = useAuth();
+  const navigate = useNavigate()
+  const { logout, user } = useAuth()
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    logout()
+    navigate('/login')
   }
 
   useEffect(() => {
     new HSSideNav('.js-navbar-vertical-aside').init()
-  }, []);
+  }, [])
 
   return (
-    <header id="header" className="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
+    <header
+      id="header"
+      className="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white"
+    >
       <div className="navbar-nav-wrap">
         <a className="navbar-brand" href="../index.html" aria-label="Front">
-          <img className="navbar-brand-logo" src="../assets/svg/logos/logo.svg" alt="Logo" data-hs-theme-appearance="default" />
-          <img className="navbar-brand-logo" src="../assets/svg/logos-light/logo.svg" alt="Logo" data-hs-theme-appearance="dark" />
-          <img className="navbar-brand-logo-mini" src="../assets/svg/logos/logo-short.svg" alt="Logo" data-hs-theme-appearance="default" />
-          <img className="navbar-brand-logo-mini" src="../assets/svg/logos-light/logo-short.svg" alt="Logo" data-hs-theme-appearance="dark" />
+          <img
+            className="navbar-brand-logo"
+            src="../assets/svg/logos/logo.svg"
+            alt="Logo"
+            data-hs-theme-appearance="default"
+          />
+          <img
+            className="navbar-brand-logo"
+            src="../assets/svg/logos-light/logo.svg"
+            alt="Logo"
+            data-hs-theme-appearance="dark"
+          />
+          <img
+            className="navbar-brand-logo-mini"
+            src="../assets/svg/logos/logo-short.svg"
+            alt="Logo"
+            data-hs-theme-appearance="default"
+          />
+          <img
+            className="navbar-brand-logo-mini"
+            src="../assets/svg/logos-light/logo-short.svg"
+            alt="Logo"
+            data-hs-theme-appearance="dark"
+          />
         </a>
 
         <div className="navbar-nav-wrap-content-start">
-
-          <button type="button" className="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
-            <i className="bi-arrow-bar-left navbar-toggler-short-align" data-bs-template='<div className="tooltip d-none d-md-block" role="tooltip"><div className="arrow"></div><div className="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
-            <i className="bi-arrow-bar-right navbar-toggler-full-align" data-bs-template='<div className="tooltip d-none d-md-block" role="tooltip"><div className="arrow"></div><div className="tooltip-inner"></div></div>' data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+          <button
+            type="button"
+            className="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler"
+          >
+            <i
+              className="bi-arrow-bar-left navbar-toggler-short-align"
+              data-bs-template='<div className="tooltip d-none d-md-block" role="tooltip"><div className="arrow"></div><div className="tooltip-inner"></div></div>'
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Collapse"
+            ></i>
+            <i
+              className="bi-arrow-bar-right navbar-toggler-full-align"
+              data-bs-template='<div className="tooltip d-none d-md-block" role="tooltip"><div className="arrow"></div><div className="tooltip-inner"></div></div>'
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Expand"
+            ></i>
           </button>
 
-        {/*   <div className="dropdown ms-2">
+          {/*   <div className="dropdown ms-2">
 
             <div className="d-none d-lg-block">
               <div className="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
@@ -176,38 +213,60 @@ export const HeaderTop = () => {
 
 
           </div> */}
-
-
         </div>
 
         <div className="navbar-nav-wrap-content-end">
-
           <ul className="navbar-nav">
-         
-
             <li className="nav-item">
-
               <div className="dropdown">
-                <a className="navbar-dropdown-account-wrapper" href="javascript:;" id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-dropdown-animation>
-              {/*     <div className="avatar avatar-sm avatar-circle">
+                <a
+                  className="navbar-dropdown-account-wrapper"
+                  href="javascript:;"
+                  id="accountNavbarDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  data-bs-auto-close="outside"
+                  data-bs-dropdown-animation
+                >
+                  {/*     <div className="avatar avatar-sm avatar-circle">
                     <img className="avatar-img" src="../assets/img/160x160/img6.jpg" alt="Image Description" />
                     <span className="avatar-status avatar-sm-status avatar-status-success"></span>
                   </div> */}
-                    <span className="avatar avatar-soft-primary avatar-circle" data-bs-toggle="tooltip" data-bs-placement="top" 
-                      title={user?.name}>
-                        <span className="avatar-initials">{user?.name.charAt(0)}</span>
-                      </span>
+                  <span
+                    className="avatar avatar-soft-primary avatar-circle"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title={user?.name}
+                  >
+                    <span className="avatar-initials">
+                      {user?.name.charAt(0)}
+                    </span>
+                  </span>
+                  <span className="d-none d-sm-inline-block ms-2">
+                    {user?.name}
+                  </span>
                 </a>
 
-                <div className="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account" aria-labelledby="accountNavbarDropdown" style={{ minWidth: "16rem" }}>
+                <div
+                  className="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account"
+                  aria-labelledby="accountNavbarDropdown"
+                  style={{ minWidth: '16rem' }}
+                >
                   <div className="dropdown-item-text">
                     <div className="d-flex align-items-center">
                       {/*  <div className="avatar avatar-sm avatar-circle">
                           <img className="avatar-img" src="../assets/img/160x160/img6.jpg" alt="Image Description" />
                         </div> */}
-                      <a className="avatar avatar-soft-primary avatar-circle" href="javascript:;" data-bs-toggle="tooltip" data-bs-placement="top" 
-                      title={user?.name}>
-                        <span className="avatar-initials">{user?.name.charAt(0)}</span>
+                      <a
+                        className="avatar avatar-soft-primary avatar-circle"
+                        href="javascript:;"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title={user?.name}
+                      >
+                        <span className="avatar-initials">
+                          {user?.name.charAt(0)}
+                        </span>
                       </a>
                       <div className="flex-grow-1 ms-3">
                         <h5 className="mb-0">{user?.name}</h5>
@@ -217,7 +276,6 @@ export const HeaderTop = () => {
                   </div>
 
                   <div className="dropdown-divider"></div>
-
 
                   {/*  <div className="dropdown">
                       <a className="navbar-dropdown-submenu-item dropdown-item dropdown-toggle" href="javascript:;" id="navSubmenuPagesAccountDropdown1" data-bs-toggle="dropdown" aria-expanded="false">Set status</a>
@@ -284,16 +342,15 @@ export const HeaderTop = () => {
     
                     <div className="dropdown-divider"></div> */}
 
-                  <a className="dropdown-item" href="#" onClick={handleLogout}>Cerrar sesión</a>
+                  <a className="dropdown-item" href="#" onClick={handleLogout}>
+                    Cerrar sesión
+                  </a>
                 </div>
               </div>
-
             </li>
           </ul>
-
         </div>
       </div>
     </header>
-
   )
 }
