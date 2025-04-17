@@ -1,8 +1,5 @@
-﻿using FileManagement.Core.Constants;
-using FileManagement.Core.Contracts.Request;
-using FileManagement.Core.Interfaces.Repositories;
+﻿using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
@@ -36,5 +33,11 @@ namespace FileManagement.WebApi.Controllers
             var file = await _fileService.DownloadFileAsync(fileId);
             return File(file.File, file.MimeType, file.FileName);
         }
+        [HttpGet("file-storage-status")]
+        public async Task<IActionResult> FileStorageStatus()
+        {
+            return Ok(await _fileService.FileStorageStatusAsync());
+        }
+        
     }
 }

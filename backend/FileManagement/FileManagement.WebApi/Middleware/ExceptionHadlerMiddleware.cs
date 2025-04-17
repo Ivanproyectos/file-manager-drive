@@ -1,4 +1,5 @@
 ﻿using FileManagement.Core.Contracts.Dtos;
+using FileManagement.Core.Interfaces.Services;
 using System.Net;
 using System.Text.Json;
 namespace FileManagement.WebApi.Middleware
@@ -7,10 +8,12 @@ namespace FileManagement.WebApi.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IHostEnvironment _env;
-        public ExceptionHadlerMiddleware(RequestDelegate next, IHostEnvironment env)
+        private readonly ILoggerService _loggerService;
+        public ExceptionHadlerMiddleware(RequestDelegate next, IHostEnvironment env, ILoggerService loggerService)
         {
             _next = next;
             _env = env;
+            _loggerService = loggerService;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -50,6 +53,7 @@ namespace FileManagement.WebApi.Middleware
                         result.Message = _env.IsDevelopment() ? error.Message : "Consulte al administrador del sistema";
                         result.Details = Array.Empty<string>();
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        _loggerService.LogError(error.Message, error);
                         break;
                 }
 

@@ -7,7 +7,7 @@ namespace FileManagement.Core.Interfaces.Services
     {
         Task<List<UserFileDto>> GetFilesByFolderIdAsync(int folderId);
         Task<DownloadResponse> DownloadFileAsync(int fileId);
-
+        Task<FileStorageStatusResponse> FileStorageStatusAsync();
         Task DeleteFileAsync(int fileId);
     }
 }

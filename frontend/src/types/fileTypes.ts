@@ -5,6 +5,11 @@ export interface IFile {
     sizeBytes: number;
     createdDate: string;
 }
+export interface IFileStorageStatus {
+  usedStorageBytes: number
+  totalStorageBytes: number
+  remainingStorageBytes: number
+}
 
 export interface ICreateFile  {
     folderId: number;

@@ -18,6 +18,11 @@ namespace FileManagement.Persistence.Repositories
             return Task.CompletedTask;
         }
 
+        public Task<long> TotalSizeAsync()
+        {
+            return _context.Files.SumAsync(f => f.SizeBytes);
+        }
+
         public Task DeleteFileAsync(Core.Entities.File File)
         {
             File.DeletedAt = DateTime.Now;

@@ -14,12 +14,14 @@ namespace FileManagement.Service.Services
         private readonly IGoogleDriveService _googleDriveService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFileUploadConfigurationRepository _fileUploadConfigurationRepository;
         public FileService(IFileRepository fileRepository,
             IMapper mapper,
             IFilePermissionRepository filePermissionRepository,
             ITokenService tokenService,
             IGoogleDriveService googleDriveService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IFileUploadConfigurationRepository fileUploadConfigurationRepository)
         {
             _fileRepository = fileRepository;
             _mapper = mapper;
@@ -27,6 +29,7 @@ namespace FileManagement.Service.Services
             _tokenService = tokenService;
             _googleDriveService = googleDriveService;
             _unitOfWork = unitOfWork;
+            _fileUploadConfigurationRepository = fileUploadConfigurationRepository;
         }
 
         public async Task<DownloadResponse> DownloadFileAsync(int fileId)
@@ -50,6 +53,17 @@ namespace FileManagement.Service.Services
             await _unitOfWork.SaveChangesAsync();
 
             _googleDriveService.DeleteFile(user.FileStorage.StorageIdentifier);
+        }
+
+        public async Task<FileStorageStatusResponse> FileStorageStatusAsync()
+        {
+            var configuration = await _fileUploadConfigurationRepository.GetAsync();
+            var sizeTotal = await _fileRepository.TotalSizeAsync();
+            return new FileStorageStatusResponse(
+                sizeTotal,
+                configuration.MaxFileSizeBytes,       
+                configuration.MaxFileSizeBytes - sizeTotal
+                );
         }
     }
 }

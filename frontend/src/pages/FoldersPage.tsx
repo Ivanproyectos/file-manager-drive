@@ -5,6 +5,7 @@ import {
   EditFolderForm,
   FolderTable,
   StatusLoadFiles,
+  FileUploadStatus
 } from '@/components'
 import { useSignalr } from '@/context/SignalrContext'
 import { useInitTomSelect } from '@/hooks'
@@ -237,38 +238,15 @@ export const FoldersPage = () => {
               <div className="flex-grow-1 ms-3">
                 <div className="row mx-md-n3">
                   <div className="col-md px-md-4">
-                    <span className="d-block">Total folders</span>
-                    {/*       <span className="badge bg-soft-success text-success rounded-pill p-1">
-                      <i className="bi-graph-up"></i> +2 files
-                    </span> */}
+                    <span className="d-block">Total carpetas</span>
+                    <span className="badge bg-soft-success text-success rounded-pill p-1">
+                      <i className="bi-folder"></i>
+                    </span>
                   </div>
                   {/* End Col */}
 
                   <div className="col-md-9 col-lg-10 column-md-divider px-md-4">
-                    <div className="row justify-content-start mb-2">
-                      <div className="col-auto">
-                        <span className="legend-indicator bg-primary"></span>
-                        <strong>65 GB</strong>{' '}
-                        <span className="text-muted">
-                          de 100 GB utilizados.
-                        </span>
-                      </div>
-                    </div>
-                    {/* End Row */}
-
-                    {/* Progress */}
-                    <div className="progress rounded-pill">
-                      <div
-                        className="progress-bar"
-                        role="progressbar"
-                        style={{ width: '60%' }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      ></div>
-                      {/*  <div className="progress-bar bg-success" role="progressbar" style={{width: "30%"}} aria-valuenow={30} aria-valuemin={0} aria-valuemax={100}></div> */}
-                    </div>
-                    {/* End Progress */}
+                    <FileUploadStatus />
                   </div>
                   {/* End Col */}
                 </div>

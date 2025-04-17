@@ -11,5 +11,7 @@ namespace FileManagement.Core.Interfaces.Repositories {
         Task UpdateFileAsync(CoreLayer.File File);
         Task DeleteFileAsync(CoreLayer.File File);
 
+        Task<long> TotalSizeAsync();
+
     }
 }
