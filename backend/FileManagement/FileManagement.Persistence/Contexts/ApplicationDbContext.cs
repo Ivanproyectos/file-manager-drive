@@ -22,7 +22,9 @@ namespace FileManagement.Persistence.Contexts
         public DbSet<FileManagement.Core.Entities.File> Files { get; set; }
         public DbSet<FileStorage> FilesStorage { get; set; }
         public DbSet<FolderProcessHistory> FolderProcessHistories { get; set; }
+        public DbSet<FolderProcessState> FolderProcessStates { get; set; }
         
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())

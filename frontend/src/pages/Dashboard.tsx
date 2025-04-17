@@ -7,7 +7,7 @@ declare const HSSideNav: any
 
 export const Dashboard = () => {
     useEffect(() => {
-        document.title = 'Dashboard - Mi Aplicación';
+        document.title = 'Dashboard - Grupo qhuya';
       }, []);
     return (
     <main className="has-navbar-vertical-aside navbar-vertical-aside-show-xl">

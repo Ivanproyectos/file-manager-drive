@@ -6,6 +6,7 @@ namespace FileManagement.Core.Entities
     {
         public int FolderId { get; set; }
         public int FolderProcessStateId { get; set; }
+        public string Comment  { get; set; }
         public bool IsActive { get; set; }
         public Folder Folder { get; set; }
         public FolderProcessState FolderProcessStates { get; set; }

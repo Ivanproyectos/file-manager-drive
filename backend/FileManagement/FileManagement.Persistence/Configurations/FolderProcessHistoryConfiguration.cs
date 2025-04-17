@@ -24,6 +24,12 @@ namespace FileManagement.Persistence.Configurations
                 .HasDefaultValue(true)
                 .IsRequired();
 
+            builder.Property(x => x.Comment)
+                .HasMaxLength(500)
+                .IsRequired(false);
+
+            
+
             builder.HasOne(x => x.FolderProcessStates)
                 .WithMany()
                 .HasForeignKey(x => x.FolderProcessStateId)

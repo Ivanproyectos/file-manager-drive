@@ -98,9 +98,9 @@ export const FoldersPage = () => {
     }
   }
 
-  const hanldeChangeProcessStatus = async (statusId: number) => {
+  const hanldeChangeProcessStatus = async (statusId: number, comment: string) => {
     try {
-      await folderApi.changeStatus(folderIdToStatus || 0, statusId)
+      await folderApi.changeStatus(folderIdToStatus || 0, statusId, comment)
       showSuccess('Cambio de estado exitoso')
       setfolderIdToStatus(null)
       setRefresh((prev) => !prev)
@@ -198,13 +198,13 @@ export const FoldersPage = () => {
                   </li>
                   <li className="breadcrumb-item">
                     <a className="breadcrumb-link" href="javascript:;">
-                      Mis folders
+                      Mis carpetas
                     </a>
                   </li>
                 </ol>
               </nav>
 
-              <h1 className="page-header-title">Folders</h1>
+              <h1 className="page-header-title">Carpetas</h1>
             </div>
 
             <div className="col-sm-auto">
@@ -216,7 +216,7 @@ export const FoldersPage = () => {
                 data-bs-target="#newFolderModal"
                 onClick={() => setIsModalOpen(true)}
               >
-                <i className="bi-plus me-1"></i> Nuevo folder
+                <i className="bi-plus me-1"></i> Nueva carpeta
               </button>
               {/*End Button Group */}
             </div>
@@ -304,7 +304,7 @@ export const FoldersPage = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="newProjectModalLabel">
-                Nuevo folder
+                Nueva carpeta
               </h5>
               <button
                 type="button"

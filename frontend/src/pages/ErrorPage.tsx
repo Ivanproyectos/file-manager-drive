@@ -25,7 +25,7 @@ export const ErrorPage = () => {
             <p className="lead">
               Sorry, the page you're looking for cannot be found.
             </p>
-            <a className="btn btn-primary" href="./index.html">
+            <a className="btn btn-primary" href="/">
               Go back to the App
             </a>
           </div>

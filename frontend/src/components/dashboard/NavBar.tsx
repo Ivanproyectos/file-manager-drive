@@ -1,45 +1,65 @@
 import { AuthorizedForRole } from "@/components";
 import { RoleName } from "@/types/rolTypes";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const NavBar = () => {
+  let isCollapsed = false;
+
+  useEffect(() => {
+
+    const toogleNavbar = () => {
+
+      isCollapsed = !isCollapsed
+      const movilLogo = document.querySelector('img[data-type-layout="movil"]') as HTMLDivElement;
+      const desktopLogo = document.querySelector('div[data-type-layout="desktop"]') as HTMLDivElement;
+
+      if(isCollapsed){
+
+       movilLogo.style.display ='block';
+       desktopLogo.setAttribute('style', 'display: none !important;');
+    }else{
+    
+      movilLogo.style.display ='none';
+      desktopLogo.setAttribute('style', 'display: flex !important;');
+    }
+  }
+
+    document.querySelector('#navbarVerticalCollapse')?.addEventListener('click', toogleNavbar)
+
+    return () => {
+      document.querySelector('#navbarVerticalCollapse')?.removeEventListener('click', toogleNavbar)
+    }
+
+  })
   return (
     <aside className="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-white  ">
       <div className="navbar-vertical-container">
         <div className="navbar-vertical-footer-offset">
           {/* Logo */}
 
-          <a className="navbar-brand" href="../index.html" aria-label="Front">
-            <img
-              className="navbar-brand-logo"
-              src="../assets/svg/logos/logo.svg"
-              alt="Logo"
-              data-hs-theme-appearance="default"
-            />
-            <img
-              className="navbar-brand-logo"
-              src="../assets/svg/logos-light/logo.svg"
-              alt="Logo"
-              data-hs-theme-appearance="dark"
-            />
-            <img
-              className="navbar-brand-logo-mini"
-              src="../assets/svg/logos/logo-short.svg"
-              alt="Logo"
-              data-hs-theme-appearance="default"
-            />
-            <img
-              className="navbar-brand-logo-mini"
-              src="../assets/svg/logos-light/logo-short.svg"
-              alt="Logo"
-              data-hs-theme-appearance="dark"
-            />
-          </a>
+          <a className="navbar-brand" href="/" aria-label="Front">
+            <div className="navbar-brand-logo d-flex align-items-center gap-2" data-type-layout="desktop"> 
+              <img height={25} width={25}
+                src="/assets/img/folder-logo.png"
+                alt="Logo"
+              />
+              <h3 className="mb-0">Grupo qhuya</h3>
+            </div>
+     
+            <img height={25} width={25} data-type-layout="movil"
+            className="navbar-brand-logo-mini"
+            src="/assets/img/folder-logo.png"
+            alt="Logo"
+          />
+     
+        </a>
 
           {/* End Logo */}
 
           {/* Navbar Vertical Toggle */}
           <button
+            id="navbarVerticalCollapse"
             type="button"
             className="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler"
           >
@@ -125,7 +145,7 @@ export const NavBar = () => {
                     >
                       <i className="bi-folder2-open nav-icon"></i>
                       <span className="nav-link-title">
-                        File manager
+                      Gestión de Archivos
                       </span>
                     </a>
 
@@ -135,7 +155,7 @@ export const NavBar = () => {
                       data-bs-parent="#navbarVerticalMenuPagesMenu"
                     >
                       <Link className="nav-link " to="/dashboard/folders">
-                        Folders
+                        Carpetas
                       </Link>
                       {/*   <a className="nav-link " href="../user-profile-teams.html">
                       Configuración

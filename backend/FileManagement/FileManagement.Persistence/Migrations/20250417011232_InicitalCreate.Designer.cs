@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileManagement.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250414002615_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250417011232_InicitalCreate")]
+    partial class InicitalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -294,6 +294,10 @@ namespace FileManagement.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("datetime2");
@@ -373,7 +377,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 668, DateTimeKind.Local).AddTicks(8030),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 393, DateTimeKind.Local).AddTicks(7468),
                             CreatedBy = 1,
                             Description = "Pendiente",
                             Name = "Pendiente"
@@ -381,7 +385,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 668, DateTimeKind.Local).AddTicks(8053),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 393, DateTimeKind.Local).AddTicks(7496),
                             CreatedBy = 1,
                             Description = "En proceso",
                             Name = "En proceso"
@@ -389,7 +393,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 668, DateTimeKind.Local).AddTicks(8055),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 393, DateTimeKind.Local).AddTicks(7500),
                             CreatedBy = 1,
                             Description = "Atendido",
                             Name = "Atendido"
@@ -539,7 +543,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 679, DateTimeKind.Local).AddTicks(9745),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 398, DateTimeKind.Local).AddTicks(8773),
                             Email = "ivansperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -595,7 +599,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 681, DateTimeKind.Local).AddTicks(7006),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 399, DateTimeKind.Local).AddTicks(1499),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -603,7 +607,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 681, DateTimeKind.Local).AddTicks(7038),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 399, DateTimeKind.Local).AddTicks(1505),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -691,7 +695,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 14, 0, 26, 15, 683, DateTimeKind.Utc).AddTicks(9598),
+                            CreatedAt = new DateTime(2025, 4, 17, 1, 12, 32, 399, DateTimeKind.Utc).AddTicks(8846),
                             CreatedBy = 1,
                             Description = "Google Drive Provider",
                             ProviderName = "Google Drive"
@@ -760,13 +764,13 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 684, DateTimeKind.Local).AddTicks(6951),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 400, DateTimeKind.Local).AddTicks(2517),
                             HasChangedPassword = false,
                             IsExpired = false,
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 684, DateTimeKind.Local).AddTicks(6967)
+                            UpdatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 400, DateTimeKind.Local).AddTicks(2522)
                         });
                 });
 
@@ -854,7 +858,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 13, 19, 26, 15, 686, DateTimeKind.Local).AddTicks(1081),
+                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 401, DateTimeKind.Local).AddTicks(108),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1

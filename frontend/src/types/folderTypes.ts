@@ -16,6 +16,7 @@ export interface IFolder {
 export interface IFolderProcessHistories {
   id: number
   isActive: boolean
+  comment?: string
   state: IFolderProcessState
 }
 

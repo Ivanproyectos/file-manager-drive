@@ -4,7 +4,7 @@ export type { AuthContextType } from "./authTypes";
 export { StatusUploadFile } from "./fileTypes";
 export type { ICreateFile, IFile, IUserFilePermission, StatusUploadedFile } from "./fileTypes";
 export type { CreateFolderPermission, IUserFolderPermission as IFolderPermission, UpdateFolderPermission } from "./folderPermissionTypes";
-export type { CreateFolder, ICreateSubFolder, IFolder, IFolderById, ISubFolder, UpdateFolder,IFolderProcessHistories } from "./folderTypes";
+export type { CreateFolder, ICreateSubFolder, IFolder, IFolderById, ISubFolder, UpdateFolder,IFolderProcessHistories, IFolderProcessState } from "./folderTypes";
 export { LoginType } from "./loginStateTypes";
 export type { IUserInfoPayload, LoginActionTypes } from "./loginStateTypes";
 export type { ILogin, IUserSession, IUserToken } from "./loginTypes";

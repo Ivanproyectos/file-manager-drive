@@ -258,7 +258,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
 
               <div className="mb-4">
                 <label htmlFor="address" className="form-label">
-                  Dirección{" "}
+                  Dirección{" "} <span className="text-muted">(Opcional)</span>
                 </label>
                 <div className={`input-group input-group-merge ${errors.people?.address ? "is-invalid" : ""}`}>
                   <div className="input-group-prepend input-group-text">

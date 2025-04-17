@@ -7,7 +7,7 @@ import {
   CreateFolderPermission,
 } from '@/types'
 import { useForm } from 'react-hook-form'
-import { useFormStep } from '@/hooks'
+import { useFormStep, useInitTooltip } from '@/hooks'
 import { createFile } from '@/api/files'
 import { createFolder } from '@/services/folderService'
 import { showError } from '@/utils/alerts'
@@ -30,9 +30,8 @@ export const CreateFolderForm = ({
     uploadId: null,
   })
 
+  useInitTooltip(); 
   const { uploadId, dropzone } = dropzoneInstance
-
-  debugger
 
   const {
     register,
@@ -141,7 +140,7 @@ export const CreateFolderForm = ({
             >
               <span className="step-icon step-icon-soft-dark">1</span>
               <div className="step-content">
-                <span className="step-title">Folder</span>
+                <span className="step-title">Informacion de la carpeta</span>
               </div>
             </a>
           </li>
@@ -171,12 +170,12 @@ export const CreateFolderForm = ({
                 htmlFor="projectNameNewProjectLabel"
                 className="form-label"
               >
-                Folder{' '}
+                Carpeta{' '}
                 <i
                   className="bi-question-circle text-body ms-1"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="Displayed on public forums, such as Front."
+                  title="ingrese el nombre de su carpeta"
                 ></i>
               </label>
 
@@ -187,8 +186,8 @@ export const CreateFolderForm = ({
                   className="form-control"
                   name="name"
                   id="projectNameNewProjectLabel"
-                  placeholder="Ingrese el nombre del folder"
-                  aria-label="Ingrese el nombre del folder"
+                  placeholder="Ingrese el nombre de la carpeta"
+                  aria-label="Ingrese el nombre de la carpeta"
                   required
                   data-msg="Nombre de folder es requerido."
                 />
@@ -234,8 +233,7 @@ export const CreateFolderForm = ({
             {hasProcessState && (
               <>
                 <div className="alert alert-soft-primary" role="alert">
-                  <i className="bi-info-circle me-2"></i> Este folder tendra
-                  estados para su seguimiento, el estado inicial es:{' '}
+                  <i className="bi-info-circle me-2"></i> Esta carpeta y/o trámite tendrá estados para su seguimiento. El estado inicial es:{' '}
                   <strong>pendiente</strong>
                 </div>
               </>
@@ -333,7 +331,7 @@ export const CreateFolderForm = ({
 
           <div className="mb-4">
             <h2>Creado!</h2>
-            <p>Nuevo folder creado con exito.</p>
+            <p>Nueva carpeta creada con exito.</p>
           </div>
 
           <div className="d-flex justify-content-center gap-3">

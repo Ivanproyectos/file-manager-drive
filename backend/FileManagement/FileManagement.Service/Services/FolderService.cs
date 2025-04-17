@@ -2,10 +2,8 @@
 using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Contracts.Request;
 using FileManagement.Core.Entities;
-using FileManagement.Core.Exceptions;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
-using FileManagement.Service.Helpers;
 
 namespace FileManagement.Service.Services
 {
@@ -18,6 +16,7 @@ namespace FileManagement.Service.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGoogleDriveService _googleDriveService;
+        private readonly IFolderProcessStateRepostory _folderProcessStateRepostory;
         public FolderService(
             IFolderRepository folderRepository,
             IUserFolderRepository userFolderRepository,
@@ -25,7 +24,8 @@ namespace FileManagement.Service.Services
             IMapper mapper,
             IUnitOfWork unitOfWork,
             IGoogleDriveService googleDriveService,
-            IFolderProcessHistoryRepository folderProcessHistoryRepository)
+            IFolderProcessHistoryRepository folderProcessHistoryRepository,
+            IFolderProcessStateRepostory folderProcessStateRepostory)
         {
             _folderRepository = folderRepository;
             _userFolderRepository = userFolderRepository;
@@ -34,6 +34,7 @@ namespace FileManagement.Service.Services
             _unitOfWork = unitOfWork;
             _googleDriveService = googleDriveService;
             _folderProcessHistoryRepository = folderProcessHistoryRepository;
+            _folderProcessStateRepostory = folderProcessStateRepostory;
         }
         public async Task<List<FolderDto>> GetAllFoldersAsync()
         {
@@ -95,12 +96,12 @@ namespace FileManagement.Service.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task ChangeProcessStatus(int folderId, int statusId )
+        public async Task ChangeProcessStatus(ChangeStatusRequest request)
         {
-            var folderHistories = await _folderProcessHistoryRepository.GetHistoriesAsync(folderId);
+            var folderHistories = await _folderProcessHistoryRepository.GetHistoriesAsync(request.FolderId);
             if (folderHistories.Count == 0)
             {
-                throw new KeyNotFoundException($"El folder con el id {folderId} no existe");
+                throw new KeyNotFoundException($"El folder con el id {request.FolderId} no existe");
             }
 
             var updatedFolderHistory = folderHistories
@@ -117,8 +118,9 @@ namespace FileManagement.Service.Services
 
                 var folderHistory = new FolderProcessHistory
                 {
-                    FolderId = folderId,
-                    FolderProcessStateId = statusId,
+                    FolderId = request.FolderId,
+                    FolderProcessStateId = request.StatusId,
+                    Comment =  request.Comment,
                     IsActive = true
                 };
                 await _folderProcessHistoryRepository.CreateAsync(folderHistory);
@@ -139,6 +141,11 @@ namespace FileManagement.Service.Services
             var folder = await _folderRepository.GetFolderByIdAsync(folderId);
             return new GetFolderByIdRequest(folder.Id, folder.Name, folder.Description);
             
+        }
+
+        public async Task<List<FolderProcessState>> GetFolderProcessStatesAsync()
+        {
+            return await _folderProcessStateRepostory.GetFolderProcessStateAsync();
         }
     }
 }

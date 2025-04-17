@@ -300,7 +300,7 @@ export const EditUserForm = ({
 
               <div className="mb-4">
                 <label htmlFor="address" className="form-label">
-                  Dirección{' '}
+                  Dirección{' '}<span className="text-muted">(Opcional)</span>
                 </label>
                 <div
                   className={`input-group input-group-merge ${errors.people?.address ? 'is-invalid' : ''}`}

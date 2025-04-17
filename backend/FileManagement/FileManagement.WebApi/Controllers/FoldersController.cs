@@ -70,11 +70,17 @@ namespace FileManagement.WebApi.Controllers
             return Ok(await Mediator.Send(folderRequest));
         }
 
-        [HttpPost("{folderId}/status/{statusId}")]
-        public async Task<IActionResult> ChangeStatus([FromRoute] int folderId, [FromRoute] int statusId)
+        [HttpPost("status-process")]
+        public async Task<IActionResult> ChangeStatus([FromBody] ChangeStatusRequest changeStatusRequest)
         {
-            await _folderService.ChangeProcessStatus(folderId, statusId);
+            await _folderService.ChangeProcessStatus(changeStatusRequest);
             return NoContent();
+        }
+
+        [HttpGet("status-process")]
+        public async Task<IActionResult> GetStatusProcess()
+        {
+            return Ok(await _folderService.GetFolderProcessStatesAsync());
         }
 
 

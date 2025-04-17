@@ -23,31 +23,20 @@ export const HeaderTop = () => {
       className="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white"
     >
       <div className="navbar-nav-wrap">
-        <a className="navbar-brand" href="../index.html" aria-label="Front">
+        <a className="navbar-brand" href="/" aria-label="Front">
           <img
             className="navbar-brand-logo"
-            src="../assets/svg/logos/logo.svg"
+            src="/assets/img/folder-logo.png"
             alt="Logo"
             data-hs-theme-appearance="default"
           />
-          <img
-            className="navbar-brand-logo"
-            src="../assets/svg/logos-light/logo.svg"
-            alt="Logo"
-            data-hs-theme-appearance="dark"
-          />
-          <img
+            <img
             className="navbar-brand-logo-mini"
-            src="../assets/svg/logos/logo-short.svg"
+            src="/assets/img/folder-logo.png"
             alt="Logo"
             data-hs-theme-appearance="default"
           />
-          <img
-            className="navbar-brand-logo-mini"
-            src="../assets/svg/logos-light/logo-short.svg"
-            alt="Logo"
-            data-hs-theme-appearance="dark"
-          />
+         <h2>Grupo</h2>
         </a>
 
         <div className="navbar-nav-wrap-content-start">

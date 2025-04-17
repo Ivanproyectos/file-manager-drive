@@ -13,7 +13,7 @@ namespace FileManagement.Service.External
     {
         private readonly string[] _scopes = { DriveService.Scope.DriveFile };
         private readonly string _applicationName = "MyApp";
-        private readonly string _credentialsPath = "credentialsDrive.json";
+        private readonly string _credentialsPath = "drive-credentials.json";
         public DriveService GetDriveService()
         {
             GoogleCredential credential;

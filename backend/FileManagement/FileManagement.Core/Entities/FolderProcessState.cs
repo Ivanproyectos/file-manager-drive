@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileManagement.Core.Entities
 {
-    public sealed class FolderProcessState: AuditableBaseEntity
+    public class FolderProcessState: AuditableBaseEntity
     { 
         public string Name { get; set; }
         public string Description { get; set; }

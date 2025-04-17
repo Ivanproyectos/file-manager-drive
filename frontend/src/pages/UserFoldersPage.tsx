@@ -101,7 +101,7 @@ export const UserFoldersPage = () => {
               </ol>
             </nav>
 
-            <h1 className="page-header-title mb-2">Files</h1>
+            <h1 className="page-header-title mb-2">Mis archivos asignados</h1>
             <div className="d-flex align-items-center gap-2">
               <div>
                 <i className="bi-folder me-1"></i>

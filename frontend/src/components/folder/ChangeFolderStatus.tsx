@@ -1,19 +1,22 @@
-import { IFolderProcessHistories, IFolderProcessStatus } from "@/types";
-import { useState } from "react";
+import { IFolderProcessHistories, IFolderProcessStatus, IFolderProcessState } from "@/types";
+import { useEffect, useState } from "react";
+import { getFolderProcessStatus } from "@/api/folderStatus";
 
 declare const bootstrap: any;
 
 interface Props {
     modalRef: React.RefObject<HTMLDivElement | null>;
     folderStatusHistories: IFolderProcessHistories[] | null;
-    onSubmit: (statusId: number) => Promise<boolean>;
+    onSubmit: (statusId: number, comment: string) => Promise<boolean>;
     onCloseModal?: () => void
 }
 
 export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderStatusHistories }: Props) => {
     const [statusId, setStatusId] = useState(0);
+    const [comment, setComment] = useState('');
     const [isValid, setValid] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [folderStatus, setFolderStatus] = useState<IFolderProcessState[] | null>(null);
     /* const modalRef = useRef<HTMLDivElement>(null); */
 
     const handleSelectedStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,7 +34,7 @@ export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderSta
             return;
         }
         setIsLoading(true);
-        const result = await onSubmit(statusId);
+        const result = await onSubmit(statusId, comment);
         if (result) {
             closeModal();
         }
@@ -43,18 +46,28 @@ export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderSta
         modal.hide();
     }
 
-    const getStatusClassName = (statusId: number): string => {
-        switch (statusId) {
-            case IFolderProcessStatus.PENDING:
-                return "avatar avatar-xs avatar-warning avatar-circle";
-            case IFolderProcessStatus.PROCESS:
-                return "avatar avatar-xs avatar-info avatar-circle";
-            case IFolderProcessStatus.FINISHED:
-                return "avatar avatar-xs avatar-success avatar-circle";
-            default:
-                return "";
-        }
+
+    const statusIdExistsInFolderHistory = (statusId: number): boolean =>
+        folderStatusHistories?.some((history) => history.id === statusId) ?? false;
+
+    const getCommentStatus = (statusId: number): string => {
+        const history = folderStatusHistories?.find((history) => history.id === statusId);
+        return history?.comment || "";
     };
+
+    useEffect(() => {
+       const getLoagedFolderStatus = async () => {
+            try{
+                const folderStatus = await getFolderProcessStatus();
+                setFolderStatus(folderStatus);
+            }catch(error){
+                console.error('Error fetching data:', error)
+            }
+         
+       }
+       getLoagedFolderStatus();
+
+    }, [])
 
     return (
 
@@ -67,7 +80,7 @@ export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderSta
             aria-hidden="true"
             data-bs-backdrop="static"
         >
-            <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-dialog modal-dialog-centered modal-md">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="uploadFilesModalLabel">
@@ -85,19 +98,50 @@ export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderSta
 
                         <ul className="step">
 
-                            {folderStatusHistories?.map(({ id, state: { id: stateId, name } = {} }) => (
+                            {folderStatus?.map(({ id, name }) => (
 
                                 <li className="step-item" key={id}>
                                     <div className="step-content-wrapper">
 
-                                        <span className={`step-icon ${getStatusClassName(stateId as number)}`}>
-                                            <span className="avatar-initials"></span>
+                                        <span className={`step-icon avatar avatar-sm avatar-${
+                                            id === IFolderProcessStatus.PENDING ? "warning" : 
+                                            statusIdExistsInFolderHistory(id) ? "success" : "light"} avatar-circle`
+                                            }>
+                                            <span className="avatar-initials">
+                                            {id === IFolderProcessStatus.PENDING ?
+                                             (<i className="bi-clock"></i>) :
+                                             (<i className="bi bi-check"></i>) }
+                                               
+                                            </span>
+                                        </span>
+                                        <div className="step-content d-flex justify-content-center flex-column">
+                                            <span className="step-title">{name}</span>
+                                            {statusIdExistsInFolderHistory(id) && getCommentStatus(id) && (
+                                              <div className="d-flex gap-1">
+                                                  <i className="bi bi-chat"></i>
+                                                  <p>{ getCommentStatus(id) }</p>
+                                              </div>
+                                            )}
+
+                                          
+                                        </div>
+                                 
+                                    </div>
+                                </li> 
+
+                              /*   <li className="step-item" key={id}>
+                                    <div className="step-content-wrapper">
+
+                                        <span className={`step-icon ${getStatusClassName(id as number)}`}>
+                                            <span className="avatar-initials">
+                                                {id === IFolderProcessStatus.PENDING ? (<i className="bi-clock"></i>) : "" }
+                                            </span>
                                         </span>
                                         <div className="step-content d-flex align-items-center">
                                             <h5 >{name}</h5>
                                         </div>
                                     </div>
-                                </li>
+                                </li> */
 
 
                             ))}
@@ -108,13 +152,22 @@ export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderSta
                             <label className="form-label">Cambiar estado a:</label>
                             <select className={`form-select ${!isValid ? "is-invalid" : ""}`} onChange={handleSelectedStatus} value={statusId}>
                                 <option value="0" disabled>Seleccionar</option>
-                                <option value="1">Pendiente</option>
-                                <option value="2">En proceso</option>
-                                <option value="3">Atendido</option>
+                                {folderStatus?.map(({ id, name }) => (
+                                    <option key={id} value={id} disabled={statusIdExistsInFolderHistory(id)}>{name}</option>
+                                ))}
                             </select>
                             {!isValid && <span className="invalid-feedback">El campo es requerido</span>}
                         </div>
-
+                        <div className="mb-4">
+                            <label className="form-label">Observaciones: <span className="text-muted">(Opcional)</span></label>
+                            <textarea
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                className="form-control" rows={3}
+                                placeholder="Ingrese las observaciones">
+                            
+                            </textarea>
+                    </div>
                     </div>
                     <div className="modal-footer">
                         <button

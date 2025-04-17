@@ -5,7 +5,7 @@ export enum PersonType {
 export interface IPeople {
    id: number;
    phone: number | string;
-   address: string;
+   address?: string;
    personType: PersonType;
    identification: string | number;
    lastName?: string;

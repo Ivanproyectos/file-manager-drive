@@ -19,7 +19,7 @@ export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
         phone: yup.number()
         .typeError('El teléfono debe ser un número')
         .integer('Debe ser un número entero').required('El teléfono es obligatorio'),
-        address: yup.string().required('La dirección es obligatoria'),
+  /*       address: yup.string().required('La dirección es obligatoria'), */
         personType: yup
           .mixed<PersonType>()
           .oneOf([PersonType.Natural, PersonType.Juridico], 'Tipo de persona inválido')

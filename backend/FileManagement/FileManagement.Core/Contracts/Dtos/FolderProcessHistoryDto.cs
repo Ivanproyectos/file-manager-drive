@@ -2,7 +2,8 @@
 {
     public record struct FolderProcessHistoryDto(
         int Id,
-        bool IsActive, 
+        bool IsActive,
+        string Comment,
         FolderProcessStateDto State
     );
 }

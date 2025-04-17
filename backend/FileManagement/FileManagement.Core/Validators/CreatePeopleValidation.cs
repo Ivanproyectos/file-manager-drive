@@ -29,9 +29,9 @@ namespace FileManagement.Core.Validators
                 .MaximumLength(100).WithMessage("El correo no puede superar los {MaxLength} caracteres")
                 .EmailAddress().WithMessage("El correo no es valido");
 
-            RuleFor(x => x.Address)
-                 .NotEmpty().WithMessage("La dirección es obligatorio")
-                 .MaximumLength(500).WithMessage("La dirección no puede superar los {MaxLength} caracteres");
+            //RuleFor(x => x.Address)
+            //     .NotEmpty().WithMessage("La dirección es obligatorio")
+            //     .MaximumLength(500).WithMessage("La dirección no puede superar los {MaxLength} caracteres");
 
             RuleFor(x => x.Identification)
                 .NotEmpty().WithMessage("El número de identificación es obligatorio.");

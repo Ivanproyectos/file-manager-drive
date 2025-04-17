@@ -26,9 +26,9 @@ namespace FileManagement.Persistence
             services.AddScoped<IFileStorageRepository, FileStorageRepository>();
             services.AddScoped<IFolderPermissionRepository, FolderPermissionRepository>();
             services.AddScoped<IFolderProcessHistoryRepository, FolderProcessHistoryRepository>();
+            services.AddScoped<IFolderProcessStateRepostory, FolderProcessStateRepostory>();
+
             
-
-
             services.AddScoped<IUnitOfWork, UnitOfWork>(); 
             #endregion
 
