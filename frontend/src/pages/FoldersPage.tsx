@@ -305,7 +305,7 @@ export const FoldersPage = () => {
         </div>
       </div>
       <EditFolderForm
-        key={folderIdToEdit}
+        key={folderIdToEdit ?? 0}
         modalRefEdit={modalRefEdit}
         folderId={folderIdToEdit}
         isModalOpen={isModalEditOpen}
@@ -313,7 +313,7 @@ export const FoldersPage = () => {
         onSubmit={handleUpdateFolder}
       />
       <ChangeFolderStatus
-        key={folderIdToStatus}
+        key={`status-${folderIdToStatus ?? 0}`} 
         modalRef={modalRefStatus}
         onSubmit={hanldeChangeProcessStatus}
         folderStatusHistories={folderStatusHistories}

@@ -1,45 +1,42 @@
 import { FileItemSkeleton } from '@/components/skeletons/FileItemSkeleton'
-import { IUserFile } from '@/types'
+import { IUserFile, IFolderPermission } from '@/types'
 import { convertDateToLocaleString } from '@/utils/dateFormat'
 import { getFileIcon } from '@/utils/fileIconMapping'
 import { convertBytes } from '@/utils/formatBytes'
 
 interface userFileListProps {
-  files: IUserFile[]
+  files: IUserFile[], 
+  filePermission:IFolderPermission | null
   loading: boolean
 }
 
 interface FileActionsProps {
   fileId: number
-  canDownload: boolean
-  expirationDate: string
-  isDateExpired: boolean
+  canDownload?: boolean
+  expirationDate?: string | null
+  isDateExpired?: boolean
 }
 
-/* const handleDownload = async (fileId: number) => {
-  debugger;
-  try{
-    const data = await downloadFile(fileId);
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'filename.pdf'); 
-    document.body.appendChild(link);
-    link.click(); 
 
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.log(error);
-  }
-};
- */
 const FileActions = ({
   fileId,
-  canDownload,
-  expirationDate,
-  isDateExpired,
+  canDownload = false,
+  expirationDate = null,
+  isDateExpired = false,
 }: FileActionsProps) => {
+
+
+
+  const hasFilePermission = (canDownload: boolean, isDateExpired: boolean, expirationDate?: string | null): boolean => {
+    if (!canDownload) return false;
+
+    if (isDateExpired && expirationDate) {
+      return new Date(expirationDate) > new Date();
+    }
+
+    return true;
+  };
+
   return (
     <div className="dropdown">
       <button
@@ -59,22 +56,16 @@ const FileActions = ({
         style={{ minWidth: '13rem' }}
       >
         <span className="dropdown-header">Opciones</span>
-        {/*     {canDownload && !isDateExpired && (
-          <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
-            <i className="bi-download dropdown-item-icon"></i> Descargar
-          </a>
-        )} */}
-        <a
-          className="dropdown-item"
-          href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`}
-        >
-          <i className="bi-download dropdown-item-icon"></i> Descargar
-        </a>
+          {hasFilePermission(canDownload, isDateExpired, expirationDate) && (
+            <a className="dropdown-item" href={`${import.meta.env.VITE_API_BASE_URL}/files/${fileId}/download`} >
+              <i className="bi-download dropdown-item-icon"></i> Descargar
+            </a>
+          )}
       </div>
     </div>
   )
 }
-export const UserFileList = ({ files, loading }: userFileListProps) => {
+export const UserFileList = ({ files,filePermission, loading }: userFileListProps) => {
   return (
     <ul className="list-group">
       {loading ? (
@@ -86,11 +77,8 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
             fileName,
             extension,
             createdDate,
-            sizeBytes,
-            canView,
-            canDownload,
-            expirationDate,
-            isDateExpired,
+            sizeBytes
+
           }) => (
             <li className="list-group-item" key={id}>
               <div className="row align-items-center">
@@ -121,9 +109,9 @@ export const UserFileList = ({ files, loading }: userFileListProps) => {
                 <div className="col-auto">
                   <FileActions
                     fileId={id}
-                    canDownload={canDownload}
-                    isDateExpired={isDateExpired}
-                    expirationDate={expirationDate}
+                    canDownload={filePermission?.canDownload}
+                    isDateExpired={filePermission?.isDateExpired}
+                    expirationDate={filePermission?.expirationDate}
                   />
                 </div>
               </div>
