@@ -1,10 +1,12 @@
-import { SearchFilterFiles, UserFileList, UserFoderList } from '@/components'
+import { SearchFilterFiles, UserFileList, UserFoderList, ViewFolderStatus } from '@/components'
 import { useUserFolder } from '@/hooks'
-import { ISubFolder } from '@/types'
+import { ISubFolder, IFolderProcessHistories, IFolderPermission } from '@/types'
 import { useEffect, useState } from 'react'
+
 
 declare const HSBsDropdown: any
 declare const HSCore: any
+declare const bootstrap: any
 
 interface Breadcrumbs {
   id: number
@@ -17,9 +19,12 @@ export const UserFoldersPage = () => {
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([])
   const [foldersFiltered, setFoldersFiltered] = useState<ISubFolder[]>([])
   const [filter, setFilter] = useState('')
+  const [folderHistories, setfolderHistories] = useState<IFolderProcessHistories[] | null >(null)
+  const [folderPermission, setFolderPermission] = useState<IFolderPermission | null>(null)
 
   const { files, folders, subFolders, loadingFiles, loadingFolders } =
     useUserFolder({ folderId })
+
 
   const FilesFiltered = files.filter((file) =>
     file.fileName.toLowerCase().includes(filter.toLowerCase())
@@ -29,6 +34,13 @@ export const UserFoldersPage = () => {
     newFolderId: number,
     newFolderName: string
   ) => {
+
+    const folderPermission = folders.find((folder) => folder.id === newFolderId)?.folderPermissions ?? null
+    if(folderPermission){
+      setFolderPermission(folderPermission)
+    }
+   
+
     const newSubFolder = { id: newFolderId, name: newFolderName }
     setFolderId(newFolderId)
     setBreadcrumbs((prevState) => [...prevState, newSubFolder])
@@ -39,6 +51,16 @@ export const UserFoldersPage = () => {
     setBreadcrumbs((prevState) =>
       prevState.slice(0, prevState.findIndex((x) => x.id === folderId) + 1)
     )
+  }
+
+  const handleViewStatus = (id: number) => {
+    const folderHistories = folders.find((folder) => folder.id === id)?.folderProcessHistories ?? null
+  
+    setfolderHistories(folderHistories)
+    const modal = bootstrap.Modal.getOrCreateInstance(
+      document.getElementById('viewFolderStatusModal')
+    )
+    modal.show()
   }
 
   useEffect(() => {
@@ -66,7 +88,8 @@ export const UserFoldersPage = () => {
     HSCore.components.HSTomSelect.init('.js-select')
   }, [])
   return (
-    <div className="content container-fluid">
+    <>
+        <div className="content container-fluid">
       <div className="page-header">
         <div className="row align-items-end">
           <div className="col-sm mb-2 mb-sm-0">
@@ -129,6 +152,7 @@ export const UserFoldersPage = () => {
               loading={loadingFolders}
               folders={foldersFiltered}
               onSelectSubFolder={handleNavigateToSubfolder}
+              onViewStatus={handleViewStatus}
             />
           </div>
         </>
@@ -139,11 +163,11 @@ export const UserFoldersPage = () => {
         <>
           <div className="row align-items-center mb-2">
             <div className="col">
-              <h2 className="h4 mb-0">Files</h2>
+              <h2 className="h4 mb-0">Archivos</h2>
             </div>
           </div>
 
-          <UserFileList files={FilesFiltered} loading={loadingFiles} />
+          <UserFileList files={FilesFiltered} filePermission={folderPermission} loading={loadingFiles} />
         </>
       )}
 
@@ -163,5 +187,9 @@ export const UserFoldersPage = () => {
         </div>
       )}
     </div>
+    <ViewFolderStatus 
+    folderStatusHistories={folderHistories}  />
+    </>
+
   )
 }

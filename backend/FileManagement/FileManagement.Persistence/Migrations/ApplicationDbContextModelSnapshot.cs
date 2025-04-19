@@ -180,6 +180,54 @@ namespace FileManagement.Persistence.Migrations
                     b.ToTable("FileStorages", (string)null);
                 });
 
+            modelBuilder.Entity("FileManagement.Core.Entities.FileUploadConfiguration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("MaxFileSizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileUploadConfigurations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 446, DateTimeKind.Local).AddTicks(8477),
+                            CreatedBy = 1,
+                            MaxFileSizeBytes = 2199023255552L,
+                            UpdatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 446, DateTimeKind.Local).AddTicks(8491),
+                            UpdatedBy = 1
+                        });
+                });
+
             modelBuilder.Entity("FileManagement.Core.Entities.Folder", b =>
                 {
                     b.Property<int>("Id")
@@ -374,7 +422,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 393, DateTimeKind.Local).AddTicks(7468),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 448, DateTimeKind.Local).AddTicks(5650),
                             CreatedBy = 1,
                             Description = "Pendiente",
                             Name = "Pendiente"
@@ -382,7 +430,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 393, DateTimeKind.Local).AddTicks(7496),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 448, DateTimeKind.Local).AddTicks(5668),
                             CreatedBy = 1,
                             Description = "En proceso",
                             Name = "En proceso"
@@ -390,7 +438,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 393, DateTimeKind.Local).AddTicks(7500),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 448, DateTimeKind.Local).AddTicks(5672),
                             CreatedBy = 1,
                             Description = "Atendido",
                             Name = "Atendido"
@@ -540,7 +588,7 @@ namespace FileManagement.Persistence.Migrations
                         {
                             Id = 1,
                             Address = "123 Main St",
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 398, DateTimeKind.Local).AddTicks(8773),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 457, DateTimeKind.Local).AddTicks(1953),
                             Email = "ivansperezt@gmail.com",
                             FirstName = "John",
                             Identification = "123456789",
@@ -596,7 +644,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 399, DateTimeKind.Local).AddTicks(1499),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 458, DateTimeKind.Local).AddTicks(225),
                             CreatedBy = 1,
                             Description = "Administrador",
                             RoleName = "Admin"
@@ -604,7 +652,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 399, DateTimeKind.Local).AddTicks(1505),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 458, DateTimeKind.Local).AddTicks(245),
                             CreatedBy = 1,
                             Description = "Usuario",
                             RoleName = "User"
@@ -692,7 +740,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 17, 1, 12, 32, 399, DateTimeKind.Utc).AddTicks(8846),
+                            CreatedAt = new DateTime(2025, 4, 17, 19, 34, 47, 459, DateTimeKind.Utc).AddTicks(2761),
                             CreatedBy = 1,
                             Description = "Google Drive Provider",
                             ProviderName = "Google Drive"
@@ -761,13 +809,13 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 400, DateTimeKind.Local).AddTicks(2517),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 459, DateTimeKind.Local).AddTicks(7479),
                             HasChangedPassword = false,
                             IsExpired = false,
                             PasswordHash = "change password for password hash",
                             PeopleId = 1,
                             Status = true,
-                            UpdatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 400, DateTimeKind.Local).AddTicks(2522)
+                            UpdatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 459, DateTimeKind.Local).AddTicks(7489)
                         });
                 });
 
@@ -855,7 +903,7 @@ namespace FileManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 4, 16, 20, 12, 32, 401, DateTimeKind.Local).AddTicks(108),
+                            CreatedAt = new DateTime(2025, 4, 17, 14, 34, 47, 460, DateTimeKind.Local).AddTicks(7998),
                             CreatedBy = 1,
                             RoleId = 1,
                             UserId = 1

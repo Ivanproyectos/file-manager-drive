@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Reflection;
+using Serilog;
 
 namespace FileManagement.Service
 {
@@ -42,12 +43,15 @@ namespace FileManagement.Service
             services.AddTransient<IFolderService, FolderService>();
             services.AddScoped<IUploadNotifierService, UploadNotifierService>();
             services.AddTransient<IFolderPermissionService, FolderPermissionService>();
-
+            services.AddSingleton<ILoggerService, SerilogLoggerService>();
             
             services.AddHostedService<FileUploadBackgroundService>();
 
-
             services.AddTransient<SeedUseCase>();
+
+            //Log.Logger = new LoggerConfiguration()
+            //    .WriteTo.File("logs/log-{Date}.txt", rollingInterval: RollingInterval.Day)
+            //    .CreateLogger();
 
             services.AddAuthentication(options =>
                 {

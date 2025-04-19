@@ -48,10 +48,10 @@ export const ChangeFolderStatus = ({ modalRef, onSubmit, onCloseModal, folderSta
 
 
     const statusIdExistsInFolderHistory = (statusId: number): boolean =>
-        folderStatusHistories?.some((history) => history.id === statusId) ?? false;
+        folderStatusHistories?.some((history) => history.state.id === statusId) ?? false;
 
     const getCommentStatus = (statusId: number): string => {
-        const history = folderStatusHistories?.find((history) => history.id === statusId);
+        const history = folderStatusHistories?.find((history) => history.state.id === statusId);
         return history?.comment || "";
     };
 

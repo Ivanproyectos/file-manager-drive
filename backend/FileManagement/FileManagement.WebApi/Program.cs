@@ -3,6 +3,8 @@ using FileManagement.Core.Settings;
 using FileManagement.IoC;
 using FileManagement.WebApi.Middleware;
 using Microsoft.OpenApi.Models;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +70,17 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
+
+builder.Host.UseSerilog((context, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+    if (context.HostingEnvironment.IsDevelopment())
+    {
+        config.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command",
+            Serilog.Events.LogEventLevel.Information);
+    }
+});
+   
 
 
 /*builder.Services.AddCors(options =>

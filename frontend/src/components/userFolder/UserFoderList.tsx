@@ -3,14 +3,18 @@ import {
   IFolderProcessStatus,
   ISubFolder,
 } from '@/types'
+import { UserFolderActions } from "./UserFolderActions"
+
 interface FolderListProps {
   folders: ISubFolder[]
   loading: boolean
   onSelectSubFolder: (folderId: number, folderName: string) => void
+  onViewStatus: (id : number) => void
 }
 export const UserFoderList = ({
   folders,
   onSelectSubFolder,
+  onViewStatus
 }: FolderListProps) => {
   const renderStatusBadge = (histories: IFolderProcessHistories[]) => {
     const activeStatus = histories?.find((history) => history.isActive)
@@ -55,9 +59,13 @@ export const UserFoderList = ({
                 <h5 className="text-truncate ms-2 mb-0">{name}</h5>
               </div>
               {folderProcessHistories && folderProcessHistories.length > 0 && (
-                <div className="ms-auto d-flex align-items-center">
-                  {renderStatusBadge(folderProcessHistories)}
+                <div className='ms-auto  d-flex align-items-center'>
+                   <div className="d-flex align-items-center">
+                    {renderStatusBadge(folderProcessHistories)}
+                  </div>
+                  <UserFolderActions id={id} onViewStatus={onViewStatus} />
                 </div>
+             
               )}
             </div>
 

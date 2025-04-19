@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Contracts.Request;
+using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
@@ -17,6 +18,7 @@ namespace FileManagement.Service.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGoogleDriveService _googleDriveService;
         private readonly IFolderProcessStateRepostory _folderProcessStateRepostory;
+      
         public FolderService(
             IFolderRepository folderRepository,
             IUserFolderRepository userFolderRepository,
@@ -25,7 +27,8 @@ namespace FileManagement.Service.Services
             IUnitOfWork unitOfWork,
             IGoogleDriveService googleDriveService,
             IFolderProcessHistoryRepository folderProcessHistoryRepository,
-            IFolderProcessStateRepostory folderProcessStateRepostory)
+            IFolderProcessStateRepostory folderProcessStateRepostory,
+            IFileUploadConfigurationRepository fileUploadConfigurationRepository)
         {
             _folderRepository = folderRepository;
             _userFolderRepository = userFolderRepository;
@@ -147,5 +150,7 @@ namespace FileManagement.Service.Services
         {
             return await _folderProcessStateRepostory.GetFolderProcessStateAsync();
         }
+
+       
     }
 }
