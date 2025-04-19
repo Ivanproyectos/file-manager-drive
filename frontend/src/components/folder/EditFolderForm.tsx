@@ -60,7 +60,7 @@ export const EditFolderForm = ({
         const folder = await folderApi.getFolderByIdAsync(folderId)
         const folderPermission = await getFolderPermission(folderId)
         reset(folder);
-        debugger;
+       
         setFolderPermissions(folderPermission) 
       } catch (error) {
         console.error('Error fetching data:', error)

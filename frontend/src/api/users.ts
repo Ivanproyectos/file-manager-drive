@@ -6,8 +6,14 @@ export const getUsersSummary = async (): Promise<IUserSummary[]> => {
   return response.data
 }
 
-export const getUsers = async (): Promise<IUser[]> => {
-  const response = await axiosInstance.get('/users')
+export const getUsers = async (email?: string, identification?: string): Promise<IUser[]> => {
+  const params = new URLSearchParams()
+
+  if(email) params.append('email', email)
+  if(identification) params.append('identification', identification)
+
+
+  const response = await axiosInstance.get(`/users?${params.toString()}`)
   return response.data
 }
 

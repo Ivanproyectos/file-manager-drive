@@ -23,7 +23,6 @@ axiosInstance.interceptors.request.use(
   axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-      debugger;
       if (error.response && error.response.status === 401) {
         console.log('Token expirado o no válido. Redirigiendo al login...');   
          window.location.href = '/login'; 

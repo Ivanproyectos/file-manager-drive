@@ -101,7 +101,7 @@ export const FolderManagerPage = () => {
   useEffect(() => {
     if (signalr) {
       signalr?.on("FileUploaded", (response: StatusUploadedFile) => {
-        debugger;
+     
         setUploadedFiles(response.files);
         setStatusUploaded(response.status);
         setFileRefresh((prev) => !prev);

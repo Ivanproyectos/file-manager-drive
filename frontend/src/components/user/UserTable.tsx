@@ -365,6 +365,7 @@ export const UserTable = ({
               {/* Select */}
               <div className="tom-select-custom">
                 <select
+                  value={15}
                   id="datatableEntries"
                   className="js-select form-select form-select-borderless w-auto"
                   autoComplete="off"

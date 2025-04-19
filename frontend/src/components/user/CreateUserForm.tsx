@@ -5,6 +5,8 @@ import { createUserSchema } from "@/schemas";
 import { CreateUser, RoleId } from "@/types";
 import { RolList } from "./RolList";
 import { useEffect, useState, useRef } from "react";
+import { useDebounce } from 'use-debounce';
+import {  getUsers } from '@/api/users'
 
 declare const HSCore: any;
 
@@ -14,7 +16,10 @@ interface CreateUserFormProps {
 }
 export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
   const [selectedRoles, setSelectedRoles] = useState<RoleId[]>([]);
+  const [emailExists, setEmailExists] = useState(false);
+  const [identificationExists, setIdentificationExists] = useState(false);
   const inputDateRef = useRef<HTMLInputElement | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -37,6 +42,10 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
   const personType = watch("people.personType");
   const identification = watch("people.identification");
   const isExpired = watch("isExpired");
+  const email = watch("people.email");
+
+  const [debouncedEmail] = useDebounce(email, 500);
+  const [debouncedIdentification] = useDebounce(identification, 500);
 
   const handleUserSubmit = async (user: CreateUser) => {
     const result = await onSubmit(user);
@@ -67,6 +76,35 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
 
   }, [isExpired]);
 
+  useEffect(() => {
+    const checkEmailExists = async () => {
+      if (!debouncedEmail) return;
+
+      try {
+        const users = await getUsers(debouncedEmail);
+        setEmailExists(users.length > 0);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    checkEmailExists();
+  }, [debouncedEmail]);
+
+  useEffect(() => {
+    const checkIdentificationExists = async () => {
+      if (!debouncedIdentification) return;
+
+      try {
+        const users = await getUsers(undefined, debouncedIdentification.toString());
+        setIdentificationExists(users.length > 0);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    checkIdentificationExists();
+  }, [debouncedIdentification]);
 
   return (
 
@@ -140,12 +178,14 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                 <input
                   {...register("people.identification")}
                   type="text"
-                  className={`form-control ${errors.people?.identification ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.people?.identification || identificationExists ? "is-invalid" : ""}`}
                   id="identification"
                   placeholder={personType === PersonType.Natural ? "Ingrese DNI" : "Ingrese RUC"}
                   aria-label="Ingrese informacion"
                 />
                 {errors.people?.identification && <span className="invalid-feedback">{errors.people?.identification?.message}</span>}
+                {identificationExists && <span className="invalid-feedback">Ya existe un usuario con esta identificacion</span>}
+                
               </div>
               {personType === PersonType.Juridico && (
                 <div className="mb-4">
@@ -214,7 +254,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                     <label htmlFor="email" className="form-label">
                       Correo{" "}
                     </label>
-                    <div className={`input-group input-group-merge ${errors.people?.email ? "is-invalid" : ""}`}  >
+                    <div className={`input-group input-group-merge ${errors.people?.email || emailExists ? "is-invalid" : ""}`}  >
                       <div className="input-group-prepend input-group-text">
                         <i className="bi-envelope"></i>
                       </div>
@@ -229,6 +269,8 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
 
                     </div>
                     {errors.people?.email && <span className="invalid-feedback">{errors.people?.email?.message}</span>}
+                    {emailExists && <span className="invalid-feedback">Ya existe un usuario con este correo</span>}
+                    
                   </div>
                 </div>
 
@@ -338,7 +380,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
               type="submit"
               className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
               form="createUserForm"
-              disabled={!isValid && selectedRoles.length === 0}
+              disabled={!isValid || selectedRoles.length === 0 || emailExists || identificationExists}
 
             >
               <div
