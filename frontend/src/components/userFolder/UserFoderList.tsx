@@ -19,17 +19,17 @@ export const UserFoderList = ({
     switch (statusId) {
       case IFolderProcessStatus.PENDING:
         return (
-          <span className="badge bg-soft-warning text-warning">
+          <span className="badge bg-warning">
             {statusName}
           </span>
         )
       case IFolderProcessStatus.PROCESS:
         return (
-          <span className="badge bg-soft-info text-info">{statusName}</span>
+          <span className="badge bg-info">{statusName}</span>
         )
       case IFolderProcessStatus.FINISHED:
         return (
-          <span className="badge bg-soft-success text-success">
+          <span className="badge bg-success">
             {statusName}
           </span>
         )

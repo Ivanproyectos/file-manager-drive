@@ -21,9 +21,6 @@ export const UserFoldersPage = () => {
   const { files, folders, subFolders, loadingFiles, loadingFolders } =
     useUserFolder({ folderId })
 
-  /*   const foldersFiltered = subFolders.filter((folder) =>
-    folder.name.toLowerCase().includes(filter.toLowerCase())
-  ) */
   const FilesFiltered = files.filter((file) =>
     file.fileName.toLowerCase().includes(filter.toLowerCase())
   )
@@ -51,6 +48,7 @@ export const UserFoldersPage = () => {
       )
 
       setFoldersFiltered(foldersFiltered)
+
     }
     if (folderId !== 0) {
       {
@@ -105,11 +103,11 @@ export const UserFoldersPage = () => {
             <div className="d-flex align-items-center gap-2">
               <div>
                 <i className="bi-folder me-1"></i>
-                <strong>2</strong> Folders
+                <strong>{foldersFiltered.length}</strong> Carpetas
               </div>
               <div>
                 <i className="bi-files me-1"></i>
-                <strong>3</strong> Archivos
+                <strong>{FilesFiltered.length}</strong> Archivos
               </div>
             </div>
           </div>
@@ -124,7 +122,7 @@ export const UserFoldersPage = () => {
       </div>
       {foldersFiltered.length > 0 && (
         <>
-          <h2 className="h4 mb-3">Folders</h2>
+          <h2 className="h4 mb-3">Carpetas</h2>
 
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
             <UserFoderList
