@@ -81,7 +81,7 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
     {
       data: null,
       render: ({ id, name }: IFolder) => `
-           <a class="d-flex align-items-center" href="javascript:;" >
+           <a class="d-flex align-items-center" href="#" >
                   <i className="bi-folder me-2"></i>
                   <span data-action="navigate" data-folder-id="${id}" data-folder-name="${name}">${name}</span>
          </a>
@@ -170,8 +170,8 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
                 id="datatableSearch"
                 type="search"
                 className="form-control"
-                placeholder="Buscar folder"
-                aria-label="Buscar folder"
+                placeholder="Buscar carpeta"
+                aria-label="Buscar carpeta"
               />
             </div>
             {/* End Search */}
@@ -186,7 +186,7 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
                 <span id="datatableCounter">0</span>
                 Selected
               </span>
-              <a className="btn btn-outline-danger btn-sm" href="javascript:;">
+              <a className="btn btn-outline-danger btn-sm" href="#">
                 <i className="bi-trash"></i> Delete
               </a>
             </div>

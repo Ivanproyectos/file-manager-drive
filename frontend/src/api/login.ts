@@ -8,9 +8,14 @@ export const loginAsync = async (user: ILogin): Promise<IUserToken> => {
   )
   return response.data
 }
-export const getUserById = async (userId: number): Promise<IUser> => {
+export const getUserById = async (userId: number, token: string): Promise<IUser> => {
   const response = await axios.get(
-    `${import.meta.env.VITE_API_BASE_URL}/account/users/${userId}`
+    `${import.meta.env.VITE_API_BASE_URL}/users/${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
   )
   return response.data
 }

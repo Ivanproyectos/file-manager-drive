@@ -30,7 +30,7 @@ export const generateAvatar = (names: string[]): string => {
 export const createAvatarHTML = (name: string, color: string): string => {
     const letter = name.charAt(0);
     return `
-      <a class="avatar avatar-soft-${color}" href="javascript:;" data-bs-toggle="tooltip" data-bs-placement="top" title="${name}">
+      <a class="avatar avatar-soft-${color}" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="${name}">
         <span class="avatar-initials">${letter}</span>
       </a>
     `;
@@ -38,7 +38,7 @@ export const createAvatarHTML = (name: string, color: string): string => {
   
   const createRemainingAvatarsHTML = (count: number): string => {
     return `
-      <a class="avatar avatar-soft-light" href="javascript:;" data-bs-toggle="tooltip" data-bs-placement="top" title="+${count}">
+      <a class="avatar avatar-soft-light" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="+${count}">
         <span class="avatar-initials">+${count}</span>
       </a>
     `;

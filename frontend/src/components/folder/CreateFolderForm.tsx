@@ -133,7 +133,7 @@ export const CreateFolderForm = ({
           <li className="step-item">
             <a
               className="step-content-wrapper"
-              href="javascript:;"
+              href="#"
               data-hs-step-form-next-options='{
                 "targetSelector": "#createProjectStepDetails"
               }'
@@ -148,7 +148,7 @@ export const CreateFolderForm = ({
           <li className="step-item">
             <a
               className="step-content-wrapper"
-              href="javascript:;"
+              href="#"
               data-hs-step-form-next-options='{
                   "targetSelector": "#createProjectStepMembers"
                 }'

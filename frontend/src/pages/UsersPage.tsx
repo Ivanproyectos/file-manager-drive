@@ -106,12 +106,12 @@ export const UsersPage = () => {
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb breadcrumb-no-gutter">
                   <li className="breadcrumb-item">
-                    <a className="breadcrumb-link" href="javascript:;">
+                    <a className="breadcrumb-link" href="#">
                       Pages
                     </a>
                   </li>
                   <li className="breadcrumb-item">
-                    <a className="breadcrumb-link" href="javascript:;">
+                    <a className="breadcrumb-link" href="#">
                       Mis archivos
                     </a>
                   </li>

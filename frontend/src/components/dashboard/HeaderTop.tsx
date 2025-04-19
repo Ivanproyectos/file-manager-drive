@@ -75,7 +75,7 @@ export const HeaderTop = () => {
                          "toggleIconOnFocus": true,
                          "activeclassName": "focus"
                        }' />
-                <a className="input-group-append input-group-text" href="javascript:;">
+                <a className="input-group-append input-group-text" href="#">
                   <i id="clearSearchResultsIcon" className="bi-x-lg" style={{ display: 'none' }}></i>
                 </a>
               </div>
@@ -104,7 +104,7 @@ export const HeaderTop = () => {
                       </div>
 
                       <input type="search" className="htmlForm-control" placeholder="Search in front" aria-label="Search in front" />
-                      <a className="input-group-append input-group-text" href="javascript:;">
+                      <a className="input-group-append input-group-text" href="#">
                         <i className="bi-x-lg"></i>
                       </a>
                     </div>
@@ -210,7 +210,7 @@ export const HeaderTop = () => {
               <div className="dropdown">
                 <a
                   className="navbar-dropdown-account-wrapper"
-                  href="javascript:;"
+                  href="#"
                   id="accountNavbarDropdown"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -248,7 +248,7 @@ export const HeaderTop = () => {
                         </div> */}
                       <a
                         className="avatar avatar-soft-primary avatar-circle"
-                        href="javascript:;"
+                        href="#"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         title={user?.name}
@@ -267,7 +267,7 @@ export const HeaderTop = () => {
                   <div className="dropdown-divider"></div>
 
                   {/*  <div className="dropdown">
-                      <a className="navbar-dropdown-submenu-item dropdown-item dropdown-toggle" href="javascript:;" id="navSubmenuPagesAccountDropdown1" data-bs-toggle="dropdown" aria-expanded="false">Set status</a>
+                      <a className="navbar-dropdown-submenu-item dropdown-item dropdown-toggle" href="#" id="navSubmenuPagesAccountDropdown1" data-bs-toggle="dropdown" aria-expanded="false">Set status</a>
     
                       <div className="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu" aria-labelledby="navSubmenuPagesAccountDropdown1">
                         <a className="dropdown-item" href="#">
@@ -309,7 +309,7 @@ export const HeaderTop = () => {
     
                 
                     <div className="dropdown">
-                      <a className="navbar-dropdown-submenu-item dropdown-item dropdown-toggle" href="javascript:;" id="navSubmenuPagesAccountDropdown2" data-bs-toggle="dropdown" aria-expanded="false">Customization</a>
+                      <a className="navbar-dropdown-submenu-item dropdown-item dropdown-toggle" href="#" id="navSubmenuPagesAccountDropdown2" data-bs-toggle="dropdown" aria-expanded="false">Customization</a>
     
                       <div className="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu" aria-labelledby="navSubmenuPagesAccountDropdown2">
                         <a className="dropdown-item" href="#">

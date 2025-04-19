@@ -6,6 +6,7 @@ import { convertBytes } from '@/utils/formatBytes'
 export const FileUploadStatus = () => {4
     const [fileStorageStatus, setFileStorageStatus] = useState<IFileStorageStatus>();
 
+    debugger;
     const percent = Math.round((fileStorageStatus?.usedStorageBytes || 0) / (fileStorageStatus?.totalStorageBytes || 1) * 100);
 
     useEffect(() => {

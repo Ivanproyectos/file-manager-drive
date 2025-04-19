@@ -8,13 +8,13 @@ declare const HSBsDropdown: any
 declare const HSCore: any
 declare const bootstrap: any
 
-interface Breadcrumbs {
+interface Breadcrumbs   {
   id: number
   name: string
   class?: string
 }
 
-export const UserFoldersPage = () => {
+export const UserFoldersPage = () =>   {
   const [folderId, setFolderId] = useState<number>(0)
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumbs[]>([])
   const [foldersFiltered, setFoldersFiltered] = useState<ISubFolder[]>([])
@@ -98,7 +98,7 @@ export const UserFoldersPage = () => {
                 <li className="breadcrumb-item">
                   <a
                     className="breadcrumb-link"
-                    href="javascript:;"
+                    href="#"
                     onClick={() => handleGoBackToFolder(0)}
                   >
                     Mis archivos
@@ -113,7 +113,7 @@ export const UserFoldersPage = () => {
                   >
                     <a
                       className={`breadcrumb-link ${breadcrumb.class}`}
-                      href="javascript:;"
+                      href="#"
                     >
                       {breadcrumb.name}
                     </a>

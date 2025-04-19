@@ -1,6 +1,6 @@
 import { formatISO, parse, format } from 'date-fns'
 
-export const convertDateToLocaleString = (isoDate: string): string => {
+export const   convertDateToLocaleString = (isoDate: string): string => {
   const date = new Date(isoDate)
 
   const friendlyDateWithTime = date.toLocaleString('es-ES', {

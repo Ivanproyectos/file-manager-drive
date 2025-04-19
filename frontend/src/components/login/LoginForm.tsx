@@ -27,7 +27,8 @@ export const LoginForm = () => {
     try {
       setMessage('')
       const response = await loginAsync(data)
-      const user = await getUserById(response.userId)
+
+      const user = await getUserById(response.userId, response.token)
 
       const userSession: IUserSession = {
         id: user.id,
@@ -129,7 +130,7 @@ export const LoginForm = () => {
           <a
             onClick={() => setShowPassword(!showPassword)}
             className="input-group-append input-group-text"
-            href="javascript:;"
+            href="#"
           >
             {showPassword && <i id="changePassIcon" className="bi-eye"></i>}
             {!showPassword && (

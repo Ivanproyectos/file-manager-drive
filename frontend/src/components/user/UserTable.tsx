@@ -193,7 +193,7 @@ export const UserTable = ({
                 <span id="datatableCounter">0</span>
                 Selected
               </span>
-              <a className="btn btn-outline-danger btn-sm" href="javascript:;">
+              <a className="btn btn-outline-danger btn-sm" href="#">
                 <i className="bi-trash"></i> Delete
               </a>
             </div>
@@ -303,7 +303,7 @@ export const UserTable = ({
                     </div>
                 
                     <div className="d-grid">
-                      <a className="btn btn-primary" href="javascript:;">
+                      <a className="btn btn-primary" href="#">
                         Aplicar
                       </a>
                     </div>

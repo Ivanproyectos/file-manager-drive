@@ -193,12 +193,12 @@ export const FoldersPage = () => {
               <nav aria-label="breadcrumb mb-4">
                 <ol className="breadcrumb breadcrumb-no-gutter">
                   <li className="breadcrumb-item">
-                    <a className="breadcrumb-link" href="javascript:;">
+                    <a className="breadcrumb-link" href="#">
                       Pages
                     </a>
                   </li>
                   <li className="breadcrumb-item">
-                    <a className="breadcrumb-link" href="javascript:;">
+                    <a className="breadcrumb-link" href="#">
                       Mis carpetas
                     </a>
                   </li>

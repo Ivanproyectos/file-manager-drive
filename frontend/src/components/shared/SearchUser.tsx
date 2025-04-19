@@ -87,7 +87,7 @@ export const SearchUser = ({ onSelectedUser }: SearchUserProps) => {
           {filtersUsers(users, search).map((user) => (
             <a
               className="dropdown-item"
-              href="javascript:;"
+              href="#"
               onClick={() => handleSelectedUser(user)}
               key={user.id}
             >

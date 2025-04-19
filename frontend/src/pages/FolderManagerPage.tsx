@@ -131,7 +131,7 @@ export const FolderManagerPage = () => {
                     >
                       <a
                         className={`breadcrumb-link ${breadcrumb.class}`}
-                        href="javascript:;"
+                        href="#"
                       >
                         {breadcrumb.name}
                       </a>
@@ -140,11 +140,11 @@ export const FolderManagerPage = () => {
                 </ol>
               </nav>
 
-              <h1 className="page-header-title mb-2">Files</h1>
+              <h1 className="page-header-title mb-2">Gestión de archivos</h1>
               <div className="d-flex align-items-center gap-4">
                 <div>
                   <i className="bi-folder me-2"></i>
-                  <strong>{folders.length}</strong> Folders
+                  <strong>{folders.length}</strong> Carpetas
                 </div>
                 <div>
                   <i className="bi-files me-2"></i>
@@ -193,14 +193,14 @@ export const FolderManagerPage = () => {
                     <a
                       onClick={openUploadFilesModal}
                       className="dropdown-item"
-                      href="javascript:;"
+                      href="#"
                       data-bs-toggle="modal"
                       data-bs-target="#uploadFilesModal"
                     >
                       <i className="bi-file-earmark-arrow-up dropdown-item-icon"></i>{" "}
                       Cargar archivos
                     </a>
-                    {/*   <a className="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
+                    {/*   <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
                   <i className="bi-upload dropdown-item-icon"></i> Upload folder
                 </a> */}
                   </div>
@@ -219,7 +219,7 @@ export const FolderManagerPage = () => {
         </div>
         {foldersFiltered.length > 0 && (
           <>
-            <h2 className="h4 mb-3">Folders</h2>
+            <h2 className="h4 mb-3">Carpetas</h2>
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-5">
               <FolderList
                 folders={foldersFiltered}
@@ -235,7 +235,7 @@ export const FolderManagerPage = () => {
           <>
             <div className="row align-items-center mb-2">
               <div className="col">
-                <h2 className="h4 mb-0">Files</h2>
+                <h2 className="h4 mb-0">Archivos</h2>
               </div>
             </div>
             <FileList
