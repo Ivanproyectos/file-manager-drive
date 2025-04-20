@@ -31,10 +31,23 @@ namespace FileManagement.Persistence.Repositories
             return _context.Users.Include(u => u.People).Where(u => u.Status == true).ToListAsync();
         }
 
-        public Task<List<User>> GetAllUsersAsync()
+        public Task<List<User>> GetAllUsersAsync(string? email, string? identification)
         {
-            return _context.Users.Include(u => u.People)
-                               .ToListAsync();
+            var query = _context.Users.Include(u => u.People).AsQueryable();
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                query = query.Where(u => u.People.Email.Contains(email));
+            }
+
+            if (!string.IsNullOrEmpty(identification))
+            {
+                query = query.Where(u => u.People.Identification.Contains(identification));
+            }
+
+            //return _context.Users.Include(u => u.People)
+            //                   .ToListAsync();
+            return query.ToListAsync();
         }
 
         public Task<User?> GetUserByEmailAsync(string email)

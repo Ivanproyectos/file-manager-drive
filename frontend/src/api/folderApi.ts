@@ -4,8 +4,11 @@ export const createFolderAsync = async (folder: CreateFolder): Promise<number> =
     const response = await axiosInstance.post('/folders', folder);
     return response.data?.id;
 }
-export const getFoldersAsync = async (): Promise<IFolder[]> => {
-    const response = await axiosInstance.get('/folders');
+export const getFoldersAsync = async (folderName?: string): Promise<IFolder[]> => {
+    const params = new URLSearchParams()
+    if(folderName) params.append('folderName', folderName)
+
+    const response = await axiosInstance.get(`/folders?${params.toString()}`);
     return response.data;
 }
 export const getFolderByIdAsync = async (folderId: number): Promise<IFolderById> => {

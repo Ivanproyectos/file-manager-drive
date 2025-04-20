@@ -35,6 +35,11 @@ namespace FileManagement.Service.UseCases
                 throw new UnauthorizedException($"El usuario con la identificacion {request.Email} no existe");
             }
 
+            if (people.User.IsExpired && people.User.ExpirationDate < DateTime.Now)
+            {
+                throw new UnauthorizedException("El usuario ha caducado");
+            }
+
             if (!_passwordService.VerifyPassword(people.User.PasswordHash, request.Password))
             {
                 throw new UnauthorizedException("Contraseña incorrecta");

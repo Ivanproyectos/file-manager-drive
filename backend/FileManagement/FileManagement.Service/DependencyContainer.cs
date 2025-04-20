@@ -49,10 +49,8 @@ namespace FileManagement.Service
 
             services.AddTransient<SeedUseCase>();
 
-            //Log.Logger = new LoggerConfiguration()
-            //    .WriteTo.File("logs/log-{Date}.txt", rollingInterval: RollingInterval.Day)
-            //    .CreateLogger();
-
+       
+            #region Auth
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -125,7 +123,8 @@ namespace FileManagement.Service
                         OnMessageReceived = context =>
                         {
                             var accessToken = context.Request.Query["access_token"]; // configuracion para websockets
-                            if (!string.IsNullOrEmpty(accessToken))
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/fileUploadHub"))
                             {
                                 context.Token = accessToken;
                             }
@@ -133,7 +132,7 @@ namespace FileManagement.Service
                         }
                     };
                 });
-
+#endregion Auth
 
             return services;
         }

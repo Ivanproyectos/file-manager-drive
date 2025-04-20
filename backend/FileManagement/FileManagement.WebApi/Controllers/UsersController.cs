@@ -22,9 +22,9 @@ namespace FileManagement.WebApi.Controllers
             return Ok(await _userService.GetAllUserSummaryAsync());
         }
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery] string? email, [FromQuery]string? identification)
         {
-            return Ok(await _userService.GetAllUsers());
+            return Ok(await _userService.GetAllUsers(email, identification));
         }
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetUserById(int id)

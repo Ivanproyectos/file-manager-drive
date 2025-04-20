@@ -43,7 +43,7 @@ namespace FileManagement.Persistence.Repositories
             return await _context.UserFolders.Include(uf => uf.Folder)
                 .ThenInclude(f => f.FolderProcessHistories)
                 .ThenInclude(fh => fh.FolderProcessStates)
-                .Where(uf => uf.UserId == UserId && uf.Folder.ParentFolderId == null).ToListAsync();
+                .Where(uf => uf.UserId == UserId && uf.Folder.ParentFolderId == null && uf.Folder.Status).ToListAsync();
         }
 
         public Task RemoveUserFolderRangeASync(List<UserFolder> userFolders)

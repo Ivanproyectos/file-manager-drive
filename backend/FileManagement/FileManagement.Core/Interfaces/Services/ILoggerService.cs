@@ -9,7 +9,8 @@ namespace FileManagement.Core.Interfaces.Services
     public interface ILoggerService
     {
         void LogError(string message, Exception ex);
-        void LogInformation(string message);
+        void LogInformation(string message, params object[] args);
 
+        void LogWarning(string message, params object[] args);
     }
 }

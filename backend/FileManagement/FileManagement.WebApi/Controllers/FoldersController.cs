@@ -17,9 +17,9 @@ namespace FileManagement.WebApi.Controllers
             _folderService = folderService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetFolders()
+        public async Task<IActionResult> GetFolders([FromQuery]string? folderName)
         {
-            return Ok(await _folderService.GetAllFoldersAsync());
+            return Ok(await _folderService.GetAllFoldersAsync(folderName));
         }
         [HttpGet("{folderId}")]
         public async Task<IActionResult> GetFolderById(int folderId)

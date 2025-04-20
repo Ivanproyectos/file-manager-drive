@@ -35,9 +35,9 @@ namespace FileManagement.Service.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<UserDto>> GetAllUsers()
+        public async Task<List<UserDto>> GetAllUsers(string? email, string? identification)
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            var users = await _userRepository.GetAllUsersAsync(email, identification);
             return _mapper.Map<List<UserDto>>(users);
         }
 

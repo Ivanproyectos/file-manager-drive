@@ -39,9 +39,9 @@ namespace FileManagement.Service.Services
             _folderProcessHistoryRepository = folderProcessHistoryRepository;
             _folderProcessStateRepostory = folderProcessStateRepostory;
         }
-        public async Task<List<FolderDto>> GetAllFoldersAsync()
+        public async Task<List<FolderDto>> GetAllFoldersAsync(string? folderName)
         {
-            var folders = await _folderRepository.GetFoldersAsync();
+            var folders = await _folderRepository.GetFoldersAsync(folderName);
 
             var foldersDto = _mapper.Map<List<FolderDto>>(folders);
 

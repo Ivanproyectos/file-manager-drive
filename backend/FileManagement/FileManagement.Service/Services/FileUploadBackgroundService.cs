@@ -7,22 +7,16 @@ using FileManagement.Core.Interfaces.Services;
 using FileManagement.Core.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.StaticFiles;
-using System.Management;
-using Microsoft.AspNetCore.SignalR;
-using FileManagement.Core.Hubs;
-using MediatR;
 
 namespace FileManagement.Service.Services
 {
-    public class FileUploadBackgroundService : BackgroundService    
+    public class FileUploadBackgroundService : BackgroundService
     {
         private readonly IFileUploadChannel _channel;
         private readonly IGoogleDriveService _googleDriveService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<FileUploadBackgroundService> _logger;
+        private readonly ILoggerService _logger;
         private readonly GoogleDriveSettings _googleDriveSettings;
 
         public FileUploadBackgroundService(
@@ -30,7 +24,8 @@ namespace FileManagement.Service.Services
             IGoogleDriveService googleDriveService,
             IServiceProvider serviceProvider,
             IOptions<GoogleDriveSettings> googleDriveSettings,
-            ILogger<FileUploadBackgroundService> logger)
+            ILoggerService logger
+        )
         {
             _channel = channel;
             _googleDriveService = googleDriveService;
@@ -38,6 +33,7 @@ namespace FileManagement.Service.Services
             _logger = logger;
             _googleDriveSettings = googleDriveSettings.Value;
         }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("El servicio de fondo ha comenzado.");
@@ -46,52 +42,71 @@ namespace FileManagement.Service.Services
             {
                 try
                 {
-                    var filesNames = new List<string>();
                     var request = await _channel.DequeueAsync(stoppingToken);
 
-                    filesNames?.RemoveRange(0, filesNames.Count);
+                    var filesNames = new List<string>();
 
-                    _logger.LogInformation("Procesando carga de archivos desde {Path}", request.UploadId);
-                    var uploadPath = Path.Combine(Path.GetTempPath(), "uploads", request.UploadId.ToString());
+                    using var scope = _serviceProvider.CreateScope();
+                    var fileTempRepository =
+                        scope.ServiceProvider.GetRequiredService<IFileTempRepository>();
+                    var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-                    if (!Directory.Exists(uploadPath))
+                    List<FileTemp> filesTemp = null;
+                    string uploadPath = null;
+
+                    try
                     {
-                        _logger.LogWarning("La carpeta de carga no existe para el UploadId {UploadId}", request.UploadId);
+                        filesTemp = await fileTempRepository.GetAllByUploadIdAsync(
+                            request.UploadId
+                        );
+                        uploadPath = Path.Combine(
+                            Path.GetTempPath(),
+                            "uploads",
+                            request.UploadId.ToString()
+                        );
+
+                        foreach (var file in filesTemp)
+                        {
+                            try
+                            {
+                                var path = Path.Combine(uploadPath, file.FileName);
+                                var fileName = Path.GetFileName(path);
+                                var driveFileId = await _googleDriveService.UploadFileAsync(
+                                    path,
+                                    fileName,
+                                    _googleDriveSettings.FolderId
+                                );
+                                file.StorageIdentifier = driveFileId;
+
+                                await fileTempRepository.UpdateFileAsync(file);
+                                await unitOfWork.SaveChangesAsync();
+
+                                filesNames?.Add(Path.GetFileName(path));
+                            }
+                            catch (Exception fileEx)
+                            {
+                                _logger.LogError("Error procesando archivo {FileName}", fileEx);
+                                // Continuar con el siguiente archivo
+                                continue;
+                            }
+                        }
+
+                        await CompleteFileRegistrationWithStorageAsync(filesTemp, request.UploadId);
+
+                        NotifyUpload(request.UserId, StatusUploadFileEnum.Success, filesNames);
+                    }
+                    catch (Exception ex)
+                    {
+                        NotifyUpload(request.UserId, StatusUploadFileEnum.Error, filesNames);
+                        _logger.LogError("Error subiendo archivo {File}", ex);
                         continue;
                     }
-
-                    var files = Directory.GetFiles(uploadPath);
-
-                    foreach (var file in files)
+                    finally
                     {
-                        try
-                        {
-                            var fileName = Path.GetFileName(file);
-                            var driveFileId = await _googleDriveService.UploadFileAsync(file, fileName, _googleDriveSettings.FolderId);
-
-                            await SaveFileRepository(driveFileId, file, request);
-                            filesNames?.Add(Path.GetFileName(file));
-
-
-
-                        }
-                        catch (Exception ex)
-                        {
-                            NotifyUpload(request.UserId, StatusUploadFileEnum.Error, filesNames);
-                            _logger.LogError(ex, "Error subiendo archivo {File}", file);
-                            continue;
-                        }
+                        await fileTempRepository.RemoveFileRangeAsync(filesTemp);
+                        await unitOfWork.SaveChangesAsync();
+                        Directory.Delete(uploadPath, true);
                     }
-
-                    //using var scope = _serviceProvider.CreateScope();
-                    //var fileHub = scope.ServiceProvider.GetRequiredService<IHubContext<FileUploadHub>>();
-
-                    //await fileHub.Clients.User(request.UserId.ToString())
-                    //    .SendAsync("FileUploaded", new UploadedFileRequest(StatusUploadFileEnum.Success, filesNames));
-
-                    NotifyUpload(request.UserId, StatusUploadFileEnum.Success, filesNames);
-                    Directory.Delete(uploadPath, true);
-
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -100,98 +115,63 @@ namespace FileManagement.Service.Services
                 }
                 catch (Exception ex)
                 {
-                  
-                    continue;
-                 
+                    _logger.LogError("Error inesperado en el servicio de fondo", ex);
+                    // Pequeña pausa para evitar bucles rápidos de error
+                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
             }
         }
 
-        private async Task SaveFileRepository(string driveFileId, string file, CreateFileRequest request)
+        private async Task CompleteFileRegistrationWithStorageAsync(
+            List<FileTemp> filesTemp,
+            string uploadId
+        )
         {
-
-            // Creamos un scope para usar servicios Scoped
             using var scope = _serviceProvider.CreateScope();
             var fileRepository = scope.ServiceProvider.GetRequiredService<IFileRepository>();
-       
-            var fileStorageRepository = scope.ServiceProvider.GetRequiredService<IFileStorageRepository>();
+            var fileStorageRepository =
+                scope.ServiceProvider.GetRequiredService<IFileStorageRepository>();
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+            await unitOfWork.BeginTransactionAsync();
 
             try
             {
-                await unitOfWork.BeginTransactionAsync();
-
-                var provider = new FileExtensionContentTypeProvider();
-                if (!provider.TryGetContentType(file, out string contentType))
+                foreach (var fileTemp in filesTemp)
                 {
-                    contentType = "application/octet-stream"; 
-                }
-
-
-                var fileEntity = new Core.Entities.File
-                {
-                    FileName = Path.GetFileName(file),
-                    Extension = Path.GetExtension(file),
-                    MimeType = contentType,
-                    SizeBytes = new FileInfo(file).Length,
-                    FolderId = request.FolderId,
-                };
-
-                await fileRepository.AddFileAsync(fileEntity);
-                await unitOfWork.SaveChangesAsync();
-
-                var fileStorage = new Core.Entities.FileStorage
-                {
-                    StorageIdentifier = driveFileId,
-                    FileId = fileEntity.Id,
-                    StorageProviderId = (int)StorageProviderEnum.Drive,
-                    StoragePath = request.UploadId
-                };
-
-                await fileStorageRepository.AddFileStorageAsync(fileStorage);
-                await unitOfWork.SaveChangesAsync();
-
-                if (request.FilePermissions != null && request.FilePermissions.Any())
-                {
-                    var filesPermisions = request.FilePermissions.Select(fm => new FilePermission
+                    var file = new Core.Entities.File
                     {
-                        FileId = fileEntity.Id,
-                        UserId = fm.UserId,
-                        CanView = fm.CanView,
-                        CanDownload = fm.CanDownload,
-                        IsDateExpired = fm.IsDateExpired,
-                        ExpirationDate = fm.ExpirationDate
-                    }).ToList();
+                        FileName = fileTemp.FileName,
+                        Extension = fileTemp.Extension,
+                        SizeBytes = fileTemp.SizeBytes,
+                        MimeType = fileTemp.MimeType,
+                        FolderId = fileTemp.FolderId,
+                        CreatedBy = fileTemp.CreatedBy,
+                        CreatedAt = fileTemp.CreatedAt,
+                    };
 
-                    AddFilePermisions(filesPermisions);
+                    await fileRepository.AddFileAsync(file);
+                    await unitOfWork.SaveChangesAsync();
+
+                    var fileStorage = new FileStorage
+                    {
+                        StorageProviderId = (int)StorageProviderEnum.Drive,
+                        StorageIdentifier = fileTemp.StorageIdentifier,
+                        CreatedBy = fileTemp.CreatedBy,
+                        CreatedAt = fileTemp.CreatedAt,
+                        FileId = file.Id,
+                        StoragePath = uploadId,
+                    };
+                    await fileStorageRepository.AddFileStorageAsync(fileStorage);
                 }
                 await unitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
                 await unitOfWork.RollbackAsync();
-                _logger.LogError(ex, "Error al guardar el archivo en la base de datos", file);
+                _logger.LogError("Error al registrar los archivos", ex);
+                throw;
             }
-   
-        }
-
-        private void AddFilePermisions(List<FilePermission> filesPermisions)
-        {
-            Task.Run(async () =>
-            {
-                try
-                {
-                    using var scope = _serviceProvider.CreateScope();
-                    var filePermissionRepository = scope.ServiceProvider.GetRequiredService<IFilePermissionRepository>();
-
-                    await filePermissionRepository.AddFilePermissionsAsync(filesPermisions);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error al guardar los permisos de los archivos en la base de datos");
-                }
-            });
-           
         }
 
         private void NotifyUpload(int userId, StatusUploadFileEnum status, List<string> filesNames)

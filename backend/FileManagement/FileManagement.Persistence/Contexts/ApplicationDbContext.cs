@@ -1,5 +1,6 @@
 ﻿using FileManagement.Core.Common;
 using FileManagement.Core.Entities;
+using FileManagement.Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -7,8 +8,12 @@ namespace FileManagement.Persistence.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        private readonly ITokenService _tokenService;
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options, 
+            ITokenService tokenService) : base(options)
         {
+            _tokenService = tokenService;
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
@@ -23,23 +28,30 @@ namespace FileManagement.Persistence.Contexts
         public DbSet<FileStorage> FilesStorage { get; set; }
         public DbSet<FolderProcessHistory> FolderProcessHistories { get; set; }
         public DbSet<FolderProcessState> FolderProcessStates { get; set; }
-
         public DbSet<FileUploadConfiguration> FileUploadConfigurations { get; set; }
+        public DbSet<FileTemp> FileTemps { get; set; }
 
-        
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
             {
+                if(entry.Entity.GetType() == typeof(FileTemp) || 
+                    entry.Entity.GetType() == typeof(FileStorage) ||
+                    entry.Entity.GetType() == typeof(Core.Entities.File))
+                {
+                    continue;
+                }
+
                 switch (entry.State)
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedAt = DateTime.UtcNow;
-                        entry.Entity.CreatedBy = 1; 
+                        entry.Entity.CreatedBy = _tokenService.DecodeToken().UserId;
                         break;
                     case EntityState.Modified:
                         entry.Entity.UpdatedAt = DateTime.UtcNow;
-                        entry.Entity.UpdatedBy = 1;
+                        entry.Entity.UpdatedBy = _tokenService.DecodeToken().UserId;
                         break;
                 }
             }

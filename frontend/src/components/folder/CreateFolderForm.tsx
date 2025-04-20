@@ -11,6 +11,8 @@ import { useFormStep, useInitTooltip } from '@/hooks'
 import { createFile } from '@/api/files'
 import { createFolder } from '@/services/folderService'
 import { showError } from '@/utils/alerts'
+import { useDebounce } from 'use-debounce'
+import { getFoldersAsync } from '@/api/folderApi'
 
 interface CreateFolderFormProps {
   onCloseModal: () => void
@@ -24,6 +26,7 @@ export const CreateFolderForm = ({
   onUploadFiles,
 }: CreateFolderFormProps) => {
   const [users, setUsers] = useState<IFolderPermission[]>([])
+  const [existsFolder, setExistsFolder] = useState(false)
   /*  const [uploadId, setUploadId] = useState<string>(""); */
   const [dropzoneInstance, setdropzoneInstance] = useState<any>({
     dropzone: null,
@@ -45,6 +48,9 @@ export const CreateFolderForm = ({
   const uploadIdRef = useRef<string>('')
 
   const hasProcessState = watch('hasProcessState')
+  const folderName = watch('name')
+
+  const [debouncedFolderName] = useDebounce(folderName, 1000)
 
   const handleDropzone = (uploadId: string, dropzone?: any) => {
     setdropzoneInstance({ dropzone, uploadId })
@@ -103,15 +109,37 @@ export const CreateFolderForm = ({
     }
 
     try {
-      const file: ICreateFile = { folderId, uploadId }
-      await createFile(file)
+      if(dropzone.files.length > 0) {
+        const file: ICreateFile = { folderId, uploadId }
+        await createFile(file)
+        onUploadFiles(dropzone.files.map((file: any) => file.name))
+      }
       finishCreate()
-      onUploadFiles(dropzone.files.map((file: any) => file.name))
     } catch (error) {
       console.error(error)
       showError('Error al cargar los archivos, vuelva a intentalor mas tarde')
     }
   }
+
+  useEffect(() => {
+
+    const checkFolderName = async () => {
+      if (debouncedFolderName) {
+        const folders = await getFoldersAsync(debouncedFolderName)
+        debugger; 
+        setExistsFolder(false)
+        if (folders.length > 0) {
+          setExistsFolder(true)
+        }
+      
+      }
+    }
+
+    if (debouncedFolderName) {
+      checkFolderName();
+    }
+  }, [debouncedFolderName])
+
   return (
     <>
       <form
@@ -183,7 +211,7 @@ export const CreateFolderForm = ({
                 <input
                   {...register('name')}
                   type="text"
-                  className="form-control"
+                  className={`form-control ${existsFolder ? "is-invalid" : ""}`}
                   name="name"
                   id="projectNameNewProjectLabel"
                   placeholder="Ingrese el nombre de la carpeta"
@@ -191,9 +219,8 @@ export const CreateFolderForm = ({
                   required
                   data-msg="Nombre de folder es requerido."
                 />
-                <span className="invalid-feedback">
-                  Ingrese el nombre del folder
-                </span>
+               {!existsFolder && <span className="invalid-feedback">Por favor ingrese el nombre del folder</span>}
+                {existsFolder && <span className="invalid-feedback">El nombre de la carpeta ingresado ya esta en uso</span>}
               </div>
             </div>
 
@@ -251,6 +278,7 @@ export const CreateFolderForm = ({
             <div className="d-flex align-items-center mt-5">
               <div className="ms-auto">
                 <button
+                  disabled={existsFolder}
                   type="button"
                   className="btn btn-primary"
                   data-hs-step-form-next-options='{

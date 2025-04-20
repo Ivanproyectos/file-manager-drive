@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FileManagement.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InicitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -449,46 +449,46 @@ namespace FileManagement.Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "FileUploadConfigurations",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "MaxFileSizeBytes", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 17, 14, 34, 47, 446, DateTimeKind.Local).AddTicks(8477), 1, null, null, 2199023255552L, new DateTime(2025, 4, 17, 14, 34, 47, 446, DateTimeKind.Local).AddTicks(8491), 1 });
+                values: new object[] { 1, new DateTime(2025, 4, 18, 20, 19, 46, 615, DateTimeKind.Local).AddTicks(7476), 1, null, null, 2199023255552L, new DateTime(2025, 4, 18, 20, 19, 46, 615, DateTimeKind.Local).AddTicks(7493), 1 });
 
             migrationBuilder.InsertData(
                 table: "FolderProcessStates",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "Name", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 17, 14, 34, 47, 448, DateTimeKind.Local).AddTicks(5650), 1, null, "Pendiente", "Pendiente", null, null },
-                    { 2, new DateTime(2025, 4, 17, 14, 34, 47, 448, DateTimeKind.Local).AddTicks(5668), 1, null, "En proceso", "En proceso", null, null },
-                    { 3, new DateTime(2025, 4, 17, 14, 34, 47, 448, DateTimeKind.Local).AddTicks(5672), 1, null, "Atendido", "Atendido", null, null }
+                    { 1, new DateTime(2025, 4, 18, 20, 19, 46, 617, DateTimeKind.Local).AddTicks(809), 1, null, "Pendiente", "Pendiente", null, null },
+                    { 2, new DateTime(2025, 4, 18, 20, 19, 46, 617, DateTimeKind.Local).AddTicks(825), 1, null, "En proceso", "En proceso", null, null },
+                    { 3, new DateTime(2025, 4, 18, 20, 19, 46, 617, DateTimeKind.Local).AddTicks(829), 1, null, "Atendido", "Atendido", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Peoples",
                 columns: new[] { "Id", "Address", "BussinessName", "CreatedAt", "CreatedBy", "DeletedAt", "Email", "FirstName", "Identification", "LastName", "PersonType", "Phone", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 17, 14, 34, 47, 457, DateTimeKind.Local).AddTicks(1953), null, null, "ivansperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
+                values: new object[] { 1, "123 Main St", null, new DateTime(2025, 4, 18, 20, 19, 46, 622, DateTimeKind.Local).AddTicks(5413), null, null, "ivansperezt@gmail.com", "John", "123456789", "Doe", "N", "1234567890", null, null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "RoleName", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 17, 14, 34, 47, 458, DateTimeKind.Local).AddTicks(225), 1, null, "Administrador", "Admin", null, null },
-                    { 2, new DateTime(2025, 4, 17, 14, 34, 47, 458, DateTimeKind.Local).AddTicks(245), 1, null, "Usuario", "User", null, null }
+                    { 1, new DateTime(2025, 4, 18, 20, 19, 46, 622, DateTimeKind.Local).AddTicks(8330), 1, null, "Administrador", "Admin", null, null },
+                    { 2, new DateTime(2025, 4, 18, 20, 19, 46, 622, DateTimeKind.Local).AddTicks(8373), 1, null, "Usuario", "User", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "SourceProviders",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "Description", "ProviderName", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 17, 19, 34, 47, 459, DateTimeKind.Utc).AddTicks(2761), 1, null, "Google Drive Provider", "Google Drive", null, null });
+                values: new object[] { 1, new DateTime(2025, 4, 19, 1, 19, 46, 623, DateTimeKind.Utc).AddTicks(8375), 1, null, "Google Drive Provider", "Google Drive", null, null });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "ExpirationDate", "PasswordHash", "PeopleId", "Status", "UpdatedAt", "UpdatedBy" },
-                values: new object[] { 1, new DateTime(2025, 4, 17, 14, 34, 47, 459, DateTimeKind.Local).AddTicks(7479), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 17, 14, 34, 47, 459, DateTimeKind.Local).AddTicks(7489), null });
+                values: new object[] { 1, new DateTime(2025, 4, 18, 20, 19, 46, 624, DateTimeKind.Local).AddTicks(3525), null, null, null, "change password for password hash", 1, true, new DateTime(2025, 4, 18, 20, 19, 46, 624, DateTimeKind.Local).AddTicks(3530), null });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "RoleId", "UpdatedAt", "UpdatedBy", "UserId" },
-                values: new object[] { 1, new DateTime(2025, 4, 17, 14, 34, 47, 460, DateTimeKind.Local).AddTicks(7998), 1, null, 1, null, null, 1 });
+                values: new object[] { 1, new DateTime(2025, 4, 18, 20, 19, 46, 625, DateTimeKind.Local).AddTicks(8313), 1, null, 1, null, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilePermissions_FileId",

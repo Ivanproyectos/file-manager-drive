@@ -15,9 +15,14 @@ namespace FileManagement.Service.Services
             Log.Error(ex, message);
         }
 
-        public void LogInformation(string message)
+        public void LogInformation(string message, params object[] args)
         {
-            Log.Information(message);
+            Log.Information(message, args);
+        }
+
+        public void LogWarning(string message, params object[] args)
+        {
+            Log.Warning(message, args);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace FileManagement.Core.Interfaces.Repositories
     public interface IFolderRepository
     {
         Task<List<Folder>> GetSubFoldersAsync(int folderId);
-        Task<List<Folder>> GetFoldersAsync();
+        Task<List<Folder>> GetFoldersAsync(string? folderName);
         Task<PagedResultDto<List<Folder>>> GetPagedFoldersAsync(string searchTerm, int pageNumber, int pageSize);
         Task<IEnumerable<Folder>> GetFoldersByUserIdAsync(int userId);
         Task<Folder> GetFolderByIdAsync(int id);

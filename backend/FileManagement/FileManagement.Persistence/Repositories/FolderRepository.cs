@@ -67,10 +67,9 @@ namespace FileManagement.Persistence.Repositories
             return Task.FromResult(folder);
         }
 
-        public async Task<List<Folder>> GetFoldersAsync()
+        public async Task<List<Folder>> GetFoldersAsync(string? folderName)
         {
-
-            var folders = await _context.Folders.Where(x => x.ParentFolderId == null)
+            var query  = _context.Folders.Where(x => x.ParentFolderId == null)
                             .Include(f => f.UserFolders)
                             .ThenInclude(uf => uf.User)
                             .ThenInclude(u => u.People)
@@ -79,10 +78,28 @@ namespace FileManagement.Persistence.Repositories
                             .Include(f => f.FolderProcessHistories)
                             .ThenInclude(fh => fh.FolderProcessStates)
                             .OrderByDescending(f => f.Id)
-                            .ToListAsync();
+                              .AsQueryable();
+
+            if (!string.IsNullOrEmpty(folderName))
+            {
+                query = query.Where(f => f.Name.Contains(folderName));
+            }
+
+
+            //var folders = await _context.Folders.Where(x => x.ParentFolderId == null)
+            //                .Include(f => f.UserFolders)
+            //                .ThenInclude(uf => uf.User)
+            //                .ThenInclude(u => u.People)
+            //                .Include(f => f.UserFolders)
+            //                .Include(f => f.Files)
+            //                .Include(f => f.FolderProcessHistories)
+            //                .ThenInclude(fh => fh.FolderProcessStates)
+            //                .OrderByDescending(f => f.Id)
+            //                .ToListAsync();
                             
 
-            return folders;
+            return await query.ToListAsync();
+            
         }
 
         public async Task<List<Folder>> GetSubFoldersAsync(int folderId)

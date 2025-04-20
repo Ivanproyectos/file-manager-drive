@@ -13,7 +13,7 @@ namespace FileManagement.Core.Interfaces.Services
     public interface IFolderService
     {
         public Task<GetFolderByIdRequest> GetFolderByIdAsync(int folderId);
-        public Task<List<FolderDto>> GetAllFoldersAsync();
+        public Task<List<FolderDto>> GetAllFoldersAsync(string? folderName);
         public Task<List<SubFolderDto>> GetSubFoldersAsync(int folderId);
         public Task<List<FileDto>> GetFolderFiles(int folderId);
         public Task DeleteFolderAndFiles(int folderId);

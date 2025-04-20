@@ -13,10 +13,6 @@ namespace FileManagement.Persistence.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            //builder.HasIndex(x => new { x.UserId, x.FolderId })
-            //  .HasFilter("DeletedAt IS NULL")
-            // .IsUnique();
-
             builder.Property(x => x.CanView)
                 .HasColumnType("bit")
                 .HasConversion<bool>().IsRequired();

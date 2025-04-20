@@ -18,10 +18,6 @@ namespace FileManagement.WebApi.Controllers
         {
             return Ok(await Mediator.Send(loginRequest));
         }
-        [HttpGet("users/{id}")]
-        public async Task<IActionResult> GetUserById(int id)
-        {
-            return Ok(await _userService.GetUserByIdAsync(id));
-        }
+  
     }
 }
