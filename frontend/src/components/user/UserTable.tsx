@@ -22,11 +22,15 @@ export const UserTable = ({
 
   const getExpirationBadge = (user: IUser) => {
     if (user.isExpired) {
+      debugger; 
       const expirationDate = new Date(user.expirationDate || '')
       const currentDate = new Date()
 
+      expirationDate.setHours(0, 0, 0, 0);
+      currentDate.setHours(0, 0, 0, 0);
+
       if (expirationDate < currentDate) {
-        return '<span class="badge bg-soft-danger text-danger">Expirado</span>'
+        return `<span class="badge bg-soft-danger text-danger">Expirado ${convertDateToLocaleString(user.expirationDate || '')} </span>`
       }
 
       return `<span class="badge bg-soft-warning text-warning">${convertDateToLocaleString(
@@ -60,7 +64,7 @@ export const UserTable = ({
     },
     {
       data: 'people.personType',
-      render: (personType: PersonType) => (personType ? 'Natural' : 'Juridica'),
+      render: (personType: PersonType) => (personType == PersonType.Natural ? 'Natural' : 'Juridica'),
     },
     { data: 'people.identification' },
     {
@@ -363,9 +367,10 @@ export const UserTable = ({
               <span className="me-2">Mostrar:</span>
 
               {/* Select */}
-              <div className="tom-select-custom">
+              <div className="tom-select-custom" style={{ minWidth: '6rem' }}>
                 <select
-                  value={15}
+                  value={30}
+                  
                   id="datatableEntries"
                   className="js-select form-select form-select-borderless w-auto"
                   autoComplete="off"
@@ -375,10 +380,11 @@ export const UserTable = ({
                           }'
                 >
                   <option value="10">10</option>
-                  <option value="15" selected>
+                  <option value="15">
                     15
                   </option>
                   <option value="20">20</option>
+                  <option value="30">30</option>
                 </select>
               </div>
               {/* End Select */}

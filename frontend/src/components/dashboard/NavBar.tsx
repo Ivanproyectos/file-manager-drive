@@ -117,7 +117,7 @@ export const NavBar = () => {
                       data-bs-parent="#navbarVerticalMenuPagesMenu"
                     >
                       <Link className="nav-link " to="/dashboard/users">
-                        Users
+                        Usuarios
                       </Link>
                       {/*   <a className="nav-link " href="../users-leaderboard.html">
                       Leaderboard

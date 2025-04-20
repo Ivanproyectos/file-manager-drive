@@ -6,8 +6,8 @@ import { CreateUser, PersonType, UpdateUser } from '@/types';
 export const createUserSchema:  yup.ObjectSchema<CreateUser>  = yup.object({
    /*  password: yup.string().required('La contraseña es obligatoria').min(6, 'La contraseña debe tener al menos 6 caracteres'),
     confirmPassword: yup.string().required('La confirmación de la contraseña es obligatoria').oneOf([yup.ref('password')], 'Las contraseñas no coinciden'), */
-    status: yup.boolean(),
-    roles: yup.array().min(1, 'Debes seleccionar al menos un rol').required('Los roles son obligatorios'),
+   /*  status: yup.boolean(), */
+    roles: yup.array().required('Los roles son obligatorios').min(1, 'Debes seleccionar al menos un rol'),
     isExpired: yup.boolean().required('La fecha de espiración es obligatoria'),
     expirationDate: yup.string()
     .when('isExpired', {
@@ -69,7 +69,7 @@ export const updateUserSchema:  yup.ObjectSchema<UpdateUser>  = yup.object({
       phone: yup.number()
       .typeError('El teléfono debe ser un número')
       .integer('Debe ser un número entero').required('El teléfono es obligatorio'),
-      address: yup.string().required('La dirección es obligatoria'),
+     /*  address: yup.string().required('La dirección es obligatoria'), */
       personType: yup
         .mixed<PersonType>()
         .oneOf([PersonType.Natural, PersonType.Juridico], 'Tipo de persona inválido')

@@ -242,11 +242,11 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
         <div className="row justify-content-center justify-content-sm-between align-items-sm-center">
           <div className="col-sm mb-2 mb-sm-0">
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center">
-              <span className="me-2">Showing:</span>
+              <span className="me-2">Mostrando:</span>
 
               {/* Select */}
               <div className="tom-select-custom">
-                <select
+                <select value={30}
                   id="datatableEntries"
                   className="js-select form-select form-select-borderless w-auto"
                   autoComplete="off"
@@ -257,15 +257,16 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
                           }'
                 >
                   <option value="10">10</option>
-                  <option value="15"    defaultValue={0}>
+                  <option value="15">
                     15
                   </option>
                   <option value="20">20</option>
+                  <option value="30">30</option>
                 </select>
               </div>
               {/* End Select */}
 
-              <span className="text-secondary me-2">of</span>
+              <span className="text-secondary me-2">de</span>
 
               {/* Pagination Quantity */}
               <span id="datatableWithPaginationInfoTotalQty"></span>

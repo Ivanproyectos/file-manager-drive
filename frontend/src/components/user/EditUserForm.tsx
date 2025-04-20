@@ -32,7 +32,7 @@ export const EditUserForm = ({
     watch,
     reset,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty, isValid },
   } = useForm<UpdateUser>({
     resolver: yupResolver(updateUserSchema),
     mode: 'onBlur',
@@ -47,10 +47,6 @@ export const EditUserForm = ({
     if (!result) return
 
   }
-  useEffect(() => {
-
-    setValue('roles', selectedRoles)
-  }, [selectedRoles])
 
   useEffect(() => {
     HSCore.components.HSFlatpickr.init('.dt-picker', {
@@ -65,6 +61,11 @@ export const EditUserForm = ({
       },
     })
   }, [refresh, isExpired])
+
+  useEffect(() => {
+      setValue("roles", selectedRoles);
+      trigger("roles");
+  }, [selectedRoles]);
 
     useEffect(() => {
       if (!userId || userId === 0) return
@@ -325,7 +326,7 @@ export const EditUserForm = ({
               </div>
 
               <div className="mb-4">
-                <h4 className="text-muted mb-3">
+                <h4 className={`text-muted mb-3 ${errors.roles ? "is-invalid" : ""}`}>
                   Agregue permisos para el usuario
                 </h4>
                 <RolList
@@ -408,7 +409,7 @@ export const EditUserForm = ({
               type="submit"
               className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? 'text-transparent' : ''}`}
               form="updateUserForm"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isValid}
             >
               <div
                 className="spinner-border text-light status-spinner"

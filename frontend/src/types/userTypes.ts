@@ -17,7 +17,7 @@ export interface IUserSummary {
   email: string;
   personType: string;
 }
-export type CreateUser = Omit<IUser, "id" | "userName" | "people" | "roles"> & {
+export type CreateUser = Omit<IUser, "id" | "userName" | "people" | "roles" | "status"> & {
   /* confirmPassword: string; */
   people: CreatePerson
   roles?: number[];

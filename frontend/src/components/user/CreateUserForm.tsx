@@ -27,11 +27,11 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
     reset,
     setValue,
     trigger,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, isDirty },
   } = useForm<CreateUser>({
     resolver: yupResolver(createUserSchema),
-    mode: 'onBlur',
-    reValidateMode: 'onChange',
+    mode: 'all',
+  /*   reValidateMode: 'onChange', */
     defaultValues: {
       people: {
         personType: PersonType.Natural
@@ -54,7 +54,11 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
   };
 
   useEffect(() => {
-    setValue("roles", selectedRoles);
+    if(isDirty){
+      setValue("roles", selectedRoles);
+      trigger("roles");
+    }
+
   }, [selectedRoles]);
 
   useEffect(() => {
@@ -78,6 +82,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
 
   useEffect(() => {
     const checkEmailExists = async () => {
+      setEmailExists(false);
       if (!debouncedEmail) return;
 
       try {
@@ -93,6 +98,8 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
 
   useEffect(() => {
     const checkIdentificationExists = async () => {
+
+      setIdentificationExists(false);
       if (!debouncedIdentification) return;
 
       try {
@@ -317,8 +324,8 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
                 </div>
                 {errors.people?.address && <span className="invalid-feedback">{errors.people?.address?.message}</span>}
               </div>
-              <div className="mb-2">
-                <h4 className="text-muted mb-3">Agregue permisos para el usuario</h4>
+              <div className="mb-2" >
+                <h4 className={`text-muted mb-3 ${errors.roles ? "is-invalid" : ""}`}>Agregue permisos para el usuario</h4>
                 <RolList onSelected={setSelectedRoles} />
                 {errors.roles && <span className="invalid-feedback">{errors.roles?.message}</span>}
               </div>
@@ -380,7 +387,7 @@ export const CreateUserForm = ({ modalRef, onSubmit }: CreateUserFormProps) => {
               type="submit"
               className={`btn btn-primary d-flex justify-content-center align-items-center ${isSubmitting ? "text-transparent" : ""}`}
               form="createUserForm"
-              disabled={!isValid || selectedRoles.length === 0 || emailExists || identificationExists}
+              disabled={!isValid || isSubmitting || emailExists || identificationExists }
 
             >
               <div

@@ -55,9 +55,19 @@ export const LoginForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
+        <a href="/" className="mb-4 d-block" aria-label="Front">
+          <div className="d-flex align-items-center justify-content-center gap-2" data-type-layout="desktop"> 
+            <img height={25} width={25}
+              src="/assets/img/folder-logo.png"
+              alt="Logo"
+            />
+            <h1 className="mb-0 display-5" >Grupo qhuya</h1>
+          </div>
+      </a>
       <div className="text-center">
-        <div className="mb-5">
-          <h1 className="display-5">Iniciar sesión </h1>
+  
+        <div className="mb-2">
+          <h2 >Ingresa a tu cuenta </h2>
           {/*   <p>
             ¿ Aun no tienes una cuenta ?{" "}
             <a className="link" href="./authentication-signup-basic.html">
@@ -65,7 +75,6 @@ export const LoginForm = () => {
             </a>
           </p> */}
         </div>
-
         <div className="d-grid mb-4" style={{ placeContent: 'center' }}>
           <img
             className="img-fluid me-2"

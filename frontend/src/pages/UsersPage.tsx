@@ -112,7 +112,7 @@ export const UsersPage = () => {
                   </li>
                   <li className="breadcrumb-item">
                     <a className="breadcrumb-link" href="#">
-                      Mis archivos
+                      Usuarios
                     </a>
                   </li>
                 </ol>
