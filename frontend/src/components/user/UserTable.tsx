@@ -17,12 +17,14 @@ export const UserTable = ({
   users,
   onReload,
 }: UserListProps) => {
-  useInitTomSelect()
+  
+ /*  useInitTomSelect() */
+
   const tableRef = useRef<HTMLTableElement>(null)
 
   const getExpirationBadge = (user: IUser) => {
     if (user.isExpired) {
-      debugger; 
+     
       const expirationDate = new Date(user.expirationDate || '')
       const currentDate = new Date()
 
@@ -96,7 +98,7 @@ export const UserTable = ({
           </a>
           <div class="btn-group">
             <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" 
-              id="optionsUser" data-bs-toggle="dropdown" aria-expanded="false"></button>
+              id="optionsFolder" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="optionsUser" style="">
               <a class="dropdown-item" href="#"  data-action="delete" data-id="${user.id}" >
                 <i class="bi-trash dropdown-item-icon"></i> Eliminar

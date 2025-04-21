@@ -40,9 +40,10 @@ export const CreateSubFolder = ({
   }
   const handleCreateSubFolder = async (data: any) => {
     let subFolderId: number
+    const { uploadId, dropzone } = dropzoneInstance
 
     try {
-      const { uploadId } = dropzoneInstance
+   
       const folder: ICreateSubFolder = {
         folderId,
         name: data.name,
@@ -50,27 +51,25 @@ export const CreateSubFolder = ({
       }
       subFolderId = await createSubFolder(folder)
 
-      const file: ICreateFile = { folderId: subFolderId, uploadId }
-      await createFile(file)
-      handleCloseModal()
-      reset()
-      onCreated((preve: boolean) => !preve)
     } catch (error) {
       showError('Error al crear la carpeta, vuelva a intentalor mas tarde')
     }
 
     try {
-      const { uploadId, dropzone } = dropzoneInstance
 
-      if (dropzone.files.length === 0) return
+      if (dropzone.files.length !== 0){
 
-      const file: ICreateFile = { folderId: subFolderId!, uploadId }
-      await createFile(file)
-      handleCloseModal()
-      onUploadedFiles(dropzone.files.map((file: any) => file.name))
+        const file: ICreateFile = { folderId: subFolderId!, uploadId }
+        await createFile(file)
+        onUploadedFiles(dropzone.files.map((file: any) => file.name))
+      }
+ 
     } catch (error) {
       console.error(error)
     }
+    reset()
+    onCreated((preve: boolean) => !preve)
+    handleCloseModal()
   }
 
   const handleCloseModal = () => {

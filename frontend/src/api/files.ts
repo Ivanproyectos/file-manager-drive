@@ -1,6 +1,7 @@
 import { axiosInstance } from "./axiosInstance";
 import { ICreateFile, IFileStorageStatus } from "@/types";
 export const createFile = async (file: ICreateFile):Promise<void> => {
+    debugger; 
    await axiosInstance.post('/files', file);
 }
 

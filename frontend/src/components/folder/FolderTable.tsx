@@ -18,6 +18,8 @@ interface Props {
 
 export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRemove }: Props) => {
 
+ 
+
   const navigate = useNavigate();
 
   const tableRef = useRef<HTMLTableElement>(null);
@@ -82,7 +84,7 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
       data: null,
       render: ({ id, name }: IFolder) => `
            <a class="d-flex align-items-center" href="#" >
-                  <i className="bi-folder me-2"></i>
+                  <i class="bi-folder me-2"></i>
                   <span data-action="navigate" data-folder-id="${id}" data-folder-name="${name}">${name}</span>
          </a>
       `,
@@ -197,14 +199,14 @@ export const FolderTable = ({ folders,onChangeStatus, onEdit,onUpdateStatus,onRe
       {/* End Header */}
 
       {/* Table */}
-      <div className="table-responsive datatable-custom">
+      <div className="table-responsive datatable-custom" style={{overflowX: "unset"}}>
         <table
           ref={tableRef}
           id="datatable"
           className="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
           data-hs-datatables-options='{
                "columnDefs": [{
-                      "targets": [0, 2, 3],
+                      "targets": [0, 1, 2],
                       "orderable": false
                     }],
                    "order": [],

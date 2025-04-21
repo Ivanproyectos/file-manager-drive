@@ -35,7 +35,7 @@ namespace FileManagement.Service.UseCases
                 throw new UnauthorizedException($"El usuario con la identificacion {request.Email} no existe");
             }
 
-            if (people.User.IsExpired && people.User.ExpirationDate < DateTime.Now)
+            if (people.User.IsExpired && people.User.ExpirationDate < DateTime.Now.Date)
             {
                 throw new UnauthorizedException("El usuario ha caducado");
             }

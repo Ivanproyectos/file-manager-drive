@@ -24,6 +24,7 @@ axiosInstance.interceptors.request.use(
     (response) => response,
     (error) => {
       if (error.response && error.response.status === 401) {
+        alert('Sesión expirada o no válida. vuelve a iniciar sesión.');
         console.log('Token expirado o no válido. Redirigiendo al login...');   
          window.location.href = '/login'; 
          Cookies.remove('auth_token');
