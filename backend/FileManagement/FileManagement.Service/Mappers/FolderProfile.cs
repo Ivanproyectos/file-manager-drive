@@ -1,13 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Entities;
-using System.Drawing;
-using Google.Apis.Drive.v3.Data;
 using FileManagement.Service.Helpers;
 
 namespace FileManagement.Service.Mappers
@@ -18,9 +11,8 @@ namespace FileManagement.Service.Mappers
         {
             CreateMap<Folder, FolderDto>()
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
-                      //.ForMember(dest => dest.FolderProcessHistories,
-                      //    opt => opt.MapFrom(src => src.FolderProcessHistories.Select(fh => fh.FolderProcessStates).ToList()))
-                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Files.Sum(file => file.SizeBytes)))
+               
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => SumChildFoldersSizeAsync(src)))
                 .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.UserFolders.Select(uf => new UserFolderDto
                 {
                     Name = FormatPeopleName.FormatPeopleType(uf.User.People),
@@ -33,6 +25,23 @@ namespace FileManagement.Service.Mappers
 
             CreateMap<FolderProcessState, FolderProcessStateDto>();
 
+        }
+
+        private long SumChildFoldersSizeAsync(Folder folder)
+        {
+            if (folder == null) return 0;
+
+            long totalSize = folder.Files?.Sum(x => x.SizeBytes) ?? 0;
+
+            if (folder.SubFolders == null) return totalSize;
+            //Recorre todos los folders hijos
+            foreach (var childFolder in folder.SubFolders)
+            {
+                // Llama recursivamente para obtener los archivos de los subfolders
+                totalSize +=  SumChildFoldersSizeAsync(childFolder);
+            }
+
+            return totalSize;
         }
     }
 }

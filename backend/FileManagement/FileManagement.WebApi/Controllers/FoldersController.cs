@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FileManagement.WebApi.Controllers
 {
-    [Authorize(Roles = $"{RoleConstants.Admin}")]
+    //[Authorize(Roles = $"{RoleConstants.Admin}")]
     [ApiController]
     public class FoldersController : BaseApiController
     {

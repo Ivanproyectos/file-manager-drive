@@ -21,7 +21,8 @@ namespace FileManagement.Persistence.Repositories
 
         public Task DeleteUserAsync(User user)
         {
-             user.DeletedAt = DateTime.Now;
+            user.People.DeletedAt = DateTime.UtcNow;
+            user.DeletedAt = DateTime.Now;
             _context.Users.Update(user);
             return Task.FromResult(user);
         }

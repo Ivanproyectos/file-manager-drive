@@ -15,8 +15,10 @@ namespace FileManagement.Persistence.Configurations
             builder.Property(x => x.ParentFolderId)
                 .IsRequired(false);
 
-            builder.HasOne(f => f.ParentFolder) // Un folder tiene un padre
-            .WithMany() // Un folder puede tener muchos hijos
+            builder.HasIndex(f => f.ParentFolderId);
+
+            builder.HasMany(f => f.SubFolders) // Un folder tiene un padre
+            .WithOne(x => x.ParentFolder) // Un folder puede tener muchos hijos
             .HasForeignKey(f => f.ParentFolderId) // FK recursiva
             .OnDelete(DeleteBehavior.Restrict);
 

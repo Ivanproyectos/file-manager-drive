@@ -30,7 +30,7 @@ namespace FileManagement.Service.Services
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
                 throw new KeyNotFoundException($"usuario con el id {id} no existe");
-
+            
             await _userRepository.DeleteUserAsync(user);
             await _unitOfWork.SaveChangesAsync();
         }

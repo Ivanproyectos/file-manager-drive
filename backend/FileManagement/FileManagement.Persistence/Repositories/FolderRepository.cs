@@ -70,6 +70,8 @@ namespace FileManagement.Persistence.Repositories
         public async Task<List<Folder>> GetFoldersAsync(string? folderName)
         {
             var query  = _context.Folders.Where(x => x.ParentFolderId == null)
+                            .Include(f => f.SubFolders)
+                            .ThenInclude(sf => sf.Files)
                             .Include(f => f.UserFolders)
                             .ThenInclude(uf => uf.User)
                             .ThenInclude(u => u.People)

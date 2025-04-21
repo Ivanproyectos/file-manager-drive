@@ -1,0 +1,283 @@
+2025-04-20 21:01:11.234 -05:00 [ERR] Failed executing DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[CreatedAt], [f].[CreatedBy], [f].[DeletedAt], [f].[Description], [f].[HasProcessState], [f].[Name], [f].[ParentFolderId], [f].[ParentFolderId1], [f].[Status], [f].[UpdatedAt], [f].[UpdatedBy], [t].[Id], [t].[CreatedAt], [t].[CreatedBy], [t].[DeletedAt], [t].[Description], [t].[HasProcessState], [t].[Name], [t].[ParentFolderId], [t].[ParentFolderId1], [t].[Status], [t].[UpdatedAt], [t].[UpdatedBy], [t1].[Id], [t1].[CreatedAt], [t1].[CreatedBy], [t1].[DeletedAt], [t1].[FolderId], [t1].[UpdatedAt], [t1].[UpdatedBy], [t1].[UserId], [t1].[Id0], [t1].[CreatedAt0], [t1].[CreatedBy0], [t1].[DeletedAt0], [t1].[ExpirationDate], [t1].[HasChangedPassword], [t1].[IsExpired], [t1].[PasswordHash], [t1].[PeopleId], [t1].[Status], [t1].[UpdatedAt0], [t1].[UpdatedBy0], [t1].[Id1], [t1].[Address], [t1].[BussinessName], [t1].[CreatedAt1], [t1].[CreatedBy1], [t1].[DeletedAt1], [t1].[Email], [t1].[FirstName], [t1].[Identification], [t1].[LastName], [t1].[PersonType], [t1].[Phone], [t1].[UpdatedAt1], [t1].[UpdatedBy1], [t3].[Id], [t3].[CreatedAt], [t3].[CreatedBy], [t3].[DeletedAt], [t3].[Extension], [t3].[FileName], [t3].[FolderId], [t3].[MimeType], [t3].[SizeBytes], [t3].[UpdatedAt], [t3].[UpdatedBy], [t4].[Id], [t4].[Comment], [t4].[CreatedAt], [t4].[CreatedBy], [t4].[DeletedAt], [t4].[FolderId], [t4].[FolderProcessStateId], [t4].[IsActive], [t4].[UpdatedAt], [t4].[UpdatedBy], [t4].[Id0], [t4].[CreatedAt0], [t4].[CreatedBy0], [t4].[DeletedAt0], [t4].[Description], [t4].[Name], [t4].[UpdatedAt0], [t4].[UpdatedBy0]
+FROM [Folders] AS [f]
+LEFT JOIN (
+    SELECT [f0].[Id], [f0].[CreatedAt], [f0].[CreatedBy], [f0].[DeletedAt], [f0].[Description], [f0].[HasProcessState], [f0].[Name], [f0].[ParentFolderId], [f0].[ParentFolderId1], [f0].[Status], [f0].[UpdatedAt], [f0].[UpdatedBy]
+    FROM [Folders] AS [f0]
+    WHERE [f0].[DeletedAt] IS NULL
+) AS [t] ON [f].[Id] = [t].[ParentFolderId]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[FolderId], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserId], [t0].[Id] AS [Id0], [t0].[CreatedAt] AS [CreatedAt0], [t0].[CreatedBy] AS [CreatedBy0], [t0].[DeletedAt] AS [DeletedAt0], [t0].[ExpirationDate], [t0].[HasChangedPassword], [t0].[IsExpired], [t0].[PasswordHash], [t0].[PeopleId], [t0].[Status], [t0].[UpdatedAt] AS [UpdatedAt0], [t0].[UpdatedBy] AS [UpdatedBy0], [t2].[Id] AS [Id1], [t2].[Address], [t2].[BussinessName], [t2].[CreatedAt] AS [CreatedAt1], [t2].[CreatedBy] AS [CreatedBy1], [t2].[DeletedAt] AS [DeletedAt1], [t2].[Email], [t2].[FirstName], [t2].[Identification], [t2].[LastName], [t2].[PersonType], [t2].[Phone], [t2].[UpdatedAt] AS [UpdatedAt1], [t2].[UpdatedBy] AS [UpdatedBy1]
+    FROM [UserFolders] AS [u]
+    INNER JOIN (
+        SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[DeletedAt], [u0].[ExpirationDate], [u0].[HasChangedPassword], [u0].[IsExpired], [u0].[PasswordHash], [u0].[PeopleId], [u0].[Status], [u0].[UpdatedAt], [u0].[UpdatedBy]
+        FROM [Users] AS [u0]
+        WHERE [u0].[DeletedAt] IS NULL
+    ) AS [t0] ON [u].[UserId] = [t0].[Id]
+    INNER JOIN (
+        SELECT [p].[Id], [p].[Address], [p].[BussinessName], [p].[CreatedAt], [p].[CreatedBy], [p].[DeletedAt], [p].[Email], [p].[FirstName], [p].[Identification], [p].[LastName], [p].[PersonType], [p].[Phone], [p].[UpdatedAt], [p].[UpdatedBy]
+        FROM [Peoples] AS [p]
+        WHERE [p].[DeletedAt] IS NULL
+    ) AS [t2] ON [t0].[PeopleId] = [t2].[Id]
+    WHERE [u].[DeletedAt] IS NULL
+) AS [t1] ON [f].[Id] = [t1].[FolderId]
+LEFT JOIN (
+    SELECT [f1].[Id], [f1].[CreatedAt], [f1].[CreatedBy], [f1].[DeletedAt], [f1].[Extension], [f1].[FileName], [f1].[FolderId], [f1].[MimeType], [f1].[SizeBytes], [f1].[UpdatedAt], [f1].[UpdatedBy]
+    FROM [Files] AS [f1]
+    WHERE [f1].[DeletedAt] IS NULL
+) AS [t3] ON [f].[Id] = [t3].[FolderId]
+LEFT JOIN (
+    SELECT [f2].[Id], [f2].[Comment], [f2].[CreatedAt], [f2].[CreatedBy], [f2].[DeletedAt], [f2].[FolderId], [f2].[FolderProcessStateId], [f2].[IsActive], [f2].[UpdatedAt], [f2].[UpdatedBy], [t5].[Id] AS [Id0], [t5].[CreatedAt] AS [CreatedAt0], [t5].[CreatedBy] AS [CreatedBy0], [t5].[DeletedAt] AS [DeletedAt0], [t5].[Description], [t5].[Name], [t5].[UpdatedAt] AS [UpdatedAt0], [t5].[UpdatedBy] AS [UpdatedBy0]
+    FROM [FolderProcessHistories] AS [f2]
+    INNER JOIN (
+        SELECT [f3].[Id], [f3].[CreatedAt], [f3].[CreatedBy], [f3].[DeletedAt], [f3].[Description], [f3].[Name], [f3].[UpdatedAt], [f3].[UpdatedBy]
+        FROM [FolderProcessStates] AS [f3]
+        WHERE [f3].[DeletedAt] IS NULL
+    ) AS [t5] ON [f2].[FolderProcessStateId] = [t5].[Id]
+    WHERE [f2].[DeletedAt] IS NULL
+) AS [t4] ON [f].[Id] = [t4].[FolderId]
+WHERE ([f].[DeletedAt] IS NULL) AND ([f].[ParentFolderId] IS NULL)
+ORDER BY [f].[Id] DESC, [t].[Id], [t1].[Id], [t1].[Id0], [t1].[Id1], [t3].[Id], [t4].[Id]
+2025-04-20 21:01:11.273 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:f8a2e368-b22b-4f7b-bded-5b74b5c7437e
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:f8a2e368-b22b-4f7b-bded-5b74b5c7437e
+Error Number:207,State:1,Class:16
+2025-04-20 21:01:11.609 -05:00 [ERR] Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 102
+   at FileManagement.Service.Services.FolderService.GetAllFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Services\FolderService.cs:line 44
+   at FileManagement.WebApi.Controllers.FoldersController.GetFolders(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+ClientConnectionId:f8a2e368-b22b-4f7b-bded-5b74b5c7437e
+Error Number:207,State:1,Class:16
+2025-04-20 21:07:40.881 -05:00 [ERR] Failed executing DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[CreatedAt], [f].[CreatedBy], [f].[DeletedAt], [f].[Description], [f].[HasProcessState], [f].[Name], [f].[ParentFolderId], [f].[ParentFolderId1], [f].[Status], [f].[UpdatedAt], [f].[UpdatedBy], [t].[Id], [t].[CreatedAt], [t].[CreatedBy], [t].[DeletedAt], [t].[Description], [t].[HasProcessState], [t].[Name], [t].[ParentFolderId], [t].[ParentFolderId1], [t].[Status], [t].[UpdatedAt], [t].[UpdatedBy], [t1].[Id], [t1].[CreatedAt], [t1].[CreatedBy], [t1].[DeletedAt], [t1].[FolderId], [t1].[UpdatedAt], [t1].[UpdatedBy], [t1].[UserId], [t1].[Id0], [t1].[CreatedAt0], [t1].[CreatedBy0], [t1].[DeletedAt0], [t1].[ExpirationDate], [t1].[HasChangedPassword], [t1].[IsExpired], [t1].[PasswordHash], [t1].[PeopleId], [t1].[Status], [t1].[UpdatedAt0], [t1].[UpdatedBy0], [t1].[Id1], [t1].[Address], [t1].[BussinessName], [t1].[CreatedAt1], [t1].[CreatedBy1], [t1].[DeletedAt1], [t1].[Email], [t1].[FirstName], [t1].[Identification], [t1].[LastName], [t1].[PersonType], [t1].[Phone], [t1].[UpdatedAt1], [t1].[UpdatedBy1], [t3].[Id], [t3].[CreatedAt], [t3].[CreatedBy], [t3].[DeletedAt], [t3].[Extension], [t3].[FileName], [t3].[FolderId], [t3].[MimeType], [t3].[SizeBytes], [t3].[UpdatedAt], [t3].[UpdatedBy], [t4].[Id], [t4].[Comment], [t4].[CreatedAt], [t4].[CreatedBy], [t4].[DeletedAt], [t4].[FolderId], [t4].[FolderProcessStateId], [t4].[IsActive], [t4].[UpdatedAt], [t4].[UpdatedBy], [t4].[Id0], [t4].[CreatedAt0], [t4].[CreatedBy0], [t4].[DeletedAt0], [t4].[Description], [t4].[Name], [t4].[UpdatedAt0], [t4].[UpdatedBy0]
+FROM [Folders] AS [f]
+LEFT JOIN (
+    SELECT [f0].[Id], [f0].[CreatedAt], [f0].[CreatedBy], [f0].[DeletedAt], [f0].[Description], [f0].[HasProcessState], [f0].[Name], [f0].[ParentFolderId], [f0].[ParentFolderId1], [f0].[Status], [f0].[UpdatedAt], [f0].[UpdatedBy]
+    FROM [Folders] AS [f0]
+    WHERE [f0].[DeletedAt] IS NULL
+) AS [t] ON [f].[Id] = [t].[ParentFolderId]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[FolderId], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserId], [t0].[Id] AS [Id0], [t0].[CreatedAt] AS [CreatedAt0], [t0].[CreatedBy] AS [CreatedBy0], [t0].[DeletedAt] AS [DeletedAt0], [t0].[ExpirationDate], [t0].[HasChangedPassword], [t0].[IsExpired], [t0].[PasswordHash], [t0].[PeopleId], [t0].[Status], [t0].[UpdatedAt] AS [UpdatedAt0], [t0].[UpdatedBy] AS [UpdatedBy0], [t2].[Id] AS [Id1], [t2].[Address], [t2].[BussinessName], [t2].[CreatedAt] AS [CreatedAt1], [t2].[CreatedBy] AS [CreatedBy1], [t2].[DeletedAt] AS [DeletedAt1], [t2].[Email], [t2].[FirstName], [t2].[Identification], [t2].[LastName], [t2].[PersonType], [t2].[Phone], [t2].[UpdatedAt] AS [UpdatedAt1], [t2].[UpdatedBy] AS [UpdatedBy1]
+    FROM [UserFolders] AS [u]
+    INNER JOIN (
+        SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[DeletedAt], [u0].[ExpirationDate], [u0].[HasChangedPassword], [u0].[IsExpired], [u0].[PasswordHash], [u0].[PeopleId], [u0].[Status], [u0].[UpdatedAt], [u0].[UpdatedBy]
+        FROM [Users] AS [u0]
+        WHERE [u0].[DeletedAt] IS NULL
+    ) AS [t0] ON [u].[UserId] = [t0].[Id]
+    INNER JOIN (
+        SELECT [p].[Id], [p].[Address], [p].[BussinessName], [p].[CreatedAt], [p].[CreatedBy], [p].[DeletedAt], [p].[Email], [p].[FirstName], [p].[Identification], [p].[LastName], [p].[PersonType], [p].[Phone], [p].[UpdatedAt], [p].[UpdatedBy]
+        FROM [Peoples] AS [p]
+        WHERE [p].[DeletedAt] IS NULL
+    ) AS [t2] ON [t0].[PeopleId] = [t2].[Id]
+    WHERE [u].[DeletedAt] IS NULL
+) AS [t1] ON [f].[Id] = [t1].[FolderId]
+LEFT JOIN (
+    SELECT [f1].[Id], [f1].[CreatedAt], [f1].[CreatedBy], [f1].[DeletedAt], [f1].[Extension], [f1].[FileName], [f1].[FolderId], [f1].[MimeType], [f1].[SizeBytes], [f1].[UpdatedAt], [f1].[UpdatedBy]
+    FROM [Files] AS [f1]
+    WHERE [f1].[DeletedAt] IS NULL
+) AS [t3] ON [f].[Id] = [t3].[FolderId]
+LEFT JOIN (
+    SELECT [f2].[Id], [f2].[Comment], [f2].[CreatedAt], [f2].[CreatedBy], [f2].[DeletedAt], [f2].[FolderId], [f2].[FolderProcessStateId], [f2].[IsActive], [f2].[UpdatedAt], [f2].[UpdatedBy], [t5].[Id] AS [Id0], [t5].[CreatedAt] AS [CreatedAt0], [t5].[CreatedBy] AS [CreatedBy0], [t5].[DeletedAt] AS [DeletedAt0], [t5].[Description], [t5].[Name], [t5].[UpdatedAt] AS [UpdatedAt0], [t5].[UpdatedBy] AS [UpdatedBy0]
+    FROM [FolderProcessHistories] AS [f2]
+    INNER JOIN (
+        SELECT [f3].[Id], [f3].[CreatedAt], [f3].[CreatedBy], [f3].[DeletedAt], [f3].[Description], [f3].[Name], [f3].[UpdatedAt], [f3].[UpdatedBy]
+        FROM [FolderProcessStates] AS [f3]
+        WHERE [f3].[DeletedAt] IS NULL
+    ) AS [t5] ON [f2].[FolderProcessStateId] = [t5].[Id]
+    WHERE [f2].[DeletedAt] IS NULL
+) AS [t4] ON [f].[Id] = [t4].[FolderId]
+WHERE ([f].[DeletedAt] IS NULL) AND ([f].[ParentFolderId] IS NULL)
+ORDER BY [f].[Id] DESC, [t].[Id], [t1].[Id], [t1].[Id0], [t1].[Id1], [t3].[Id], [t4].[Id]
+2025-04-20 21:07:40.886 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:99440542-5114-44d0-be58-ddf63e6b250b
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:99440542-5114-44d0-be58-ddf63e6b250b
+Error Number:207,State:1,Class:16
+2025-04-20 21:07:41.166 -05:00 [ERR] Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ParentFolderId1'.
+Invalid column name 'ParentFolderId1'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFoldersAsync(String folderName)
+   at FileManagement.Service.Services.FolderService.GetAllFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Services\FolderService.cs:line 44
+   at FileManagement.WebApi.Controllers.FoldersController.GetFolders(String folderName)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context)
+ClientConnectionId:99440542-5114-44d0-be58-ddf63e6b250b
+Error Number:207,State:1,Class:16
+2025-04-20 21:53:16.238 -05:00 [ERR] Failed executing DbCommand (34,044ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([f].[SizeBytes]), CAST(0 AS bigint))
+FROM [Files] AS [f]
+WHERE [f].[DeletedAt] IS NULL
+2025-04-20 21:53:16.296 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): Tiempo de espera de la operación de espera agotado.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:24312ec6-42b9-4ae7-8bf6-2d7c808b2896
+Error Number:-2,State:0,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): Tiempo de espera de la operación de espera agotado.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:24312ec6-42b9-4ae7-8bf6-2d7c808b2896
+Error Number:-2,State:0,Class:11
+2025-04-20 21:53:16.482 -05:00 [ERR] Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): Tiempo de espera de la operación de espera agotado.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at FileManagement.Service.Services.FileService.FileStorageStatusAsync()
+   at FileManagement.WebApi.Controllers.FilesController.FileStorageStatus() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FilesController.cs:line 39
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+ClientConnectionId:24312ec6-42b9-4ae7-8bf6-2d7c808b2896
+Error Number:-2,State:0,Class:11

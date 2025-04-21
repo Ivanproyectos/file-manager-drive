@@ -11,7 +11,7 @@ namespace FileManagement.Core.Entities
         public Folder ParentFolder { get; set; }
         public bool Status { get; set; }
         public bool HasProcessState { get; set; }
-        //public ICollection<Folder> SubFolders { get; set; } // Hijos de la carpeta
+        public ICollection<Folder> SubFolders { get; set; } // Hijos de la carpeta
 
         public ICollection<UserFolder>? UserFolders { get; set; }
 

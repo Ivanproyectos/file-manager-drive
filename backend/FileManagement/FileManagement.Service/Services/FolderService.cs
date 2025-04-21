@@ -5,6 +5,7 @@ using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
+using System.Diagnostics.Eventing.Reader;
 
 namespace FileManagement.Service.Services
 {
@@ -42,11 +43,10 @@ namespace FileManagement.Service.Services
         public async Task<List<FolderDto>> GetAllFoldersAsync(string? folderName)
         {
             var folders = await _folderRepository.GetFoldersAsync(folderName);
-
             var foldersDto = _mapper.Map<List<FolderDto>>(folders);
-
             return foldersDto;
         }
+
 
         public async Task<List<FileDto>> GetFolderFiles(int folderId)
         {

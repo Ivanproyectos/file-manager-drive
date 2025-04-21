@@ -71,6 +71,7 @@ export const FolderList = ({
           className="col mb-3 mb-lg-5"
           key={id}
           onClick={() => onSelectSubFolder(id, name)}
+          title={name}
         >
           {/*Card */}
           <div className="card card-sm card-hover-shadow h-100">
@@ -122,7 +123,7 @@ export const FolderList = ({
             )}
 
             <div className="card-body d-flex flex-column">
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center w-100">
                 <i className="bi-folder fs-2 text-body me-2"></i>
 
                 <h5 className="text-truncate ms-2 mb-0">{name}</h5>

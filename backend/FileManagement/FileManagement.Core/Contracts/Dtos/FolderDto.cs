@@ -11,11 +11,4 @@
         public List<FolderProcessHistoryDto> FolderProcessHistories { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
-
-    //public record struct UserFolderDto 
-    //{
-    //    public string Name { get; set; }
-    //    public string Email { get; set; }
-    //}
-
 }
