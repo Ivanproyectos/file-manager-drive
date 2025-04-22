@@ -20,7 +20,7 @@ namespace FileManagement.Persistence.Repositories
 
         public Task<long> TotalSizeAsync()
         {
-            return _context.Files.SumAsync(f => f.SizeBytes);
+            return _context.Files.Where(f => f.DeletedAt == null).SumAsync(f => f.SizeBytes);
         }
 
         public Task DeleteFileAsync(Core.Entities.File File)

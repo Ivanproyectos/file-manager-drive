@@ -21,15 +21,26 @@ namespace FileManagement.Persistence.Repositories
 
         public Task DeleteFolderAsync(Folder folder)
         {
-            folder.DeletedAt = DateTime.UtcNow;
-            _context.Folders.Update(folder);
+            //folder.DeletedAt = DateTime.UtcNow;
+            _context.Folders.Remove(folder);
             return Task.CompletedTask;
         }
 
-        public async Task<Folder> GetFolderByIdAsync(int id)
+        public async Task<Folder?> GetFolderByIdAsync(int id)
         {
-            return await _context.Folders.FirstOrDefaultAsync(f => f.Id == id);
+            var folder = await _context.Folders.Include(f => f.Files!)
+                  .ThenInclude(fi => fi.FileStorage)
+                  .Include(f => f.SubFolders)
+                  .ThenInclude(sf => sf.Files!)
+                  .ThenInclude(fi => fi.FileStorage)
+                  .FirstOrDefaultAsync(f => f.Id == id);
+
+            await LoadSubFoldersRecursively(folder);
+
+            return folder;
         }
+
+      
 
         public Task<Folder> GetFolderByNameAsync(string name)
         {
@@ -69,16 +80,16 @@ namespace FileManagement.Persistence.Repositories
 
         public async Task<List<Folder>> GetFoldersAsync(string? folderName)
         {
-            var query  = _context.Folders.Where(x => x.ParentFolderId == null)
+            var query  = _context.Folders.Include(f => f.Files)
                             .Include(f => f.SubFolders)
                             .ThenInclude(sf => sf.Files)
-                            .Include(f => f.UserFolders)
+                            .Include(f => f.UserFolders!)
                             .ThenInclude(uf => uf.User)
                             .ThenInclude(u => u.People)
                             .Include(f => f.UserFolders)
-                            .Include(f => f.Files)
-                            .Include(f => f.FolderProcessHistories)
+                            .Include(f => f.FolderProcessHistories!)
                             .ThenInclude(fh => fh.FolderProcessStates)
+                             .Where(x => x.ParentFolderId == null)
                             .OrderByDescending(f => f.Id)
                               .AsQueryable();
 
@@ -87,21 +98,14 @@ namespace FileManagement.Persistence.Repositories
                 query = query.Where(f => f.Name.Contains(folderName));
             }
 
+            var folders = await query.ToListAsync();
+            foreach (var folder in folders)
+            {
+                await LoadSubFoldersRecursively(folder);
+            }
 
-            //var folders = await _context.Folders.Where(x => x.ParentFolderId == null)
-            //                .Include(f => f.UserFolders)
-            //                .ThenInclude(uf => uf.User)
-            //                .ThenInclude(u => u.People)
-            //                .Include(f => f.UserFolders)
-            //                .Include(f => f.Files)
-            //                .Include(f => f.FolderProcessHistories)
-            //                .ThenInclude(fh => fh.FolderProcessStates)
-            //                .OrderByDescending(f => f.Id)
-            //                .ToListAsync();
-                            
+            return folders;
 
-            return await query.ToListAsync();
-            
         }
 
         public async Task<List<Folder>> GetSubFoldersAsync(int folderId)
@@ -127,6 +131,31 @@ namespace FileManagement.Persistence.Repositories
             _context.Folders.Update(folder);
 
             return Task.CompletedTask;
+        }
+
+        private async Task LoadSubFoldersRecursively(Folder folder)
+        {
+            if (folder?.SubFolders != null && folder.SubFolders.Count > 0)
+            {
+                foreach (var subfolder in folder.SubFolders)
+                {
+
+                    if (_context.Entry(subfolder).State == EntityState.Detached)
+                    {
+                        _context.Attach(subfolder);
+                    }
+                    // Cargar subcarpetas de manera recursiva
+                    await _context.Entry(subfolder)
+                        .Collection(f => f.SubFolders)
+                        .Query()
+                        .Include(f => f.Files!)
+                        .ThenInclude(fi => fi.FileStorage)
+                        .LoadAsync();
+
+                    // Llamar recursivamente para seguir profundizando
+                    await LoadSubFoldersRecursively(subfolder);
+                }
+            }
         }
     }
 }

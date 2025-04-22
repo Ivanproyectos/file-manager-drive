@@ -68,10 +68,10 @@ namespace FileManagement.Service.External
             }
         }
 
-        public void DeleteFile(string fileId)
+        public async Task DeleteFileAsync(string fileId)
         {
             var service = _client.GetDriveService();
-            service.Files.Delete(fileId).Execute();
+            await service.Files.Delete(fileId).ExecuteAsync();
         }
 
     }

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using FileManagement.Core.Contracts.Dtos;
 using FileManagement.Core.Contracts.Request;
-using FileManagement.Core.Contracts.Response;
 using FileManagement.Core.Entities;
 using FileManagement.Core.Interfaces.Repositories;
 using FileManagement.Core.Interfaces.Services;
-using System.Diagnostics.Eventing.Reader;
 
 namespace FileManagement.Service.Services
 {
@@ -53,29 +51,7 @@ namespace FileManagement.Service.Services
             var files = await _fileRepository.GetFilesByFolderIdAsync(folderId);
             return _mapper.Map<List<FileDto>>(files);
         }
-        public async Task DeleteFolderAndFiles(int folderId)
-        {
-            var folder = await _folderRepository.GetFolderByIdAsync(folderId);
-            if (folder == null)
-            {
-                throw new KeyNotFoundException($"El folder con el id {folderId} no existe");
-            }
-
-            var files = await _fileRepository.GetFilesByFolderIdAsync(folderId);
-            var deleteTasks = files.Select(file =>
-            {
-                _googleDriveService.DeleteFile(file.FileStorage.StorageIdentifier);
-                return _fileRepository.DeleteFileAsync(file);
-            });
-            var subFolders = await _folderRepository.GetSubFoldersAsync(folderId);
-
-            await Task.WhenAll(deleteTasks);
-            await _folderRepository.DeleteFolderRangeAsync(subFolders);
-            await _folderRepository.DeleteFolderAsync(folder);
-            await _unitOfWork.SaveChangesAsync();
-  
-        }
-
+     
         public async Task<List<SubFolderDto>> GetSubFoldersAsync(int FolderId)
         {
             var subFolders = await _folderRepository.GetSubFoldersAsync(FolderId);

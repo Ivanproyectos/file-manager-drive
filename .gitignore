@@ -11,6 +11,7 @@ obj/
 appsettings.Development.json
 appsettings.Production.json
 secrets.json
+drive-credentials.json
 .vscode/
 .idea/
 *.user

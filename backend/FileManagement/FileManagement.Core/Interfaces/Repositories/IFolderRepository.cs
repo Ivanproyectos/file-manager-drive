@@ -9,7 +9,7 @@ namespace FileManagement.Core.Interfaces.Repositories
         Task<List<Folder>> GetFoldersAsync(string? folderName);
         Task<PagedResultDto<List<Folder>>> GetPagedFoldersAsync(string searchTerm, int pageNumber, int pageSize);
         Task<IEnumerable<Folder>> GetFoldersByUserIdAsync(int userId);
-        Task<Folder> GetFolderByIdAsync(int id);
+        Task<Folder?> GetFolderByIdAsync(int id);
         Task UpdateStatusAsync(Folder folder);
         Task<Folder> GetFolderByNameAsync(string name);
         Task<Folder> CreateFolderAsync(Folder folder);

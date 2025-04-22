@@ -52,7 +52,7 @@ namespace FileManagement.Service.Services
 
             await _unitOfWork.SaveChangesAsync();
 
-            _googleDriveService.DeleteFile(user.FileStorage.StorageIdentifier);
+            _googleDriveService.DeleteFileAsync(user.FileStorage.StorageIdentifier);
         }
 
         public async Task<FileStorageStatusResponse> FileStorageStatusAsync()

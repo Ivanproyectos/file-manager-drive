@@ -1,0 +1,544 @@
+2025-04-21 12:31:47.882 -05:00 [ERR] An exception occurred in the database while saving changes for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The DELETE statement conflicted with the SAME TABLE REFERENCE constraint "FK_Folders_Folders_ParentFolderId". The conflict occurred in database "FileManager", table "dbo.Folders", column 'ParentFolderId'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:5ad07d17-c98a-4341-b570-08abf87c3c09
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The DELETE statement conflicted with the SAME TABLE REFERENCE constraint "FK_Folders_Folders_ParentFolderId". The conflict occurred in database "FileManager", table "dbo.Folders", column 'ParentFolderId'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:5ad07d17-c98a-4341-b570-08abf87c3c09
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-04-21 12:31:48.696 -05:00 [ERR] An error occurred while saving the entity changes. See the inner exception for details.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The DELETE statement conflicted with the SAME TABLE REFERENCE constraint "FK_Folders_Folders_ParentFolderId". The conflict occurred in database "FileManager", table "dbo.Folders", column 'ParentFolderId'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithRowsAffectedOnlyAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:5ad07d17-c98a-4341-b570-08abf87c3c09
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.UnitOfWork.SaveChangesAsync() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\UnitOfWork.cs:line 56
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.Handle(DeleteFolderRequest request, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 70
+   at FileManagement.Service.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Behaviors\ValidationBehavior.cs:line 26
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at FileManagement.WebApi.Controllers.FoldersController.Delete(Int32 folderId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 62
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 12:32:59.667 -05:00 [ERR] Failed executing DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Folders] ADD CONSTRAINT [FK_Folders_Folders_ParentFolderId] FOREIGN KEY ([ParentFolderId]) REFERENCES [Folders] ([Id]) ON DELETE CASCADE;
+2025-04-21 12:46:14.059 -05:00 [ERR] Object reference not set to an instance of an object.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.DeleteFolderAndSubFolders(Folder folder) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 81
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.Handle(DeleteFolderRequest request, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 56
+   at FileManagement.Service.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Behaviors\ValidationBehavior.cs:line 26
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at FileManagement.WebApi.Controllers.FoldersController.Delete(Int32 folderId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 62
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 13:58:05.295 -05:00 [ERR] The navigation 'Folder.SubFolders' cannot be loaded because the entity is not being tracked. Navigations can only be loaded for tracked entities.
+System.InvalidOperationException: The navigation 'Folder.SubFolders' cannot be loaded because the entity is not being tracked. Navigations can only be loaded for tracked entities.
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.LoadAsync(INavigation navigation, InternalEntityEntry entry, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFolderByIdAsync(Int32 id) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 39
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.Handle(DeleteFolderRequest request, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 53
+   at FileManagement.Service.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Behaviors\ValidationBehavior.cs:line 26
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at FileManagement.WebApi.Controllers.FoldersController.Delete(Int32 folderId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 62
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 14:00:35.997 -05:00 [ERR] The navigation 'Folder.SubFolders' cannot be loaded because the entity is not being tracked. Navigations can only be loaded for tracked entities.
+System.InvalidOperationException: The navigation 'Folder.SubFolders' cannot be loaded because the entity is not being tracked. Navigations can only be loaded for tracked entities.
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.LoadAsync(INavigation navigation, InternalEntityEntry entry, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFolderByIdAsync(Int32 id) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 39
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.Handle(DeleteFolderRequest request, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 53
+   at FileManagement.Service.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Behaviors\ValidationBehavior.cs:line 26
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at FileManagement.WebApi.Controllers.FoldersController.Delete(Int32 folderId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 62
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 14:19:59.381 -05:00 [ERR] The navigation 'Folder.SubFolders' cannot be loaded because the entity is not being tracked. Navigations can only be loaded for tracked entities.
+System.InvalidOperationException: The navigation 'Folder.SubFolders' cannot be loaded because the entity is not being tracked. Navigations can only be loaded for tracked entities.
+   at Microsoft.EntityFrameworkCore.Internal.EntityFinder`1.LoadAsync(INavigation navigation, InternalEntityEntry entry, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.LoadSubFoldersRecursively(Folder folder)
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFolderByIdAsync(Int32 id)
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.Handle(DeleteFolderRequest request, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 53
+   at FileManagement.Service.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Behaviors\ValidationBehavior.cs:line 26
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at FileManagement.WebApi.Controllers.FoldersController.Delete(Int32 folderId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 62
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 14:39:00.179 -05:00 [ERR] Error al eliminar archivos de drive
+The service drive has thrown an exception.
+HttpStatusCode is NotFound.
+Google.Apis.Requests.RequestError
+File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA. [404]
+Errors [
+	Message[File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA.] Location[fileId - parameter] Reason[notFound] Domain[global]
+]
+
+Google.GoogleApiException: The service drive has thrown an exception. HttpStatusCode is NotFound. File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA.
+   at Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(HttpResponseMessage response)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync()
+   at FileManagement.Service.External.GoogleDriveService.DeleteFileAsync(String fileId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\External\GoogleDriveService.cs:line 74
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91
+2025-04-21 14:39:00.179 -05:00 [ERR] Error al eliminar archivos de drive
+The service drive has thrown an exception.
+HttpStatusCode is NotFound.
+Google.Apis.Requests.RequestError
+File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M. [404]
+Errors [
+	Message[File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M.] Location[fileId - parameter] Reason[notFound] Domain[global]
+]
+
+Google.GoogleApiException: The service drive has thrown an exception. HttpStatusCode is NotFound. File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M.
+   at Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(HttpResponseMessage response)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync()
+   at FileManagement.Service.External.GoogleDriveService.DeleteFileAsync(String fileId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\External\GoogleDriveService.cs:line 74
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91
+2025-04-21 14:44:42.170 -05:00 [ERR] Error al eliminar archivos de drive
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<DeleteFilesDrive>b__1(File file) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 89
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at System.Threading.Tasks.Task.WhenAll(IEnumerable`1 tasks)
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91
+2025-04-21 14:44:44.936 -05:00 [ERR] Error al eliminar archivos de drive
+The service drive has thrown an exception.
+HttpStatusCode is NotFound.
+Google.Apis.Requests.RequestError
+File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA. [404]
+Errors [
+	Message[File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA.] Location[fileId - parameter] Reason[notFound] Domain[global]
+]
+
+Google.GoogleApiException: The service drive has thrown an exception. HttpStatusCode is NotFound. File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA.
+   at Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(HttpResponseMessage response)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync()
+   at FileManagement.Service.External.GoogleDriveService.DeleteFileAsync(String fileId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\External\GoogleDriveService.cs:line 74
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91
+2025-04-21 14:44:45.043 -05:00 [ERR] Error al eliminar archivos de drive
+The service drive has thrown an exception.
+HttpStatusCode is NotFound.
+Google.Apis.Requests.RequestError
+File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M. [404]
+Errors [
+	Message[File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M.] Location[fileId - parameter] Reason[notFound] Domain[global]
+]
+
+Google.GoogleApiException: The service drive has thrown an exception. HttpStatusCode is NotFound. File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M.
+   at Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(HttpResponseMessage response)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync()
+   at FileManagement.Service.External.GoogleDriveService.DeleteFileAsync(String fileId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\External\GoogleDriveService.cs:line 74
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91
+2025-04-21 15:18:47.870 -05:00 [ERR] The entity type 'HashSet<Folder>' was not found. Ensure that the entity type has been added to the model.
+System.InvalidOperationException: The entity type 'HashSet<Folder>' was not found. Ensure that the entity type has been added to the model.
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.GetOrCreateEntry(Object entity)
+   at Microsoft.EntityFrameworkCore.DbContext.EntryWithoutDetectChanges[TEntity](TEntity entity)
+   at Microsoft.EntityFrameworkCore.DbContext.Entry[TEntity](TEntity entity)
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFolderByIdAsync(Int32 id)
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.Handle(DeleteFolderRequest request, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 53
+   at FileManagement.Service.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Behaviors\ValidationBehavior.cs:line 26
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at FileManagement.WebApi.Controllers.FoldersController.Delete(Int32 folderId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 62
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 15:25:28.627 -05:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[CreatedAt], [f].[CreatedBy], [f].[DeletedAt], [f].[Description], [f].[HasProcessState], [f].[Name], [f].[ParentFolderId], [f].[Status], [f].[UpdatedAt], [f].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[DeletedAt], [t0].[Extension], [t0].[FileName], [t0].[FolderId], [t0].[MimeType], [t0].[SizeBytes], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[DeletedAt0], [t0].[FileId], [t0].[StorageIdentifier], [t0].[StoragePath], [t0].[StorageProviderId], [t0].[UpdatedAt0], [t0].[UpdatedBy0], [t0].[UploadedAt]
+FROM [Folders] AS [f]
+LEFT JOIN (
+    SELECT [f0].[Id], [f0].[CreatedAt], [f0].[CreatedBy], [f0].[DeletedAt], [f0].[Extension], [f0].[FileName], [f0].[FolderId], [f0].[MimeType], [f0].[SizeBytes], [f0].[UpdatedAt], [f0].[UpdatedBy], [t].[Id] AS [Id0], [t].[CreatedAt] AS [CreatedAt0], [t].[CreatedBy] AS [CreatedBy0], [t].[DeletedAt] AS [DeletedAt0], [t].[FileId], [t].[StorageIdentifier], [t].[StoragePath], [t].[StorageProviderId], [t].[UpdatedAt] AS [UpdatedAt0], [t].[UpdatedBy] AS [UpdatedBy0], [t].[UploadedAt]
+    FROM [Files] AS [f0]
+    LEFT JOIN (
+        SELECT [f1].[Id], [f1].[CreatedAt], [f1].[CreatedBy], [f1].[DeletedAt], [f1].[FileId], [f1].[StorageIdentifier], [f1].[StoragePath], [f1].[StorageProviderId], [f1].[UpdatedAt], [f1].[UpdatedBy], [f1].[UploadedAt]
+        FROM [FileStorages] AS [f1]
+        WHERE [f1].[DeletedAt] IS NULL
+    ) AS [t] ON [f0].[Id] = [t].[FileId]
+    WHERE [f0].[DeletedAt] IS NULL
+) AS [t0] ON [f].[Id] = [t0].[FolderId]
+WHERE ([f].[DeletedAt] IS NULL) AND [f].[ParentFolderId] = @__p_0
+ORDER BY [f].[Id], [t0].[Id]
+2025-04-21 15:25:28.627 -05:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[CreatedAt], [f].[CreatedBy], [f].[DeletedAt], [f].[Description], [f].[HasProcessState], [f].[Name], [f].[ParentFolderId], [f].[Status], [f].[UpdatedAt], [f].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[DeletedAt], [t0].[Extension], [t0].[FileName], [t0].[FolderId], [t0].[MimeType], [t0].[SizeBytes], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[DeletedAt0], [t0].[FileId], [t0].[StorageIdentifier], [t0].[StoragePath], [t0].[StorageProviderId], [t0].[UpdatedAt0], [t0].[UpdatedBy0], [t0].[UploadedAt]
+FROM [Folders] AS [f]
+LEFT JOIN (
+    SELECT [f0].[Id], [f0].[CreatedAt], [f0].[CreatedBy], [f0].[DeletedAt], [f0].[Extension], [f0].[FileName], [f0].[FolderId], [f0].[MimeType], [f0].[SizeBytes], [f0].[UpdatedAt], [f0].[UpdatedBy], [t].[Id] AS [Id0], [t].[CreatedAt] AS [CreatedAt0], [t].[CreatedBy] AS [CreatedBy0], [t].[DeletedAt] AS [DeletedAt0], [t].[FileId], [t].[StorageIdentifier], [t].[StoragePath], [t].[StorageProviderId], [t].[UpdatedAt] AS [UpdatedAt0], [t].[UpdatedBy] AS [UpdatedBy0], [t].[UploadedAt]
+    FROM [Files] AS [f0]
+    LEFT JOIN (
+        SELECT [f1].[Id], [f1].[CreatedAt], [f1].[CreatedBy], [f1].[DeletedAt], [f1].[FileId], [f1].[StorageIdentifier], [f1].[StoragePath], [f1].[StorageProviderId], [f1].[UpdatedAt], [f1].[UpdatedBy], [f1].[UploadedAt]
+        FROM [FileStorages] AS [f1]
+        WHERE [f1].[DeletedAt] IS NULL
+    ) AS [t] ON [f0].[Id] = [t].[FileId]
+    WHERE [f0].[DeletedAt] IS NULL
+) AS [t0] ON [f].[Id] = [t0].[FolderId]
+WHERE ([f].[DeletedAt] IS NULL) AND [f].[ParentFolderId] = @__p_0
+ORDER BY [f].[Id], [t0].[Id]
+2025-04-21 15:25:28.739 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2025-04-21 15:25:28.739 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2025-04-21 15:25:58.711 -05:00 [ERR] There is already an open DataReader associated with this Connection which must be closed first.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.LoadSubFoldersRecursively(Folder folder) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 55
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 126
+   at FileManagement.Service.Services.FolderService.GetAllFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Services\FolderService.cs:line 43
+   at FileManagement.WebApi.Controllers.FoldersController.GetFolders(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 15:25:59.893 -05:00 [ERR] There is already an open DataReader associated with this Connection which must be closed first.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.LoadSubFoldersRecursively(Folder folder) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 55
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 126
+   at FileManagement.Service.Services.FolderService.GetAllFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Services\FolderService.cs:line 43
+   at FileManagement.WebApi.Controllers.FoldersController.GetFolders(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 15:26:20.643 -05:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[CreatedAt], [f].[CreatedBy], [f].[DeletedAt], [f].[Description], [f].[HasProcessState], [f].[Name], [f].[ParentFolderId], [f].[Status], [f].[UpdatedAt], [f].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[DeletedAt], [t0].[Extension], [t0].[FileName], [t0].[FolderId], [t0].[MimeType], [t0].[SizeBytes], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[DeletedAt0], [t0].[FileId], [t0].[StorageIdentifier], [t0].[StoragePath], [t0].[StorageProviderId], [t0].[UpdatedAt0], [t0].[UpdatedBy0], [t0].[UploadedAt]
+FROM [Folders] AS [f]
+LEFT JOIN (
+    SELECT [f0].[Id], [f0].[CreatedAt], [f0].[CreatedBy], [f0].[DeletedAt], [f0].[Extension], [f0].[FileName], [f0].[FolderId], [f0].[MimeType], [f0].[SizeBytes], [f0].[UpdatedAt], [f0].[UpdatedBy], [t].[Id] AS [Id0], [t].[CreatedAt] AS [CreatedAt0], [t].[CreatedBy] AS [CreatedBy0], [t].[DeletedAt] AS [DeletedAt0], [t].[FileId], [t].[StorageIdentifier], [t].[StoragePath], [t].[StorageProviderId], [t].[UpdatedAt] AS [UpdatedAt0], [t].[UpdatedBy] AS [UpdatedBy0], [t].[UploadedAt]
+    FROM [Files] AS [f0]
+    LEFT JOIN (
+        SELECT [f1].[Id], [f1].[CreatedAt], [f1].[CreatedBy], [f1].[DeletedAt], [f1].[FileId], [f1].[StorageIdentifier], [f1].[StoragePath], [f1].[StorageProviderId], [f1].[UpdatedAt], [f1].[UpdatedBy], [f1].[UploadedAt]
+        FROM [FileStorages] AS [f1]
+        WHERE [f1].[DeletedAt] IS NULL
+    ) AS [t] ON [f0].[Id] = [t].[FileId]
+    WHERE [f0].[DeletedAt] IS NULL
+) AS [t0] ON [f].[Id] = [t0].[FolderId]
+WHERE ([f].[DeletedAt] IS NULL) AND [f].[ParentFolderId] = @__p_0
+ORDER BY [f].[Id], [t0].[Id]
+2025-04-21 15:26:20.667 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'FileManagement.Persistence.Contexts.ApplicationDbContext'.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2025-04-21 15:26:23.754 -05:00 [ERR] There is already an open DataReader associated with this Connection which must be closed first.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at FileManagement.Persistence.Repositories.FolderRepository.LoadSubFoldersRecursively(Folder folder) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 55
+   at FileManagement.Persistence.Repositories.FolderRepository.GetFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Persistence\Repositories\FolderRepository.cs:line 126
+   at FileManagement.Service.Services.FolderService.GetAllFoldersAsync(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\Services\FolderService.cs:line 43
+   at FileManagement.WebApi.Controllers.FoldersController.GetFolders(String folderName) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Controllers\FoldersController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at FileManagement.WebApi.Middleware.ExceptionHadlerMiddleware.Invoke(HttpContext context) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.WebApi\Middleware\ExceptionHadlerMiddleware.cs:line 22
+2025-04-21 15:36:19.999 -05:00 [ERR] Error al eliminar archivos de drive
+The service drive has thrown an exception.
+HttpStatusCode is NotFound.
+Google.Apis.Requests.RequestError
+File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M. [404]
+Errors [
+	Message[File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M.] Location[fileId - parameter] Reason[notFound] Domain[global]
+]
+
+Google.GoogleApiException: The service drive has thrown an exception. HttpStatusCode is NotFound. File not found: 1liOL1IwEUuq-ffaMtP3AY2C8-8XeFB1M.
+   at Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(HttpResponseMessage response)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync()
+   at FileManagement.Service.External.GoogleDriveService.DeleteFileAsync(String fileId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\External\GoogleDriveService.cs:line 74
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91
+2025-04-21 15:36:19.999 -05:00 [ERR] Error al eliminar archivos de drive
+The service drive has thrown an exception.
+HttpStatusCode is NotFound.
+Google.Apis.Requests.RequestError
+File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA. [404]
+Errors [
+	Message[File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA.] Location[fileId - parameter] Reason[notFound] Domain[global]
+]
+
+Google.GoogleApiException: The service drive has thrown an exception. HttpStatusCode is NotFound. File not found: 1kidW-csi9oNsfh4Dz87udosj3RlapsIA.
+   at Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(HttpResponseMessage response)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync()
+   at FileManagement.Service.External.GoogleDriveService.DeleteFileAsync(String fileId) in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\External\GoogleDriveService.cs:line 74
+   at FileManagement.Service.UseCases.DeleteFolderUseCase.<>c__DisplayClass12_0.<<DeleteFilesDrive>b__0>d.MoveNext() in C:\Users\ISP\Documents\Proyectos\FileManager\backend\FileManagement\FileManagement.Service\UseCases\DeleteFolderUseCase.cs:line 91

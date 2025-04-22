@@ -149,6 +149,7 @@ export const FoldersPage = () => {
     const loadUsers = async () => {
       try {
         const folders = await folderApi.getFoldersAsync()
+        debugger;
         setFolders(folders)
         foldersRef.current = folders
       } catch (error) {
@@ -246,7 +247,7 @@ export const FoldersPage = () => {
                   {/* End Col */}
 
                   <div className="col-md-9 col-lg-10 column-md-divider px-md-4">
-                    <FileUploadStatus />
+                    <FileUploadStatus isReload={refresh} />
                   </div>
                   {/* End Col */}
                 </div>

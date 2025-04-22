@@ -57,7 +57,7 @@ export const useClientDataTable = <T>({ tableRef, columns, data }: Props<T>) => 
   }, [])
 
   useEffect(() => {
-    if (datatable && data?.length > 0) {
+    if (datatable && data && Array.isArray(data)) {
       datatable.clear();
       datatable.rows.add(data);
       datatable.draw();

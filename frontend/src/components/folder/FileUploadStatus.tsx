@@ -3,7 +3,11 @@ import { useEffect, useState} from 'react'
 import { IFileStorageStatus } from '@/types'
 import { convertBytes } from '@/utils/formatBytes'
 
-export const FileUploadStatus = () => {4
+interface IFileUploadStatusProps {
+  isReload?: boolean
+}
+
+export const FileUploadStatus = ({isReload}: IFileUploadStatusProps) => {
     const [fileStorageStatus, setFileStorageStatus] = useState<IFileStorageStatus>();
 
   
@@ -20,7 +24,7 @@ export const FileUploadStatus = () => {4
       }
 
       fetchFileStorageStatus();
-    }, [])
+    }, [isReload]);
 
   return (
     <>
