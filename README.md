@@ -41,8 +41,9 @@ npm install
 cp .env
 
 Frontend .env
-VITE_GOOGLE_CLIENT_ID=tu-client-id
-VITE_API_URL=http://localhost:5000
+VITE_API_BASE_URL= https://localhost:7095/api
+VITE_TOKEN_NAME= auth_token
+VITE_BASE_URL= https://localhost:7095
 ```
 ### 3. Configurar el Backend
 ```bash
