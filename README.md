@@ -43,7 +43,7 @@ cp .env
 Frontend .env
 VITE_GOOGLE_CLIENT_ID=tu-client-id
 VITE_API_URL=http://localhost:5000
-
+```
 ### 3. Configurar el Backend
 ```bash
 cd backend
@@ -59,10 +59,8 @@ generar un archivo credentials-drive en la raiz del proyecto y anadir las creden
   }
 }
 
-
-```bash
 dotnet run
-
+```
 ## 📷 Capturas
 
 ![Captura de pantalla 2025-04-27 113947](https://github.com/user-attachments/assets/d9474392-2923-404f-be53-e8859bfcb918)
