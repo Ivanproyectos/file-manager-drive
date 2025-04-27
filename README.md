@@ -17,7 +17,7 @@ Aplicación **Fullstack** para la gestión de archivos en Google Drive utilizand
 
 ---
 
-## 🛠️ Requisitos previos
+## 🛠️ Requisitos previos 
 
 - Node.js `v23`
 - .NET 7 SDK
@@ -31,5 +31,42 @@ Aplicación **Fullstack** para la gestión de archivos en Google Drive utilizand
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/tu-repo.git
+git clone https://github.com/Ivanproyectos/file-manager-drive.git
 cd tu-repo
+
+### 2. Configuracion frontend
+```bash
+cd frontend
+npm install
+cp .env
+
+Frontend .env
+VITE_GOOGLE_CLIENT_ID=tu-client-id
+VITE_API_URL=http://localhost:5000
+
+### 3. Configurar el Backend
+```bash
+cd backend
+dotnet restore
+dontnet database update
+
+generar un archivo credentials-drive en la raiz del proyecto y anadir las credenciales generadas por la configuracion del google drive
+{
+  "GoogleDrive": {
+    "ClientId": "tu-client-id",
+    "ClientSecret": "tu-client-secret",
+    "RedirectUri": "http://localhost:5000/auth/callback"
+  }
+}
+
+
+```bash
+dotnet run
+
+## 📷 Capturas
+
+![Captura de pantalla 2025-04-27 113947](https://github.com/user-attachments/assets/d9474392-2923-404f-be53-e8859bfcb918)
+
+![file-manager-drive](https://github.com/user-attachments/assets/c03f4c62-7301-411d-9abb-f4405c7c22b4)
+
+
